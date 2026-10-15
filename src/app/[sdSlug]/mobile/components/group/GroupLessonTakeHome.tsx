@@ -7,6 +7,7 @@ import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery } from "@tanstack/react-query";
 import type { PlanInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
+import { Eyebrow, PlateSection, Thumb } from "../kit";
 
 interface Props {
   isMember: boolean;
@@ -86,53 +87,34 @@ export const GroupLessonTakeHome = ({ isMember, plans }: Props) => {
   const title = lesson.title || lesson.name || "";
   const dateLabel = featured.plan.serviceDate ? DateHelper.prettyDate(DateHelper.toDate(featured.plan.serviceDate as any)) : "";
 
+  const line = (label: string, value: string) => (
+    <Typography sx={{ fontSize: 15, lineHeight: "22px", color: tc.text, mt: "4px" }}>
+      <Box component="span" sx={{ fontWeight: 600 }}>{label}:</Box> {value}
+    </Typography>
+  );
+
   return (
-    <Box
-      data-testid="group-lesson-take-home"
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        p: `${mobileTheme.spacing.md}px`
-      }}
-    >
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
-        {Locale.label("mobile.details.thisWeeksLesson")}
-      </Typography>
-      {lesson.image && (
-        <Box
-          component="img"
-          src={lesson.image}
-          alt={title}
-          sx={{ width: "100%", maxHeight: 160, objectFit: "cover", borderRadius: `${mobileTheme.radius.md}px`, mb: `${mobileTheme.spacing.sm}px` }}
-        />
-      )}
-      {title && (
-        <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>{title}</Typography>
-      )}
-      {dateLabel && (
-        <Typography sx={{ fontSize: 13, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px` }}>{dateLabel}</Typography>
-      )}
-      {lesson.bottomLine && (
-        <Typography sx={{ fontSize: 14, color: tc.text, mb: 0.5 }}>
-          <strong>{Locale.label("mobile.details.bottomLine")}:</strong> {lesson.bottomLine}
-        </Typography>
-      )}
-      {lesson.verse && (
-        <Typography sx={{ fontSize: 14, color: tc.text, mb: 0.5 }}>
-          <strong>{Locale.label("mobile.details.verse")}:</strong> {lesson.verse}
-        </Typography>
-      )}
-      {lesson.parentQuestion && (
-        <Typography sx={{ fontSize: 14, color: tc.text, mb: 0.5 }}>
-          <strong>{Locale.label("mobile.details.parentQuestion")}:</strong> {lesson.parentQuestion}
-        </Typography>
-      )}
-      {lesson.parentNote && (
-        <Box sx={{ fontSize: 14, color: tc.textMuted, mt: 0.5, "& p": { mt: 0, mb: 1 }, "& p:last-child": { mb: 0 } }}>
-          <MarkdownPreviewLight value={lesson.parentNote} />
+    <PlateSection>
+      <Box data-testid="group-lesson-take-home">
+        <Box sx={{ mb: "10px" }}><Eyebrow>{Locale.label("mobile.details.thisWeeksLesson")}</Eyebrow></Box>
+        <Box sx={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
+          {lesson.image && <Thumb src={lesson.image} alt={title} width={96} height={54} />}
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            {title && <Typography sx={{ fontSize: 17, lineHeight: "24px", fontWeight: 600, color: tc.text }}>{title}</Typography>}
+            {dateLabel && <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary }}>{dateLabel}</Typography>}
+          </Box>
         </Box>
-      )}
-    </Box>
+        <Box sx={{ mt: "8px" }}>
+          {lesson.bottomLine && line(Locale.label("mobile.details.bottomLine"), lesson.bottomLine)}
+          {lesson.verse && line(Locale.label("mobile.details.verse"), lesson.verse)}
+          {lesson.parentQuestion && line(Locale.label("mobile.details.parentQuestion"), lesson.parentQuestion)}
+          {lesson.parentNote && (
+            <Box sx={{ fontSize: 15, lineHeight: "22px", color: tc.textSecondary, mt: "6px", "& p": { mt: 0, mb: 1 }, "& p:last-child": { mb: 0 } }}>
+              <MarkdownPreviewLight value={lesson.parentNote} />
+            </Box>
+          )}
+        </Box>
+      </Box>
+    </PlateSection>
   );
 };

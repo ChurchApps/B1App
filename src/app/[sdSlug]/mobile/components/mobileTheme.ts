@@ -23,6 +23,20 @@ export const mobileTheme = {
     divider: "var(--mb-divider)",
     iconBackground: "var(--mb-icon-background)",
     disabled: "var(--mb-disabled)",
+    control: "var(--mb-control)",
+    link: "var(--mb-link)",
+    eyebrow: "var(--mb-eyebrow)",
+    selected: "var(--mb-selected)",
+    onSelected: "var(--mb-on-selected)",
+    chip: "var(--mb-chip)",
+    onChip: "var(--mb-on-chip)",
+    primaryDeep: "var(--mb-primary-deep)",
+    header: "var(--mb-header)",
+    successBg: "var(--mb-success-bg)",
+    warningBg: "var(--mb-warning-bg)",
+    errorBg: "var(--mb-error-bg)",
+    neutral: "var(--mb-neutral)",
+    neutralBg: "var(--mb-neutral-bg)",
     wash1: "var(--mb-wash-1)",
     wash2: "var(--mb-wash-2)",
     wash3: "var(--mb-wash-3)",
@@ -33,17 +47,16 @@ export const mobileTheme = {
   // element — routing it through a :root token breaks because :root sits outside that wrapper.
   fonts: {
     serif: 'var(--font-mobile-serif, "Iowan Old Style"), "Iowan Old Style", "Palatino Linotype", Georgia, serif',
-    sans: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+    sans: "inherit"
   },
-  // Standard media-card fallback when no photo exists: brand hue drifting warm, never a ghosted icon.
   colorWash: "linear-gradient(115deg, var(--mb-wash-1) 0%, var(--mb-wash-2) 55%, var(--mb-wash-3) 100%)",
   verseGradient: "linear-gradient(150deg, var(--mb-verse-1) 0%, var(--mb-verse-2) 100%)",
   spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
-  radius: { sm: 6, md: 10, lg: 16, xl: 22 },
+  radius: { sm: 6, md: 10, lg: 10, xl: 16 },
   radiusVar: { sm: "var(--mb-radius-sm)", md: "var(--mb-radius-md)", lg: "var(--mb-radius-lg)", xl: "var(--mb-radius-xl)" },
   typography: {
-    h1: { fontSize: 24, fontWeight: 700 },
-    h2: { fontSize: 20, fontWeight: 600 },
+    h1: { fontSize: 28, fontWeight: 650 },
+    h2: { fontSize: 20, fontWeight: 650 },
     h3: { fontSize: 18, fontWeight: 600 },
     body: { fontSize: 16, fontWeight: 400 },
     bodySmall: { fontSize: 14, fontWeight: 400 },
@@ -55,7 +68,7 @@ export const mobileTheme = {
     md: "var(--mb-shadow-md)",
     lg: "var(--mb-shadow-lg)"
   },
-  drawerWidth: 280,
+  contentMaxWidth: 1180,
   headerHeight: 56,
   tabBarHeight: 64,
   // Content safe zone. :root sets --safe-* from env(safe-area-inset-*).
@@ -179,21 +192,3 @@ export const linkTypeToIcon = (linkType?: string, itemIcon?: string): string => 
   }
 };
 
-// Returning null lets callers omit the subtext line instead of using generic fallback.
-export const linkTypeToTagline = (linkType?: string): string | null => {
-  switch ((linkType || "").toLowerCase()) {
-    case "groups": return Locale.label("mobile.taglines.groups");
-    case "directory": return Locale.label("mobile.taglines.directory");
-    case "plans": return Locale.label("mobile.taglines.plans");
-    case "checkin": return Locale.label("mobile.taglines.checkin");
-    case "lessons": return Locale.label("mobile.taglines.lessons");
-    case "donation": return Locale.label("mobile.taglines.donation");
-    case "volunteer": return Locale.label("mobile.taglines.volunteer");
-    case "bible": return Locale.label("mobile.taglines.bible");
-    case "votd": return Locale.label("mobile.taglines.votd");
-    case "sermons": return Locale.label("mobile.taglines.sermons");
-    case "stream": return Locale.label("mobile.taglines.stream");
-    case "registrations": return Locale.label("mobile.taglines.registrations");
-    default: return null;
-  }
-};

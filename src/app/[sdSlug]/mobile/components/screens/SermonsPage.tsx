@@ -1,19 +1,21 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Box, Icon, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Button, Skeleton, Typography } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import LiveTvIcon from "@mui/icons-material/LiveTv";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
-import { formatDate as formatDateShared, formatDuration } from "../util";
-import { SermonCard } from "../SermonCard";
+import { formatDate } from "../util";
+import { BackVerb, FilterPills, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, SearchField, StatusBadge, TextLink, Thumb, useSliceView } from "../kit";
+import { MediaFrame, SermonRow, sermonHref, sermonMeta, useChurchSermons } from "../SermonCard";
 import { DateHelper } from "@churchapps/helpers";
-
-const formatDate = (date?: Date | string) => formatDateShared(date, "short");
 
 interface Props {
   config: ConfigurationInterface;
@@ -59,396 +61,29 @@ const getSecondsFromDisplay = (value?: string) => {
   }
 };
 
-const FeaturedSermonHero = ({ sermon, onClick }: { sermon: SermonInterface; onClick: () => void }) => {
-  const tc = mobileTheme.colors;
-  const hasImage = !!(sermon.thumbnail && sermon.thumbnail.trim() !== "");
+const sermonYear = (s: SermonInterface) => (s.publishDate ? new Date(s.publishDate).getFullYear() : 0);
 
-  return (
-    <Box
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onClick(); }}
-      sx={{
-        position: "relative",
-        width: "100%",
-        paddingTop: "56.25%",
-        mb: `${mobileTheme.spacing.lg}px`,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        overflow: "hidden",
-        cursor: "pointer",
-        background: hasImage ? `url(${sermon.thumbnail}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
-      }}
-    >
-      <Box sx={{
-        position: "absolute",
-        inset: 0,
-        background: "linear-gradient(transparent, rgba(7,14,27,0.78))",
-        display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "space-between",
-        gap: `${mobileTheme.spacing.md}px`,
-        p: `${mobileTheme.spacing.lg}px`
-      }}>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography sx={{
-            color: "#FFFFFF",
-            fontSize: 12,
-            fontWeight: 600,
-            letterSpacing: 1,
-            textTransform: "uppercase",
-            opacity: 0.9,
-            mb: 1
-          }}>
-            Latest Sermon
-          </Typography>
-          <Typography sx={{
-            color: "#FFFFFF",
-            fontWeight: 700,
-            fontSize: 22,
-            lineHeight: 1.2,
-            mb: 1,
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-            textShadow: "0 1px 2px rgba(0,0,0,0.5)"
-          }}>
-            {sermon.title || "Untitled Sermon"}
-          </Typography>
-          {sermon.publishDate && (
-            <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14, mb: 0.5 }}>
-              {formatDate(sermon.publishDate)}
-            </Typography>
-          )}
-          {sermon.duration ? (
-            <Typography sx={{ color: "#FFFFFF", opacity: 0.8, fontSize: 12 }}>
-              {formatDuration(sermon.duration)}
-            </Typography>
-          ) : null}
-        </Box>
-        <Box sx={{
-          flexShrink: 0,
-          bgcolor: `color-mix(in srgb, ${tc.primary} 90%, transparent)`,
-          borderRadius: "28px",
-          width: 56,
-          height: 56,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: mobileTheme.shadows.md
-        }}>
-          <Icon sx={{ fontSize: 32, color: tc.onPrimary }}>play_arrow</Icon>
-        </Box>
+const playlistHref = (p: PlaylistInterface) => `/mobile/playlist/${p.id}${p.title ? `?title=${encodeURIComponent(p.title)}` : ""}`;
+
+const RowSkeletons = ({ count = 3 }: { count?: number }) => (
+  <>
+    {Array.from({ length: count }).map((_, i) => (
+      <Box key={i} sx={{ display: "flex", alignItems: "center", gap: "12px", minHeight: 70 }}>
+        <Skeleton variant="rounded" width={96} height={54} sx={{ borderRadius: "6px" }} />
+        <Box sx={{ flex: 1 }}><Skeleton variant="text" width="60%" /><Skeleton variant="text" width="35%" /></Box>
       </Box>
-    </Box>
-  );
-};
-
-const LiveStreamCard = ({ stream }: { stream: UpcomingStream }) => {
-  const router = useRouter();
-  const now = new Date();
-  const diffMs = stream.startDate.getTime() - now.getTime();
-  const days = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
-  const hours = Math.max(0, Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-  const minutes = Math.max(0, Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60)));
-  const goLive = () => router.push("/mobile/stream");
-
-  if (stream.isLive) {
-    return (
-      <Box
-        role="button"
-        tabIndex={0}
-        onClick={goLive}
-        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") goLive(); }}
-        sx={{
-          background: "linear-gradient(135deg, #D32F2F 0%, #F44336 100%)",
-          borderRadius: `${mobileTheme.radius.xl}px`,
-          p: `${mobileTheme.spacing.lg}px`,
-          mb: `${mobileTheme.spacing.lg}px`,
-          boxShadow: mobileTheme.shadows.lg,
-          textAlign: "center",
-          cursor: "pointer"
-        }}
-      >
-        <Box sx={{ display: "inline-flex", alignItems: "center", gap: 1, mb: 1.5 }}>
-          <Box sx={{
-            width: 12,
-            height: 12,
-            borderRadius: "6px",
-            bgcolor: "#FFFFFF",
-            animation: "pulse 1.4s ease-in-out infinite",
-            "@keyframes pulse": {
-              "0%, 100%": { opacity: 1 },
-              "50%": { opacity: 0.4 }
-            }
-          }} />
-          <Typography sx={{ color: "#FFFFFF", fontWeight: 800, letterSpacing: 1.5, fontSize: 14 }}>
-            LIVE NOW
-          </Typography>
-        </Box>
-        <Typography sx={{ color: "#FFFFFF", fontWeight: 700, fontSize: 20, mb: 1 }}>
-          {stream.title}
-        </Typography>
-        {stream.description && (
-          <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14, mb: 2 }}>
-            {stream.description}
-          </Typography>
-        )}
-        <Box sx={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 1,
-          bgcolor: "#FFFFFF",
-          color: "#D32F2F",
-          px: 2.5,
-          py: 1,
-          borderRadius: "24px",
-          fontWeight: 700
-        }}>
-          <Icon sx={{ fontSize: 20 }}>play_circle</Icon>
-          <Typography sx={{ fontSize: 14, fontWeight: 700 }}>{Locale.label("mobile.screens.watchLive")}</Typography>
-        </Box>
-      </Box>
-    );
-  }
-
-  return (
-    <Box sx={{
-      background: mobileTheme.verseGradient,
-      borderRadius: `${mobileTheme.radius.xl}px`,
-      p: `${mobileTheme.spacing.lg}px`,
-      mb: `${mobileTheme.spacing.lg}px`,
-      textAlign: "center"
-    }}>
-      <Typography sx={{
-        color: "#FFFFFF",
-        fontWeight: 600,
-        letterSpacing: 1,
-        fontSize: 12,
-        textTransform: "uppercase",
-        mb: 2
-      }}>
-        Next Service In
-      </Typography>
-      <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: 3, mb: 2 }}>
-        {days > 0 && (
-          <Box sx={{ textAlign: "center" }}>
-            <Typography sx={{ color: "#FFFFFF", fontWeight: 800, fontSize: 36, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{days}</Typography>
-            <Typography sx={{ color: "#FFFFFF", opacity: 0.85, fontSize: 11, fontWeight: 600, textTransform: "uppercase" }}>
-              {days === 1 ? "Day" : "Days"}
-            </Typography>
-          </Box>
-        )}
-        <Box sx={{ textAlign: "center" }}>
-          <Typography sx={{ color: "#FFFFFF", fontWeight: 800, fontSize: 36, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{hours}</Typography>
-          <Typography sx={{ color: "#FFFFFF", opacity: 0.85, fontSize: 11, fontWeight: 600, textTransform: "uppercase" }}>
-            {hours === 1 ? "Hour" : "Hours"}
-          </Typography>
-        </Box>
-        <Box sx={{ textAlign: "center" }}>
-          <Typography sx={{ color: "#FFFFFF", fontWeight: 800, fontSize: 36, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{minutes}</Typography>
-          <Typography sx={{ color: "#FFFFFF", opacity: 0.85, fontSize: 11, fontWeight: 600, textTransform: "uppercase" }}>
-            {minutes === 1 ? "Minute" : "Minutes"}
-          </Typography>
-        </Box>
-      </Box>
-      <Typography sx={{ color: "#FFFFFF", fontWeight: 700, fontSize: 18, mb: 0.5 }}>
-        {stream.title}
-      </Typography>
-      {stream.description && (
-        <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14, mb: 1 }}>
-          {stream.description}
-        </Typography>
-      )}
-      <Typography sx={{ color: "#FFFFFF", opacity: 0.85, fontSize: 13 }}>
-        {formatPrettyDateTime(stream.startDate)}
-      </Typography>
-    </Box>
-  );
-};
-
-const PlaylistCard = ({ playlist, onClick }: { playlist: PlaylistInterface; onClick: () => void }) => {
-  const hasImage = !!(playlist.thumbnail && playlist.thumbnail.trim() !== "");
-
-  return (
-    <Box
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onClick(); }}
-      sx={{
-        position: "relative",
-        width: "100%",
-        paddingTop: "56.25%",
-        mb: `${mobileTheme.spacing.md - 4}px`,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        overflow: "hidden",
-        cursor: "pointer",
-        background: hasImage ? `url(${playlist.thumbnail}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
-      }}
-    >
-      <Box sx={{
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        background: "linear-gradient(transparent, rgba(7,14,27,0.78))",
-        p: "16px",
-        pt: "32px",
-        display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "space-between",
-        gap: 1
-      }}>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography sx={{
-            color: "#FFFFFF",
-            fontWeight: 600,
-            fontSize: 16,
-            mb: 0.5,
-            lineHeight: 1.2,
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-            textShadow: "0 1px 2px rgba(0,0,0,0.4)"
-          }}>
-            {playlist.title || "Untitled Series"}
-          </Typography>
-          {playlist.description ? (
-            <Typography sx={{
-              color: "#FFFFFF",
-              opacity: 0.9,
-              fontSize: 14,
-              mb: 0.5,
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              textShadow: "0 1px 2px rgba(0,0,0,0.4)"
-            }}>
-              {playlist.description}
-            </Typography>
-          ) : null}
-          {playlist.publishDate && (
-            <Typography sx={{ color: "#FFFFFF", opacity: 0.85, fontSize: 12, textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}>
-              {formatDate(playlist.publishDate)}
-            </Typography>
-          )}
-        </Box>
-        <Icon sx={{ fontSize: 24, color: "#FFFFFF" }}>chevron_right</Icon>
-      </Box>
-    </Box>
-  );
-};
-
-const SkeletonCard = () => {
-  const tc = mobileTheme.colors;
-  return (
-    <Box sx={{
-      position: "relative",
-      width: "100%",
-      paddingTop: "56.25%",
-      mb: `${mobileTheme.spacing.md - 4}px`,
-      borderRadius: `${mobileTheme.radius.xl}px`,
-      overflow: "hidden",
-      bgcolor: tc.surfaceVariant
-    }} />
-  );
-};
-
-const EmptyState = ({ type }: { type: "sermons" | "playlists" }) => {
-  const tc = mobileTheme.colors;
-  const isPlaylists = type === "playlists";
-  return (
-    <Box sx={{
-      bgcolor: tc.surface,
-      border: `1px solid ${tc.border}`,
-      borderRadius: `${mobileTheme.radius.xl}px`,
-      p: 4,
-      textAlign: "center",
-      mt: 2
-    }}>
-      <Box sx={{
-        width: 72,
-        height: 72,
-        borderRadius: "11px",
-        bgcolor: tc.iconBackground,
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        mb: 2
-      }}>
-        <Icon sx={{ fontSize: 36, color: tc.primary }}>
-          {isPlaylists ? "playlist_add" : "video_library"}
-        </Icon>
-      </Box>
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-        {isPlaylists ? "No Sermon Series Available" : "No Recent Sermons"}
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        {isPlaylists
-          ? "Check back later for new sermon series from your church."
-          : "Check back later for new sermons from your church."}
-      </Typography>
-    </Box>
-  );
-};
-
-const ErrorState = ({ onGoBack }: { onGoBack: () => void }) => {
-  const tc = mobileTheme.colors;
-  return (
-    <Box sx={{
-      bgcolor: tc.surface,
-      border: `1px solid ${tc.border}`,
-      borderRadius: `${mobileTheme.radius.xl}px`,
-      p: 4,
-      textAlign: "center",
-      mt: 2
-    }}>
-      <Box sx={{
-        width: 72,
-        height: 72,
-        borderRadius: "11px",
-        bgcolor: tc.iconBackground,
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        mb: 2
-      }}>
-        <Icon sx={{ fontSize: 36, color: tc.textSecondary }}>sentiment_dissatisfied</Icon>
-      </Box>
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-        {Locale.label("mobile.screens.sermonsLoadError")}
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-        {Locale.label("mobile.screens.sermonsLoadErrorBody")}
-      </Typography>
-      <Box
-        component="button"
-        onClick={onGoBack}
-        sx={{
-          border: "none",
-          cursor: "pointer",
-          background: "none",
-          color: tc.primary,
-          fontWeight: 600,
-          fontSize: 14
-        }}
-      >
-        {Locale.label("mobile.screens.sermonsGoBack")}
-      </Box>
-    </Box>
-  );
-};
+    ))}
+  </>
+);
 
 export const SermonsPage = ({ config }: Props) => {
   const router = useRouter();
   const tc = mobileTheme.colors;
   const churchId = config?.church?.id;
   const keyName = config?.church?.subDomain;
-  const [activeTab, setActiveTab] = useState<"series" | "recent">("series");
+  const [view, setView] = useSliceView();
+  const [search, setSearch] = useState("");
+  const [year, setYear] = useState<number | "all" | null>(null);
 
   const [nowMs, setNowMs] = useState(() => Date.now());
 
@@ -457,20 +92,7 @@ export const SermonsPage = ({ config }: Props) => {
     return () => clearInterval(interval);
   }, []);
 
-  const { data: sermons = [], isLoading: sermonsLoading, isError: sermonsError } = useQuery<SermonInterface[]>({
-    queryKey: ["sermons", churchId],
-    queryFn: async () => {
-      const result = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
-      const list: SermonInterface[] = Array.isArray(result)
-        ? result.filter((s: any) => s && s.id && s.title)
-        : [];
-      list.sort((a, b) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime());
-      return list;
-    },
-    enabled: !!churchId,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000
-  });
+  const { data: sermons = [], isLoading: sermonsLoading, isError: sermonsError } = useChurchSermons(churchId);
 
   const { data: playlists = [], isLoading: playlistsLoading, isError: playlistsError } = useQuery<PlaylistInterface[]>({
     queryKey: ["playlists", churchId],
@@ -535,107 +157,178 @@ export const SermonsPage = ({ config }: Props) => {
     };
   }, [streamConfig, nowMs]);
 
-  const featuredSermon = useMemo<SermonInterface | null>(() => {
-    if (!sermons || sermons.length === 0) return null;
-    return sermons[0];
+  const featuredSermon = sermons[0] || null;
+
+  const playlistTitles = useMemo(() => new Map(playlists.map((p) => [p.id, p.title])), [playlists]);
+  const seriesCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    sermons.forEach((s) => { if (s.playlistId) counts.set(s.playlistId, (counts.get(s.playlistId) || 0) + 1); });
+    return counts;
   }, [sermons]);
 
-  const handleSermonClick = (sermon: SermonInterface) => {
-    if (!sermon.id) return;
-    const qs = sermon.title ? `?title=${encodeURIComponent(sermon.title)}` : "";
-    router.push(`/mobile/sermons/${sermon.id}${qs}`);
-  };
+  const years = useMemo(() => Array.from(new Set(sermons.map(sermonYear).filter(Boolean))).sort((a, b) => b - a), [sermons]);
+  const activeYear = year ?? years[0] ?? "all";
 
-  const handlePlaylistClick = (playlist: PlaylistInterface) => {
-    if (!playlist.id) return;
-    const qs = playlist.title ? `?title=${encodeURIComponent(playlist.title)}` : "";
-    router.push(`/mobile/playlist/${playlist.id}${qs}`);
-  };
+  const filteredSermons = useMemo(() => {
+    const needle = search.trim().toLowerCase();
+    // Search spans every year; the year pills only browse.
+    if (needle) return sermons.filter((s) => `${s.title || ""} ${s.description || ""}`.toLowerCase().includes(needle));
+    return activeYear === "all" ? sermons : sermons.filter((s) => sermonYear(s) === activeYear);
+  }, [sermons, search, activeYear]);
 
-  const renderSkeletons = () => (
-    <>
-      <SkeletonCard />
-      <SkeletonCard />
-      <SkeletonCard />
-    </>
-  );
+  const title = Locale.label("mobile.screenTitles.sermons");
+  const backToSermons = <BackVerb label={Locale.label("mobile.details.backToSermons")} onClick={() => setView("")} />;
 
-  const renderSeriesTab = () => {
-    if (playlistsLoading || sermonsLoading) return renderSkeletons();
-    if (playlistsError || sermonsError) return <ErrorState onGoBack={() => router.back()} />;
+  const playlistRow = (p: PlaylistInterface) => {
+    const count = seriesCounts.get(p.id || "") || 0;
+    const subtitle = count
+      ? `${count} ${count === 1 ? Locale.label("mobile.details.sermonSingular") : Locale.label("mobile.details.sermonPlural")}`
+      : p.description || undefined;
     return (
-      <>
-        {upcomingStream ? (
-          <LiveStreamCard stream={upcomingStream} />
-        ) : featuredSermon ? (
-          <FeaturedSermonHero sermon={featuredSermon} onClick={() => handleSermonClick(featuredSermon)} />
-        ) : null}
-
-        <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary, mb: 2 }}>
-          Sermon Series
-        </Typography>
-
-        {playlists.length === 0
-          ? <EmptyState type="playlists" />
-          : playlists.map((p) => (
-            <PlaylistCard key={p.id} playlist={p} onClick={() => handlePlaylistClick(p)} />
-          ))}
-      </>
+      <Row key={p.id} href={playlistHref(p)} leading={<Thumb src={p.thumbnail?.trim() || undefined} />} title={p.title || Locale.label("mobile.details.untitledSeries")} subtitle={subtitle} chevron />
     );
   };
 
-  const renderRecentTab = () => {
-    if (sermonsLoading) return renderSkeletons();
-    if (sermonsError) return <ErrorState onGoBack={() => router.back()} />;
+  if (sermonsError || playlistsError) {
     return (
-      <>
-        {upcomingStream ? <LiveStreamCard stream={upcomingStream} /> : null}
-
-        <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary, mb: 2 }}>
-          Recent Sermons
-        </Typography>
-
-        {sermons.length === 0
-          ? <EmptyState type="sermons" />
-          : sermons.map((s) => (
-            <SermonCard key={s.id} sermon={s} onClick={() => handleSermonClick(s)} />
-          ))}
-      </>
+      <Box>
+        <PageHead title={title} />
+        <Plate>
+          <PlateSection>
+            <Typography component="h2" sx={{ fontSize: 17, fontWeight: 650, color: tc.text }}>{Locale.label("mobile.screens.sermonsLoadError")}</Typography>
+            <QuietEmpty sx={{ mt: "4px", mb: "12px" }}>{Locale.label("mobile.screens.sermonsLoadErrorBody")}</QuietEmpty>
+            <TextLink onClick={() => router.back()}>{Locale.label("mobile.screens.sermonsGoBack")}</TextLink>
+          </PlateSection>
+        </Plate>
+      </Box>
     );
-  };
+  }
+
+  if (view === "all") {
+    return (
+      <Box>
+        {backToSermons}
+        <PageHead title={Locale.label("mobile.sermons.allSermons")} />
+        <Plate>
+          <PlateSection>
+            <SearchField value={search} onChange={setSearch} label={Locale.label("mobile.sermons.searchSermons")} placeholder={Locale.label("mobile.sermons.searchSermons")} />
+            {years.length > 1 && !search.trim() && (
+              <Box sx={{ mt: "14px" }}>
+                <FilterPills<number | "all">
+                  label={Locale.label("mobile.sermons.filterByYear")}
+                  value={activeYear}
+                  onChange={setYear}
+                  options={[...years.map((y) => ({ value: y, label: String(y) })), { value: "all" as const, label: Locale.label("mobile.sermons.allYears") }]}
+                />
+              </Box>
+            )}
+            <RowList sx={{ mt: "8px" }}>
+              {sermonsLoading
+                ? <RowSkeletons count={5} />
+                : filteredSermons.map((s) => <SermonRow key={s.id} sermon={s} href={sermonHref(s)} />)}
+            </RowList>
+            {!sermonsLoading && filteredSermons.length === 0 && (
+              <QuietEmpty sx={{ mt: "12px" }}>{Locale.label(sermons.length ? "mobile.sermons.noMatches" : "mobile.sermons.noSermons")}</QuietEmpty>
+            )}
+          </PlateSection>
+        </Plate>
+      </Box>
+    );
+  }
+
+  if (view === "series") {
+    return (
+      <Box>
+        {backToSermons}
+        <PageHead title={Locale.label("mobile.sermons.allSeries")} />
+        <Plate>
+          <PlateSection>
+            {playlistsLoading
+              ? <RowSkeletons count={4} />
+              : playlists.length === 0
+                ? <QuietEmpty>{Locale.label("mobile.sermons.noSeries")}</QuietEmpty>
+                : <RowList>{playlists.map(playlistRow)}</RowList>}
+          </PlateSection>
+        </Plate>
+      </Box>
+    );
+  }
+
+  const loading = sermonsLoading || playlistsLoading;
+  const recent = sermons.slice(1, 4);
 
   return (
-    <Box sx={{ bgcolor: tc.background, minHeight: "100%" }}>
-      <Box sx={{
-        borderBottom: `1px solid ${tc.border}`,
-        bgcolor: tc.surface
-      }}>
-        <Tabs
-          value={activeTab}
-          onChange={(_, value) => setActiveTab(value)}
-          variant="fullWidth"
-          textColor="primary"
-          indicatorColor="primary"
-          sx={{
-            minHeight: 52,
-            "& .MuiTab-root": {
-              textTransform: "none",
-              fontWeight: 500,
-              fontSize: 14,
-              minHeight: 52,
-              color: tc.textSecondary
-            },
-            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
-            "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 }
-          }}
-        >
-          <Tab value="series" label={Locale.label("mobile.screens.tabSeries")} />
-          <Tab value="recent" label={Locale.label("mobile.screens.tabRecent")} />
-        </Tabs>
-      </Box>
-      <Box sx={{ p: `${mobileTheme.spacing.md}px` }}>
-        {activeTab === "series" ? renderSeriesTab() : renderRecentTab()}
-      </Box>
+    <Box>
+      <PageHead title={title}>
+        {upcomingStream?.isLive
+          ? <Button variant="contained" component={Link} href="/mobile/stream" startIcon={<LiveTvIcon />}>{Locale.label("mobile.screens.watchLive")}</Button>
+          : featuredSermon && <Button variant="contained" component={Link} href={sermonHref(featuredSermon)} startIcon={<PlayArrowIcon />}>{Locale.label("mobile.sermons.watchLatest")}</Button>}
+      </PageHead>
+      <Plate>
+        {loading && (
+          <PlateSection>
+            <Skeleton variant="rounded" sx={{ width: "100%", maxWidth: 720, height: "auto", aspectRatio: "16 / 9", borderRadius: "10px" }} />
+            <RowSkeletons />
+          </PlateSection>
+        )}
+
+        {!loading && featuredSermon && (
+          <PlateSection title={Locale.label("mobile.sermons.latest")}>
+            <Box sx={{ maxWidth: 720 }}>
+              <MediaFrame
+                href={sermonHref(featuredSermon)}
+                ariaLabel={`${Locale.label("mobile.components.playSermon")}: ${featuredSermon.title || ""}`}
+                src={featuredSermon.thumbnail}
+                kicker={playlistTitles.get(featuredSermon.playlistId || "") || formatDate(featuredSermon.publishDate, "short")}
+                title={featuredSermon.title}
+                play
+              />
+            </Box>
+            <Typography sx={{ mt: "12px", fontSize: 16, lineHeight: "22px", fontWeight: 600, color: tc.text }}>
+              {featuredSermon.title || Locale.label("mobile.components.untitledSermon")}
+            </Typography>
+            {sermonMeta(featuredSermon) && <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary }}>{sermonMeta(featuredSermon)}</Typography>}
+          </PlateSection>
+        )}
+
+        {!loading && upcomingStream && (
+          <PlateSection title={Locale.label("mobile.sermons.live")}>
+            <Row
+              href="/mobile/stream"
+              leading={<LiveTvIcon sx={{ color: tc.textSecondary }} />}
+              title={upcomingStream.title}
+              subtitle={upcomingStream.isLive
+                ? upcomingStream.description || undefined
+                : `${Locale.label("mobile.screens.nextService")} · ${formatPrettyDateTime(upcomingStream.startDate)}`}
+              trailing={upcomingStream.isLive ? <StatusBadge tone="bad" dot>{Locale.label("mobile.stream.live")}</StatusBadge> : undefined}
+              chevron
+            />
+          </PlateSection>
+        )}
+
+        {!loading && (
+          <PlateSection
+            title={Locale.label("mobile.screens.tabRecent")}
+            action={sermons.length > 0 ? <TextLink onClick={() => setView("all")}>{Locale.label("mobile.sermons.allSermons")}</TextLink> : undefined}
+          >
+            {sermons.length === 0
+              ? <QuietEmpty>{Locale.label("mobile.sermons.noSermons")}</QuietEmpty>
+              : recent.length > 0 && <RowList>{recent.map((s) => <SermonRow key={s.id} sermon={s} href={sermonHref(s)} />)}</RowList>}
+          </PlateSection>
+        )}
+
+        {!loading && (
+          <PlateSection
+            id="sermon-series"
+            title={Locale.label("mobile.screens.tabSeries")}
+            action={playlists.length > 0 ? <TextLink onClick={() => setView("series")}>{Locale.label("mobile.sermons.allSeries")}</TextLink> : undefined}
+          >
+            {playlists.length === 0
+              ? <QuietEmpty>{Locale.label("mobile.sermons.noSeries")}</QuietEmpty>
+              : <RowList>{playlists.slice(0, 3).map(playlistRow)}</RowList>}
+          </PlateSection>
+        )}
+      </Plate>
     </Box>
   );
 };

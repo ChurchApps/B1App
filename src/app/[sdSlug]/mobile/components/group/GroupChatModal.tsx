@@ -1,30 +1,19 @@
 "use client";
 
 import React from "react";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Icon,
-  IconButton,
-  InputAdornment,
-  Menu,
-  MenuItem,
-  Snackbar,
-  Tab,
-  Tabs,
-  TextField,
-  Typography
-} from "@mui/material";
+import { Box, Button, CircularProgress, Dialog, IconButton, Menu, MenuItem, Snackbar, TextField, Typography } from "@mui/material";
+import AddReactionOutlinedIcon from "@mui/icons-material/AddReactionOutlined";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import SendIcon from "@mui/icons-material/Send";
 import { ApiHelper, Locale, PersonHelper, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
 import { SubscriptionToggle, SUBSCRIPTION_MESSAGE_TYPE } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
+import { Eyebrow, PersonAvatar, QuietEmpty, Sheet, TextLink } from "../kit";
 
 export type ChatSubTab = "discussions" | "announcements";
 
@@ -91,6 +80,7 @@ export const GroupChatModal = ({
   const [sending, setSending] = React.useState(false);
   const [people, setPeople] = React.useState<Record<string, PersonInterface>>({});
   const [hasAnnouncements, setHasAnnouncements] = React.useState(false);
+  const [latestAnnouncement, setLatestAnnouncement] = React.useState<Message | null>(null);
   const [editingId, setEditingId] = React.useState<string | null>(null);
   const [menuAnchor, setMenuAnchor] = React.useState<{ el: HTMLElement; message: Message } | null>(null);
   const [reactAnchor, setReactAnchor] = React.useState<{ el: HTMLElement; message: Message } | null>(null);
@@ -130,21 +120,25 @@ export const GroupChatModal = ({
 
   const loadAnnouncementsPreflight = React.useCallback(async () => {
     if (!groupId || !open) return;
-    if (isLeader) {
-      setHasAnnouncements(true);
-      return;
-    }
     try {
       const data: Conversation[] = await ApiHelper.get(
         `/conversations/messages/groupAnnouncement/${groupId}?page=1&limit=1`,
         "MessagingApi"
       );
-      const any =
-        Array.isArray(data) &&
-        data.some((c) => Array.isArray(c.messages) && c.messages.length > 0);
-      setHasAnnouncements(any);
+      const latest = (Array.isArray(data) ? data : [])
+        .flatMap((c) => c.messages || [])
+        .filter((m) => m.messageType !== SUBSCRIPTION_MESSAGE_TYPE)[0] || null;
+      setLatestAnnouncement(latest);
+      setHasAnnouncements(isLeader || !!latest);
+      if (latest?.personId) {
+        try {
+          const p: PersonInterface[] = await ApiHelper.get(`/people/basic?ids=${latest.personId}`, "MembershipApi");
+          if (Array.isArray(p) && p[0]?.id) setPeople((prev) => ({ ...prev, [p[0].id!]: p[0] }));
+        } catch { /* name falls back to blank */ }
+      }
     } catch {
-      setHasAnnouncements(false);
+      setLatestAnnouncement(null);
+      setHasAnnouncements(isLeader);
     }
   }, [groupId, isLeader, open]);
 
@@ -377,27 +371,15 @@ export const GroupChatModal = ({
   const renderMessageContent = (content: string) => {
     const imageRegex = /https?:\/\/\S+\.(jpg|jpeg|png|gif|webp|svg)(\?\S*)?/gi;
     const urlRegex = /https?:\/\/\S+/gi;
-
     const imageMatches = content.match(imageRegex);
     const urlMatches = content.match(urlRegex);
-
     const textWithoutUrls = content.replace(urlRegex, "").trim();
 
     return (
       <>
-        {textWithoutUrls && (
-          <Typography sx={{ fontSize: 15, lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
-            {textWithoutUrls}
-          </Typography>
-        )}
+        {textWithoutUrls && <Typography sx={{ fontSize: 15, lineHeight: "21px", whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{textWithoutUrls}</Typography>}
         {imageMatches?.map((url, i) => (
-          <Box
-            key={i}
-            component="img"
-            src={url}
-            alt="image"
-            sx={{ maxWidth: "100%", borderRadius: 2, mt: 0.5 }}
-          />
+          <Box key={i} component="img" src={url} alt="" sx={{ maxWidth: "100%", borderRadius: "8px", mt: 0.5, display: "block" }} />
         ))}
         {urlMatches
           ?.filter((url) => !new RegExp(imageRegex.source, "i").test(url))
@@ -408,194 +390,88 @@ export const GroupChatModal = ({
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-                mt: 0.5,
-                px: 1.5,
-                py: 1,
-                bgcolor: "rgba(255,255,255,0.15)",
-                borderRadius: "10px",
-                textDecoration: "none",
-                color: "inherit"
-              }}
+              sx={{ display: "inline-flex", alignItems: "center", gap: "6px", mt: 0.5, fontSize: 14, fontWeight: 600, color: "inherit", textDecoration: "underline" }}
             >
-              <Icon sx={{ fontSize: 18 }}>attach_file</Icon>
-              <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
-                Open file
-              </Typography>
+              <AttachFileIcon sx={{ fontSize: 18 }} />
+              {Locale.label("mobile.group.openFile")}
             </Box>
           ))}
       </>
     );
   };
 
-  const renderEmpty = () => (
-    <Box sx={{ textAlign: "center", p: `${mobileTheme.spacing.lg}px`, mt: 2 }}>
-      <Box
-        sx={{
-          width: 64,
-          height: 64,
-          borderRadius: "11px",
-          bgcolor: tc.iconBackground,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <Icon sx={{ fontSize: 32, color: tc.primary }}>
-          {subTab === "announcements" ? "campaign" : "chat"}
-        </Icon>
-      </Box>
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-        {subTab === "announcements" ? Locale.label("mobile.group.noAnnouncementsYet") : Locale.label("mobile.group.startTheConversation")}
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        {subTab === "announcements"
-          ? isLeader
-            ? Locale.label("mobile.group.postAnnouncementBelow")
-            : Locale.label("mobile.group.leadersCanPost")
-          : Locale.label("mobile.group.beFirstToShare")}
-      </Typography>
-    </Box>
-  );
+  const nameOf = (personId?: string) => (personId && people[personId]?.name?.display) || "";
 
   const renderMessages = () => (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "2px", py: `${mobileTheme.spacing.sm}px` }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", py: "16px" }}>
       {messages.map((m, i) => {
         const isMine = m.personId === myPersonId;
         const p = m.personId ? people[m.personId] : undefined;
-        const name = p?.name?.display || "";
+        const name = nameOf(m.personId);
         const prev = messages[i - 1];
-        const next = messages[i + 1];
         const showName = !isMine && (!prev || prev.personId !== m.personId);
-        const showAvatar = !isMine && (!next || next.personId !== m.personId);
         const photo = p ? (() => { try { return PersonHelper.getPhotoUrl(p); } catch { return ""; } })() : "";
         const showActions = (isMine || isLeader) && !!m.id;
+        const reactions = (m.reactions || []).filter((r) => r.count > 0);
         return (
-          <Box
-            key={m.id || `m-${i}`}
-            sx={{
-              display: "flex",
-              flexDirection: isMine ? "row-reverse" : "row",
-              alignItems: "flex-end",
-              gap: 1
-            }}
-          >
-            {showActions && (
-              <IconButton
-                size="small"
-                aria-label={Locale.label("mobile.group.messageActions")}
-                onClick={(e) => setMenuAnchor({ el: e.currentTarget, message: m })}
-                data-testid={`message-actions-${m.id}`}
-                sx={{ color: tc.textMuted, p: "4px" }}
-              >
-                <Icon sx={{ fontSize: 18 }}>more_vert</Icon>
-              </IconButton>
-            )}
-            {!isMine && (
-              <Box sx={{ width: 32, flexShrink: 0 }}>
-                {showAvatar ? (
-                  photo ? (
-                    <Box
-                      component="img"
-                      src={photo}
-                      alt={name}
-                      sx={{ width: 32, height: 32, borderRadius: "16px", objectFit: "cover" }}
-                    />
-                  ) : (
-                    <Box
-                      sx={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: "16px",
-                        bgcolor: tc.primaryLight,
-                        color: tc.primary,
-                        fontSize: 12,
-                        fontWeight: 700,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}
-                    >
-                      {(name[0] || "?").toUpperCase()}
-                    </Box>
-                  )
-                ) : null}
-              </Box>
-            )}
-            <Box
-              sx={{
-                maxWidth: "75%",
-                bgcolor: isMine ? tc.primary : tc.surface,
-                color: isMine ? tc.onPrimary : tc.text,
-                px: 1.5,
-                py: 1,
-                borderRadius: "18px",
-                borderBottomLeftRadius: !isMine ? "4px" : "18px",
-                borderBottomRightRadius: isMine ? "4px" : "18px"
-              }}
-            >
-              {showName && name && (
-                <Typography sx={{ fontSize: 12, fontWeight: 600, color: tc.primary, mb: "2px" }}>
-                  {name}
+          <Box key={m.id || `m-${i}`} sx={{ display: "flex", gap: "8px", alignItems: "flex-start", flexDirection: isMine ? "row-reverse" : "row" }}>
+            {!isMine && <Box sx={{ width: 32, flex: "none", pt: showName ? "22px" : 0 }}>{showName && <PersonAvatar name={name} src={photo || undefined} size={32} />}</Box>}
+            <Box sx={{ maxWidth: "78%", minWidth: 0, display: "flex", flexDirection: "column", alignItems: isMine ? "flex-end" : "flex-start" }}>
+              {showName && (
+                <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary, mb: "4px" }}>
+                  {[name, formatRelative(m.timeSent)].filter(Boolean).join(" · ")}
                 </Typography>
               )}
-              {renderMessageContent(m.content || "")}
-              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, mt: "2px" }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
-                  {(m.reactions || []).filter((r) => r.count > 0).map((r) => (
-                    <Box
-                      key={r.emoji}
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => handleToggleReaction(m, r.emoji)}
-                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleToggleReaction(m, r.emoji); } }}
-                      data-testid={`reaction-chip-${r.emoji}`}
-                      sx={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "2px",
-                        px: "6px",
-                        height: 20,
-                        borderRadius: "999px",
-                        cursor: "pointer",
-                        fontSize: 10.5,
-                        fontWeight: 700,
-                        bgcolor: r.mine ? tc.primaryLight : (isMine ? "rgba(255,255,255,0.2)" : tc.iconBackground),
-                        color: r.mine ? tc.primary : (isMine ? "#fff" : tc.text),
-                        border: r.mine ? `1px solid ${tc.primary}` : "1px solid transparent"
-                      }}
-                    >
-                      <span>{r.emoji}</span>
-                      <span>{r.count}</span>
-                    </Box>
-                  ))}
-                  {m.id && (
-                    <IconButton
-                      size="small"
-                      aria-label={Locale.label("mobile.group.addReaction")}
-                      onClick={(e) => setReactAnchor({ el: e.currentTarget, message: m })}
-                      data-testid={`react-add-${m.id}`}
-                      sx={{ p: "2px", color: isMine ? "rgba(255,255,255,0.85)" : tc.textMuted }}
-                    >
-                      <Icon sx={{ fontSize: 16 }}>add_reaction</Icon>
-                    </IconButton>
-                  )}
-                </Box>
-                <Typography
-                  sx={{
-                    fontSize: 11,
-                    opacity: 0.8,
-                    color: isMine ? "rgba(255,255,255,0.85)" : tc.textSecondary,
-                    textAlign: "right",
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  {formatRelative(m.timeSent)}
-                </Typography>
+              <Box sx={{
+                px: "12px",
+                py: "8px",
+                borderRadius: "14px",
+                bgcolor: isMine ? tc.primary : tc.surface,
+                color: isMine ? tc.onPrimary : tc.text,
+                border: isMine ? 0 : `1px solid ${tc.border}`
+              }}>
+                {renderMessageContent(m.content || "")}
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap", mt: "4px", flexDirection: isMine ? "row-reverse" : "row" }}>
+                {reactions.map((r) => (
+                  <Box
+                    key={r.emoji}
+                    component="button"
+                    type="button"
+                    aria-pressed={r.mine}
+                    onClick={() => handleToggleReaction(m, r.emoji)}
+                    data-testid={`reaction-chip-${r.emoji}`}
+                    sx={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      height: 24,
+                      px: "8px",
+                      borderRadius: 999,
+                      cursor: "pointer",
+                      font: "inherit",
+                      fontSize: 12.5,
+                      fontWeight: 600,
+                      border: `1px solid ${r.mine ? tc.onChip : "transparent"}`,
+                      bgcolor: tc.chip,
+                      color: tc.onChip
+                    }}
+                  >
+                    <span>{r.emoji}</span>
+                    <span>{r.count}</span>
+                  </Box>
+                ))}
+                {m.id && (
+                  <IconButton size="small" aria-label={Locale.label("mobile.group.addReaction")} onClick={(e) => setReactAnchor({ el: e.currentTarget, message: m })} data-testid={`react-add-${m.id}`} sx={{ p: "2px", color: tc.textSecondary }}>
+                    <AddReactionOutlinedIcon sx={{ fontSize: 18 }} />
+                  </IconButton>
+                )}
+                {showActions && (
+                  <IconButton size="small" aria-label={Locale.label("mobile.group.messageActions")} onClick={(e) => setMenuAnchor({ el: e.currentTarget, message: m })} data-testid={`message-actions-${m.id}`} sx={{ p: "2px", color: tc.textSecondary }}>
+                    <MoreVertIcon sx={{ fontSize: 18 }} />
+                  </IconButton>
+                )}
+                {(isMine || !showName) && <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>{formatRelative(m.timeSent)}</Typography>}
               </Box>
             </Box>
           </Box>
@@ -604,179 +480,122 @@ export const GroupChatModal = ({
     </Box>
   );
 
-  const showDiscussionsTab = discussionsEnabled;
-  const showAnnouncementsTab = announcementsEnabled && (isLeader || hasAnnouncements);
-  // Only one feed to choose from: drop the tab bar and name the feed under the title instead.
-  const showTabBar = showDiscussionsTab && showAnnouncementsTab;
+  const showAnnouncementsFeed = announcementsEnabled && (isLeader || hasAnnouncements);
+  const feedLabel = subTab === "announcements" ? Locale.label("mobile.group.announcements") : Locale.label("mobile.group.chat");
+  const column = { width: "100%", maxWidth: 760, mx: "auto", px: "16px", boxSizing: "border-box" } as const;
+
+  const renderStrip = () => {
+    if (subTab === "discussions" && showAnnouncementsFeed) {
+      return (
+        <Box sx={{ ...column, py: "12px" }} data-testid="group-chat-announcement">
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", mb: "2px" }}>
+            <Eyebrow component="p">{Locale.label("mobile.group.announcement")}</Eyebrow>
+            <TextLink onClick={() => setSubTab("announcements")}>{Locale.label("mobile.group.allAnnouncements")}</TextLink>
+          </Box>
+          {latestAnnouncement ? (
+            <>
+              <Typography sx={{ fontSize: 15, lineHeight: "21px", fontWeight: 500, color: tc.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{latestAnnouncement.content}</Typography>
+              <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary }}>{[nameOf(latestAnnouncement.personId), formatRelative(latestAnnouncement.timeSent)].filter(Boolean).join(" · ")}</Typography>
+            </>
+          ) : <QuietEmpty>{Locale.label("mobile.group.noAnnouncementsYet")}</QuietEmpty>}
+        </Box>
+      );
+    }
+    if (subTab === "announcements" && discussionsEnabled) {
+      return (
+        <Box sx={{ ...column, py: "10px" }}>
+          <TextLink onClick={() => setSubTab("discussions")}><ArrowBackIcon sx={{ fontSize: 18 }} />{Locale.label("mobile.group.backToChat")}</TextLink>
+        </Box>
+      );
+    }
+    return null;
+  };
+
+  const strip = renderStrip();
+  const titleId = React.useId();
 
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      fullWidth
-      maxWidth="sm"
-      PaperProps={{
-        sx: {
-          borderRadius: `${mobileTheme.radius.xl}px`,
-          height: "85dvh",
-          maxHeight: "85dvh",
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column"
-        }
-      }}
+      fullScreen
+      aria-labelledby={titleId}
+      PaperProps={{ sx: { bgcolor: tc.background, backgroundImage: "none", display: "flex", flexDirection: "column", overflow: "hidden" } }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          px: `${mobileTheme.spacing.md}px`,
-          py: `${mobileTheme.spacing.sm}px`,
-          borderBottom: `1px solid ${tc.border}`
-        }}
-      >
-        <Box>
-          <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
-            {groupName || Locale.label("mobile.group.groupChat")}
-          </Typography>
-          {!showTabBar && (
-            <Typography data-testid="group-chat-feed-label" sx={{ fontSize: 12, color: tc.textMuted }}>
-              {subTab === "announcements" ? Locale.label("mobile.group.announcements") : Locale.label("mobile.group.discussions")}
-            </Typography>
-          )}
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-          <SubscriptionToggle
-            conversationId={conversationId}
-            messages={allMessages as any}
-            personId={myPersonId}
-          />
-          <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label={Locale.label("mobile.components.close")}>
-            <Icon>close</Icon>
+      <Box sx={{ bgcolor: tc.surface, borderBottom: `1px solid ${tc.border}`, pt: mobileTheme.safe.top }}>
+        <Box sx={{ ...column, px: "4px", display: "flex", alignItems: "center", gap: "4px", minHeight: 56 }}>
+          <IconButton onClick={onClose} aria-label={Locale.label("mobile.group.backTo").replace("{}", groupName || Locale.label("mobile.components.group"))} sx={{ color: tc.text }}>
+            <ArrowBackIcon />
           </IconButton>
+          <Box sx={{ flex: 1, minWidth: 0, pl: "4px" }}>
+            <Typography data-testid="group-chat-feed-label" sx={{ fontSize: 11, lineHeight: "14px", fontWeight: 650, letterSpacing: "0.07em", textTransform: "uppercase", color: tc.eyebrow }}>
+              {feedLabel}
+            </Typography>
+            <Typography id={titleId} component="h1" sx={{ fontSize: 17, lineHeight: "22px", fontWeight: 600, color: tc.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {groupName || Locale.label("mobile.group.groupChat")}
+            </Typography>
+          </Box>
+          <SubscriptionToggle conversationId={conversationId} messages={allMessages as any} personId={myPersonId} />
         </Box>
       </Box>
-      {showTabBar && (
-        <Box sx={{ borderBottom: `1px solid ${tc.border}` }}>
-          <Tabs
-            value={subTab}
-            onChange={(_, v) => setSubTab(v)}
-            variant="fullWidth"
-            textColor="primary"
-            indicatorColor="primary"
-            sx={{
-              minHeight: 52,
-              "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 },
-              "& .MuiTab-root": {
-                minHeight: 52,
-                textTransform: "none",
-                fontWeight: 500,
-                fontSize: 14,
-                color: tc.textSecondary
-              },
-              "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
-            }}
-          >
-            <Tab value="discussions" label={Locale.label("mobile.group.discussions")} />
-            <Tab value="announcements" label={Locale.label("mobile.group.announcements")} />
-          </Tabs>
+      {strip && <Box sx={{ bgcolor: tc.surface, borderBottom: `1px solid ${tc.border}` }}>{strip}</Box>}
+      <Box ref={scrollRef} sx={{ flex: 1, overflow: "auto" }}>
+        <Box sx={column}>
+          {loading && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+              <CircularProgress size={28} sx={{ color: tc.primary }} />
+            </Box>
+          )}
+          {!loading && messages.length === 0 && (
+            <Box sx={{ py: "32px", textAlign: "center" }}>
+              <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
+                {subTab === "announcements" ? Locale.label("mobile.group.noAnnouncementsYet") : Locale.label("mobile.group.startTheConversation")}
+              </Typography>
+              <QuietEmpty>
+                {subTab === "announcements"
+                  ? isLeader ? Locale.label("mobile.group.postAnnouncementBelow") : Locale.label("mobile.group.leadersCanPost")
+                  : Locale.label("mobile.group.beFirstToShare")}
+              </QuietEmpty>
+            </Box>
+          )}
+          {!loading && messages.length > 0 && renderMessages()}
         </Box>
-      )}
-      <DialogContent
-        ref={scrollRef}
-        sx={{ px: `${mobileTheme.spacing.md}px`, py: 0, flex: 1, overflow: "auto", bgcolor: tc.background }}
-      >
-        {loading && (
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-            <CircularProgress sx={{ color: tc.primary }} />
+      </Box>
+      <Box sx={{ bgcolor: tc.surface, borderTop: `1px solid ${tc.border}`, pb: mobileTheme.safe.bottom }}>
+        {editingId && (
+          <Box sx={{ ...column, pt: "8px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+            <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, fontWeight: 600 }}>{Locale.label("mobile.group.editingMessage")}</Typography>
+            <TextLink onClick={handleCancelEdit}>{Locale.label("mobile.group.cancel")}</TextLink>
           </Box>
         )}
-        {!loading && messages.length === 0 && renderEmpty()}
-        {!loading && messages.length > 0 && renderMessages()}
-      </DialogContent>
-      {editingId && (
-        <Box
-          sx={{
-            bgcolor: tc.iconBackground,
-            borderTop: `1px solid ${tc.border}`,
-            px: `${mobileTheme.spacing.md}px`,
-            py: "6px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "8px"
-          }}
-        >
-          <Typography sx={{ fontSize: 12, color: tc.primary, fontWeight: 600 }}>
-            {Locale.label("mobile.group.editingMessage")}
-          </Typography>
-          <Button
-            size="small"
-            onClick={handleCancelEdit}
-            sx={{ color: tc.primary, textTransform: "none", fontSize: 12, minWidth: 0 }}
-          >
-            {Locale.label("mobile.group.cancel")}
-          </Button>
-        </Box>
-      )}
-      {canPost ? (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            px: `${mobileTheme.spacing.md}px`,
-            py: `${mobileTheme.spacing.sm}px`,
-            borderTop: `1px solid ${tc.border}`,
-            bgcolor: tc.surface
-          }}
-        >
-          <TextField
-            fullWidth
-            size="small"
-            placeholder={
-              subTab === "announcements" ? Locale.label("mobile.group.postAnnouncement") : Locale.label("mobile.group.sendAMessage")
-            }
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            multiline
-            maxRows={4}
-            InputProps={{
-              sx: { borderRadius: "20px" },
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={handleSend}
-                    disabled={sending || !draft.trim()}
-                    sx={{
-                      color: draft.trim() ? "#fff" : tc.disabled,
-                      bgcolor: draft.trim() ? tc.primary : tc.iconBackground,
-                      "&:hover": { bgcolor: draft.trim() ? tc.primary : tc.iconBackground },
-                      width: 36,
-                      height: 36
-                    }}
-                  >
-                    <Icon sx={{ fontSize: 20 }}>send</Icon>
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-          />
-        </Box>
-      ) : (
-        <Box sx={{ py: 1.5, borderTop: `1px solid ${tc.border}`, bgcolor: tc.surface }}>
-          <Typography sx={{ fontSize: 12, color: tc.textMuted, textAlign: "center" }}>
-            {Locale.label("mobile.group.onlyLeadersPost", "Only group leaders can post announcements.")}
-          </Typography>
-        </Box>
-      )}
+        {canPost ? (
+          <Box sx={{ ...column, py: "8px", display: "flex", alignItems: "flex-end", gap: "8px" }}>
+            <TextField
+              fullWidth
+              size="small"
+              placeholder={subTab === "announcements" ? Locale.label("mobile.group.postAnnouncement") : Locale.label("mobile.group.sendAMessage")}
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+              multiline
+              maxRows={4}
+              slotProps={{ input: { sx: { borderRadius: "8px", minHeight: 44 } } }}
+            />
+            <Button variant="contained" onClick={handleSend} disabled={sending || !draft.trim()} aria-label={Locale.label("mobile.details.send")} sx={{ minWidth: 44, width: 44, height: 44, px: 0, flex: "none" }}>
+              <SendIcon sx={{ fontSize: 20 }} />
+            </Button>
+          </Box>
+        ) : (
+          <Box sx={{ ...column, py: "14px" }}>
+            <QuietEmpty sx={{ textAlign: "center", fontSize: 14 }}>{Locale.label("mobile.group.onlyLeadersPost", "Only group leaders can post announcements.")}</QuietEmpty>
+          </Box>
+        )}
+      </Box>
       <Menu
         anchorEl={menuAnchor?.el || null}
         open={!!menuAnchor}
@@ -786,12 +605,12 @@ export const GroupChatModal = ({
       >
         {menuAnchor?.message.personId === myPersonId && (
           <MenuItem onClick={() => menuAnchor && handleStartEdit(menuAnchor.message)}>
-            <Icon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }}>edit</Icon>
+            <EditOutlinedIcon sx={{ fontSize: 18, mr: 1, color: tc.textSecondary }} />
             {Locale.label("mobile.group.edit")}
           </MenuItem>
         )}
         <MenuItem onClick={() => menuAnchor && handleRequestDelete(menuAnchor.message)}>
-          <Icon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }}>delete_outline</Icon>
+          <DeleteOutlineIcon sx={{ fontSize: 18, mr: 1, color: tc.textSecondary }} />
           {Locale.label("mobile.group.delete")}
         </MenuItem>
       </Menu>
@@ -814,22 +633,20 @@ export const GroupChatModal = ({
           </MenuItem>
         ))}
       </Menu>
-      <Dialog open={!!confirmDelete} onClose={() => setConfirmDelete(null)}>
-        <DialogTitle>{Locale.label("mobile.group.confirmDeleteTitle")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {Locale.label("mobile.group.confirmDeleteMessage")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmDelete(null)}>
-            {Locale.label("mobile.group.cancel")}
-          </Button>
-          <Button onClick={handleConfirmDelete} color="error" autoFocus>
-            {Locale.label("mobile.group.delete")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Sheet
+        open={!!confirmDelete}
+        onClose={() => setConfirmDelete(null)}
+        title={Locale.label("mobile.group.confirmDeleteTitle")}
+        maxWidth="xs"
+        actions={(
+          <>
+            <Button variant="outlined" onClick={() => setConfirmDelete(null)}>{Locale.label("mobile.group.cancel")}</Button>
+            <Button variant="contained" color="error" onClick={handleConfirmDelete} autoFocus>{Locale.label("mobile.group.delete")}</Button>
+          </>
+        )}
+      >
+        <Typography sx={{ color: tc.textSecondary }}>{Locale.label("mobile.group.confirmDeleteMessage")}</Typography>
+      </Sheet>
       <Snackbar open={!!actionError} autoHideDuration={4000} onClose={() => setActionError(null)} message={actionError} />
     </Dialog>
   );

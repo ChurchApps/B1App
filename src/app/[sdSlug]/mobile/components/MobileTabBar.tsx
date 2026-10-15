@@ -6,50 +6,21 @@ import { usePathname } from "next/navigation";
 import { Box, Icon, Typography } from "@mui/material";
 import { type LinkInterface } from "@churchapps/helpers";
 import { Locale } from "@churchapps/apphelper";
-import { mobileTheme, linkTypeToIcon, linkTypeToRoute, mobileSlugFromPath } from "./mobileTheme";
+import { mobileTheme, linkTypeToIcon, mobileSlugFromPath } from "./mobileTheme";
+import { navLinks, routeSlug } from "./MobileAppBar";
 
-interface Props {
-  links: LinkInterface[];
-  onMore: () => void;
-}
+export const MAX_LINK_TABS = 3;
 
-const MAX_LINK_TABS = 3;
-
-export const MobileTabBar = ({ links, onMore }: Props) => {
+export const MobileTabBar = ({ links }: { links: LinkInterface[] }) => {
   const pathname = usePathname();
-  const slug = mobileSlugFromPath(pathname);
+  const slug = mobileSlugFromPath(pathname) || "dashboard";
   const tc = mobileTheme.colors;
 
-  // votd is excluded because the dashboard verse card is its entry point.
-  const tabLinks = links
-    .filter((l) => l.linkType !== "separator" && l.linkType !== "url" && l.linkType !== "page" && l.linkType !== "votd")
-    .map((l) => ({ link: l, route: linkTypeToRoute(l.linkType, l.linkData, l.text, l.url) }))
-    .filter((t): t is { link: LinkInterface; route: string } => !!t.route && !t.route.startsWith("http"))
-    .slice(0, MAX_LINK_TABS);
-
-  const isActive = (route: string) => slug === route.split("?")[0].split("/").filter(Boolean).pop();
-
-  const tabSx = (active: boolean) => ({
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "2px",
-    py: "8px",
-    minWidth: 0,
-    cursor: "pointer",
-    textDecoration: "none",
-    color: active ? tc.primary : tc.textHint,
-    border: "none",
-    background: "transparent"
-  });
-
-  const label = (text: string, active: boolean) => (
-    <Typography noWrap sx={{ fontSize: 10.5, fontWeight: active ? 700 : 600, lineHeight: 1.2, color: "inherit", maxWidth: "100%" }}>
-      {text}
-    </Typography>
-  );
+  const tabs = [
+    { key: "home", href: "/mobile/dashboard", icon: "home", label: Locale.label("mobile.components.home"), active: slug === "dashboard" },
+    ...navLinks(links, MAX_LINK_TABS).map(({ link, route }) => ({ key: link.id || route, href: route, icon: linkTypeToIcon(link.linkType, link.icon), label: link.text || "", active: slug === routeSlug(route) })),
+    { key: "more", href: "/mobile/more", icon: "more_horiz", label: Locale.label("mobile.components.more"), active: slug === "more" }
+  ];
 
   return (
     <Box
@@ -64,28 +35,39 @@ export const MobileTabBar = ({ links, onMore }: Props) => {
         alignItems: "stretch",
         bgcolor: tc.surface,
         borderTop: `1px solid ${tc.border}`,
-        pb: mobileTheme.safe.bottom,
+        pt: "6px",
+        px: "4px",
+        pb: `calc(8px + ${mobileTheme.safe.bottom})`,
         minHeight: `${mobileTheme.tabBarHeight}px`,
         zIndex: (theme) => theme.zIndex.appBar
       }}
     >
-      <Box component={Link} href="/mobile/dashboard" sx={tabSx(!slug || slug === "dashboard")}>
-        <Icon sx={{ fontSize: 24 }}>home</Icon>
-        {label(Locale.label("mobile.components.home"), !slug || slug === "dashboard")}
-      </Box>
-      {tabLinks.map(({ link, route }) => {
-        const active = isActive(route);
-        return (
-          <Box key={link.id || route} component={Link} href={route} sx={tabSx(active)}>
-            <Icon sx={{ fontSize: 24 }}>{linkTypeToIcon(link.linkType, link.icon)}</Icon>
-            {label(link.text || "", active)}
+      {tabs.map((t) => (
+        <Box
+          key={t.key}
+          component={Link}
+          href={t.href}
+          aria-current={t.active ? "page" : undefined}
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "4px",
+            textDecoration: "none",
+            color: t.active ? tc.onSelected : tc.textSecondary
+          }}
+        >
+          <Box sx={{ width: 56, height: 30, borderRadius: 999, display: "grid", placeItems: "center", bgcolor: t.active ? tc.selected : "transparent" }}>
+            <Icon sx={{ fontSize: 22 }}>{t.icon}</Icon>
           </Box>
-        );
-      })}
-      <Box component="button" type="button" onClick={onMore} aria-label={Locale.label("mobile.components.openMenu")} sx={tabSx(false)}>
-        <Icon sx={{ fontSize: 24 }}>more_horiz</Icon>
-        {label(Locale.label("mobile.components.more"), false)}
-      </Box>
+          <Typography noWrap sx={{ fontSize: 11.5, fontWeight: t.active ? 650 : 500, lineHeight: 1, color: "inherit", maxWidth: "100%" }}>
+            {t.label}
+          </Typography>
+        </Box>
+      ))}
     </Box>
   );
 };

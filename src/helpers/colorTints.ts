@@ -20,7 +20,7 @@ const rgbToHex = (r: number, g: number, b: number): string => {
 };
 
 // `ratio` is how much of `mix` to blend in: 0 = pure base, 1 = pure mix.
-const mix = (base: string, mixColor: string, ratio: number): string => {
+export const mix = (base: string, mixColor: string, ratio: number): string => {
   if (!isValidHex(base) || !isValidHex(mixColor)) return base;
   const [br, bg, bb] = hexToRgb(base);
   const [mr, mg, mb] = hexToRgb(mixColor);

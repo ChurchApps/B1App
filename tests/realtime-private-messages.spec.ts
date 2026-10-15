@@ -18,7 +18,7 @@ test.describe("Realtime — private messages", () => {
   test("attempting a direct thread URL routes correctly", async ({ page }) => {
     await page.goto("/mobile/messages/PER00000001");
     await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
-    await expect(page.locator("body")).toContainText(/Donald Clark|Send|Message/i, { timeout: 15000 });
+    await expect(page.getByPlaceholder(/Type (a|your) message/i).first()).toBeVisible({ timeout: 15000 });
   });
 });
 

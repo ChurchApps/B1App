@@ -40,28 +40,14 @@ function captureDiagnostics(page: Page) {
   return log;
 }
 
-async function openDonateTab(page: Page) {
-  await page.goto("/mobile/donate");
-  const tab = page.getByRole("tab", { name: /^Donate$/i });
-  await tab.waitFor({ state: "visible", timeout: 20000 });
-  await tab.click();
-  await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 15000 });
+async function openGiveSlice(page: Page) {
+  await page.goto("/mobile/donate?view=give");
+  await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 20000 });
 }
 
-async function openManageTab(page: Page) {
-  await page.goto("/mobile/donate");
-  const tab = page.getByRole("tab", { name: /Manage/i });
-  await tab.waitFor({ state: "visible", timeout: 20000 });
-  await tab.click();
-  await page.getByRole("heading", { name: "Payment Methods" }).waitFor({ state: "visible", timeout: 20000 });
-}
-
-// RecurringDonations renders only after subscriptions query resolves.
-async function openHistoryTab(page: Page) {
-  await page.goto("/mobile/donate");
-  const tab = page.getByRole("tab", { name: /History/i });
-  await tab.waitFor({ state: "visible", timeout: 20000 });
-  await tab.click();
+async function openManageSlice(page: Page) {
+  await page.goto("/mobile/donate?view=manage");
+  await page.getByRole("heading", { name: "Payment Methods", exact: true }).waitFor({ state: "visible", timeout: 20000 });
 }
 
 async function fillDonationDetails(page: Page, amount: string, card: string) {
@@ -83,7 +69,7 @@ async function submitDonation(page: Page) {
 
 // Menu can remount and dismiss on gateway refetch; retry until CardForm iframe appears.
 async function addCardViaManage(page: Page, card: string) {
-  await openManageTab(page);
+  await openManageSlice(page);
   await expect(async () => {
     await page.getByLabel("add-button").click();
     await page.getByLabel("add-card").click({ timeout: 2000 });
@@ -95,7 +81,7 @@ async function addCardViaManage(page: Page, card: string) {
 
 async function deleteAllCards(page: Page) {
   page.on("dialog", (d) => d.accept());
-  await openManageTab(page);
+  await openManageSlice(page);
   // Component invalidates + refetches after each delete; re-nav would restore stale cache.
   for (let i = 0; i < 8; i++) {
     const count = await page.getByLabel("edit-button").count();
@@ -110,7 +96,7 @@ test.describe.serial("Stripe member donations (real test-mode charges)", () => {
   test("one-time donation with a new card (inline entry)", async ({ page }) => {
     const diag = captureDiagnostics(page);
     await deleteAllCards(page); // deterministic clean slate -> inline card entry
-    await openDonateTab(page);
+    await openGiveSlice(page);
     await fillDonationDetails(page, "5", CARD_OK);
     await submitDonation(page);
 
@@ -120,12 +106,12 @@ test.describe.serial("Stripe member donations (real test-mode charges)", () => {
     expect(ok, "No success Alert after one-time donation").toBe(true);
   });
 
-  test("saved card appears on Manage tab", async ({ page }) => {
-    await openManageTab(page);
+  test("saved card appears on Manage slice", async ({ page }) => {
+    await openManageSlice(page);
     await expect(page.getByText(/\*{2,4}4242/).first()).toBeVisible({ timeout: 20000 });
   });
 
-  test("add a second card via Manage tab (CardForm)", async ({ page }) => {
+  test("add a second card via Manage slice (CardForm)", async ({ page }) => {
     const diag = captureDiagnostics(page);
     await addCardViaManage(page, CARD_OK2);
 
@@ -137,7 +123,7 @@ test.describe.serial("Stripe member donations (real test-mode charges)", () => {
 
   test("recurring donation with a saved card", async ({ page }) => {
     const diag = captureDiagnostics(page);
-    await openDonateTab(page);
+    await openGiveSlice(page);
     await page.locator("#recurring-donation-button").click();
     await page.locator("#frequency-select").waitFor({ state: "visible", timeout: 15000 });
     await fillDonationDetails(page, "10", CARD_OK);
@@ -155,7 +141,8 @@ test.describe.serial("Stripe member donations (real test-mode charges)", () => {
   // real wheel event -- that is the only thing a phone user actually has.
   test("recurring donation edit pencil is reachable at phone width", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await openHistoryTab(page);
+    // RecurringDonations renders only after the subscriptions query resolves.
+    await page.goto("/mobile/donate?view=manage");
 
     const recurringBox = page.locator('[data-testid="recurring-donations"]');
     await expect(recurringBox).toBeVisible({ timeout: 20000 });
@@ -203,7 +190,8 @@ test.describe.serial("Stripe member donations (real test-mode charges)", () => {
     const diag = captureDiagnostics(page);
     page.on("dialog", (d) => d.accept()); // window.confirm on pause + cancel
 
-    await openHistoryTab(page);
+    // RecurringDonations renders only after the subscriptions query resolves.
+    await page.goto("/mobile/donate?view=manage");
     const recurringBox = page.locator('[data-testid="recurring-donations"]');
     await expect(recurringBox).toBeVisible({ timeout: 20000 });
     const pauseBtn = recurringBox.locator('button[aria-label="pause-subscription"]').first();
@@ -234,9 +222,9 @@ test.describe.serial("Stripe member donations (real test-mode charges)", () => {
     expect(cancelResp.ok(), "cancel response ok").toBe(true);
   });
 
-  test("delete a card via Manage tab", async ({ page }) => {
+  test("delete a card via Manage slice", async ({ page }) => {
     const diag = captureDiagnostics(page);
-    await openManageTab(page);
+    await openManageSlice(page);
     const before = await page.getByLabel("edit-button").count();
     expect(before, "expected at least one saved card to delete").toBeGreaterThan(0);
 
@@ -296,8 +284,9 @@ test.describe.serial("Stripe donation error handling", () => {
     const diag = captureDiagnostics(page);
     await deleteAllCards(page); // clean slate -> inline entry shows the decline card
 
-    // In-page tab switch (not re-nav) keeps live 0-card state for inline card entry.
-    await page.getByRole("tab", { name: /^Donate$/i }).click();
+    // In-page slice switch (not re-nav) keeps live 0-card state for inline card entry.
+    await page.getByRole("link", { name: /Back to Giving/i }).click();
+    await page.locator("main").getByRole("button", { name: /^Give$/ }).click();
     await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 15000 });
     await fillDonationDetails(page, "5", CARD_DECLINE);
     await submitDonation(page);
@@ -315,7 +304,8 @@ test.describe.serial("Stripe donation error handling", () => {
 
   test("a fixed error does not re-appear when re-previewing", async ({ page }) => {
     await deleteAllCards(page); // clean slate -> inline card entry
-    await page.getByRole("tab", { name: /^Donate$/i }).click();
+    await page.getByRole("link", { name: /Back to Giving/i }).click();
+    await page.locator("main").getByRole("button", { name: /^Give$/ }).click();
     await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 15000 });
     await page.locator("#donation-details").waitFor({ state: "visible", timeout: 15000 });
     await page.locator('input[name="amount"]').first().fill("5");

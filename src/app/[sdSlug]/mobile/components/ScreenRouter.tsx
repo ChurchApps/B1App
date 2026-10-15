@@ -90,7 +90,6 @@ export function ScreenRouter({ pageSlug, config }: Props) {
       return (
         <PlaceholderPage
           title={Locale.label("mobile.notFound.title")}
-          icon="error_outline"
           description={Locale.label("mobile.notFound.body")}
           actionLabel={Locale.label("mobile.notFound.backToHome")}
           actionHref="/mobile/dashboard"

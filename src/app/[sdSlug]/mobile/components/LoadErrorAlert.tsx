@@ -1,15 +1,13 @@
 "use client";
 
 import React from "react";
-import { Alert, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
+import { QuietEmpty, TextLink } from "./kit";
 
 export const LoadErrorAlert = ({ onRetry }: { onRetry: () => void }) => (
-  <Alert
-    severity="error"
-    data-testid="load-error"
-    action={<Button color="inherit" size="small" onClick={onRetry}>{Locale.label("mobile.screens.retry")}</Button>}
-  >
-    {Locale.label("mobile.screens.sermonsLoadErrorBody")}
-  </Alert>
+  <Box role="alert" data-testid="load-error">
+    <QuietEmpty>{Locale.label("mobile.screens.sermonsLoadErrorBody")}</QuietEmpty>
+    <Box sx={{ mt: "8px" }}><TextLink onClick={onRetry}>{Locale.label("mobile.screens.retry")}</TextLink></Box>
+  </Box>
 );

@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
+import { mobileTheme } from "../mobileTheme";
+import { Sheet } from "../kit";
 
 interface Props {
   open: boolean;
@@ -31,13 +33,22 @@ export const RequestToJoinDialog: React.FC<Props> = ({ open, groupId, groupName,
     }
   };
 
+  const handleCancel = () => { setMessage(""); setError(null); onClose(); };
+
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" data-testid="request-to-join-dialog">
-      <DialogTitle>{groupName ? Locale.label("mobile.group.requestToJoinNamed").replace("{}", groupName) : Locale.label("mobile.group.requestToJoin")}</DialogTitle>
-      <DialogContent>
-        <Typography variant="body2" sx={{ mb: 2, color: "text.secondary" }}>
-          {Locale.label("mobile.group.requestNote")}
-        </Typography>
+    <Sheet
+      open={open}
+      onClose={handleCancel}
+      title={groupName ? Locale.label("mobile.group.requestToJoinNamed").replace("{}", groupName) : Locale.label("mobile.group.requestToJoin")}
+      actions={(
+        <>
+          <Button variant="outlined" onClick={handleCancel} disabled={submitting}>{Locale.label("mobile.group.cancel")}</Button>
+          <Button onClick={handleSubmit} variant="contained" disabled={submitting} data-testid="request-submit">{Locale.label("mobile.group.sendRequest")}</Button>
+        </>
+      )}
+    >
+      <Box data-testid="request-to-join-dialog">
+        <Typography sx={{ mb: 2, fontSize: 15, color: mobileTheme.colors.textSecondary }}>{Locale.label("mobile.group.requestNote")}</Typography>
         <TextField
           autoFocus
           fullWidth
@@ -50,20 +61,8 @@ export const RequestToJoinDialog: React.FC<Props> = ({ open, groupId, groupName,
           slotProps={{ htmlInput: { maxLength: 1000 } }}
           data-testid="request-message-input"
         />
-        {error && (
-          <Typography color="error" sx={{ mt: 1 }} data-testid="request-error">
-            {error}
-          </Typography>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => { setMessage(""); setError(null); onClose(); }} disabled={submitting}>
-          {Locale.label("mobile.group.cancel")}
-        </Button>
-        <Button onClick={handleSubmit} variant="contained" disabled={submitting} data-testid="request-submit">
-          {Locale.label("mobile.group.sendRequest")}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        {error && <Typography sx={{ mt: 1, color: mobileTheme.colors.error }} data-testid="request-error">{error}</Typography>}
+      </Box>
+    </Sheet>
   );
 };

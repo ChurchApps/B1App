@@ -1,24 +1,24 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Menu, MenuItem, Popover, Snackbar, TextField, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
 import { Emojis } from "@/components/video/chat";
-import { ApiHelper, Locale, PersonHelper, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type MessageInterface, type PersonInterface } from "@churchapps/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
-import { getInitials } from "../util";
+import { PersonAvatar, QuietEmpty, TextLink } from "../kit";
 
 interface Props {
   id: string;
@@ -36,7 +36,7 @@ interface PersonWithDM extends PersonInterface {
   allowDirectMessages?: boolean;
 }
 
-export const MessageConversation = ({ id, config }: Props) => {
+export const MessageConversation = ({ id, config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -386,148 +386,53 @@ export const MessageConversation = ({ id, config }: Props) => {
 
   const name = person?.name?.display || Locale.label("mobile.details.conversation");
 
-  const getPhoto = (): string | "" => {
-    if (!person) return "";
-    try {
-      return PersonHelper.getPhotoUrl(person) || "";
-    } catch {
-      return "";
-    }
-  };
-
-  const renderAvatar = () => {
-    const photo = getPhoto();
-    const common = {
-      width: 36,
-      height: 36,
-      borderRadius: "18px",
-      flexShrink: 0,
-      overflow: "hidden"
-    } as const;
-    if (photo) {
-      return <Box component="img" src={photo} alt={name} sx={{ ...common, objectFit: "cover" }} />;
-    }
-    return (
-      <Box
-        sx={{
-          ...common,
-          bgcolor: tc.primaryLight,
-          color: tc.primary,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontWeight: 700,
-          fontSize: 13
-        }}
-      >
-        {getInitials(name)}
-      </Box>
-    );
-  };
-
   const renderBubble = (m: MessageInterface, index: number) => {
     const mine = m.personId === myPersonId;
-    const bubbleName = m.displayName || m.person?.name?.display || "";
     const isPersisted = !!m.id && !m.id.startsWith("temp-");
     const showActions = mine && isPersisted;
 
     return (
       <Box
         key={m.id || index}
-        sx={{
-          display: "flex",
-          width: "100%",
-          minWidth: 0,
-          alignItems: "center",
-          justifyContent: mine ? "flex-end" : "flex-start",
-          gap: "2px",
-          mb: "6px"
-        }}
+        sx={{ display: "flex", width: "100%", minWidth: 0, alignItems: "center", justifyContent: mine ? "flex-end" : "flex-start", gap: "2px", mb: "8px" }}
       >
         {showActions && (
           <IconButton
             size="small"
             aria-label={Locale.label("mobile.details.messageActions")}
             onClick={(e) => setMenuAnchor({ el: e.currentTarget, message: m })}
-            sx={{ color: tc.textMuted, p: "4px" }}
+            sx={{ color: tc.textSecondary, p: "4px" }}
           >
             <MoreVertIcon sx={{ fontSize: 18 }} />
           </IconButton>
         )}
         <Box
           sx={{
-            maxWidth: "75%",
+            maxWidth: "80%",
             minWidth: 0,
-            px: "12px",
-            py: "8px",
-            bgcolor: mine ? tc.primary : tc.surfaceVariant,
-            color: mine ? tc.onPrimary : tc.text,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            boxShadow: mobileTheme.shadows.sm,
+            px: "14px",
+            py: "10px",
+            bgcolor: mine ? tc.chip : tc.surface,
+            color: mine ? tc.onChip : tc.text,
+            border: `1px solid ${mine ? "transparent" : tc.border}`,
+            borderRadius: "14px",
             wordBreak: "break-word",
             overflowWrap: "anywhere",
-            fontSize: 14,
-            lineHeight: 1.35,
-            "& a": { wordBreak: "break-all", overflowWrap: "anywhere" }
+            fontSize: 15,
+            lineHeight: "21px",
+            "& a": { color: "inherit", textDecoration: "underline", wordBreak: "break-all", overflowWrap: "anywhere" }
           }}
         >
-          {bubbleName && (
-            <Typography
-              component="div"
-              sx={{
-                fontSize: 11,
-                fontWeight: 600,
-                color: mine ? tc.onPrimary : tc.primary,
-                opacity: mine ? 0.9 : 1,
-                mb: "2px",
-                lineHeight: 1.2
-              }}
-            >
-              {bubbleName}
-            </Typography>
-          )}
           <span dangerouslySetInnerHTML={{ __html: ChatHelper.insertLinks(m.content || "") }} />
         </Box>
       </Box>
     );
   };
 
-  const renderEmpty = () => (
-    <Box
-      sx={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        color: tc.textMuted,
-        gap: "8px",
-        p: `${mobileTheme.spacing.lg}px`
-      }}
-    >
-      <Box
-        sx={{
-          width: 56,
-          height: 56,
-          borderRadius: "17px",
-          bgcolor: tc.iconBackground,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center"
-        }}
-      >
-        <ChatBubbleOutlineIcon sx={{ fontSize: 28, color: tc.primary }} />
-      </Box>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        {Locale.label("mobile.details.startConversationWith").replace("{}", name)}
-      </Typography>
-    </Box>
-  );
-
-  const shellHeight = viewportHeight
-    ? `${Math.max(viewportHeight - mobileTheme.headerHeight, 0)}px`
-    : `calc(100dvh - ${mobileTheme.headerHeight}px)`;
+  // Fills the gap between the shell's app bar and tab bar on phone (cancelling main's extra 20px), and between its header and bottom padding on desktop.
+  const vh = viewportHeight ? `${viewportHeight}px` : "100dvh";
+  const phoneHeight = `calc(${vh} - ${mobileTheme.headerHeight + mobileTheme.tabBarHeight}px - ${mobileTheme.safe.top} - ${mobileTheme.safe.bottom})`;
+  const desktopHeight = `calc(${vh} - 136px)`;
 
   return (
     <Box
@@ -536,49 +441,23 @@ export const MessageConversation = ({ id, config }: Props) => {
         flexDirection: "column",
         width: "100%",
         maxWidth: "100%",
-        height: shellHeight,
-        minHeight: shellHeight,
-        maxHeight: shellHeight,
+        height: { xs: phoneHeight, md: desktopHeight },
+        mb: { xs: "-20px", md: 0 },
         overflow: "hidden",
-        bgcolor: tc.background
+        bgcolor: tc.background,
+        border: { md: `1px solid ${tc.border}` },
+        borderRadius: { md: "10px" }
       }}
     >
-
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: `${mobileTheme.spacing.sm}px`,
-          px: `${mobileTheme.spacing.md}px`,
-          py: "10px",
-          bgcolor: tc.surface,
-          borderBottom: `1px solid ${tc.border}`
-        }}
-      >
-        {renderAvatar()}
-        <Typography
-          sx={{
-            flex: 1,
-            minWidth: 0,
-            fontSize: 16,
-            fontWeight: 600,
-            color: tc.text,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap"
-          }}
-        >
-          {name}
-        </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", gap: "10px", px: "16px", py: "8px", bgcolor: tc.surface, borderBottom: `1px solid ${tc.border}` }}>
+        <Box component={Link} href={`/mobile/community/${id}`} sx={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: "inherit" }}>
+          <PersonAvatar person={person} name={name} size={32} />
+          <Typography component="h1" noWrap sx={{ minWidth: 0, fontSize: 17, fontWeight: 650, color: tc.text }}>{name}</Typography>
+        </Box>
         <IconButton
           aria-label={Locale.label("mobile.details.newConversation")}
           onClick={() => router.push("/mobile/messages/new")}
-          sx={{
-            bgcolor: tc.iconBackground,
-            color: tc.primary,
-            "&:hover": { bgcolor: tc.iconBackground }
-          }}
-          size="small"
+          sx={{ color: tc.textSecondary }}
         >
           <PersonAddAlt1Icon />
         </IconButton>
@@ -586,91 +465,39 @@ export const MessageConversation = ({ id, config }: Props) => {
 
       <Box
         ref={listRef}
-        sx={{
-          flex: 1,
-          minHeight: 0,
-          minWidth: 0,
-          overflowY: "auto",
-          overflowX: "hidden",
-          p: `${mobileTheme.spacing.md}px`,
-          display: "flex",
-          flexDirection: "column"
-        }}
+        sx={{ flex: 1, minHeight: 0, minWidth: 0, overflowY: "auto", overflowX: "hidden", p: "16px", display: "flex", flexDirection: "column" }}
       >
         {messages === null && (
           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flex: 1 }}>
             <CircularProgress size={28} sx={{ color: tc.primary }} />
           </Box>
         )}
-        {messages !== null && messages.length === 0 && renderEmpty()}
-        {messages !== null && messages.length > 0 && messages.map(renderBubble)}
+        {messages !== null && messages.length === 0 && (
+          <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+            <QuietEmpty>{Locale.label("mobile.details.startConversationWith").replace("{}", name)}</QuietEmpty>
+          </Box>
+        )}
+        {messages !== null && messages.length > 0 && <Box sx={{ mt: "auto" }}>{messages.map(renderBubble)}</Box>}
       </Box>
 
       {editingId && (
-        <Box
-          sx={{
-            flexShrink: 0,
-            bgcolor: tc.iconBackground,
-            borderTop: `1px solid ${tc.border}`,
-            px: `${mobileTheme.spacing.md}px`,
-            py: "6px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "8px"
-          }}
-        >
-          <Typography sx={{ fontSize: 12, color: tc.primary, fontWeight: 600 }}>
-            {Locale.label("mobile.details.editingMessage")}
-          </Typography>
-          <Button
-            size="small"
-            onClick={handleCancelEdit}
-            sx={{ color: tc.primary, textTransform: "none", fontSize: 12, minWidth: 0 }}
-          >
-            {Locale.label("mobile.details.cancel")}
-          </Button>
+        <Box sx={{ flexShrink: 0, bgcolor: tc.surface, borderTop: `1px solid ${tc.border}`, px: "16px", py: "8px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+          <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, fontWeight: 600 }}>{Locale.label("mobile.details.editingMessage")}</Typography>
+          <TextLink onClick={handleCancelEdit}>{Locale.label("mobile.details.cancel")}</TextLink>
         </Box>
       )}
 
       {messagingBlocked && (
-        <Box
-          sx={{
-            flexShrink: 0,
-            width: "100%",
-            bgcolor: tc.surface,
-            borderTop: `1px solid ${tc.border}`,
-            px: `${mobileTheme.spacing.md}px`,
-            pt: "14px",
-            pb: `calc(14px + ${mobileTheme.safe.bottom})`,
-            textAlign: "center"
-          }}
-        >
-          <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
-            {Locale.label("mobile.details.messagingNotAvailable")}
-          </Typography>
+        <Box sx={{ flexShrink: 0, width: "100%", bgcolor: tc.surface, borderTop: `1px solid ${tc.border}`, px: "16px", py: "14px", textAlign: "center" }}>
+          <QuietEmpty sx={{ fontSize: 14 }}>{Locale.label("mobile.details.messagingNotAvailable")}</QuietEmpty>
         </Box>
       )}
       {!messagingBlocked && (
-        <Box
-          sx={{
-            flexShrink: 0,
-            width: "100%",
-            minWidth: 0,
-            bgcolor: tc.surface,
-            borderTop: `1px solid ${tc.border}`,
-            px: "10px",
-            pt: "10px",
-            pb: `calc(10px + ${mobileTheme.safe.bottom})`,
-            display: "flex",
-            alignItems: "center",
-            gap: "8px"
-          }}
-        >
+        <Box sx={{ flexShrink: 0, width: "100%", minWidth: 0, bgcolor: tc.surface, borderTop: `1px solid ${tc.border}`, pl: "6px", pr: "8px", py: "8px", display: "flex", alignItems: "flex-end", gap: "6px" }}>
           <IconButton
             aria-label={Locale.label("mobile.details.openEmojiPicker")}
             onClick={(e) => setEmojiAnchor(e.currentTarget)}
-            sx={{ flexShrink: 0, color: tc.textMuted, width: 36, height: 36 }}
+            sx={{ flexShrink: 0, color: tc.textSecondary, width: 44, height: 44 }}
           >
             <EmojiEmotionsOutlinedIcon sx={{ fontSize: 22 }} />
           </IconButton>
@@ -687,18 +514,11 @@ export const MessageConversation = ({ id, config }: Props) => {
                 handleSend();
               }
             }}
-            size="small"
             sx={{
               flex: 1,
               minWidth: 0,
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "22px",
-                bgcolor: tc.background,
-                fontSize: 14,
-                px: "12px",
-                py: "8px"
-              },
-              "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.border }
+              "& .MuiOutlinedInput-root": { borderRadius: "6px", bgcolor: tc.surface, fontSize: 16, minHeight: 44, px: "12px", py: "10px" },
+              "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.control }
             }}
           />
           <IconButton
@@ -707,19 +527,16 @@ export const MessageConversation = ({ id, config }: Props) => {
             disabled={sending || !text.trim()}
             sx={{
               flexShrink: 0,
+              width: 44,
+              height: 44,
+              borderRadius: "6px",
               bgcolor: tc.primary,
               color: tc.onPrimary,
               "&:hover": { bgcolor: tc.primary },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textSecondary },
-              width: 40,
-              height: 40
+              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textSecondary }
             }}
           >
-            {sending ? (
-              <CircularProgress size={18} sx={{ color: tc.onPrimary }} />
-            ) : (
-              <SendIcon sx={{ fontSize: 20 }} />
-            )}
+            {sending ? <CircularProgress size={18} sx={{ color: tc.onPrimary }} /> : <SendIcon sx={{ fontSize: 20 }} />}
           </IconButton>
         </Box>
       )}
@@ -761,11 +578,11 @@ export const MessageConversation = ({ id, config }: Props) => {
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <MenuItem onClick={() => menuAnchor && handleStartEdit(menuAnchor.message)}>
-          <EditIcon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }} />
+          <EditIcon sx={{ fontSize: 18, mr: 1, color: tc.textSecondary }} />
           {Locale.label("mobile.details.edit")}
         </MenuItem>
         <MenuItem onClick={() => menuAnchor && handleRequestDelete(menuAnchor.message)}>
-          <DeleteOutlineIcon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }} />
+          <DeleteOutlineIcon sx={{ fontSize: 18, mr: 1, color: tc.textSecondary }} />
           {Locale.label("mobile.details.delete")}
         </MenuItem>
       </Menu>

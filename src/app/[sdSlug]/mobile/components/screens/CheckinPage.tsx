@@ -1,24 +1,13 @@
 "use client";
 
 import React, { useCallback, useContext, useEffect, useState } from "react";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Alert,
-  Box,
-  Button,
-  CardActionArea,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Divider,
-  Icon,
-  Typography
-} from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import QrCode2Icon from "@mui/icons-material/QrCode2";
 import { QRCodeSVG } from "qrcode.react";
-import { ApiHelper, ArrayHelper, Locale, PersonHelper as ApphelperPersonHelper } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, Locale } from "@churchapps/apphelper";
 import type {
   CampusInterface,
   GroupInterface,
@@ -33,6 +22,7 @@ import UserContext from "@/context/UserContext";
 import { CheckinHelper, PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, Row, RowList, Sheet, StatusBadge, TextLink } from "../kit";
 
 interface Props {
   config: ConfigurationInterface;
@@ -49,109 +39,19 @@ interface GroupCategory {
 }
 
 const tc = mobileTheme.colors;
-const spacing = mobileTheme.spacing;
-const radius = mobileTheme.radius;
-const shadows = mobileTheme.shadows;
 
-const SurfaceCard = ({ children, sx }: { children: React.ReactNode; sx?: object }) => (
-  <Box
-    sx={{
-      bgcolor: tc.surface,
-      border: `1px solid ${tc.border}`,
-      borderRadius: `${radius.lg}px`,
-      overflow: "hidden",
-      mb: `${spacing.sm + 4}px`,
-      ...sx
-    }}
+const Notice = ({ tone, children, testId }: { tone: "error" | "info"; children: React.ReactNode; testId?: string }) => (
+  <Typography
+    role={tone === "error" ? "alert" : "status"}
+    data-testid={testId}
+    sx={{ fontSize: 14.5, lineHeight: "21px", fontWeight: tone === "error" ? 600 : 400, color: tone === "error" ? tc.error : tc.textSecondary, mb: "12px" }}
   >
     {children}
-  </Box>
+  </Typography>
 );
 
-const IconCircle = ({
-  size = 56,
-  bg = tc.iconBackground,
-  children,
-  sx
-}: {
-  size?: number;
-  bg?: string;
-  children: React.ReactNode;
-  sx?: object;
-}) => (
-  <Box
-    sx={{
-      width: size,
-      height: size,
-      borderRadius: "11px",
-      bgcolor: bg,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      flexShrink: 0,
-      ...sx
-    }}
-  >
-    {children}
-  </Box>
-);
-
-const ScreenSubhead = ({
-  iconName,
-  subtitle
-}: {
-  iconName: string;
-  subtitle: string;
-}) => (
-  <Box
-    sx={{
-      bgcolor: tc.surface,
-      border: `1px solid ${tc.border}`,
-      borderRadius: `${radius.xl}px`,
-      px: `${spacing.lg}px`,
-      py: `${spacing.lg}px`,
-      mb: `${spacing.md}px`,
-      textAlign: "center"
-    }}
-  >
-    <IconCircle size={72} sx={{ mx: "auto", mb: `${spacing.sm + 4}px` }}>
-      <Icon sx={{ fontSize: 40, color: tc.primary }}>{iconName}</Icon>
-    </IconCircle>
-    <Typography sx={{ fontSize: 14, color: tc.textMuted, maxWidth: 320, mx: "auto" }}>
-      {subtitle}
-    </Typography>
-  </Box>
-);
-
-const EmptyState = ({
-  iconName,
-  title,
-  message,
-  action
-}: {
-  iconName: string;
-  title: string;
-  message: string;
-  action?: React.ReactNode;
-}) => (
-  <Box
-    sx={{
-      bgcolor: tc.surface,
-      border: `1px solid ${tc.border}`,
-      borderRadius: `${radius.xl}px`,
-      p: `${spacing.lg}px`,
-      textAlign: "center"
-    }}
-  >
-    <IconCircle size={64} sx={{ mx: "auto", mb: `${spacing.md}px` }}>
-      <Icon sx={{ fontSize: 32, color: tc.primary }}>{iconName}</Icon>
-    </IconCircle>
-    <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.5 }}>
-      {title}
-    </Typography>
-    <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{message}</Typography>
-    {action ? <Box sx={{ mt: `${spacing.md}px` }}>{action}</Box> : null}
-  </Box>
+const Intro = ({ children }: { children: React.ReactNode }) => (
+  <Typography sx={{ fontSize: 14.5, lineHeight: "21px", color: tc.textSecondary, mb: "8px" }}>{children}</Typography>
 );
 
 // The Api answers a blocked check-in with 409 and a JSON body; ApiHelper rethrows that body as the message.
@@ -162,6 +62,12 @@ const checkinErrorLabel = (e: any) => {
     if (reason === "capacity") return Locale.label("mobile.screens.checkinFull");
   } catch { /* not a gate response */ }
   return Locale.label("mobile.details.checkConnection");
+};
+
+const sessionGroupName = (vs: VisitSessionInterface) => {
+  const st: ServiceTimeInterface | null = ArrayHelper.getOne(CheckinHelper.serviceTimes || [], "id", vs.session?.serviceTimeId || "");
+  const group: GroupInterface = ArrayHelper.getOne(st?.groups || [], "id", vs.session?.groupId || "");
+  return { group: group?.name || Locale.label("mobile.screens.none"), time: st?.name || "" };
 };
 
 const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
@@ -267,59 +173,31 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
   };
 
   return (
-    <>
-      <ScreenSubhead iconName="event" subtitle={Locale.label("mobile.screens.chooseServiceSubtitle")} />
-      {error && <Alert severity="error" sx={{ mb: `${spacing.md}px` }}>{error}</Alert>}
-      {notOpen && <Alert severity="info" data-testid="checkin-not-open" sx={{ mb: `${spacing.md}px` }}>{Locale.label("mobile.screens.checkinNotOpen")}</Alert>}
+    <PlateSection>
+      <Intro>{Locale.label("mobile.screens.chooseServiceSubtitle")}</Intro>
+      {error && <Notice tone="error">{error}</Notice>}
+      {notOpen && <Notice tone="info" testId="checkin-not-open">{Locale.label("mobile.screens.checkinNotOpen")}</Notice>}
 
       {isLoading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
-          <CircularProgress sx={{ color: tc.primary }} />
-        </Box>
+        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>
       ) : services.length === 0 ? (
-        <EmptyState
-          iconName="event_busy"
-          title={Locale.label("mobile.screens.noServicesAvailable")}
-          message={Locale.label("mobile.screens.noServicesMessage")}
-        />
+        <QuietEmpty>{Locale.label("mobile.screens.noServicesMessage")}</QuietEmpty>
       ) : (
-        services.map((service) => {
-          const campusName = campuses.find((c) => c.id === service.campusId)?.name;
-          return (
-            <SurfaceCard key={service.id}>
-              <CardActionArea
-                onClick={() => selectService(service.id!)}
-                data-testid={`select-service-${service.id}-button`}
-                sx={{ p: `${spacing.md}px`, minHeight: 72 }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <IconCircle sx={{ mr: `${spacing.md}px` }}>
-                    <Icon sx={{ fontSize: 28, color: tc.primary }}>church</Icon>
-                  </IconCircle>
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography
-                      sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.25 }}
-                    >
-                      {service.name}
-                    </Typography>
-                    {campusName && (
-                      <Typography sx={{ fontSize: 14, color: tc.primary, fontWeight: 500 }}>
-                        {campusName}
-                      </Typography>
-                    )}
-                  </Box>
-                  {selectingId === service.id ? (
-                    <CircularProgress size={22} sx={{ color: tc.primary }} />
-                  ) : (
-                    <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
-                  )}
-                </Box>
-              </CardActionArea>
-            </SurfaceCard>
-          );
-        })
+        <RowList>
+          {services.map((service) => (
+            <Row
+              key={service.id}
+              onClick={() => selectService(service.id!)}
+              data-testid={`select-service-${service.id}-button`}
+              title={service.name}
+              subtitle={campuses.find((c) => c.id === service.campusId)?.name}
+              trailing={selectingId === service.id ? <CircularProgress size={20} /> : undefined}
+              chevron={selectingId !== service.id}
+            />
+          ))}
+        </RowList>
       )}
-    </>
+    </PlateSection>
   );
 };
 
@@ -334,7 +212,6 @@ const GroupsStep = ({
   onSelected: (group: GroupInterface | null) => void;
   onBack: () => void;
 }) => {
-  const [expandedKey, setExpandedKey] = useState<number | null>(null);
   const [tree, setTree] = useState<GroupCategory[]>([]);
 
   useEffect(() => {
@@ -355,139 +232,34 @@ const GroupsStep = ({
 
   return (
     <>
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${radius.xl}px`,
-          px: `${spacing.lg}px`,
-          py: `${spacing.lg}px`,
-          mb: `${spacing.md}px`,
-          textAlign: "center"
-        }}
-      >
-        <IconCircle size={72} sx={{ mx: "auto", mb: `${spacing.sm + 4}px` }}>
-          <Icon sx={{ fontSize: 40, color: tc.primary }}>groups</Icon>
-        </IconCircle>
-        <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 0.5 }}>
+      <PlateSection>
+        <Typography sx={{ fontSize: 17, fontWeight: 600, color: tc.text }}>
           {Locale.label("mobile.screens.chooseGroupFor").replace("{}", member.name?.display || "")}
         </Typography>
         {time?.name && (
-          <Typography sx={{ fontSize: 14, color: tc.primary, fontWeight: 600 }}>
+          <Typography sx={{ fontSize: 14, color: tc.textSecondary }}>
             {Locale.label("mobile.screens.serviceLabel").replace("{}", time.name)}
           </Typography>
         )}
-      </Box>
+        {tree.length === 0 && <QuietEmpty sx={{ mt: "12px" }}>{Locale.label("mobile.screens.noGroupsMessage")}</QuietEmpty>}
+      </PlateSection>
 
-      {tree.length === 0 ? (
-        <EmptyState
-          iconName="group_off"
-          title={Locale.label("mobile.screens.noGroupsAvailable")}
-          message={Locale.label("mobile.screens.noGroupsMessage")}
-        />
-      ) : (
-        tree.map((cat) => {
-          const isOpen = expandedKey === cat.key;
-          return (
-            <SurfaceCard key={cat.key}>
-              <CardActionArea
-                onClick={() => setExpandedKey(isOpen ? null : cat.key)}
-                sx={{ p: `${spacing.md}px` }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <IconCircle size={40} sx={{ mr: `${spacing.sm + 4}px` }}>
-                    <Icon sx={{ fontSize: 22, color: tc.primary }}>folder</Icon>
-                  </IconCircle>
-                  <Typography
-                    sx={{ flex: 1, fontSize: 16, fontWeight: 600, color: tc.text }}
-                  >
-                    {cat.name || Locale.label("mobile.screens.generalGroups")}
-                  </Typography>
-                  <Icon sx={{ color: tc.textSecondary }}>
-                    {isOpen ? "expand_less" : "expand_more"}
-                  </Icon>
-                </Box>
-              </CardActionArea>
-              {isOpen && (
-                <>
-                  <Divider sx={{ bgcolor: tc.divider }} />
-                  <Box sx={{ bgcolor: tc.background }}>
-                    {cat.items.map((g, idx) => (
-                      <Box
-                        key={g.id}
-                        sx={{
-                          borderBottom:
-                            idx < cat.items.length - 1
-                              ? `1px solid ${tc.divider}`
-                              : "none"
-                        }}
-                      >
-                        <CardActionArea
-                          onClick={() => onSelected(g)}
-                          sx={{ py: `${spacing.md}px`, px: `${spacing.lg}px` }}
-                        >
-                          <Box sx={{ display: "flex", alignItems: "center" }}>
-                            <IconCircle
-                              size={32}
-                              bg={tc.surface}
-                              sx={{ mr: `${spacing.sm + 4}px` }}
-                            >
-                              <Icon sx={{ fontSize: 18, color: tc.secondary }}>group</Icon>
-                            </IconCircle>
-                            <Typography
-                              sx={{ flex: 1, fontSize: 15, fontWeight: 500, color: tc.text }}
-                            >
-                              {g.name}
-                            </Typography>
-                            <Icon sx={{ color: tc.textSecondary, fontSize: 20 }}>
-                              chevron_right
-                            </Icon>
-                          </Box>
-                        </CardActionArea>
-                      </Box>
-                    ))}
-                  </Box>
-                </>
-              )}
-            </SurfaceCard>
-          );
-        })
-      )}
+      {tree.map((cat) => (
+        <PlateSection key={cat.key} title={cat.name || Locale.label("mobile.screens.generalGroups")}>
+          <RowList>
+            {cat.items.map((g) => (
+              <Row key={g.id} onClick={() => onSelected(g)} title={g.name} chevron />
+            ))}
+          </RowList>
+        </PlateSection>
+      ))}
 
-      <Box sx={{ mt: `${spacing.md}px`, display: "flex", gap: `${spacing.sm}px` }}>
-        <Button
-          variant="outlined"
-          onClick={onBack}
-          startIcon={<Icon>arrow_back</Icon>}
-          sx={{
-            borderColor: tc.border,
-            color: tc.textSecondary,
-            borderRadius: `${radius.lg}px`,
-            height: 48,
-            fontWeight: 600,
-            textTransform: "none"
-          }}
-        >
-          {Locale.label("mobile.components.back")}
-        </Button>
-        <Button
-          variant="outlined"
-          fullWidth
-          onClick={() => onSelected(null)}
-          data-testid="checkin-none-button"
-          startIcon={<Icon>close</Icon>}
-          sx={{
-            borderColor: tc.disabled,
-            color: tc.textSecondary,
-            borderRadius: `${radius.lg}px`,
-            height: 48,
-            fontWeight: 600,
-            textTransform: "none"
-          }}
-        >
+      <PlateSection sx={{ display: "flex", gap: "8px" }}>
+        <Button variant="outlined" onClick={onBack}>{Locale.label("mobile.components.back")}</Button>
+        <Button variant="outlined" fullWidth onClick={() => onSelected(null)} data-testid="checkin-none-button">
           {Locale.label("mobile.screens.noGroup")}
         </Button>
-      </Box>
+      </PlateSection>
     </>
   );
 };
@@ -517,11 +289,13 @@ const HouseholdStep = ({
     onShowGroups(member, st);
   };
 
-  const renderServiceTime = (
-    member: PersonInterface,
-    st: ServiceTimeInterface,
-    visitSessions: VisitSessionInterface[]
-  ) => {
+  const changeMember = (member: PersonInterface) => {
+    const times = CheckinHelper.serviceTimes || [];
+    if (times.length === 1) selectServiceTime(member, times[0]);
+    else setSelectedMember(member);
+  };
+
+  const renderServiceTime = (member: PersonInterface, st: ServiceTimeInterface, visitSessions: VisitSessionInterface[]) => {
     const stSessions = ArrayHelper.getAll(visitSessions, "session.serviceTimeId", st.id);
     let selectedGroupName = Locale.label("mobile.screens.noGroupSelected");
     let hasSelection = false;
@@ -534,67 +308,17 @@ const HouseholdStep = ({
     }
 
     return (
-      <Box
+      <Row
         key={st.id}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          px: `${spacing.md}px`,
-          py: `${spacing.md}px`,
-          bgcolor: tc.background,
-          borderBottom: `1px solid ${tc.divider}`,
-          "&:last-child": { borderBottom: "none" }
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", flex: 1, minWidth: 0 }}>
-          <IconCircle size={32} bg={tc.surface} sx={{ mr: `${spacing.sm + 4}px` }}>
-            <Icon sx={{ fontSize: 18, color: tc.primary }}>schedule</Icon>
-          </IconCircle>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text, mb: 0.25 }}>
-              {st.name}
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: 13,
-                color: tc.textMuted,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap"
-              }}
-            >
-              {selectedGroupName}
-            </Typography>
-          </Box>
-        </Box>
-        <Button
-          variant={hasSelection ? "contained" : "outlined"}
-          size="small"
-          onClick={() => selectServiceTime(member, st)}
-          data-testid={`service-time-${st.id}`}
-          sx={{
-            borderRadius: `${radius.md}px`,
-            minWidth: 100,
-            ml: 1,
-            textTransform: "none",
-            fontWeight: 600,
-            fontSize: 12,
-            ...(hasSelection
-              ? {
-                bgcolor: tc.success,
-                color: tc.onPrimary,
-                "&:hover": { bgcolor: tc.success, opacity: 0.9 }
-              }
-              : {
-                borderColor: tc.primary,
-                color: tc.primary
-              })
-          }}
-        >
-          {hasSelection ? Locale.label("mobile.screens.change") : Locale.label("mobile.screens.selectGroup")}
-        </Button>
-      </Box>
+        title={st.name}
+        subtitle={selectedGroupName}
+        sx={{ minHeight: 48 }}
+        trailing={
+          <TextLink onClick={() => selectServiceTime(member, st)} data-testid={`service-time-${st.id}`}>
+            {hasSelection ? Locale.label("mobile.screens.change") : Locale.label("mobile.screens.selectGroup")}
+          </TextLink>
+        }
+      />
     );
   };
 
@@ -602,125 +326,55 @@ const HouseholdStep = ({
     const isExpanded = selectedMember?.id === member.id;
     const visit = ArrayHelper.getOne(CheckinHelper.pendingVisits, "personId", member.id);
     const visitSessions: VisitSessionInterface[] = visit?.visitSessions || [];
+    const selected = visitSessions.length > 0;
+    const multipleTimes = (CheckinHelper.serviceTimes || []).length > 1;
 
     return (
-      <SurfaceCard key={member.id}>
-        <CardActionArea
+      <Box key={member.id} className="kit-row" sx={{ py: "6px", "& + .kit-row": { borderTop: `1px solid ${tc.border}` } }}>
+        <Box
+          component="button"
+          type="button"
           onClick={() => setSelectedMember(isExpanded ? null : member)}
           data-testid={`select-member-${member.id}`}
-          sx={{ p: `${spacing.md}px` }}
+          aria-expanded={isExpanded}
+          sx={{ display: "flex", alignItems: "center", gap: "12px", width: "100%", minHeight: 48, py: "6px", px: 0, bgcolor: "transparent", border: 0, font: "inherit", textAlign: "left", cursor: "pointer", "&:focus-visible": { outline: `2px solid ${tc.primary}`, outlineOffset: -2 } }}
         >
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box
-              sx={{
-                width: 56,
-                height: 56,
-                borderRadius: "50%",
-                overflow: "hidden",
-                mr: `${spacing.md}px`,
-                flexShrink: 0,
-                bgcolor: tc.iconBackground
-              }}
-            >
-              <img
-                src={ApphelperPersonHelper.getPhotoUrl(member)}
-                alt={`${member.name?.display || "Member"} avatar`}
-                data-testid={`member-photo-${member.id}`}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            </Box>
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography
-                sx={{
-                  fontSize: 17,
-                  fontWeight: 600,
-                  color: tc.text,
-                  mb: isCheckedIn(member.id!) || !isExpanded ? 0.5 : 0
-                }}
-              >
-                {member.name?.display}
-              </Typography>
-              {isCheckedIn(member.id!) && (
-                <Box
-                  sx={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 0.5,
-                    px: 1,
-                    py: 0.25,
-                    borderRadius: "999px",
-                    bgcolor: `${tc.success}1A`,
-                    color: tc.success,
-                    fontSize: 10.5,
-                    fontWeight: 700,
-                    mb: !isExpanded ? 0.5 : 0
-                  }}
-                >
-                  <Icon sx={{ fontSize: 14 }}>check_circle</Icon>
-                  {Locale.label("mobile.screens.alreadyCheckedIn")}
-                </Box>
-              )}
-              {!isExpanded && (
-                <>
-                  {visitSessions.length === 0 ? (
-                    <Typography sx={{ fontSize: 13, color: tc.textMuted, fontStyle: "italic" }}>
-                      {Locale.label("mobile.screens.tapToSelectGroups")}
-                    </Typography>
-                  ) : (
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                      {visitSessions.map((vs) => {
-                        const st: ServiceTimeInterface | null = ArrayHelper.getOne(
-                          CheckinHelper.serviceTimes,
-                          "id",
-                          vs.session?.serviceTimeId || ""
-                        );
-                        const group: GroupInterface = ArrayHelper.getOne(
-                          st?.groups || [],
-                          "id",
-                          vs.session?.groupId || ""
-                        );
-                        const name = group?.name || Locale.label("mobile.screens.none");
-                        return (
-                          <Box
-                            key={
-                              vs.id?.toString() ||
-                              `${vs.session?.serviceTimeId}-${vs.session?.groupId}`
-                            }
-                            sx={{
-                              px: 1,
-                              py: 0.25,
-                              borderRadius: "999px",
-                              bgcolor: `${tc.primary}1A`,
-                              color: tc.primary,
-                              border: `1px solid ${tc.primary}`,
-                              fontSize: 10.5,
-                              fontWeight: 700
-                            }}
-                          >
-                            {name}
-                          </Box>
-                        );
-                      })}
-                    </Box>
-                  )}
-                </>
-              )}
-            </Box>
-            <Icon sx={{ color: tc.textSecondary, ml: 1 }}>
-              {isExpanded ? "expand_less" : "expand_more"}
-            </Icon>
+          <Box
+            component="span"
+            aria-hidden
+            sx={{ width: 22, height: 22, borderRadius: "5px", flex: "none", display: "grid", placeItems: "center", border: selected ? 0 : `1px solid ${tc.control}`, bgcolor: selected ? tc.selected : "transparent", color: tc.onSelected }}
+          >
+            {selected && <CheckIcon sx={{ fontSize: 16 }} />}
           </Box>
-        </CardActionArea>
-        {isExpanded && (
-          <>
-            <Divider sx={{ bgcolor: tc.divider }} />
-            <Box>
-              {CheckinHelper.serviceTimes?.map((st) =>
-                renderServiceTime(member, st, visitSessions))}
-            </Box>
-          </>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography component="span" sx={{ display: "block", fontSize: 15, lineHeight: "21px", fontWeight: 500, color: tc.text }}>{member.name?.display}</Typography>
+            {!selected && !isExpanded && (
+              <Typography component="span" sx={{ display: "block", fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("mobile.screens.tapToSelectGroups")}</Typography>
+            )}
+          </Box>
+          {isCheckedIn(member.id!) && <StatusBadge tone="ok" dot>{Locale.label("mobile.screens.alreadyCheckedIn")}</StatusBadge>}
+        </Box>
+        {selected && !isExpanded && (
+          <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "10px", pl: "34px", pb: "8px" }}>
+            <PillRow>
+              {visitSessions.map((vs) => {
+                const { group, time } = sessionGroupName(vs);
+                return (
+                  <Pill key={vs.id?.toString() || `${vs.session?.serviceTimeId}-${vs.session?.groupId}`} qualifier={multipleTimes && time ? `· ${time}` : undefined}>
+                    {group}
+                  </Pill>
+                );
+              })}
+            </PillRow>
+            <TextLink onClick={() => changeMember(member)}>{Locale.label("mobile.screens.change")}</TextLink>
+          </Box>
         )}
-      </SurfaceCard>
+        {isExpanded && (
+          <Box sx={{ pl: "34px", pb: "6px" }}>
+            <RowList>{CheckinHelper.serviceTimes?.map((st) => renderServiceTime(member, st, visitSessions))}</RowList>
+          </Box>
+        )}
+      </Box>
     );
   };
 
@@ -771,108 +425,57 @@ const HouseholdStep = ({
 
   if (isLoading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
-        <CircularProgress sx={{ color: tc.primary }} />
-      </Box>
+      <PlateSection>
+        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>
+      </PlateSection>
     );
   }
 
+  const selectedCount = CheckinHelper.pendingVisits.filter((pv) => (pv.visitSessions?.length || 0) > 0).length;
+  const submitLabel = selectedCount === 0
+    ? Locale.label("mobile.screens.completeCheckin")
+    : selectedCount === 1
+      ? Locale.label("mobile.serving.checkInOne")
+      : Locale.label("mobile.serving.checkInPeople").replace("{}", String(selectedCount));
+
   return (
     <>
-      <ScreenSubhead iconName="people" subtitle={Locale.label("mobile.screens.selectGroupsSubtitle")} />
-      {error && <Alert severity="error" sx={{ mb: `${spacing.md}px` }}>{error}</Alert>}
+      <PlateSection
+        title={Locale.label("mobile.serving.whosHere")}
+        action={existingCode ? (
+          <TextLink onClick={() => onComplete(existingCode)} data-testid="checkin-show-code-button">
+            <QrCode2Icon sx={{ fontSize: 18 }} />{Locale.label("mobile.screens.showCheckinCode")}
+          </TextLink>
+        ) : undefined}
+      >
+        <Intro>{Locale.label("mobile.screens.selectGroupsSubtitle")}</Intro>
+        {error && <Notice tone="error">{error}</Notice>}
+        {!CheckinHelper.householdMembers || CheckinHelper.householdMembers.length === 0 ? (
+          <QuietEmpty>{Locale.label("mobile.screens.noHouseholdMessage")}</QuietEmpty>
+        ) : (
+          <Box>{CheckinHelper.householdMembers.map((m) => renderMember(m))}</Box>
+        )}
+      </PlateSection>
 
-      {existingCode && (
-        <Button
-          fullWidth
-          variant="outlined"
-          onClick={() => onComplete(existingCode)}
-          startIcon={<Icon>qr_code_2</Icon>}
-          data-testid="checkin-show-code-button"
-          sx={{
-            mb: `${spacing.md}px`,
-            borderColor: tc.primary,
-            color: tc.primary,
-            borderRadius: `${radius.lg}px`,
-            height: 48,
-            fontWeight: 600,
-            textTransform: "none"
-          }}
-        >
-          {Locale.label("mobile.screens.showCheckinCode")}
+      <PlateSection sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        <Button fullWidth variant="contained" size="large" onClick={handleCheckin} data-testid="checkin-submit-button">
+          {submitLabel}
         </Button>
-      )}
+        <Button fullWidth variant="outlined" onClick={onBack}>{Locale.label("mobile.components.back")}</Button>
+      </PlateSection>
 
-      {!CheckinHelper.householdMembers || CheckinHelper.householdMembers.length === 0 ? (
-        <EmptyState
-          iconName="person_off"
-          title={Locale.label("mobile.screens.noHouseholdMembers")}
-          message={Locale.label("mobile.screens.noHouseholdMessage")}
-        />
-      ) : (
-        CheckinHelper.householdMembers.map((m) => renderMember(m))
-      )}
-
-      <Box sx={{ mt: `${spacing.md}px`, display: "flex", gap: `${spacing.sm}px` }}>
-        <Button
-          variant="outlined"
-          onClick={onBack}
-          startIcon={<Icon>arrow_back</Icon>}
-          sx={{
-            borderColor: tc.border,
-            color: tc.textSecondary,
-            borderRadius: `${radius.lg}px`,
-            height: 56,
-            fontWeight: 600,
-            textTransform: "none"
-          }}
-        >
-          {Locale.label("mobile.components.back")}
-        </Button>
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={handleCheckin}
-          data-testid="checkin-submit-button"
-          startIcon={<Icon>check_circle</Icon>}
-          sx={{
-            bgcolor: tc.primary,
-            color: tc.onPrimary,
-            borderRadius: `${radius.lg}px`,
-            height: 56,
-            fontWeight: 700,
-            fontSize: 16,
-            textTransform: "none",
-            boxShadow: shadows.md,
-            "&:hover": { bgcolor: tc.primary, opacity: 0.92 }
-          }}
-        >
-          {Locale.label("mobile.screens.completeCheckin")}
-        </Button>
-      </Box>
-
-      <Dialog open={showDuplicateDialog} onClose={() => setShowDuplicateDialog(false)}>
-        <DialogTitle>{Locale.label("mobile.screens.alreadyCheckedIn")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {Locale.label("mobile.screens.alreadyCheckedInBody").replace("{}", duplicateNames.join(", "))}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowDuplicateDialog(false)}>{Locale.label("mobile.screens.cancel")}</Button>
-          <Button
-            onClick={doCheckin}
-            variant="contained"
-            sx={{
-              bgcolor: tc.primary,
-              color: tc.onPrimary,
-              "&:hover": { bgcolor: tc.primary, opacity: 0.92 }
-            }}
-          >
-            {Locale.label("mobile.screens.checkInAgain")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Sheet
+        open={showDuplicateDialog}
+        onClose={() => setShowDuplicateDialog(false)}
+        title={Locale.label("mobile.screens.alreadyCheckedIn")}
+        maxWidth="xs"
+        actions={<>
+          <Button variant="outlined" onClick={() => setShowDuplicateDialog(false)}>{Locale.label("mobile.screens.cancel")}</Button>
+          <Button variant="contained" onClick={doCheckin}>{Locale.label("mobile.screens.checkInAgain")}</Button>
+        </>}
+      >
+        <Typography>{Locale.label("mobile.screens.alreadyCheckedInBody").replace("{}", duplicateNames.join(", "))}</Typography>
+      </Sheet>
     </>
   );
 };
@@ -884,131 +487,49 @@ const CompleteStep = ({ securityCode, onDone }: { securityCode?: string; onDone:
     return () => clearTimeout(id);
   }, [securityCode, onDone]);
 
-  if (securityCode) {
-    return (
-      <Box
-        data-testid="checkin-complete"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "60vh",
-          borderRadius: `${radius.xl}px`,
-          background: mobileTheme.colorWash,
-          p: `${spacing.xl}px`
-        }}
-      >
-        <Box sx={{ textAlign: "center", maxWidth: 400, width: "100%" }}>
-          <Typography
-            sx={{
-              color: "#FFFFFF",
-              fontWeight: 800,
-              fontSize: 24,
-              mb: `${spacing.md}px`,
-              textShadow: "0 2px 4px rgba(0,0,0,0.25)"
-            }}
-          >
-            {Locale.label("mobile.screens.youreCheckedIn")}
-          </Typography>
-          <Box
-            sx={{
-              display: "inline-block",
-              bgcolor: "#FFFFFF",
-              borderRadius: `${radius.lg}px`,
-              p: `${spacing.lg}px`,
-              boxShadow: shadows.lg
-            }}
-          >
-            <QRCodeSVG value={securityCode} size={200} data-testid="checkin-qr-code" />
-            <Typography sx={{ fontSize: 32, fontWeight: 800, letterSpacing: 6, color: tc.text, mt: `${spacing.sm}px` }}>
+  const placements = (CheckinHelper.pendingVisits || [])
+    .filter((pv) => (pv.visitSessions?.length || 0) > 0)
+    .map((pv) => {
+      const person = (CheckinHelper.householdMembers || []).find((m) => m.id === pv.personId);
+      const where = (pv.visitSessions || []).map((vs) => {
+        const { group, time } = sessionGroupName(vs);
+        return time ? `${group} · ${time}` : group;
+      }).join(", ");
+      return { id: pv.personId || "", name: person?.name?.display || "", where };
+    })
+    .filter((p) => p.name);
+
+  return (
+    <>
+      {securityCode && (
+        <PlateSection sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "14px", py: "24px" }}>
+          {/* QR codes need a light quiet zone to scan, even in dark mode. */}
+          <Box sx={{ border: `1px solid ${tc.border}`, borderRadius: "10px", p: "16px", bgcolor: "#FFFFFF", lineHeight: 0 }}>
+            <QRCodeSVG value={securityCode} size={184} data-testid="checkin-qr-code" />
+          </Box>
+          <Box sx={{ textAlign: "center" }}>
+            <Typography sx={{ fontSize: 12, fontWeight: 650, letterSpacing: "0.07em", textTransform: "uppercase", color: tc.textSecondary }}>
+              {Locale.label("mobile.serving.securityCode")}
+            </Typography>
+            <Typography sx={{ fontSize: 40, lineHeight: "48px", fontWeight: 650, letterSpacing: "0.12em", fontVariantNumeric: "tabular-nums", color: tc.text }}>
               {securityCode}
             </Typography>
           </Box>
-          <Typography
-            sx={{
-              color: "#FFFFFF",
-              opacity: 0.9,
-              fontSize: 15,
-              mt: `${spacing.md}px`,
-              textShadow: "0 1px 2px rgba(0,0,0,0.2)"
-            }}
-          >
-            {Locale.label("mobile.screens.showCodeAtStation")}
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={onDone}
-            sx={{
-              mt: `${spacing.lg}px`,
-              bgcolor: "rgba(255,255,255,0.92)",
-              color: tc.primary,
-              borderRadius: `${radius.lg}px`,
-              height: 48,
-              px: `${spacing.xl}px`,
-              fontWeight: 700,
-              textTransform: "none",
-              "&:hover": { bgcolor: "#FFFFFF" }
-            }}
-          >
-            {Locale.label("mobile.screens.done")}
-          </Button>
-        </Box>
-      </Box>
-    );
-  }
-
-  return (
-    <Box
-      data-testid="checkin-complete"
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "60vh",
-        borderRadius: `${radius.xl}px`,
-        background: mobileTheme.colorWash,
-        p: `${spacing.xl}px`
-      }}
-    >
-      <Box sx={{ textAlign: "center", maxWidth: 400, width: "100%" }}>
-        <Box
-          sx={{
-            width: 120,
-            height: 120,
-            borderRadius: "50%",
-            bgcolor: "rgba(255, 255, 255, 0.92)",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: `${spacing.lg}px`,
-            boxShadow: shadows.lg
-          }}
-        >
-          <Icon sx={{ fontSize: 80, color: tc.success }}>check_circle</Icon>
-        </Box>
-        <Typography
-          sx={{
-            color: "#FFFFFF",
-            fontWeight: 800,
-            fontSize: 26,
-            mb: `${spacing.sm}px`,
-            textShadow: "0 2px 4px rgba(0,0,0,0.25)"
-          }}
-        >
-          {Locale.label("mobile.screens.checkinComplete")}
-        </Typography>
-        <Typography
-          sx={{
-            color: "#FFFFFF",
-            opacity: 0.9,
-            fontSize: 15,
-            textShadow: "0 1px 2px rgba(0,0,0,0.2)"
-          }}
-        >
-          {Locale.label("mobile.screens.attendanceSaved")}
-        </Typography>
-      </Box>
-    </Box>
+        </PlateSection>
+      )}
+      {placements.length > 0 && (
+        <PlateSection title={Locale.label("mobile.serving.whereEveryoneIs")}>
+          <RowList>{placements.map((p) => <Row key={p.id} title={p.name} subtitle={p.where} />)}</RowList>
+        </PlateSection>
+      )}
+      {securityCode ? (
+        <PlateSection>
+          <Button fullWidth variant="contained" size="large" onClick={onDone}>{Locale.label("mobile.screens.done")}</Button>
+        </PlateSection>
+      ) : placements.length === 0 && (
+        <PlateSection><QuietEmpty>{Locale.label("mobile.screens.attendanceSaved")}</QuietEmpty></PlateSection>
+      )}
+    </>
   );
 };
 
@@ -1057,28 +578,12 @@ export const CheckinPage = ({ config: _config }: Props) => {
 
   if (!context?.user?.firstName) {
     return (
-      <Box sx={{ p: `${spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <EmptyState
-          iconName="how_to_reg"
-          title={Locale.label("mobile.screens.signInToCheckIn")}
-          message={Locale.label("mobile.screens.signInToCheckInMessage")}
-          action={
-            <Button
-              variant="contained"
-              href="/mobile/login?returnUrl=/mobile/checkin"
-              sx={{
-                bgcolor: tc.primary,
-                color: tc.onPrimary,
-                borderRadius: `${radius.md}px`,
-                textTransform: "none",
-                fontWeight: 600,
-                "&:hover": { bgcolor: tc.primary }
-              }}
-            >
-              {Locale.label("mobile.screens.signInToCheckInCta")}
-            </Button>
-          }
-        />
+      <Box>
+        <PageHead title={Locale.label("mobile.screens.signInToCheckIn")} lede={Locale.label("mobile.screens.signInToCheckInMessage")}>
+          <Button variant="contained" component={Link} href="/mobile/login?returnUrl=/mobile/checkin">
+            {Locale.label("mobile.screens.signInToCheckInCta")}
+          </Button>
+        </PageHead>
       </Box>
     );
   }
@@ -1121,17 +626,18 @@ export const CheckinPage = ({ config: _config }: Props) => {
     content = <CompleteStep securityCode={securityCode} onDone={handleCompleteDone} />;
   }
 
+  const complete = step === "complete";
+  const title = complete
+    ? (securityCode ? Locale.label("mobile.screens.youreCheckedIn") : Locale.label("mobile.screens.checkinComplete"))
+    : Locale.label("mobile.screenTitles.checkin");
+  const lede = complete
+    ? (securityCode ? Locale.label("mobile.screens.showCodeAtStation") : Locale.label("mobile.screens.attendanceSaved"))
+    : <span data-testid="checkin-step-indicator">{Locale.label("mobile.screens.checkinStep").replace("{}", String(stepNumber)).replace("{}", stepName)}</span>;
+
   return (
-    <Box sx={{ p: `${spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {step !== "complete" && (
-        <Typography
-          data-testid="checkin-step-indicator"
-          sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary, textAlign: "center", mb: `${spacing.sm}px` }}
-        >
-          {Locale.label("mobile.screens.checkinStep").replace("{}", String(stepNumber)).replace("{}", stepName)}
-        </Typography>
-      )}
-      {content}
+    <Box>
+      <PageHead title={title} lede={lede} />
+      <Plate data-testid={complete ? "checkin-complete" : undefined}>{content}</Plate>
     </Box>
   );
 };

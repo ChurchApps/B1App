@@ -17,13 +17,15 @@ async function loginAs(page: Page, email: string) {
   await page.waitForURL((url) => !url.pathname.includes("/login"), { timeout: 30000 });
 }
 
-const attendanceTab = (page: Page) => page.getByRole("tab", { name: /Attendance/i });
+// The Attendance tab is now a plate section whose "Take attendance" link opens ?view=attendance.
+const attendanceTab = (page: Page) => page.getByRole("button", { name: /^Take attendance$/i });
+const membersSection = (page: Page) => page.locator("main").getByRole("heading", { name: /^Members$/i });
 
 test.describe("Issue 1000 - attendance taking is leaders only", () => {
   test("a plain group member does not get the attendance tab", async ({ page }) => {
     await loginAs(page, "volunteer@b1.church");
     await page.goto(`/mobile/groups/${MEMBER_GROUP}`);
-    await expect(page.getByRole("tab", { name: /Members/i })).toBeVisible({ timeout: 20000 });
+    await expect(membersSection(page)).toBeVisible({ timeout: 20000 });
     await expect(attendanceTab(page)).toHaveCount(0);
   });
 
@@ -34,7 +36,7 @@ test.describe("Issue 1000 - attendance taking is leaders only", () => {
     });
     await loginAs(page, "volunteer@b1.church");
     await page.goto(`/mobile/groups/${MEMBER_GROUP}?activeTab=attendance`);
-    await expect(page.getByRole("tab", { name: /Members/i })).toBeVisible({ timeout: 20000 });
+    await expect(membersSection(page)).toBeVisible({ timeout: 20000 });
     await expect(attendanceTab(page)).toHaveCount(0);
     expect(attendanceCalls).toEqual([]);
   });
@@ -69,7 +71,7 @@ test.describe("Issue 1000 - attendance taking is leaders only", () => {
 
       await loginAs(page, "volunteer@b1.church");
       await page.goto(`/mobile/groups/${MEMBER_GROUP}`);
-      await expect(page.getByRole("tab", { name: /Members/i })).toBeVisible({ timeout: 20000 });
+      await expect(membersSection(page)).toBeVisible({ timeout: 20000 });
       await expect(attendanceTab(page)).toHaveCount(0);
     } finally {
       await ctx.delete(`${MAIN_API}/membership/roles/${roleId}`, { headers });

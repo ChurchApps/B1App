@@ -18,7 +18,7 @@ test.describe("Mobile — home-screen app icon badge (Badging API)", () => {
     await page.addInitScript(installBadgeRecorder);
     await page.goto("/mobile/dashboard");
 
-    const bell = page.getByRole("button", { name: /Notifications/i });
+    const bell = page.getByRole("button", { name: "Notifications and messages", exact: true });
     await expect(bell).toBeVisible({ timeout: 15000 });
     const bellBadge = bell.locator(".MuiBadge-badge");
 
@@ -41,7 +41,7 @@ test.describe("Mobile — home-screen app icon badge (Badging API)", () => {
   test("only ever passes numeric values to the Badging API", async ({ page }) => {
     await page.addInitScript(installBadgeRecorder);
     await page.goto("/mobile/dashboard");
-    await expect(page.getByRole("button", { name: /Notifications/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("button", { name: "Notifications and messages", exact: true })).toBeVisible({ timeout: 15000 });
 
     // NaN/undefined would throw TypeError from setAppBadge on iOS.
     await expect.poll(async () => page.evaluate(() => ((window as any).__appBadge || []).length)).toBeGreaterThan(0);

@@ -33,8 +33,7 @@ test.describe("Issue 1078 - event description image upload", () => {
     });
 
     await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await expect(page.getByRole("tab", { name: /Events/i })).toBeVisible({ timeout: 15000 });
-    await page.getByRole("tab", { name: /Events/i }).click();
+    await page.getByRole("button", { name: /^All events$/i }).click();
 
     const addBtn = page.getByRole("button", { name: /^Add Event$/i });
     await addBtn.waitFor({ state: "visible", timeout: 15000 });

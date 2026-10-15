@@ -18,11 +18,12 @@ async function jwtFor(email: string): Promise<string> {
   return uc?.jwt as string;
 }
 
-// Open group events tab and find a matching day cell for the RSVP control.
+// Open the group's events slice (plate "All events" link) and find a matching day cell for the RSVP control.
 async function openOccurrence(page: Page): Promise<void> {
   await page.goto(`/mobile/groups/${GROUP_ID}`);
   await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
-  await page.getByRole("tab", { name: /Events/i }).click();
+  await page.getByRole("button", { name: /^All events$/i }).click();
+  await expect(page).toHaveURL(/view=events/, { timeout: 15000 });
   const control = page.getByTestId(`rsvp-${EVENT_ID}`);
   for (let i = 0; i < 3; i++) {
     const cells = page.locator('[data-testid^="day-"]');

@@ -1,5 +1,5 @@
 import { test, expect, request, type APIRequestContext, type Page } from "@playwright/test";
-import { mobileLogoutButton } from "./helpers/mobile";
+import { mobileSignedInChrome } from "./helpers/mobile";
 
 const MAIN_API = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
@@ -19,7 +19,7 @@ async function messagingHeaders(ctx: APIRequestContext) {
 test.describe("Mobile notifications", () => {
   test("notifications page loads", async ({ page }) => {
     await page.goto("/mobile/notifications");
-    await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(mobileSignedInChrome(page)).toBeVisible();
   });
 
   test("notifications page provides tab navigation", async ({ page }) => {
@@ -72,19 +72,19 @@ test.describe("Mobile notifications", () => {
 test.describe("Mobile registrations", () => {
   test("registrations page loads", async ({ page }) => {
     await page.goto("/mobile/registrations");
-    await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(mobileSignedInChrome(page)).toBeVisible();
   });
 });
 
 test.describe("Mobile volunteer", () => {
   test("volunteer page loads", async ({ page }) => {
     await page.goto("/mobile/volunteer");
-    await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(mobileSignedInChrome(page)).toBeVisible();
   });
 
   test("legacy /mobile/volunteerBrowse slug routes to volunteer", async ({ page }) => {
     await page.goto("/mobile/volunteerBrowse");
-    await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(mobileSignedInChrome(page)).toBeVisible();
   });
 
   test("volunteer page lists self-signup positions", async ({ page }) => {
@@ -95,7 +95,7 @@ test.describe("Mobile volunteer", () => {
 
   test("volunteer plan detail loads when drilling into a position", async ({ page }) => {
     await page.goto("/mobile/volunteer/PLA00000001");
-    await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(mobileSignedInChrome(page)).toBeVisible();
     await expect(page.locator("main")).toContainText(/Greeter|Usher|Worship/i, { timeout: 30000 });
   });
 

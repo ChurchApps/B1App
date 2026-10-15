@@ -1,10 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import { Box, Typography, Icon, Stack, Link } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { PlanItemInterface, ExternalVenueRefInterface, PlanHelper } from "@/helpers";
 import { ActionDialog } from "./ActionDialog";
 import { LessonDialog } from "./LessonDialog";
 import { mobileTheme } from "../mobileTheme";
+import { TextLink, Thumb } from "../kit";
 
 interface Props {
   lessonItems: PlanItemInterface[];
@@ -51,27 +53,10 @@ export const LessonPreview: React.FC<Props> = (props) => {
     if (item.itemType === "header") {
       const sectionDuration = PlanHelper.getSectionDuration(item);
       return (
-        <Box key={item.id} sx={{ mb: 2 }}>
-          <Box
-            className="planItemHeader"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              p: 1,
-              backgroundColor: `color-mix(in srgb, ${tc.primary} 8%, transparent)`,
-              borderRadius: 1
-            }}
-          >
-            <Typography sx={{ fontWeight: 700, color: tc.primary }}>{item.label}</Typography>
-            {sectionDuration > 0 && (
-              <Stack direction="row" alignItems="center" spacing={0.5}>
-                <Icon sx={{ fontSize: 16, color: tc.primary }}>schedule</Icon>
-                <Typography variant="body2" sx={{ color: tc.primary }}>
-                  {PlanHelper.formatTime(sectionDuration)}
-                </Typography>
-              </Stack>
-            )}
+        <Box key={item.id} sx={{ "& + &": { mt: "12px" } }}>
+          <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "12px", pb: "4px" }}>
+            <Typography component="h3" sx={{ fontSize: 13, fontWeight: 650, letterSpacing: "0.05em", textTransform: "uppercase", color: tc.eyebrow }}>{item.label}</Typography>
+            {sectionDuration > 0 && <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, fontVariantNumeric: "tabular-nums" }}>{PlanHelper.formatTime(sectionDuration)}</Typography>}
           </Box>
           {item.children?.map((child, i) => <React.Fragment key={child.id || `child-${i}`}>{renderPreviewItem(child, true)}</React.Fragment>)}
         </Box>
@@ -83,53 +68,25 @@ export const LessonPreview: React.FC<Props> = (props) => {
     return (
       <Box
         key={item.id}
-        className="planItem"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          p: 1,
-          pl: isChild ? 3 : 1,
-          borderBottom: "1px solid",
-          borderColor: tc.border
-        }}
+        className="kit-row"
+        sx={{ display: "flex", alignItems: "center", gap: "12px", minHeight: 44, py: "8px", pl: isChild ? "8px" : 0, "& + .kit-row": { borderTop: `1px solid ${tc.border}` } }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
-          {item.thumbnailUrl && (
-            <Box
-              component="img"
-              src={item.thumbnailUrl}
-              alt=""
-              sx={{ width: 40, height: 24, objectFit: "cover", borderRadius: 0.5, flexShrink: 0 }}
-            />
+        {item.thumbnailUrl && <Thumb src={item.thumbnailUrl} width={48} height={28} />}
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          {clickable ? (
+            <TextLink
+              onClick={(e) => isClickableAction(item) ? handleActionClick(e, item) : handleSectionClick(e, item)}
+              sx={{ whiteSpace: "normal", textAlign: "left", fontSize: 15, fontWeight: 500 }}
+            >
+              {item.label}
+            </TextLink>
+          ) : (
+            <Typography sx={{ fontSize: 15, color: tc.text }}>{item.label}</Typography>
           )}
-          <Box>
-            {clickable ? (
-              <Link
-                href="#"
-                onClick={(e) => isClickableAction(item) ? handleActionClick(e, item) : handleSectionClick(e, item)}
-                variant="body2"
-                sx={{ color: tc.primary, textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <Typography variant="body2" sx={{ color: tc.text }}>{item.label}</Typography>
-            )}
-            {item.description && (
-              <Typography variant="caption" sx={{ color: tc.textMuted, fontStyle: "italic", display: "block" }}>
-                {item.description}
-              </Typography>
-            )}
-          </Box>
+          {item.description && <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{item.description}</Typography>}
         </Box>
         {(item.seconds || 0) > 0 && (
-          <Stack direction="row" alignItems="center" spacing={0.5}>
-            <Icon sx={{ fontSize: 16, color: tc.textSecondary }}>schedule</Icon>
-            <Typography variant="body2" sx={{ color: tc.textSecondary }}>
-              {PlanHelper.formatTime(item.seconds || 0)}
-            </Typography>
-          </Stack>
+          <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, fontVariantNumeric: "tabular-nums", flex: "none" }}>{PlanHelper.formatTime(item.seconds || 0)}</Typography>
         )}
       </Box>
     );
@@ -137,15 +94,9 @@ export const LessonPreview: React.FC<Props> = (props) => {
 
   return (
     <>
-      <Box sx={{ position: "relative" }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-          <Typography variant="body2" sx={{ color: tc.textMuted }}>
-            Lesson: {props.venueName}
-          </Typography>
-        </Box>
-        <Box>
-          {props.lessonItems.map((item, i) => <React.Fragment key={item.id || `lesson-${i}`}>{renderPreviewItem(item)}</React.Fragment>)}
-        </Box>
+      <Box>
+        {props.venueName && <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, mb: "8px" }}>{Locale.label("mobile.serving.lessonName").replace("{}", props.venueName)}</Typography>}
+        {props.lessonItems.map((item, i) => <React.Fragment key={item.id || `lesson-${i}`}>{renderPreviewItem(item)}</React.Fragment>)}
       </Box>
       {actionItem && (
         <ActionDialog

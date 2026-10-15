@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useContext, useMemo, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { Box, Drawer, Toolbar } from "@mui/material";
+import React, { useContext, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { Box } from "@mui/material";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { MobileAppBar } from "./MobileAppBar";
-import { MobileDrawer } from "./MobileDrawer";
-import { MobileTabBar } from "./MobileTabBar";
+import { DesktopBack, MobileAppBar, MobileTopHeader, navLinks, routeSlug } from "./MobileAppBar";
+import { MAX_LINK_TABS, MobileTabBar } from "./MobileTabBar";
 import { WebPushEnrollmentSync } from "./WebPushEnrollmentSync";
 import { ChatNotificationBridge } from "./ChatNotificationBridge";
-import { mobileTheme, mobileSlugFromPath } from "./mobileTheme";
-import { MobileThemeProvider, useMobileThemeMode } from "./MobileThemeProvider";
+import { mobileTheme } from "./mobileTheme";
+import { MobileThemeProvider } from "./MobileThemeProvider";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
 
 interface Props {
@@ -26,16 +25,8 @@ export const MobileShell = (props: Props) => (
 );
 
 const MobileShellInner = ({ config, children }: Props) => {
-  const [open, setOpen] = useState(false);
   const context = useContext(UserContext);
   const router = useRouter();
-  const { mode } = useMobileThemeMode();
-  const themeMode = config?.appTheme?.[mode];
-  const isValidColor = (value?: string | null) => /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test((value || "").trim());
-  const primaryColor = isValidColor(themeMode?.primary)
-    ? themeMode!.primary
-    : (isValidColor(config?.appearance?.primaryColor) ? config!.appearance!.primaryColor! : mobileTheme.colors.primary);
-  const drawerWidth = mobileTheme.drawerWidth;
 
   const jwt = context?.userChurch?.jwt;
   const { data: rawLinks } = useChurchLinks(config?.church?.id, jwt);
@@ -43,73 +34,31 @@ const MobileShellInner = ({ config, children }: Props) => {
     () => filterVisibleLinks(rawLinks, jwt ? context?.userChurch : null),
     [rawLinks, jwt, context?.userChurch]
   );
-
-  const pathname = usePathname();
-  const slug = mobileSlugFromPath(pathname);
-  const isDashboard = !slug || slug === "dashboard";
+  const rootSlugs = useMemo(() => ["dashboard", "more", ...navLinks(links, MAX_LINK_TABS).map((t) => routeSlug(t.route))], [links]);
+  const goProfile = () => router.push("/mobile/profileEdit");
 
   return (
-    <Box
-      className="mobileAppRoot"
-      sx={{ display: "flex", minHeight: "100vh", maxWidth: "100%", overflowX: "hidden", bgcolor: mobileTheme.colors.background }}
-      style={{ ["--mobile-primary" as string]: primaryColor } as React.CSSProperties}
-    >
+    <Box className="mobileAppRoot" sx={{ minHeight: "100vh", maxWidth: "100%", overflowX: "hidden", bgcolor: mobileTheme.colors.background, color: mobileTheme.colors.text }}>
       <WebPushEnrollmentSync />
       {jwt && <ChatNotificationBridge personId={context?.person?.id} churchId={context?.userChurch?.church?.id} />}
 
-      <MobileAppBar
-        config={config}
-        drawerWidth={drawerWidth}
-        onAvatarClick={() => router.push("/mobile/profileEdit")}
-      />
-
-      <Drawer
-        variant="temporary"
-        open={open}
-        onClose={() => setOpen(false)}
-        ModalProps={{ keepMounted: true }}
-        sx={{
-          display: { xs: "block", md: "none" },
-          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth, bgcolor: mobileTheme.colors.surface }
-        }}
-      >
-        <MobileDrawer links={links} churchName={config?.church?.name} onNavigate={() => setOpen(false)} />
-      </Drawer>
-
-      <Drawer
-        variant="permanent"
-        open
-        sx={{
-          display: { xs: "none", md: "block" },
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            boxSizing: "border-box",
-            width: drawerWidth,
-            bgcolor: mobileTheme.colors.surface,
-            borderRight: `1px solid ${mobileTheme.colors.border}`
-          }
-        }}
-      >
-        <MobileDrawer links={links} churchName={config?.church?.name} />
-      </Drawer>
+      <MobileAppBar churchName={config?.church?.name} rootSlugs={rootSlugs} onAvatarClick={goProfile} />
+      <MobileTopHeader churchName={config?.church?.name} links={links} onAvatarClick={goProfile} />
 
       <Box component="main" sx={{
-        flexGrow: 1,
-        minWidth: 0,
-        width: { md: `calc(100% - ${drawerWidth}px)` },
-        bgcolor: mobileTheme.colors.background,
-        pb: { xs: `calc(${mobileTheme.tabBarHeight}px + ${mobileTheme.safe.bottom})`, md: 0 }
+        pt: { xs: `calc(${mobileTheme.headerHeight}px + ${mobileTheme.safe.top})`, md: "28px" },
+        pb: { xs: `calc(${mobileTheme.tabBarHeight + 20}px + ${mobileTheme.safe.bottom})`, md: "48px" },
+        px: { xs: 0, md: "32px" },
+        maxWidth: { md: mobileTheme.contentMaxWidth },
+        mx: "auto",
+        width: "100%",
+        boxSizing: "border-box"
       }}>
-        {isDashboard
-          ? <Box sx={{ height: mobileTheme.safe.top }} />
-          : <Toolbar sx={{ minHeight: `calc(${mobileTheme.headerHeight}px + ${mobileTheme.safe.top}) !important` }} />}
-        <Box sx={{ maxWidth: 760, mx: "auto", width: "100%" }}>
-          {children}
-        </Box>
+        <DesktopBack rootSlugs={rootSlugs} />
+        {children}
       </Box>
 
-      <MobileTabBar links={links} onMore={() => setOpen(true)} />
+      <MobileTabBar links={links} />
     </Box>
   );
 };

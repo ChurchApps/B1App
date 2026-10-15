@@ -2,15 +2,18 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, IconButton, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Skeleton, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { ApiHelper, Locale, PersonHelper, SocketHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
-import { formatRelative, getInitials } from "../util";
+import { formatRelative } from "../util";
 import { LoadErrorAlert } from "../LoadErrorAlert";
+import { PageHead, PersonAvatar, Plate, QuietEmpty, Row, SearchField, StatusBadge } from "../kit";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -28,7 +31,7 @@ interface Conversation {
   unread: boolean;
 }
 
-export const MessagesPage = ({ config }: Props) => {
+export const MessagesPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = React.useContext(UserContext);
@@ -85,7 +88,7 @@ export const MessagesPage = ({ config }: Props) => {
         if (seen.has(id)) return;
         seen.add(id);
         const person = peopleById[otherId];
-        const displayName = person?.name?.display || "Unknown";
+        const displayName = person?.name?.display || Locale.label("mobile.components.unknown");
         let photo = "";
         if (person) {
           try {
@@ -128,210 +131,77 @@ export const MessagesPage = ({ config }: Props) => {
     }
   };
 
-  const renderAvatar = (c: Conversation) => {
-    const common = {
-      width: 44,
-      height: 44,
-      borderRadius: "22px",
-      flexShrink: 0,
-      overflow: "hidden"
-    } as const;
-    if (c.personPhoto) {
-      return (
-        <Box
-          component="img"
-          src={c.personPhoto}
-          alt={c.personName}
-          sx={{ ...common, objectFit: "cover" }}
-        />
-      );
-    }
-    return (
-      <Box
-        sx={{
-          ...common,
-          bgcolor: tc.primaryLight,
-          color: tc.primary,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontWeight: 700,
-          fontSize: 14
-        }}
-      >
-        {getInitials(c.personName)}
-      </Box>
-    );
-  };
-
-  const handleClick = (c: Conversation) => {
-
+  const conversationHref = (c: Conversation) => {
     const path = `/mobile/messages/${c.personId}`;
-    router.push(c.conversationId ? `${path}?conversationId=${encodeURIComponent(c.conversationId)}` : path);
+    return c.conversationId ? `${path}?conversationId=${encodeURIComponent(c.conversationId)}` : path;
   };
+
+  const [filter, setFilter] = React.useState("");
+  const needle = filter.trim().toLowerCase();
+  const shown = (conversations || []).filter((c) => !needle || c.personName.toLowerCase().includes(needle) || c.preview.toLowerCase().includes(needle));
+  const unreadCount = (conversations || []).filter((c) => c.unread).length;
 
   const renderRow = (c: Conversation) => (
-    <Box
-      key={c.id}
-      data-testid={`conversation-row-${c.pmId}`}
-      onClick={() => handleClick(c)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e: React.KeyboardEvent) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          handleClick(c);
-        }
-      }}
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: `${mobileTheme.spacing.md}px`,
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        px: `${mobileTheme.spacing.md}px`,
-        py: "12px",
-        cursor: "pointer",
-        transition: "transform 150ms ease",
-        "&:active": { transform: "scale(0.995)" }
-      }}
-    >
-      {renderAvatar(c)}
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Box sx={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-          <Typography
-            sx={{
-              flex: 1,
-              minWidth: 0,
-              fontSize: 16,
-              fontWeight: c.unread ? 700 : 600,
-              color: tc.text,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap"
-            }}
-          >
-            {c.personName}
-          </Typography>
-          <Typography sx={{ fontSize: 12, color: tc.textSecondary, flexShrink: 0 }}>
-            {formatRelative(c.lastTime)}
-          </Typography>
-        </Box>
-        <Typography
-          sx={{
-            fontSize: 13,
-            color: tc.textSecondary,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap"
-          }}
-        >
-          {c.preview}
-        </Typography>
-      </Box>
+    <Box key={c.id} data-testid={`conversation-row-${c.pmId}`} sx={{ display: "flex", alignItems: "center", gap: "4px", "& + &": { borderTop: `1px solid ${tc.border}` } }}>
+      <Row
+        href={conversationHref(c)}
+        leading={<PersonAvatar name={c.personName} src={c.personPhoto} />}
+        title={<Box component="span" sx={{ fontWeight: c.unread ? 650 : 500 }}>{c.personName}</Box>}
+        subtitle={<Box component="span" sx={{ display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: c.unread ? tc.text : undefined }}>{c.preview}</Box>}
+        trailing={(
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px", flex: "none" }}>
+            <Typography component="span" sx={{ fontSize: 13, color: tc.textSecondary, whiteSpace: "nowrap" }}>{formatRelative(c.lastTime)}</Typography>
+            {c.unread && (
+              <Box component="span" aria-label={Locale.label("mobile.screens.unread")} data-testid={`conversation-unread-${c.pmId}`}>
+                <StatusBadge tone="pri" dot>{Locale.label("mobile.messages.new")}</StatusBadge>
+              </Box>
+            )}
+          </Box>
+        )}
+        sx={{ flex: 1, minWidth: 0 }}
+      />
       <IconButton
         aria-label={Locale.label("mobile.screens.deleteConversation")}
         data-testid={`conversation-delete-${c.pmId}`}
         size="small"
-        onClick={(e) => { e.stopPropagation(); setPendingDelete(c); }}
-        sx={{ color: tc.disabled, flexShrink: 0 }}
+        onClick={() => setPendingDelete(c)}
+        sx={{ color: tc.textSecondary, flex: "none", mr: "-6px" }}
       >
-        <Icon sx={{ fontSize: 20 }}>delete_outline</Icon>
+        <DeleteOutlineIcon sx={{ fontSize: 20 }} />
       </IconButton>
-      {c.unread && (
-        <Box
-          aria-label={Locale.label("mobile.screens.unread")}
-          data-testid={`conversation-unread-${c.pmId}`}
-          sx={{ width: 8, height: 8, borderRadius: "4px", bgcolor: tc.primary, flexShrink: 0 }}
-        />
-      )}
-      <Icon sx={{ color: tc.textSecondary, flexShrink: 0 }}>chevron_right</Icon>
-    </Box>
-  );
-
-  const renderSkeleton = (key: number) => (
-    <Box
-      key={`skeleton-${key}`}
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: `${mobileTheme.spacing.md}px`,
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        px: `${mobileTheme.spacing.md}px`,
-        py: "12px"
-      }}
-    >
-      <Skeleton variant="circular" width={44} height={44} />
-      <Box sx={{ flex: 1 }}>
-        <Skeleton variant="text" width="50%" height={18} />
-      </Box>
-    </Box>
-  );
-
-  const renderEmpty = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center"
-      }}
-    >
-      <Box
-        sx={{
-          width: 64,
-          height: 64,
-          borderRadius: "19px",
-          bgcolor: tc.iconBackground,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <Icon sx={{ fontSize: 32, color: tc.primary }}>chat_bubble_outline</Icon>
-      </Box>
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-        No messages yet
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        Start a conversation with someone in your church.
-      </Typography>
     </Box>
   );
 
   return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          mb: `${mobileTheme.spacing.md}px`
-        }}
+    <Box>
+      <PageHead
+        title={Locale.label("mobile.screenTitles.messages")}
+        lede={unreadCount > 0 ? Locale.label("mobile.messages.unreadCount").replace("{}", String(unreadCount)) : undefined}
       >
-        <IconButton
-          aria-label={Locale.label("mobile.screens.newMessage")}
-          onClick={() => router.push("/mobile/messages/new")}
-          sx={{
-            bgcolor: tc.iconBackground,
-            color: tc.primary,
-            "&:hover": { bgcolor: tc.iconBackground }
-          }}
-        >
-          <Icon>edit</Icon>
-        </IconButton>
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {conversations === null && conversationsError && <LoadErrorAlert onRetry={() => refetchConversations()} />}
-        {conversations === null && !conversationsError && [0, 1, 2].map(renderSkeleton)}
-        {conversations !== null && conversations.length === 0 && renderEmpty()}
-        {conversations !== null && conversations.length > 0 && conversations.map(renderRow)}
-      </Box>
+        <Button variant="contained" startIcon={<EditIcon />} onClick={() => router.push("/mobile/messages/new")}>
+          {Locale.label("mobile.screens.newMessage")}
+        </Button>
+      </PageHead>
+      <Plate>
+        {conversations !== null && conversations.length > 0 && (
+          <Box sx={{ px: { xs: "16px", md: "24px" }, pt: { xs: "16px", md: "22px" }, pb: "4px" }}>
+            <SearchField value={filter} onChange={setFilter} label={Locale.label("mobile.messages.searchConversations")} placeholder={Locale.label("mobile.messages.searchConversations")} height={44} />
+          </Box>
+        )}
+        <Box sx={{ px: { xs: "16px", md: "24px" }, py: "8px" }}>
+          {conversations === null && conversationsError && <Box sx={{ py: "8px" }}><LoadErrorAlert onRetry={() => refetchConversations()} /></Box>}
+          {conversations === null && !conversationsError && [0, 1, 2].map((i) => (
+            <Box key={i} sx={{ display: "flex", alignItems: "center", gap: "12px", minHeight: 56 }}>
+              <Skeleton variant="rounded" width={40} height={40} sx={{ borderRadius: "10px" }} />
+              <Skeleton variant="text" width="50%" height={20} />
+            </Box>
+          ))}
+          {conversations !== null && shown.length === 0 && (
+            <QuietEmpty sx={{ py: "12px" }}>{Locale.label(conversations.length === 0 ? "mobile.components.noMessages" : "mobile.messages.noConversationMatches")}</QuietEmpty>
+          )}
+          {shown.map(renderRow)}
+        </Box>
+      </Plate>
       <Dialog open={!!pendingDelete} onClose={() => setPendingDelete(null)}>
         <DialogTitle>{Locale.label("mobile.screens.deleteConversationTitle")}</DialogTitle>
         <DialogContent>

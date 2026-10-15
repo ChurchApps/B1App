@@ -14,32 +14,49 @@ import {
   DialogContentText,
   DialogTitle,
   FormControl,
-  Icon,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
   Snackbar,
   Switch,
-  Tab,
-  Tabs,
   TextField,
   Typography
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
+import PhotoCameraOutlinedIcon from "@mui/icons-material/PhotoCameraOutlined";
 import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PersonInterface, VisibilityPreferenceInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
+import { Eyebrow, KeyValues, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, Sheet, StatusBadge, TextLink } from "../kit";
 
 interface Props {
   config?: ConfigurationInterface;
 }
 
-type TabKey = "profile" | "household" | "account" | "visibility";
+type SheetKey = "name" | "contact" | "household" | "account" | "privacy";
 type VisibilityScope = "everyone" | "members" | "groups" | "leaders" | "staff";
+
+const scopeLabelKeys: Record<VisibilityScope, string> = {
+  everyone: "mobile.screens.everyone",
+  members: "mobile.screens.membersOnly",
+  groups: "mobile.screens.myGroupsOnly",
+  leaders: "mobile.screens.leadersOnly",
+  staff: "mobile.screens.staffOnly"
+};
+
+const scopeDescKeys: Record<VisibilityScope, string> = {
+  everyone: "mobile.profileEdit.everyoneDesc",
+  members: "mobile.profileEdit.membersDesc",
+  groups: "mobile.profileEdit.groupsDesc",
+  leaders: "mobile.profileEdit.leadersDesc",
+  staff: "mobile.profileEdit.staffDesc"
+};
+
+// PersonHelper only recognizes PNG data URLs; the cropper produces JPEG.
+const photoSrc = (p: PersonInterface) => (p.photo ? (p.photo.startsWith("data:") ? p.photo : PersonHelper.getPhotoUrl(p)) : undefined);
 
 const fieldLabelKeys: Record<string, string> = {
   "name.first": "person.firstName",
@@ -156,7 +173,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   const queryClient = useQueryClient();
   const personId = UserHelper.currentUserChurch?.person?.id;
 
-  const [tab, setTab] = useState<TabKey>("profile");
+  const [sheet, setSheet] = useState<SheetKey | null>(null);
   const [person, setPerson] = useState<PersonWithPrivacy | null>(null);
   const [initial, setInitial] = useState<PersonWithPrivacy | null>(null);
   const [modifiedFields, setModifiedFields] = useState<Set<string>>(new Set());
@@ -272,8 +289,6 @@ export const ProfileEditPage = ({ config }: Props) => {
     });
   }, []);
 
-  const isModified = useCallback((key: string) => modifiedFields.has(key), [modifiedFields]);
-
   const handlePhotoClick = () => {
     setPhotoError(null);
     fileInputRef.current?.click();
@@ -317,11 +332,11 @@ export const ProfileEditPage = ({ config }: Props) => {
 
   const hasChanges = profileChanges.length > 0;
 
-  const handleSave = async () => {
-    if (!person || !initial) return;
+  const handleSave = async (): Promise<boolean> => {
+    if (!person || !initial) return false;
     if (profileChanges.length === 0) {
       setSnack({ open: true, msg: Locale.label("mobile.screens.noChangesToSubmit"), severity: "info" });
-      return;
+      return false;
     }
     setSaving(true);
     // Re-read settings on the write path so a still-loading or failed query can never
@@ -390,6 +405,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       setTimeout(() => {
         try { router.back(); } catch { }
       }, 900);
+      return true;
     } catch (err: any) {
       console.error("Profile save error", err);
       setSnack({
@@ -397,6 +413,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         msg: err?.message || (saveWithApproval ? Locale.label("mobile.screens.unableToSubmitChanges") : Locale.label("mobile.screens.unableToSaveChanges")),
         severity: "error"
       });
+      return false;
     } finally {
       setSaving(false);
     }
@@ -404,6 +421,7 @@ export const ProfileEditPage = ({ config }: Props) => {
 
   const handleCancel = () => {
     setDiscardOpen(false);
+    setSheet(null);
     if (initial) setPerson(JSON.parse(JSON.stringify(initial)));
     setModifiedFields(new Set());
     setPendingFamilyMembers([]);
@@ -511,7 +529,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   const optedOutChanged = optedOutLocal !== initialOptedOut;
   const visChanged = prefsChanged || optedOutChanged;
 
-  const handleSaveVisibility = async () => {
+  const handleSaveVisibility = async (): Promise<boolean> => {
     setSavingPrivacy(true);
     try {
       const tasks: Promise<any>[] = [];
@@ -544,70 +562,43 @@ export const ProfileEditPage = ({ config }: Props) => {
         setPerson((p) => (p ? { ...p, optedOut: optedOutLocal } : p));
       }
       setSnack({ open: true, msg: Locale.label("mobile.screens.visibilityPreferencesSaved"), severity: "success" });
+      return true;
     } catch (err: any) {
       setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.couldNotSaveVisibility"), severity: "error" });
+      return false;
     } finally {
       setSavingPrivacy(false);
     }
   };
 
-  const inputSx = { "& .MuiOutlinedInput-root": { borderRadius: `${mobileTheme.radius.md}px` } };
+  const profileSheetOpen = sheet === "name" || sheet === "contact" || sheet === "household";
 
-  const modifiedOutlineSx = (key: string) => (
-    isModified(key)
-      ? {
-        "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.warning, borderWidth: 2 },
-        "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: tc.warning }
-      }
-      : {}
-  );
+  const closeProfileSheet = () => {
+    if (hasChanges) setDiscardOpen(true);
+    else setSheet(null);
+  };
 
-  const modifiedDot = (key: string) => isModified(key) ? (
-    <Box
-      sx={{
-        width: 8,
-        height: 8,
-        bgcolor: tc.warning,
-        borderRadius: "50%",
-        position: "absolute",
-        top: 10,
-        right: 12,
-        pointerEvents: "none"
-      }}
-      aria-hidden
-    />
-  ) : null;
+  const saveProfileSheet = async () => {
+    if (await handleSave()) setSheet(null);
+  };
 
-  const sectionHeader = (label: string, icon?: string) => (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: `${mobileTheme.spacing.sm}px`,
-        borderBottom: `1px solid ${tc.border}`,
-        pb: 1,
-        mb: 2
-      }}
-    >
-      {icon && <Icon sx={{ color: tc.primary, fontSize: 24 }}>{icon}</Icon>}
-      <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-        {label}
-      </Typography>
-    </Box>
-  );
+  const closePrivacySheet = () => {
+    if (initialVis) {
+      setAddressVis(initialVis.address);
+      setPhoneVis(initialVis.phone);
+      setEmailVis(initialVis.email);
+    }
+    setOptedOutLocal(initialOptedOut);
+    setSheet(null);
+  };
+
+  const savePrivacySheet = async () => {
+    if (await handleSaveVisibility()) setSheet(null);
+  };
 
   if (loading) {
     return (
-      <Box
-        sx={{
-          p: `${mobileTheme.spacing.md}px`,
-          bgcolor: tc.background,
-          minHeight: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
-        }}
-      >
+      <Box sx={{ py: "48px", display: "flex", justifyContent: "center" }}>
         <CircularProgress sx={{ color: tc.primary }} />
       </Box>
     );
@@ -616,481 +607,163 @@ export const ProfileEditPage = ({ config }: Props) => {
   if (!person) return null;
 
   const displayInitial = (person.name?.first?.charAt(0) || "?").toUpperCase();
+  const fullName = [person.name?.first, person.name?.middle, person.name?.last].filter(Boolean).join(" ");
+  const otherHousehold = household.filter((h) => h.id !== person.id);
+  const address = [
+    [person.contactInfo?.address1, person.contactInfo?.address2].filter(Boolean).join(", "),
+    [person.contactInfo?.city, [person.contactInfo?.state, person.contactInfo?.zip].filter(Boolean).join(" ")].filter(Boolean).join(", ")
+  ].filter(Boolean).join(", ");
+  const contactItems = [
+    { label: Locale.label("person.email"), value: person.contactInfo?.email },
+    { label: Locale.label("mobile.details.mobilePhone"), value: person.contactInfo?.mobilePhone },
+    { label: Locale.label("mobile.profileEdit.homePhone"), value: person.contactInfo?.homePhone },
+    { label: Locale.label("mobile.profileEdit.workPhone"), value: person.contactInfo?.workPhone },
+    { label: Locale.label("mobile.profileEdit.sectionAddress"), value: address },
+    { label: Locale.label("mobile.profileEdit.birthDate"), value: readField(person, "birthDate") }
+  ];
+  const hasContact = contactItems.some((i) => !!i.value);
+  const editLink = (key: SheetKey, label = Locale.label("mobile.details.edit")) => (
+    <TextLink data-testid={`profile-edit-${key}`} onClick={() => setSheet(key)}>{label}</TextLink>
+  );
+  const fieldStack = { display: "flex", flexDirection: "column", gap: "14px", pt: "6px" } as const;
+  const errorText = (msg: string | null) => msg ? <Typography sx={{ fontSize: 13, color: tc.error }}>{msg}</Typography> : null;
 
   const renderField = (
     key: string,
     label: string,
     opts?: { type?: string; inputMode?: "text" | "tel" | "email" | "numeric" | "url" | "search"; autoComplete?: string }
   ) => (
-    <Box sx={{ position: "relative" }}>
-      <TextField
-        label={label}
-        value={readField(person, key)}
-        onChange={(e) => setField(key, e.target.value)}
-        type={opts?.type || "text"}
-        inputProps={{ inputMode: opts?.inputMode, autoComplete: opts?.autoComplete }}
-        variant="outlined"
-        size="medium"
-        fullWidth
-        sx={{ ...inputSx, ...modifiedOutlineSx(key) } as any}
-        InputLabelProps={opts?.type === "date" ? { shrink: true } : undefined}
-      />
-      {modifiedDot(key)}
-    </Box>
+    <TextField
+      label={label}
+      value={readField(person, key)}
+      onChange={(e) => setField(key, e.target.value)}
+      type={opts?.type || "text"}
+      inputProps={{ inputMode: opts?.inputMode, autoComplete: opts?.autoComplete }}
+      fullWidth
+      InputLabelProps={opts?.type === "date" ? { shrink: true } : undefined}
+    />
   );
 
-  const renderProfileTab = () => (
-    <>
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          display: "flex",
-          alignItems: "center",
-          gap: `${mobileTheme.spacing.md}px`,
-          ...(isModified("photo") ? { outline: `2px solid ${tc.warning}` } : {})
-        }}
-      >
-        <Avatar
-          src={person.photo ? PersonHelper.getPhotoUrl(person) : undefined}
-          sx={{ width: 72, height: 72, bgcolor: tc.primaryLight, color: tc.primary, fontSize: 28, fontWeight: 700 }}
-        >
+  const renderNameSheet = () => (
+    <Box sx={fieldStack}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        <Avatar src={photoSrc(person)} sx={{ width: 72, height: 72, bgcolor: tc.chip, color: tc.onChip, fontSize: 26, fontWeight: 600 }}>
           {displayInitial}
         </Avatar>
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-            {[person.name?.first, person.name?.last].filter(Boolean).join(" ") || Locale.label("mobile.profileEdit.yourPhoto")}
-          </Typography>
-          <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: "2px" }}>
-            {Locale.label("mobile.profileEdit.photoHint")}
-          </Typography>
-          <Button
-            variant="outlined"
-            onClick={handlePhotoClick}
-            startIcon={<Icon>photo_camera</Icon>}
-            sx={{
-              mt: `${mobileTheme.spacing.sm}px`,
-              borderColor: tc.primary,
-              color: tc.primary,
-              textTransform: "none",
-              borderRadius: `${mobileTheme.radius.md}px`
-            }}
-          >
+          <Button variant="outlined" onClick={handlePhotoClick} startIcon={<PhotoCameraOutlinedIcon />}>
             {Locale.label("mobile.profileEdit.changePhoto")}
           </Button>
-          {photoError && (
-            <Typography sx={{ fontSize: 12, color: tc.error, mt: "6px" }}>{photoError}</Typography>
-          )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleFileSelected}
-          />
+          <Typography sx={{ fontSize: 12.5, color: tc.textSecondary, mt: "6px" }}>{Locale.label("mobile.profileEdit.photoHint")}</Typography>
+          {errorText(photoError)}
+          <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleFileSelected} />
         </Box>
       </Box>
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {sectionHeader(Locale.label("mobile.profileEdit.sectionName"))}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          {renderField("name.first", Locale.label("person.firstName"), { autoComplete: "given-name" })}
-          {renderField("name.middle", Locale.label("mobile.profileEdit.middleName"), { autoComplete: "additional-name" })}
-          {renderField("name.last", Locale.label("person.lastName"), { autoComplete: "family-name" })}
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {sectionHeader(Locale.label("mobile.profileEdit.sectionContact"))}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          {renderField("contactInfo.email", Locale.label("person.email"), { type: "email", inputMode: "email", autoComplete: "email" })}
-          {renderField("birthDate", Locale.label("mobile.profileEdit.birthDate"), { type: "date" })}
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {sectionHeader(Locale.label("mobile.profileEdit.sectionAddress"))}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          {renderField("contactInfo.address1", Locale.label("mobile.profileEdit.address1"), { autoComplete: "address-line1" })}
-          {renderField("contactInfo.address2", Locale.label("mobile.profileEdit.address2"), { autoComplete: "address-line2" })}
-          {renderField("contactInfo.city", Locale.label("mobile.profileEdit.city"), { autoComplete: "address-level2" })}
-          <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.sm}px` }}>
-            <Box sx={{ flex: 1 }}>{renderField("contactInfo.state", Locale.label("mobile.profileEdit.state"), { autoComplete: "address-level1" })}</Box>
-            <Box sx={{ flex: 1 }}>{renderField("contactInfo.zip", Locale.label("mobile.profileEdit.zip"), { inputMode: "numeric", autoComplete: "postal-code" })}</Box>
-          </Box>
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {sectionHeader(Locale.label("mobile.profileEdit.sectionPhone"))}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          {renderField("contactInfo.mobilePhone", Locale.label("mobile.details.mobilePhone"), { type: "tel", inputMode: "tel", autoComplete: "tel" })}
-          {renderField("contactInfo.homePhone", Locale.label("mobile.profileEdit.homePhone"), { type: "tel", inputMode: "tel" })}
-          {renderField("contactInfo.workPhone", Locale.label("mobile.profileEdit.workPhone"), { type: "tel", inputMode: "tel" })}
-        </Box>
-      </Box>
-
-      <Box sx={{ height: 24 }} />
-    </>
+      {renderField("name.first", Locale.label("person.firstName"), { autoComplete: "given-name" })}
+      {renderField("name.middle", Locale.label("mobile.profileEdit.middleName"), { autoComplete: "additional-name" })}
+      {renderField("name.last", Locale.label("person.lastName"), { autoComplete: "family-name" })}
+    </Box>
   );
 
-  const renderHouseholdTab = () => (
-    <>
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {sectionHeader(Locale.label("mobile.profileEdit.currentHousehold"), "people")}
-        {householdLoading && householdId && <CircularProgress sx={{ color: tc.primary }} size={24} />}
-        {!householdLoading && !householdId && (
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, fontStyle: "italic", textAlign: "center", py: 2 }}>
-            {Locale.label("mobile.profileEdit.noHouseholdLinked")}
-          </Typography>
-        )}
-        {!householdLoading && householdIsError && householdId && (
-          <Typography sx={{ fontSize: 14, color: tc.error, fontStyle: "italic", textAlign: "center", py: 2 }}>
-            {Locale.label("mobile.profileEdit.couldNotLoadHousehold")}
-          </Typography>
-        )}
-        {!householdLoading && !householdIsError && !!householdId && household.filter((h) => h.id !== person.id).length === 0 && (
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, fontStyle: "italic", textAlign: "center", py: 2 }}>
-            {Locale.label("mobile.profileEdit.noOtherHouseholdMembers")}
-          </Typography>
-        )}
-        {!householdLoading &&
-          !householdIsError &&
-          household
-            .filter((h) => h.id !== person.id)
-            .map((h) => (
-              <Box
-                key={h.id}
-                role="button"
-                tabIndex={0}
-                onClick={() => router.push(`/mobile/community/${h.id}`)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    router.push(`/mobile/community/${h.id}`);
-                  }
-                }}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: `${mobileTheme.spacing.md}px`,
-                  py: 1,
-                  borderRadius: `${mobileTheme.radius.md}px`,
-                  cursor: "pointer",
-                  "&:hover": { bgcolor: tc.iconBackground }
-                }}
-              >
-                <Avatar
-                  src={h.photo ? PersonHelper.getPhotoUrl(h) : undefined}
-                  sx={{ width: 48, height: 48, bgcolor: tc.primaryLight, color: tc.primary, fontSize: 16, fontWeight: 700 }}
-                >
-                  {(h.name?.first?.charAt(0) || "?").toUpperCase()}
-                </Avatar>
-                <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
-                    {h.name?.display || Locale.label("mobile.components.unknown")}
-                  </Typography>
-                  <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>
-                    {h.householdRole || Locale.label("mobile.details.householdMember")}
-                  </Typography>
-                </Box>
-                <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
-              </Box>
+  const renderContactSheet = () => (
+    <Box sx={fieldStack}>
+      {renderField("contactInfo.email", Locale.label("person.email"), { type: "email", inputMode: "email", autoComplete: "email" })}
+      {renderField("contactInfo.mobilePhone", Locale.label("mobile.details.mobilePhone"), { type: "tel", inputMode: "tel", autoComplete: "tel" })}
+      {renderField("contactInfo.homePhone", Locale.label("mobile.profileEdit.homePhone"), { type: "tel", inputMode: "tel" })}
+      {renderField("contactInfo.workPhone", Locale.label("mobile.profileEdit.workPhone"), { type: "tel", inputMode: "tel" })}
+      {renderField("birthDate", Locale.label("mobile.profileEdit.birthDate"), { type: "date" })}
+      <Eyebrow component="h3">{Locale.label("mobile.profileEdit.sectionAddress")}</Eyebrow>
+      {renderField("contactInfo.address1", Locale.label("mobile.profileEdit.address1"), { autoComplete: "address-line1" })}
+      {renderField("contactInfo.address2", Locale.label("mobile.profileEdit.address2"), { autoComplete: "address-line2" })}
+      {renderField("contactInfo.city", Locale.label("mobile.profileEdit.city"), { autoComplete: "address-level2" })}
+      <Box sx={{ display: "flex", gap: "12px" }}>
+        <Box sx={{ flex: 1 }}>{renderField("contactInfo.state", Locale.label("mobile.profileEdit.state"), { autoComplete: "address-level1" })}</Box>
+        <Box sx={{ flex: 1 }}>{renderField("contactInfo.zip", Locale.label("mobile.profileEdit.zip"), { inputMode: "numeric", autoComplete: "postal-code" })}</Box>
+      </Box>
+    </Box>
+  );
+
+  const renderHouseholdSheet = () => (
+    <Box sx={fieldStack}>
+      <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("mobile.profileEdit.familyMemberHint")}</Typography>
+      <Box sx={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
+        <TextField
+          label={Locale.label("person.firstName")}
+          value={newMemberName}
+          onChange={(e) => setNewMemberName(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAddFamilyMember(); } }}
+          fullWidth
+        />
+        <Button variant="outlined" onClick={handleAddFamilyMember} disabled={!newMemberName.trim()} sx={{ height: 56, flex: "none" }}>
+          {Locale.label("mobile.group.add")}
+        </Button>
+      </Box>
+      {pendingFamilyMembers.length > 0 && (
+        <Box>
+          <Eyebrow component="h3">{Locale.label("mobile.profileEdit.pendingFamilyMembers")}</Eyebrow>
+          <RowList>
+            {pendingFamilyMembers.map((name, idx) => (
+              <Row
+                key={`${name}-${idx}`}
+                title={name}
+                trailing={<TextLink danger onClick={() => handleRemoveFamilyMember(idx)}>{Locale.label("mobile.screens.remove")}</TextLink>}
+                sx={{ minHeight: 44 }}
+              />
             ))}
-      </Box>
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {sectionHeader(Locale.label("mobile.profileEdit.addFamilyMember"), "person_add")}
-        <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 2 }}>
-          {Locale.label("mobile.profileEdit.familyMemberHint")}
-        </Typography>
-        <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.sm}px`, alignItems: "flex-start" }}>
-          <TextField
-            label={Locale.label("person.firstName")}
-            value={newMemberName}
-            onChange={(e) => setNewMemberName(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAddFamilyMember(); } }}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          <Button
-            variant="contained"
-            onClick={handleAddFamilyMember}
-            disabled={!newMemberName.trim()}
-            sx={{
-              bgcolor: tc.primary,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              textTransform: "none",
-              px: 3,
-              py: 1.6,
-              "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
-            }}
-          >
-            {Locale.label("mobile.group.add")}
-          </Button>
+          </RowList>
+          <Typography sx={{ fontSize: 12.5, color: tc.textSecondary, mt: "4px" }}>{Locale.label("mobile.profileEdit.pendingFamilyMembersHint")}</Typography>
         </Box>
-
-        {pendingFamilyMembers.length > 0 && (
-          <Box sx={{ mt: 2, pt: 2, borderTop: `1px solid ${tc.warning}44` }}>
-            <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text, mb: 1.5 }}>
-              {Locale.label("mobile.profileEdit.pendingFamilyMembers")}
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              {pendingFamilyMembers.map((name, idx) => (
-                <Box
-                  key={`${name}-${idx}`}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    bgcolor: `${tc.warning}22`,
-                    borderRadius: `${mobileTheme.radius.md}px`,
-                    px: 1.5,
-                    py: 1
-                  }}
-                >
-                  <Icon sx={{ color: tc.warning, fontSize: 20 }}>person_outline</Icon>
-                  <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>{name}</Typography>
-                  <IconButton size="small" onClick={() => handleRemoveFamilyMember(idx)} aria-label={Locale.label("mobile.screens.remove")}>
-                    <Icon sx={{ color: tc.error, fontSize: 20 }}>close</Icon>
-                  </IconButton>
-                </Box>
-              ))}
-            </Box>
-            <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: 1, fontStyle: "italic" }}>
-              {Locale.label("mobile.profileEdit.pendingFamilyMembersHint")}
-            </Typography>
-          </Box>
-        )}
-      </Box>
-
-      <Box sx={{ height: 24 }} />
-    </>
+      )}
+    </Box>
   );
 
-  const renderAccountTab = () => (
-    <>
+  const profileSheetTitle = sheet === "name"
+    ? Locale.label("mobile.profileEdit.photoAndName")
+    : sheet === "contact"
+      ? Locale.label("mobile.profileEdit.sectionContact")
+      : Locale.label("mobile.profileEdit.addFamilyMember");
 
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {sectionHeader(Locale.label("mobile.profileEdit.displayName"), "person")}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          <TextField
-            label={Locale.label("person.firstName")}
-            value={acctFirstName}
-            onChange={(e) => { setAcctFirstName(e.target.value); setAcctNameError(null); }}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          <TextField
-            label={Locale.label("person.lastName")}
-            value={acctLastName}
-            onChange={(e) => { setAcctLastName(e.target.value); setAcctNameError(null); }}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          {acctNameError && (
-            <Typography sx={{ fontSize: 12, color: tc.error }}>{acctNameError}</Typography>
-          )}
-          {(acctFirstName !== (accountUser?.firstName || "") || acctLastName !== (accountUser?.lastName || "")) && (
-            <Button
-              variant="contained"
-              onClick={handleSaveDisplayName}
-              disabled={savingAcctName}
-              sx={{
-                bgcolor: tc.primary,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                textTransform: "none",
-                py: 1.1,
-                "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-                "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
-              }}
-            >
-              {savingAcctName ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : Locale.label("common.save")}
-            </Button>
-          )}
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {sectionHeader(Locale.label("mobile.profileEdit.changeEmail"), "email")}
-        <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 2 }}>
-          {Locale.label("person.email")}: {accountUser?.email || "—"}
-        </Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          <TextField
-            label={Locale.label("mobile.screens.newEmail")}
-            value={newEmail}
-            onChange={(e) => { setNewEmail(e.target.value); setEmailError(null); }}
-            type="email"
-            inputProps={{ inputMode: "email", autoComplete: "email" }}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          {emailError && (
-            <Typography sx={{ fontSize: 12, color: tc.error }}>{emailError}</Typography>
-          )}
-          <Button
-            variant="contained"
-            onClick={handleSaveEmail}
-            disabled={savingEmail || !newEmail.trim()}
-            sx={{
-              bgcolor: tc.primary,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              textTransform: "none",
-              py: 1.1,
-              "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
-            }}
-          >
-            {savingEmail ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : Locale.label("common.save")}
+  const renderAccountSheet = () => (
+    <Box sx={{ display: "flex", flexDirection: "column", "& > section + section": { borderTop: `1px solid ${tc.border}` }, "& > section": { py: "16px" }, "& > section:first-of-type": { pt: "6px" } }}>
+      <Box component="section" sx={fieldStack}>
+        <Eyebrow component="h3">{Locale.label("mobile.profileEdit.displayName")}</Eyebrow>
+        <TextField label={Locale.label("person.firstName")} value={acctFirstName} onChange={(e) => { setAcctFirstName(e.target.value); setAcctNameError(null); }} fullWidth />
+        <TextField label={Locale.label("person.lastName")} value={acctLastName} onChange={(e) => { setAcctLastName(e.target.value); setAcctNameError(null); }} fullWidth />
+        {errorText(acctNameError)}
+        {(acctFirstName !== (accountUser?.firstName || "") || acctLastName !== (accountUser?.lastName || "")) && (
+          <Button variant="contained" onClick={handleSaveDisplayName} disabled={savingAcctName} sx={{ alignSelf: "flex-start" }}>
+            {savingAcctName ? <CircularProgress size={20} sx={{ color: "inherit" }} /> : Locale.label("common.save")}
           </Button>
-        </Box>
+        )}
       </Box>
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {sectionHeader(Locale.label("mobile.profileEdit.changePassword"), "lock")}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          <TextField
-            label={Locale.label("mobile.screens.currentPassword")}
-            value={currentPassword}
-            onChange={(e) => { setCurrentPassword(e.target.value); setPasswordError(null); }}
-            type="password"
-            inputProps={{ autoComplete: "current-password" }}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          <TextField
-            label={Locale.label("mobile.screens.newPassword")}
-            value={newPassword}
-            onChange={(e) => { setNewPassword(e.target.value); setPasswordError(null); }}
-            type="password"
-            inputProps={{ autoComplete: "new-password" }}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          <TextField
-            label={Locale.label("mobile.screens.confirmPassword")}
-            value={confirmPassword}
-            onChange={(e) => { setConfirmPassword(e.target.value); setPasswordError(null); }}
-            type="password"
-            inputProps={{ autoComplete: "new-password" }}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            {Locale.label("mobile.profileEdit.passwordMinLength")}
-          </Typography>
-          {passwordError && (
-            <Typography sx={{ fontSize: 12, color: tc.error }}>{passwordError}</Typography>
-          )}
-          <Button
-            variant="contained"
-            onClick={handleSavePassword}
-            disabled={savingPassword || !currentPassword || !newPassword || !confirmPassword}
-            sx={{
-              bgcolor: tc.primary,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              textTransform: "none",
-              py: 1.1,
-              "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
-            }}
-          >
-            {savingPassword ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : Locale.label("common.save")}
-          </Button>
-        </Box>
+      <Box component="section" sx={fieldStack}>
+        <Eyebrow component="h3">{Locale.label("mobile.profileEdit.changeEmail")}</Eyebrow>
+        <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("person.email")}: {accountUser?.email || "—"}</Typography>
+        <TextField
+          label={Locale.label("mobile.screens.newEmail")}
+          value={newEmail}
+          onChange={(e) => { setNewEmail(e.target.value); setEmailError(null); }}
+          type="email"
+          inputProps={{ inputMode: "email", autoComplete: "email" }}
+          fullWidth
+        />
+        {errorText(emailError)}
+        <Button variant="contained" onClick={handleSaveEmail} disabled={savingEmail || !newEmail.trim()} sx={{ alignSelf: "flex-start" }}>
+          {savingEmail ? <CircularProgress size={20} sx={{ color: "inherit" }} /> : Locale.label("common.save")}
+        </Button>
       </Box>
-
-      <Box sx={{ height: 24 }} />
-    </>
+      <Box component="section" sx={fieldStack}>
+        <Eyebrow component="h3">{Locale.label("mobile.profileEdit.changePassword")}</Eyebrow>
+        <TextField label={Locale.label("mobile.screens.currentPassword")} value={currentPassword} onChange={(e) => { setCurrentPassword(e.target.value); setPasswordError(null); }} type="password" inputProps={{ autoComplete: "current-password" }} fullWidth />
+        <TextField label={Locale.label("mobile.screens.newPassword")} value={newPassword} onChange={(e) => { setNewPassword(e.target.value); setPasswordError(null); }} type="password" inputProps={{ autoComplete: "new-password" }} fullWidth />
+        <TextField label={Locale.label("mobile.screens.confirmPassword")} value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value); setPasswordError(null); }} type="password" inputProps={{ autoComplete: "new-password" }} fullWidth />
+        <Typography sx={{ fontSize: 12.5, color: tc.textSecondary }}>{Locale.label("mobile.profileEdit.passwordMinLength")}</Typography>
+        {errorText(passwordError)}
+        <Button variant="contained" onClick={handleSavePassword} disabled={savingPassword || !currentPassword || !newPassword || !confirmPassword} sx={{ alignSelf: "flex-start" }}>
+          {savingPassword ? <CircularProgress size={20} sx={{ color: "inherit" }} /> : Locale.label("common.save")}
+        </Button>
+      </Box>
+    </Box>
   );
 
   const renderVisDropdown = (
@@ -1099,264 +772,146 @@ export const ProfileEditPage = ({ config }: Props) => {
     onChange: (v: VisibilityScope) => void,
     id: string
   ) => (
-    <FormControl fullWidth sx={{ mt: 1, mb: 2 }}>
+    <FormControl fullWidth>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <Select
         labelId={`${id}-label`}
         label={label}
         value={value}
         onChange={(e: SelectChangeEvent<string>) => onChange(e.target.value as VisibilityScope)}
-        sx={{ borderRadius: `${mobileTheme.radius.md}px` }}
       >
-        <MenuItem value="everyone">{Locale.label("mobile.screens.everyone")}</MenuItem>
-        <MenuItem value="members">{Locale.label("mobile.screens.membersOnly")}</MenuItem>
-        <MenuItem value="groups">{Locale.label("mobile.screens.myGroupsOnly")}</MenuItem>
-        <MenuItem value="leaders">{Locale.label("mobile.screens.leadersOnly")}</MenuItem>
-        <MenuItem value="staff">{Locale.label("mobile.screens.staffOnly")}</MenuItem>
+        {(Object.keys(scopeLabelKeys) as VisibilityScope[]).map((s) => <MenuItem key={s} value={s}>{Locale.label(scopeLabelKeys[s])}</MenuItem>)}
       </Select>
     </FormControl>
   );
 
-  const renderPrivacyTab = () => (
-    <>
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {sectionHeader(Locale.label("mobile.profileEdit.visibilityPreferences"), "visibility")}
-        <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 2 }}>
-          {Locale.label("mobile.profileEdit.visibilityIntro")}
-        </Typography>
-
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            py: 1.5,
-            borderBottom: `1px solid ${tc.border}`,
-            mb: 2
-          }}
-        >
-          <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>
-            {Locale.label("mobile.profileEdit.hideFromDirectory")}
-          </Typography>
-          <Switch
-            checked={optedOutLocal}
-            onChange={(e) => setOptedOutLocal(e.target.checked)}
-          />
-        </Box>
-
-        {renderVisDropdown(Locale.label("mobile.profileEdit.addressVisibility"), addressVis, setAddressVis, "vis-address")}
-        {renderVisDropdown(Locale.label("mobile.profileEdit.phoneVisibility"), phoneVis, setPhoneVis, "vis-phone")}
-        {renderVisDropdown(Locale.label("mobile.profileEdit.emailVisibility"), emailVis, setEmailVis, "vis-email")}
-
-        {visChanged && (
-          <Button
-            variant="contained"
-            onClick={handleSaveVisibility}
-            disabled={savingPrivacy}
-            fullWidth
-            sx={{
-              mt: 2,
-              bgcolor: tc.primary,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              textTransform: "none",
-              py: 1.1,
-              "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
-            }}
-          >
-            {savingPrivacy ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : Locale.label("mobile.screens.save")}
-          </Button>
-        )}
-      </Box>
-
-      <Box
-        sx={{
-          bgcolor: tc.iconBackground,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-          <Icon sx={{ color: tc.primary, fontSize: 20 }}>info</Icon>
-          <Typography sx={{ fontSize: 14, fontWeight: 700, color: tc.primary }}>
-            {Locale.label("mobile.profileEdit.visibilityLevels")}
-          </Typography>
-        </Box>
-        <Box sx={{ mb: 1 }}>
-          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.everyone")}</Typography>
-          <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            {Locale.label("mobile.profileEdit.everyoneDesc")}
-          </Typography>
-        </Box>
-        <Box sx={{ mb: 1 }}>
-          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.membersOnly")}</Typography>
-          <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            {Locale.label("mobile.profileEdit.membersDesc")}
-          </Typography>
-        </Box>
-        <Box sx={{ mb: 1 }}>
-          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.myGroupsOnly")}</Typography>
-          <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            {Locale.label("mobile.profileEdit.groupsDesc")}
-          </Typography>
-        </Box>
-        <Box sx={{ mb: 1 }}>
-          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.leadersOnly")}</Typography>
-          <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            {Locale.label("mobile.profileEdit.leadersDesc")}
-          </Typography>
-        </Box>
-        <Box>
-          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.staffOnly")}</Typography>
-          <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            {Locale.label("mobile.profileEdit.staffDesc")}
-          </Typography>
+  const renderPrivacySheet = () => (
+    <Box sx={fieldStack}>
+      <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("mobile.profileEdit.visibilityIntro")}</Typography>
+      <Row
+        title={Locale.label("mobile.profileEdit.hideFromDirectory")}
+        trailing={<Switch checked={optedOutLocal} onChange={(e) => setOptedOutLocal(e.target.checked)} slotProps={{ input: { "aria-label": Locale.label("mobile.profileEdit.hideFromDirectory") } }} />}
+        sx={{ minHeight: 48, py: 0 }}
+      />
+      {renderVisDropdown(Locale.label("mobile.profileEdit.addressVisibility"), addressVis, setAddressVis, "vis-address")}
+      {renderVisDropdown(Locale.label("mobile.profileEdit.phoneVisibility"), phoneVis, setPhoneVis, "vis-phone")}
+      {renderVisDropdown(Locale.label("mobile.profileEdit.emailVisibility"), emailVis, setEmailVis, "vis-email")}
+      <Box>
+        <Eyebrow component="h3">{Locale.label("mobile.profileEdit.visibilityLevels")}</Eyebrow>
+        <Box sx={{ mt: "8px" }}>
+          <KeyValues items={(Object.keys(scopeLabelKeys) as VisibilityScope[]).map((s) => ({ label: Locale.label(scopeLabelKeys[s]), value: Locale.label(scopeDescKeys[s]) }))} />
         </Box>
       </Box>
-
-      <Box sx={{ height: 24 }} />
-    </>
+    </Box>
   );
 
-  const showPendingChanges = hasChanges && tab !== "visibility" && tab !== "account";
-
   return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          overflow: "hidden",
-          mb: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <Tabs
-          value={tab}
-          onChange={(_, v) => setTab(v)}
-          variant="fullWidth"
-          textColor="primary"
-          indicatorColor="primary"
-          sx={{
-            minHeight: 52,
-            "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 },
-            "& .MuiTab-root": {
-              minHeight: 52,
-              textTransform: "none",
-              fontWeight: 500,
-              fontSize: 14,
-              color: tc.textSecondary
-            },
-            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
-          }}
-        >
-          <Tab
-            value="profile"
-            label={
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-                {Locale.label("mobile.profileEdit.tabProfile")}
-                {hasChanges && (
-                  <Box sx={{ width: 8, height: 8, bgcolor: tc.warning, borderRadius: "50%" }} aria-hidden />
-                )}
-              </Box>
-            }
+    <Box sx={{ pb: "24px" }}>
+      <PageHead title={Locale.label("mobile.profileEdit.title")} lede={requiresApproval ? Locale.label("mobile.profileEdit.approvalLede") : undefined} />
+      <Plate>
+        <PlateSection title={Locale.label("mobile.profileEdit.photoAndName")} action={editLink("name")}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            <Avatar src={photoSrc(person)} sx={{ width: 64, height: 64, bgcolor: tc.chip, color: tc.onChip, fontSize: 24, fontWeight: 600 }}>
+              {displayInitial}
+            </Avatar>
+            <Typography sx={{ fontSize: 18, lineHeight: "24px", fontWeight: 600, color: tc.text, overflowWrap: "anywhere" }}>{fullName || "—"}</Typography>
+          </Box>
+        </PlateSection>
+
+        <PlateSection title={Locale.label("mobile.profileEdit.sectionContact")} action={editLink("contact")}>
+          {hasContact ? <KeyValues items={contactItems} /> : <QuietEmpty>{Locale.label("mobile.profileEdit.noContactInfo")}</QuietEmpty>}
+        </PlateSection>
+
+        <PlateSection title={Locale.label("mobile.screens.tabHousehold")} action={editLink("household", Locale.label("mobile.profileEdit.addFamilyMember"))}>
+          {householdLoading && householdId && <CircularProgress sx={{ color: tc.primary }} size={24} />}
+          {!householdLoading && !householdId && <QuietEmpty>{Locale.label("mobile.profileEdit.noHouseholdLinked")}</QuietEmpty>}
+          {!householdLoading && householdIsError && householdId && <QuietEmpty sx={{ color: tc.error }}>{Locale.label("mobile.profileEdit.couldNotLoadHousehold")}</QuietEmpty>}
+          {!householdLoading && !householdIsError && !!householdId && otherHousehold.length === 0 && <QuietEmpty>{Locale.label("mobile.profileEdit.noOtherHouseholdMembers")}</QuietEmpty>}
+          {!householdLoading && !householdIsError && otherHousehold.length > 0 && (
+            <RowList>
+              {otherHousehold.map((h) => (
+                <Row
+                  key={h.id}
+                  href={`/mobile/community/${h.id}`}
+                  chevron
+                  leading={(
+                    <Avatar src={h.photo ? PersonHelper.getPhotoUrl(h) : undefined} sx={{ width: 40, height: 40, bgcolor: tc.chip, color: tc.onChip, fontSize: 15, fontWeight: 600 }}>
+                      {(h.name?.first?.charAt(0) || "?").toUpperCase()}
+                    </Avatar>
+                  )}
+                  title={h.name?.display || Locale.label("mobile.components.unknown")}
+                  subtitle={h.householdRole || Locale.label("mobile.details.householdMember")}
+                />
+              ))}
+            </RowList>
+          )}
+        </PlateSection>
+
+        <PlateSection title={Locale.label("mobile.screens.tabAccount")} action={editLink("account")}>
+          <KeyValues
+            items={[
+              { label: Locale.label("mobile.profileEdit.signIn"), value: accountUser?.email || "—" },
+              { label: Locale.label("mobile.screens.passwordLabel"), value: "••••••••" },
+              { label: Locale.label("mobile.profileEdit.displayName"), value: [accountUser?.firstName, accountUser?.lastName].filter(Boolean).join(" ") }
+            ]}
           />
-          <Tab value="household" label={Locale.label("mobile.screens.tabHousehold")} />
-          <Tab value="account" label={Locale.label("mobile.screens.tabAccount")} />
-          <Tab value="visibility" label={Locale.label("mobile.screens.tabPrivacy")} />
-        </Tabs>
-      </Box>
+        </PlateSection>
 
-      {tab === "profile" && renderProfileTab()}
-      {tab === "household" && renderHouseholdTab()}
-      {tab === "account" && renderAccountTab()}
-      {tab === "visibility" && renderPrivacyTab()}
+        <PlateSection title={Locale.label("mobile.screens.tabPrivacy")} action={editLink("privacy", Locale.label("mobile.screens.change"))}>
+          <KeyValues
+            items={[
+              { label: Locale.label("mobile.profileEdit.directory"), value: Locale.label(optedOutLocal ? "mobile.profileEdit.hiddenFromDirectory" : "mobile.profileEdit.shownInDirectory") },
+              { label: Locale.label("mobile.profileEdit.addressVisibility"), value: Locale.label(scopeLabelKeys[addressVis]) },
+              { label: Locale.label("mobile.profileEdit.phoneVisibility"), value: Locale.label(scopeLabelKeys[phoneVis]) },
+              { label: Locale.label("mobile.profileEdit.emailVisibility"), value: Locale.label(scopeLabelKeys[emailVis]) }
+            ]}
+          />
+        </PlateSection>
+      </Plate>
 
-      {showPendingChanges && (
-        <Box
-          sx={{
-            bgcolor: `${tc.warning}22`,
-            border: `1px solid ${tc.warning}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.md}px`,
-            mt: `${mobileTheme.spacing.md}px`
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-            <Icon sx={{ color: tc.warning, fontSize: 24 }}>pending_actions</Icon>
-            <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-              {requiresApproval ? Locale.label("mobile.profileEdit.pendingChanges") : Locale.label("mobile.profileEdit.unsavedChanges")}
-            </Typography>
-          </Box>
-          <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 2 }}>
-            {requiresApproval ? Locale.label("mobile.profileEdit.reviewBeforeSubmitting") : Locale.label("mobile.profileEdit.reviewBeforeSaving")}
-          </Typography>
-          <Box sx={{ maxHeight: 240, overflowY: "auto", mb: 2 }}>
-            {profileChanges.map((c, i) => (
-              <Box
-                key={`${c.field}-${i}`}
-                sx={{ py: 1, borderBottom: `1px solid ${tc.warning}33` }}
-              >
-                <Typography sx={{ fontSize: 12, fontWeight: 600, color: tc.text, mb: 0.5 }}>
-                  {c.label}
-                </Typography>
-                {c.field === "photo" && c.value.startsWith("data:") ? (
-                  <Box
-                    component="img"
-                    src={c.value}
-                    alt={Locale.label("mobile.profileEdit.pendingPhoto")}
-                    sx={{ width: 60, height: 45, borderRadius: `${mobileTheme.radius.sm}px`, objectFit: "cover" }}
-                  />
-                ) : (
-                  <Typography sx={{ fontSize: 14, color: tc.text, wordBreak: "break-word" }}>
-                    {c.value || Locale.label("mobile.profileEdit.emptyValue")}
-                  </Typography>
-                )}
-              </Box>
-            ))}
-          </Box>
-          <Box sx={{ display: "flex", gap: 1.5 }}>
-            <Button
-              variant="outlined"
-              onClick={() => setDiscardOpen(true)}
-              disabled={saving}
-              sx={{
-                flex: 1,
-                borderColor: tc.textMuted,
-                color: tc.text,
-                textTransform: "none",
-                borderRadius: `${mobileTheme.radius.md}px`
-              }}
-            >
-              {Locale.label("common.cancel")}
+      <Sheet
+        open={profileSheetOpen}
+        onClose={closeProfileSheet}
+        title={profileSheetTitle}
+        actions={(
+          <>
+            <Button variant="contained" onClick={saveProfileSheet} disabled={saving || !settingsSettled} sx={{ flex: { xs: 1, sm: "none" } }}>
+              {saving ? <CircularProgress size={20} sx={{ color: "inherit" }} /> : requiresApproval ? Locale.label("mobile.profileEdit.submitForApproval") : Locale.label("mobile.profileEdit.saveChanges")}
             </Button>
-            <Button
-              variant="contained"
-              onClick={handleSave}
-              disabled={saving || !settingsSettled}
-              sx={{
-                flex: 2,
-                bgcolor: tc.primary,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                textTransform: "none",
-                fontWeight: 600,
-                "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-                "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
-              }}
-            >
-              {saving ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : requiresApproval ? Locale.label("mobile.profileEdit.submitForApproval") : Locale.label("mobile.profileEdit.saveChanges")}
-            </Button>
+            <Button variant="outlined" onClick={closeProfileSheet} disabled={saving}>{Locale.label("common.cancel")}</Button>
+          </>
+        )}
+      >
+        {sheet === "name" && renderNameSheet()}
+        {sheet === "contact" && renderContactSheet()}
+        {sheet === "household" && renderHouseholdSheet()}
+        {requiresApproval && hasChanges && (
+          <Box sx={{ display: "flex", alignItems: "center", gap: "8px", mt: "16px" }}>
+            <StatusBadge tone="warn">{Locale.label("mobile.screens.pending")}</StatusBadge>
+            <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("mobile.profileEdit.pendingAfterSaving")}</Typography>
           </Box>
-        </Box>
-      )}
+        )}
+      </Sheet>
+
+      <Sheet open={sheet === "account"} onClose={() => setSheet(null)} title={Locale.label("mobile.screens.tabAccount")}>
+        {renderAccountSheet()}
+      </Sheet>
+
+      <Sheet
+        open={sheet === "privacy"}
+        onClose={closePrivacySheet}
+        title={Locale.label("mobile.profileEdit.visibilityPreferences")}
+        actions={(
+          <>
+            <Button variant="contained" onClick={savePrivacySheet} disabled={savingPrivacy || !visChanged} sx={{ flex: { xs: 1, sm: "none" } }}>
+              {savingPrivacy ? <CircularProgress size={20} sx={{ color: "inherit" }} /> : Locale.label("mobile.screens.save")}
+            </Button>
+            <Button variant="outlined" onClick={closePrivacySheet} disabled={savingPrivacy}>{Locale.label("common.cancel")}</Button>
+          </>
+        )}
+      >
+        {renderPrivacySheet()}
+      </Sheet>
 
       <Dialog open={discardOpen} onClose={() => setDiscardOpen(false)}>
         <DialogTitle>{Locale.label("mobile.profileEdit.discardChangesTitle")}</DialogTitle>

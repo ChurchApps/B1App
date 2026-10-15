@@ -184,7 +184,17 @@
       "goodEvening": "Good evening",
       "goodMorning": "Good morning",
       "signInPrompt": "Sign in to see your groups, giving, and more.",
-      "welcome": "Welcome"
+      "welcome": "Welcome",
+      "latestSermon": "Latest sermon",
+      "allSermons": "All sermons",
+      "moreFrom": "More from {}",
+      "youreServing": "You're serving",
+      "allPlans": "All plans",
+      "yourGroups": "Your groups",
+      "allGroups": "All groups",
+      "giving": "Giving",
+      "history": "History",
+      "givenIn": "Given in {}"
     },
     "details": {
       "about": "About",
@@ -492,7 +502,36 @@
       "usedStorageUnlimited": "Used {}",
       "visibility": "Visibility",
       "weekly": "Weekly",
-      "yearly": "Yearly"
+      "yearly": "Yearly",
+      "allAnnouncements": "All announcements",
+      "allEvents": "All events",
+      "allMembers": "All members",
+      "allPlans": "All plans",
+      "allResources": "All resources",
+      "announcement": "Announcement",
+      "backTo": "Back to {}",
+      "backToChat": "Back to chat",
+      "calendar": "Calendar",
+      "cancelRequest": "Cancel request",
+      "groupCount": "{} groups",
+      "groupCountOne": "1 group",
+      "lastTaken": "Last taken {}",
+      "leaderLowercase": "leader",
+      "leaders": "Leaders",
+      "leadersLowercase": "leaders",
+      "list": "List",
+      "nGoing": "{} going",
+      "nextEvent": "Next event",
+      "noAttendanceYet": "No attendance taken yet.",
+      "noResources": "No resources yet.",
+      "noUpcomingEvents": "No upcoming events.",
+      "openChat": "Open chat",
+      "openFile": "Open file",
+      "pendingCount": "{} pending",
+      "searchYourGroups": "Search your groups",
+      "takeAttendance": "Take attendance",
+      "you": "You",
+      "yourGroups": "Your groups"
     },
     "install": {
       "allSetBody": "The {} app is installed on this device.",
@@ -547,7 +586,10 @@
       "statusInstalled": "Installed! Look for the icon on your home screen.",
       "statusInstalling": "Installing...",
       "statusUnavailable": "Install is not available yet. If you're on Android, open this page in Chrome and wait a moment.",
-      "youreOnDesktop": "You're on desktop"
+      "youreOnDesktop": "You're on desktop",
+      "title": "Add {} to your home screen",
+      "lede": "Sermons, groups, serving and giving open like an app, with notifications. Nothing to download from a store.",
+      "continueInBrowser": "Continue in browser"
     },
     "invalidLink": "Invalid link",
     "invalidLinkDescription": "The requested ID is missing or invalid.",
@@ -564,11 +606,24 @@
       "signInBody": "Sign in to view your serving assignments, registrations, and group events.",
       "signInTitle": "Sign in to see your week",
       "title": "Me",
-      "upcoming": "Upcoming"
+      "upcoming": "Upcoming",
+      "backToMe": "Back to Me",
+      "settings": "Settings",
+      "allUpcoming": "All upcoming",
+      "allGroups": "All groups",
+      "noGroups": "You're not in any groups yet.",
+      "noGiftsThisYear": "No gifts yet in {}.",
+      "givenThisYear": "Given in {0} · {1} gifts",
+      "requestsAndRegistrations": "Requests & registrations",
+      "registrationCount": "{} registrations",
+      "openInbox": "Open inbox"
     },
     "mobileApp": "Mobile",
     "more": {
-      "allOnDashboard": "Everything is on your dashboard"
+      "allOnDashboard": "Everything is on your dashboard",
+      "account": "Account",
+      "appearance": "Appearance",
+      "signOut": "Sign out"
     },
     "notFound": {
       "backToHome": "Back to home",
@@ -607,7 +662,10 @@
       "textHelp": "Get serving and event reminders by text at the mobile number on your profile. Reply STOP to any text to opt out.",
       "textMessages": "Text messages",
       "timeZone": "Time zone",
-      "unlimited": "No limit"
+      "unlimited": "No limit",
+      "lede": "How {} reaches you.",
+      "delivery": "Delivery",
+      "quietHoursOff": "Off"
     },
     "now": "now",
     "plans": {
@@ -697,7 +755,16 @@
       "visibilityPreferences": "Visibility Preferences",
       "workPhone": "Work Phone",
       "yourPhoto": "Your Photo",
-      "zip": "Zip"
+      "zip": "Zip",
+      "title": "Your profile",
+      "approvalLede": "Changes to your profile go to church staff for approval.",
+      "photoAndName": "Photo & name",
+      "noContactInfo": "No contact info yet.",
+      "signIn": "Sign-in",
+      "directory": "Directory",
+      "hiddenFromDirectory": "Hidden from the directory",
+      "shownInDirectory": "Shown in the directory",
+      "pendingAfterSaving": "Staff will review these changes after you save."
     },
     "requests": {
       "allDay": "All day",
@@ -724,7 +791,13 @@
       "statusRejected": "Rejected",
       "submit": "Submit Request",
       "submitting": "Submitting…",
-      "title": "Request an Event"
+      "title": "Request an Event",
+      "lede": "Rooms and equipment you've asked for.",
+      "allPast": "All past",
+      "noPast": "No past requests.",
+      "noUpcoming": "No upcoming requests.",
+      "backToRequests": "Back to My Requests",
+      "formLede": "Staff will approve each room and item."
     },
     "screenTitles": {
       "bible": "Bible",
@@ -971,9 +1044,160 @@
       "copied": "Copied to clipboard",
       "share": "Share",
       "shareImage": "Share image",
-      "unableToShare": "Unable to share"
+      "unableToShare": "Unable to share",
+      "thisWeek": "This week"
     },
-    "yesterday": "yesterday"
+    "yesterday": "yesterday",
+    "giving": {
+      "give": "Give",
+      "backToGiving": "Back to Giving",
+      "allHistory": "All history",
+      "manageTitle": "Recurring gifts and payment methods",
+      "paymentMethods": "Payment methods",
+      "noRecurring": "No recurring gifts.",
+      "noPaymentMethods": "No saved payment methods.",
+      "repeatLastGift": "Repeat last gift",
+      "allYears": "All",
+      "years": "Years",
+      "giftCount": "{} gifts",
+      "giftCountOne": "{} gift",
+      "pendingCount": "{} pending"
+    },
+    "registrations": {
+      "lede": "Events your household signed up for.",
+      "statusRegistered": "Registered",
+      "statusPending": "Pending",
+      "statusWaitlisted": "Waitlisted",
+      "statusCancelled": "Cancelled",
+      "balanceOf": "Balance due {} of {}",
+      "allPast": "All past",
+      "noPast": "No past registrations.",
+      "noUpcoming": "No upcoming registrations.",
+      "backToRegistrations": "Back to Registrations"
+    },
+    "register": {
+      "stepOf": "Step {} of {}",
+      "event": "Event",
+      "increase": "Increase quantity",
+      "decrease": "Decrease quantity"
+    },
+    "inbox": {
+      "title": "Inbox",
+      "new": "New",
+      "newCount": "{} new",
+      "seeAll": "See all",
+      "today": "Today",
+      "thisWeek": "This week",
+      "earlier": "Earlier",
+      "backToInbox": "Back to Inbox",
+      "noUnread": "No unread notifications.",
+      "unreadMessages": "{} unread messages",
+      "newNotifications": "{} new notifications"
+    },
+    "community": {
+      "peopleCount": "{} people",
+      "searchByName": "Search by name"
+    },
+    "messages": {
+      "new": "New",
+      "unreadCount": "{} unread",
+      "searchConversations": "Search conversations",
+      "noConversationMatches": "No conversations match your search.",
+      "composeLede": "Pick someone from the directory",
+      "matches": "Matches",
+      "noMatches": "No matches found.",
+      "recent": "Recent",
+      "composeEmpty": "Search for a person to start a conversation."
+    },
+    "serving": {
+      "addBlockoutTitle": "Add blockout dates",
+      "addDates": "Add dates",
+      "allFilter": "All",
+      "allTeams": "All teams",
+      "allUpcoming": "All upcoming",
+      "allYears": "All",
+      "backTo": "Back to {}",
+      "blockoutDates": "Blockout dates",
+      "checkInOne": "Check in 1 person",
+      "checkInPeople": "Check in {} people",
+      "confirmedCount": "{} confirmed",
+      "deleteBlockoutBody": "This blockout date will be removed. This cannot be undone.",
+      "deleting": "Deleting…",
+      "filledOf": "{} of {} filled",
+      "fullServiceOrder": "Full service order",
+      "itemsCount": "{} items",
+      "lastServed": "Last served {}",
+      "lessonName": "Lesson: {}",
+      "needsReply": "Needs your reply",
+      "needsReplyBadge": "Needs reply",
+      "noBlockouts": "No blockout dates.",
+      "noOpenSpots": "Every opportunity is full right now.",
+      "noPast": "No past assignments.",
+      "noUpcoming": "No upcoming serving times.",
+      "openOf": "{} of {} open",
+      "openSpots": "Open spots",
+      "pastAssignments": "Past assignments",
+      "replyCount": "{} needs a reply",
+      "saving": "Saving…",
+      "sectionOf": "Section {} of {} · {}",
+      "sections": "Sections",
+      "securityCode": "Security code",
+      "servingCount": "{} serving",
+      "signUpToServe": "Sign up to serve",
+      "teamsCount": "{} teams",
+      "timesInYear": "{} times in {}",
+      "volunteerFilter": "Filter opportunities",
+      "volunteerLede": "One-time ways to help at {}",
+      "whereEveryoneIs": "Where everyone is",
+      "whosHere": "Who's here",
+      "year": "Year",
+      "yourAssignment": "Your assignment"
+    },
+    "login": {
+      "signInTo": "Sign in to {}",
+      "lede": "See your groups, serving schedule and giving.",
+      "newTo": "New to {}?",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create an account"
+    },
+    "sermons": {
+      "allInSeries": "All in series",
+      "allSeries": "All series",
+      "allSermons": "All sermons",
+      "allYears": "All",
+      "filterByYear": "Filter by year",
+      "inThisSeries": "In this series",
+      "latest": "Latest",
+      "live": "Live",
+      "noMatches": "No sermons match your search.",
+      "noOtherSermons": "No other sermons in this series yet.",
+      "noSeries": "No sermon series yet.",
+      "noSermons": "No sermons yet.",
+      "playFromStart": "Play from start",
+      "searchSermons": "Search sermons",
+      "watchLatest": "Watch latest"
+    },
+    "stream": {
+      "backToStream": "Back to Stream",
+      "chatClosed": "Chat opens when the stream starts.",
+      "live": "Live",
+      "nextStream": "Next stream {}",
+      "offline": "Offline",
+      "offlineBody": "Check back during service times",
+      "offlineTitle": "We're not live right now",
+      "openChat": "Open chat",
+      "startsInDays": "Starts in {} days, {} hours",
+      "startsInHours": "Starts in {} hours, {} minutes",
+      "startsInMinutes": "Starts in {} minutes"
+    },
+    "bible": {
+      "loading": "Loading Bible…",
+      "unavailable": "The in-app reader failed to load. You can still open the Bible in your browser."
+    },
+    "lessons": {
+      "loading": "Loading {}…",
+      "unableToLoad": "Unable to load {}"
+    }
   },
   "pageSlug": {
     "achInstructions": "Instructions for ACH Payment",
