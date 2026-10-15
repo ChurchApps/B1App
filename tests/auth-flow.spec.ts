@@ -132,6 +132,19 @@ test.describe("Mobile login returnUrl", () => {
   });
 });
 
+test.describe("Mobile login labels", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("sign-in screen shows its labels and the empty-email error", async ({ page }) => {
+    await page.goto("/mobile/login");
+    const signIn = page.getByRole("button", { name: "Sign In" });
+    await expect(signIn).toBeVisible({ timeout: 20000 });
+    await expect(page.getByText("Forgot password?")).toBeVisible();
+    await signIn.click();
+    await expect(page.getByText("Please enter your email.")).toBeVisible();
+  });
+});
+
 // Mobile login writes a `jwt` cookie; the church website restores the session from it
 // so a member signed in on /mobile is not shown as logged out on the website. Logging
 // out must not race that restore and sign the member back in.
