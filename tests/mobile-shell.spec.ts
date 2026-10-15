@@ -49,11 +49,12 @@ test.describe("Mobile shell", () => {
     await expect(page.getByRole("button", { name: /^Profile$/i })).toBeVisible();
   });
 
-  test("dashboard lists leftover church links under More from the church", async ({ page }) => {
+  test("dashboard teases giving in place of a Give pill", async ({ page }) => {
     await page.goto("/mobile/dashboard");
-    const more = page.getByRole("region", { name: new RegExp(`More from ${DEMO_CHURCH.NAME}`, "i") });
-    await expect(more).toBeVisible({ timeout: 15000 });
-    await expect(more.getByRole("link", { name: "Give" })).toBeVisible();
+    const giving = page.getByRole("region", { name: /^Giving$/i });
+    await expect(giving).toBeVisible({ timeout: 15000 });
+    await expect(giving.getByRole("link", { name: "Give" })).toHaveAttribute("href", "/mobile/donate?view=give");
+    await expect(page.getByRole("region", { name: new RegExp(`More from ${DEMO_CHURCH.NAME}`, "i") }).getByRole("link", { name: "Give" })).toHaveCount(0);
   });
 
   test("dashboard renders the Verse of the Day section", async ({ page }) => {

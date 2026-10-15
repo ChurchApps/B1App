@@ -22,6 +22,7 @@ import { useEngagementSort } from "../hooks/useEngagementSort";
 import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
 import { loadDailyVerse, type DailyVerse } from "../helpers/dailyVerses";
 import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget, openExternal } from "../helpers/dashboardLinks";
+import { GivingTeaser, GroupsTeaser, ServingTeaser, useGivingSummary, useMyGroups, useUpcomingServing } from "./HomeTeasers";
 
 interface Props {
   config: ConfigurationInterface;
@@ -90,21 +91,30 @@ export const DashboardPage = ({ config }: Props) => {
   });
   const latest = hasSermonsLink ? sermons[0] : undefined;
 
+  const signedIn = !!(context?.user);
+  const has = (type: string) => signedIn && links.some((l) => l.linkType === type);
+  const serving = useUpcomingServing(has("plans"));
+  const groups = useMyGroups(has("groups"));
+  const showGiving = has("donation") && config?.allowDonations !== false;
+  const givingSummary = useGivingSummary(showGiving);
+  const showServing = serving.upcoming.length > 0;
+  const showGroups = has("groups") && groups.length > 0;
+
   // Links already in the tab bar or shown as their own section don't repeat as pills.
   const pillLinks = useMemo(() => {
     const tabRoutes = new Set(navLinks(links, MAX_LINK_TABS).map((t) => t.route));
     return links.filter((l) => {
       if (l.linkType === "votd" || (latest && l.linkType === "sermons")) return false;
+      if ((showServing && l.linkType === "plans") || (showGroups && l.linkType === "groups") || (showGiving && l.linkType === "donation")) return false;
       const target = linkTarget(l);
       return !!target && !tabRoutes.has(target.href);
     });
-  }, [links, latest]);
+  }, [links, latest, showServing, showGroups, showGiving]);
   const { sorted: sortedPills, increment: incrementViewCount } = useEngagementSort(pillLinks, LINK_VIEW_COUNTS_KEY, linkId);
 
   if (isLoading && links.length === 0) return <ScreenSkeleton />;
   if (links.length === 0) return <EmptyDashboardPlaceholder config={config} />;
 
-  const signedIn = !!(context?.user);
   // Churches can hide the anonymous sign-in prompt or reword it (B1Admin > B1 Mobile).
   const appearance = config?.appearance as Record<string, string> | undefined;
   const hideSignInPrompt = appearance?.mobileHideSignInPrompt === "true";
@@ -170,17 +180,23 @@ export const DashboardPage = ({ config }: Props) => {
     </PlateSection>
   );
 
+  const servingSection = showServing && <ServingTeaser {...serving} />;
+  const groupsSection = showGroups && <GroupsTeaser groups={groups} />;
+  const givingSection = showGiving && <GivingTeaser summary={givingSummary} />;
+  const wide = [sermonSection, servingSection, groupsSection].some(Boolean);
+  const narrow = [verseSection, givingSection, moreSection].some(Boolean);
+
   return (
     <Box>
       {head}
-      {desktop && sermonSection && (verseSection || moreSection) ? (
+      {desktop && wide && narrow ? (
         <Box sx={{ display: "grid", gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)", gap: "24px", alignItems: "start" }}>
-          <Plate>{banner}{sermonSection}</Plate>
-          <Plate>{verseSection}{moreSection}</Plate>
+          <Plate>{banner}{sermonSection}{servingSection}{groupsSection}</Plate>
+          <Plate>{verseSection}{givingSection}{moreSection}</Plate>
         </Box>
       ) : (
         // :empty hides the sheet when the only candidate (the push banner) renders nothing.
-        <Plate sx={{ "&:empty": { display: "none" } }}>{banner}{sermonSection}{verseSection}{moreSection}</Plate>
+        <Plate sx={{ "&:empty": { display: "none" } }}>{banner}{sermonSection}{verseSection}{servingSection}{groupsSection}{givingSection}{moreSection}</Plate>
       )}
     </Box>
   );

@@ -187,7 +187,14 @@
       "welcome": "Welcome",
       "latestSermon": "Latest sermon",
       "allSermons": "All sermons",
-      "moreFrom": "More from {}"
+      "moreFrom": "More from {}",
+      "youreServing": "You're serving",
+      "allPlans": "All plans",
+      "yourGroups": "Your groups",
+      "allGroups": "All groups",
+      "giving": "Giving",
+      "history": "History",
+      "givenIn": "Given in {}"
     },
     "details": {
       "about": "About",
