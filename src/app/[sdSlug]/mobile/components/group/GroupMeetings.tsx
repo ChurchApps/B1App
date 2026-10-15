@@ -1,9 +1,11 @@
 "use client";
 
 import React from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
-import { QuietEmpty, Row, RowList, Sheet, StatusBadge } from "../kit";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
+import { mobileTheme } from "../mobileTheme";
+import { QuietEmpty, Sheet, StatusBadge } from "../kit";
 
 export interface MeetingSession {
   id?: string;
@@ -13,6 +15,8 @@ export interface MeetingSession {
   notes?: string;
   visitCount?: number;
 }
+
+const tc = mobileTheme.colors;
 
 export const toHtmlDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 export const sessionDay = (s: MeetingSession) => (s.sessionDate || "").slice(0, 10);
@@ -37,24 +41,27 @@ export const GroupMeetingsList = ({ sessions, memberCount, limit, onOpen }: List
   const rows = listedMeetings(sessions).slice(0, limit);
   if (rows.length === 0) return <QuietEmpty>{Locale.label("mobile.group.noMeetingsYet")}</QuietEmpty>;
   return (
-    <RowList>
+    <Box>
       {rows.map((s) => {
         const day = sessionDay(s);
         const status = (s.visitCount || 0) > 0
           ? Locale.label("mobile.group.nOfMThere").replace("{}", String(s.visitCount)).replace("{}", String(memberCount))
           : day >= today ? Locale.label("mobile.group.upcoming") : "";
+        const title = [prettyDay(day), status].filter(Boolean).join(" · ");
         return (
-          <Row
-            key={s.id || day}
-            onClick={onOpen ? () => onOpen(day) : undefined}
-            title={[prettyDay(day), status].filter(Boolean).join(" · ")}
-            subtitle={s.notes ? <Box component="span" sx={{ whiteSpace: "pre-wrap" }}>{s.notes}</Box> : undefined}
-            sx={{ alignItems: "flex-start", py: "12px" }}
-            data-testid="group-meeting-row"
-          />
+          <Box key={s.id || day} data-testid="group-meeting-row" sx={{ py: "12px", "& + &": { borderTop: `1px solid ${tc.border}` } }}>
+            {onOpen
+              ? <Box component="button" type="button" onClick={() => onOpen(day)} sx={{ display: "block", p: 0, border: 0, background: "none", font: "inherit", textAlign: "left", cursor: "pointer", fontSize: 15, lineHeight: "21px", fontWeight: 500, color: tc.text, "&:focus-visible": { outline: `2px solid ${tc.primary}` } }}>{title}</Box>
+              : <Typography sx={{ fontSize: 15, lineHeight: "21px", fontWeight: 500, color: tc.text }}>{title}</Typography>}
+            {s.notes && (
+              <Box sx={{ mt: "2px", fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary, overflowWrap: "anywhere", "& p": { m: 0 }, "& p + p, & ul, & ol": { mt: "6px" }, "& ul, & ol": { pl: 3, mb: 0 }, "& a": { color: tc.link } }}>
+                <MarkdownPreviewLight value={s.notes} />
+              </Box>
+            )}
+          </Box>
         );
       })}
-    </RowList>
+    </Box>
   );
 };
 
