@@ -16,6 +16,7 @@ import { mobileTheme } from "../mobileTheme";
 import { BackVerb, PageHead, PersonAvatar, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, SearchField, Sheet, StatusBadge, TextLink, Thumb, useSliceView } from "../kit";
 import { GroupCalendarTab, GroupNextEvent, type EventRow } from "../group/GroupCalendarTab";
 import { GroupAttendanceTab } from "../group/GroupAttendanceTab";
+import { GroupMeetingsList, MeetingNoteSheet, listedMeetings, toHtmlDate, type MeetingSession } from "../group/GroupMeetings";
 import { GroupResourcesTab, ResourceRow, isHttpUrl, useGroupResources } from "../group/GroupResourcesTab";
 import { GroupChatModal, type ChatSubTab } from "../group/GroupChatModal";
 import { CreateEventModal } from "../group/CreateEventModal";
@@ -61,8 +62,8 @@ interface PreviewMessage {
   name?: string;
 }
 
-type SliceKey = "events" | "members" | "messages" | "resources" | "plans" | "attendance";
-const SLICES: SliceKey[] = ["events", "members", "messages", "resources", "plans", "attendance"];
+type SliceKey = "events" | "members" | "messages" | "resources" | "plans" | "attendance" | "meetings";
+const SLICES: SliceKey[] = ["events", "members", "messages", "resources", "plans", "attendance", "meetings"];
 
 const tc = mobileTheme.colors;
 
@@ -110,6 +111,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const [createEvent, setCreateEvent] = React.useState<string | null>(null);
   const [editEvent, setEditEvent] = React.useState<EventRow | null>(null);
   const [memberSearch, setMemberSearch] = React.useState("");
+  const [attendanceDate, setAttendanceDate] = React.useState<string | undefined>();
+  const [noteDate, setNoteDate] = React.useState<string | null>(null);
 
   // Legacy deep links (?activeTab=…, ?openChat=1&chatTab=…) land on the matching ?view= slice.
   React.useEffect(() => {
@@ -218,14 +221,16 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
 
   const { data: resources } = useGroupResources(group && !isOutsider ? groupId || "" : "");
 
-  const { data: sessions = [] } = useQuery<{ id?: string; sessionDate?: string }[]>({
+  const showMeetings = isMember || canTakeAttendance;
+  const { data: sessions = [] } = useQuery<MeetingSession[]>({
     queryKey: ["group-sessions", groupId],
     queryFn: async () => {
       const data = await ApiHelper.get(`/sessions?groupId=${groupId}`, "AttendanceApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: !!groupId && canTakeAttendance
+    enabled: !!groupId && showMeetings
   });
+  const refreshSessions = () => queryClient.invalidateQueries({ queryKey: ["group-sessions", groupId] });
 
   const previewType = discussionsEnabled ? "group" : "groupAnnouncement";
   const { data: chatPreview = [] } = useQuery<PreviewMessage[]>({
@@ -316,11 +321,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     const past = dated.filter((x) => x.d < today).sort((a, b) => b.d.getTime() - a.d.getTime());
     return upcoming[0] || past[0] || null;
   }, [groupPlans]);
-
-  const lastSession = React.useMemo(
-    () => [...sessions].filter((s) => s.sessionDate).sort((a, b) => new Date(b.sessionDate!).getTime() - new Date(a.sessionDate!).getTime())[0],
-    [sessions]
-  );
 
   const memberName = (m: GroupMember) => m.person?.name?.display || Locale.label("mobile.components.unknown");
   const memberHref = (m: GroupMember) => {
@@ -420,6 +420,23 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     <TextLink onClick={() => setView(slice)} data-testid={`group-all-${slice}`}>{label}</TextLink>
   );
 
+  const memberCount = members?.length || 0;
+  const openMeeting = (day: string) => {
+    if (day > toHtmlDate(new Date())) { setNoteDate(day); return; }
+    setAttendanceDate(day);
+    setView("attendance");
+  };
+  const takeAttendance = () => {
+    setAttendanceDate(undefined);
+    setView("attendance");
+  };
+  const meetingsAction = canTakeAttendance ? (
+    <Box sx={{ display: "flex", gap: "16px" }}>
+      <TextLink onClick={() => setNoteDate("")} data-testid="group-add-note">{Locale.label("mobile.group.addNote")}</TextLink>
+      <TextLink onClick={takeAttendance} data-testid="group-all-attendance">{Locale.label("mobile.group.takeAttendance")}</TextLink>
+    </Box>
+  ) : allLink("meetings", Locale.label("mobile.group.allMeetings"));
+
   const renderMembersTeaser = () => {
     if (membersUnavailable) return <QuietEmpty>{Locale.label("mobile.details.membersPrivate")}</QuietEmpty>;
     if (members === null) return <Skeleton variant="rounded" height={32} width="70%" />;
@@ -455,6 +472,14 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
         </PlateSection>
       )}
       <GroupLessonTakeHome isMember={isMember} plans={groupPlans} />
+      {showMeetings && (
+        <PlateSection title={Locale.label("mobile.group.meetings")} action={meetingsAction}>
+          <GroupMeetingsList sessions={sessions} memberCount={memberCount} limit={3} onOpen={canTakeAttendance ? openMeeting : undefined} />
+          {canTakeAttendance && listedMeetings(sessions).length > 3 && (
+            <Box sx={{ mt: "10px" }}>{allLink("meetings", Locale.label("mobile.group.allMeetings"))}</Box>
+          )}
+        </PlateSection>
+      )}
       {isMember && chatEnabled && (
         <PlateSection title={Locale.label("mobile.details.tabMessages")} action={<TextLink onClick={openChat}>{Locale.label("mobile.group.openChat")}</TextLink>}>
           {chatPreview.length === 0 ? <QuietEmpty>{Locale.label("mobile.components.noMessages")}</QuietEmpty> : (
@@ -484,13 +509,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           {planTeaser
             ? <Row href={`/mobile/plans/${planTeaser.p.id}`} title={planTeaser.p.name} subtitle={DateHelper.prettyDate(planTeaser.d)} chevron sx={{ minHeight: 0, py: 0 }} />
             : <QuietEmpty>{Locale.label("groupsPage.noUpcomingPlans")}</QuietEmpty>}
-        </PlateSection>
-      )}
-      {canTakeAttendance && (
-        <PlateSection title={Locale.label("mobile.details.tabAttendance")} action={allLink("attendance", Locale.label("mobile.group.takeAttendance"))}>
-          {lastSession?.sessionDate
-            ? <Typography sx={{ fontSize: 15, color: tc.text }}>{Locale.label("mobile.group.lastTaken").replace("{}", DateHelper.prettyDate(DateHelper.toDate(lastSession.sessionDate as any)))}</Typography>
-            : <QuietEmpty>{Locale.label("mobile.group.noAttendanceYet")}</QuietEmpty>}
         </PlateSection>
       )}
       {hasAbout && aboutSection}
@@ -547,11 +565,18 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     members: { title: Locale.label("mobile.details.membersTab"), lede: memberSummary, body: renderMembersSlice() },
     resources: { title: Locale.label("mobile.details.tabResources"), body: <GroupResourcesTab groupId={groupId} canEdit={canEditResources} /> },
     plans: hasPlans ? { title: Locale.label("groupsPage.plans"), body: <GroupPlansTab groupId={groupId} /> } : null,
+    meetings: showMeetings ? {
+      title: Locale.label("mobile.group.meetings"),
+      body: <PlateSection><GroupMeetingsList sessions={sessions} memberCount={memberCount} onOpen={canTakeAttendance ? openMeeting : undefined} /></PlateSection>
+    } : null,
     attendance: canTakeAttendance && members !== null ? {
       title: Locale.label("mobile.details.tabAttendance"),
       body: (
         <GroupAttendanceTab
+          key={attendanceDate || "today"}
           groupId={groupId}
+          initialDate={attendanceDate}
+          onSaved={refreshSessions}
           members={(members || [])
             .filter((m) => m.person?.id)
             .map((m) => ({ id: m.id, person: { id: m.person!.id, name: { display: m.person!.name?.display }, photo: m.person!.photo } }))}
@@ -615,6 +640,19 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           onSaved={() => {
             setEditEvent(null);
             queryClient.invalidateQueries({ queryKey: ["group-events", groupId] });
+          }}
+        />
+      )}
+      {groupId && canTakeAttendance && (
+        <MeetingNoteSheet
+          open={noteDate !== null}
+          groupId={groupId}
+          sessions={sessions}
+          initialDate={noteDate || undefined}
+          onClose={() => setNoteDate(null)}
+          onSaved={() => {
+            setNoteDate(null);
+            refreshSessions();
           }}
         />
       )}
