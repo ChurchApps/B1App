@@ -41,7 +41,8 @@ test.describe("Group meetings", () => {
     await page.getByTestId("group-add-note").click();
     const dialog = page.getByRole("dialog");
     await dialog.getByLabel("Date").fill(FUTURE);
-    await dialog.getByTestId("meeting-note-text").locator("textarea").first().fill("**Romans 9** next week.");
+    await dialog.getByTestId("meeting-note-text").locator(".editor-input[contenteditable='true']").click();
+    await page.keyboard.type("**Romans 9** next week.");
     await dialog.getByTestId("meeting-note-save").click();
     await expect(dialog).toBeHidden();
 
@@ -49,6 +50,10 @@ test.describe("Group meetings", () => {
     await expect(row).toBeVisible({ timeout: 15000 });
     await expect(row).toContainText("Upcoming");
     await expect(row.locator("strong")).toHaveText("Romans 9");
+
+    await row.getByRole("button").click();
+    await expect(dialog.getByTestId("meeting-note-text").locator(".editor-input")).toContainText("Romans 9 next week.", { timeout: 15000 });
+    await dialog.getByRole("button", { name: /^Cancel$/i }).click();
   });
 
   test("notes typed on the Attendance screen show in Meetings", async ({ page }) => {
@@ -56,14 +61,19 @@ test.describe("Group meetings", () => {
     await page.goto(`/mobile/groups/${GROUP_ID}`);
     await page.getByTestId("group-all-attendance").click();
     await expect(page).toHaveURL(/view=attendance/, { timeout: 15000 });
-    const notes = page.getByTestId("attendance-notes").locator("textarea").first();
-    await expect(notes).toBeEnabled({ timeout: 15000 });
-    await notes.fill(note);
+    const notes = page.getByTestId("attendance-notes").locator(".editor-input[contenteditable='true']");
+    await notes.click({ timeout: 15000 });
+    await page.keyboard.press("ControlOrMeta+a");
+    await page.keyboard.type(note);
     await page.getByRole("button", { name: /^Save Attendance$/i }).click();
     await expect(page.getByText("Attendance saved.")).toBeVisible({ timeout: 15000 });
 
     await page.getByRole("button", { name: /^Back to / }).click();
     await expect(page.locator("main").getByTestId("group-meeting-row").filter({ hasText: note })).toBeVisible({ timeout: 15000 });
+
+    await page.reload();
+    await page.getByTestId("group-all-attendance").click();
+    await expect(page.getByTestId("attendance-notes").locator(".editor-input")).toContainText(note, { timeout: 15000 });
 
     const ctx = await request.newContext();
     const sessions: any[] = await (await ctx.get(`${MAIN_API}/attendance/sessions?groupId=${GROUP_ID}`, { headers: await attendanceHeaders(ctx) })).json();

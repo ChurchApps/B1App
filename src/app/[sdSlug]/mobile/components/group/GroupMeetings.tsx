@@ -3,7 +3,7 @@
 import React from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
-import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
+import { MarkdownEditor, MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { mobileTheme } from "../mobileTheme";
 import { QuietEmpty, Sheet, StatusBadge } from "../kit";
 
@@ -77,6 +77,9 @@ interface SheetProps {
 export const MeetingNoteSheet = ({ open, groupId, sessions, initialDate, onClose, onSaved }: SheetProps) => {
   const [date, setDate] = React.useState("");
   const [notes, setNotes] = React.useState("");
+  const [ready, setReady] = React.useState(false);
+  // An unmounting MarkdownEditor fires onChange with its old text; only the current date's editor may write.
+  const dateRef = React.useRef("");
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState(false);
 
@@ -90,11 +93,13 @@ export const MeetingNoteSheet = ({ open, groupId, sessions, initialDate, onClose
   };
 
   const pick = (day: string) => {
+    dateRef.current = day;
     setDate(day);
     setNotes(sessions.find((s) => sessionDay(s) === day)?.notes || "");
   };
 
   React.useEffect(() => {
+    setReady(open);
     if (!open) return;
     setError(false);
     pick(initialDate || defaultDate());
@@ -140,16 +145,9 @@ export const MeetingNoteSheet = ({ open, groupId, sessions, initialDate, onClose
         slotProps={{ inputLabel: { shrink: true } }}
         sx={{ mt: "8px" }}
       />
-      <TextField
-        fullWidth
-        multiline
-        minRows={4}
-        label={Locale.label("mobile.group.notes")}
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-        sx={{ mt: "16px" }}
-        data-testid="meeting-note-text"
-      />
+      <Box sx={{ mt: "16px" }} data-testid="meeting-note-text">
+        {ready && <MarkdownEditor key={date} value={notes} onChange={(v) => { if (dateRef.current === date) setNotes(v); }} placeholder={Locale.label("mobile.group.notes")} style={{ maxHeight: 280, overflowY: "auto" }} />}
+      </Box>
     </Sheet>
   );
 };

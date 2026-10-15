@@ -7,6 +7,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import SearchIcon from "@mui/icons-material/Search";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
+import { MarkdownEditor } from "@churchapps/apphelper/markdown";
 import { mobileTheme } from "../mobileTheme";
 import { PersonAvatar, PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink } from "../kit";
 
@@ -60,6 +61,8 @@ export const GroupAttendanceTab = ({ groupId, members, initialDate, onSaved }: P
   const tc = mobileTheme.colors;
   const [selectedDate, setSelectedDate] = React.useState<string>(initialDate || toHtmlDate(new Date()));
   const [notes, setNotes] = React.useState("");
+  // An unmounting MarkdownEditor fires one last onChange with its old content; drop it while a date loads.
+  const acceptNotes = React.useRef(false);
   const [sessions, setSessions] = React.useState<Session[]>([]);
   const [currentSession, setCurrentSession] = React.useState<Session | null>(null);
   const [attendance, setAttendance] = React.useState<Record<string, boolean>>({});
@@ -108,6 +111,7 @@ export const GroupAttendanceTab = ({ groupId, members, initialDate, onSaved }: P
   React.useEffect(() => {
     let cancelled = false;
     const loadForDate = async () => {
+      acceptNotes.current = false;
       setLoading(true);
       const existing = sessions.find((s) => {
         if (!s.sessionDate) return false;
@@ -163,7 +167,10 @@ export const GroupAttendanceTab = ({ groupId, members, initialDate, onSaved }: P
         setOriginalAttendance({});
         setAdditional([]);
       }
-      if (!cancelled) setLoading(false);
+      if (!cancelled) {
+        acceptNotes.current = true;
+        setLoading(false);
+      }
     };
     loadForDate();
     return () => {
@@ -276,17 +283,9 @@ export const GroupAttendanceTab = ({ groupId, members, initialDate, onSaved }: P
           slotProps={{ htmlInput: { max: toHtmlDate(new Date()) }, inputLabel: { shrink: true } }}
           sx={{ minWidth: 200 }}
         />
-        <TextField
-          fullWidth
-          multiline
-          minRows={2}
-          label={Locale.label("mobile.group.notes")}
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          disabled={loading || saving}
-          sx={{ mt: "16px" }}
-          data-testid="attendance-notes"
-        />
+        <Box sx={{ mt: "16px" }} data-testid="attendance-notes">
+          {!loading && <MarkdownEditor key={selectedDate} value={notes} onChange={(v) => { if (acceptNotes.current) setNotes(v); }} placeholder={Locale.label("mobile.group.notes")} style={{ maxHeight: 240, overflowY: "auto" }} />}
+        </Box>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap", mt: "14px" }}>
           <Typography sx={{ fontSize: 15, color: tc.textSecondary }}>
             {Locale.label("mobile.group.presentOf").replace("{}", String(presentCount)).replace("{}", String(allPeople.length))}
