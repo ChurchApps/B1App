@@ -140,7 +140,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
         "MembershipApi"
       );
       if (resp.exists) {
-        showError("An account already exists for this email. Please sign in instead.");
+        showError(Locale.label("mobile.login.errAccountExists"));
       } else if (resp.peopleMatches?.length > 0) {
         const match = resp.peopleMatches[0];
         if (!regFirstName && match.firstName) setRegFirstName(match.firstName);
@@ -163,7 +163,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
         "MembershipApi"
       );
       if (resp.exists) {
-        showError("Invalid login. Please check your email or password.");
+        showError(Locale.label("mobile.login.errInvalidLogin"));
       } else {
         const match = resp.peopleMatches?.[0];
         setNoAccountPrompt({
@@ -175,14 +175,14 @@ export const MobileLoginScreen = ({ config }: Props) => {
         });
       }
     } catch {
-      showError("Invalid login. Please check your email or password.");
+      showError(Locale.label("mobile.login.errInvalidLogin"));
     }
   };
 
   const validateLogin = (): boolean => {
-    if (!email) { showError("Please enter your email."); return false; }
-    if (!EMAIL_REGEX.test(email)) { showError("Please enter a valid email address."); return false; }
-    if (!password) { showError("Please enter your password."); return false; }
+    if (!email) { showError(Locale.label("mobile.login.errEnterEmail")); return false; }
+    if (!EMAIL_REGEX.test(email)) { showError(Locale.label("mobile.login.errValidEmail")); return false; }
+    if (!password) { showError(Locale.label("mobile.login.errEnterPassword")); return false; }
     return true;
   };
 
@@ -214,9 +214,9 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   const handleRegisterSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!email || !EMAIL_REGEX.test(email)) { showError("Please enter a valid email address."); return; }
-    if (!regFirstName.trim()) { showError("Please enter your first name."); return; }
-    if (!regLastName.trim()) { showError("Please enter your last name."); return; }
+    if (!email || !EMAIL_REGEX.test(email)) { showError(Locale.label("mobile.login.errValidEmail")); return; }
+    if (!regFirstName.trim()) { showError(Locale.label("mobile.login.errFirstName")); return; }
+    if (!regLastName.trim()) { showError(Locale.label("mobile.login.errLastName")); return; }
     setLoading(true);
     try {
       const body: any = { email, firstName: regFirstName, lastName: regLastName, appName: "B1", appUrl: typeof window !== "undefined" ? window.location.origin : undefined, website: honeypotRef.current?.value || "", fillMs: Date.now() - registerShownAtRef.current };
@@ -224,14 +224,14 @@ export const MobileLoginScreen = ({ config }: Props) => {
       const resp: any = await ApiHelper.postAnonymous("/users/register", body, "MembershipApi");
       if (resp?.errors?.length) {
         const msg = String(resp.errors[0]);
-        if (msg.toLowerCase().includes("user already exists")) showError("An account already exists for this email. Please sign in instead.");
+        if (msg.toLowerCase().includes("user already exists")) showError(Locale.label("mobile.login.errAccountExists"));
         else showError(msg);
         return;
       }
       goToVerify();
     } catch (e: any) {
-      const msg = e?.toString?.() || "Registration failed.";
-      if (msg.toLowerCase().includes("user already exists")) showError("An account already exists for this email. Please sign in instead.");
+      const msg = e?.toString?.() || Locale.label("mobile.login.errRegistrationFailed");
+      if (msg.toLowerCase().includes("user already exists")) showError(Locale.label("mobile.login.errAccountExists"));
       else showError(msg);
     } finally {
       setLoading(false);
@@ -240,14 +240,14 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   const handleForgotSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!email || !EMAIL_REGEX.test(email)) { showError("Please enter a valid email address."); return; }
+    if (!email || !EMAIL_REGEX.test(email)) { showError(Locale.label("mobile.login.errValidEmail")); return; }
     setLoading(true);
     try {
       const resp: any = await ApiHelper.postAnonymous("/users/forgot", { userEmail: email }, "MembershipApi");
       if (resp?.emailed) goToVerify();
-      else showError("We could not find an account with this email address.");
+      else showError(Locale.label("mobile.login.errNoAccount"));
     } catch (e: any) {
-      showError(e?.toString?.() || "Something went wrong.");
+      showError(e?.toString?.() || Locale.label("mobile.login.errGeneric"));
     } finally {
       setLoading(false);
     }
@@ -309,7 +309,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   const submitCode = async (codeOverride?: string) => {
     const code = codeOverride ?? codeDigits.join("");
-    if (code.length !== CODE_LENGTH) { showError("Please enter the 6-digit code."); return; }
+    if (code.length !== CODE_LENGTH) { showError(Locale.label("mobile.login.errEnterCode")); return; }
     setLoading(true);
     try {
       const resp: any = await ApiHelper.postAnonymous("/users/verifyCode", { email, code }, "MembershipApi");
@@ -321,13 +321,13 @@ export const MobileLoginScreen = ({ config }: Props) => {
         } catch { /* ignore; proceed to set password regardless */ }
         setMode("setPassword");
       } else {
-        const msg = Array.isArray(resp?.errors) && resp.errors.length ? String(resp.errors[0]) : "Invalid or expired code.";
+        const msg = Array.isArray(resp?.errors) && resp.errors.length ? String(resp.errors[0]) : Locale.label("mobile.login.errInvalidCode");
         showError(msg);
         setCodeDigits(Array(CODE_LENGTH).fill(""));
         codeRefs.current[0]?.focus();
       }
     } catch (e: any) {
-      showError(e?.toString?.() || "Invalid or expired code.");
+      showError(e?.toString?.() || Locale.label("mobile.login.errInvalidCode"));
       setCodeDigits(Array(CODE_LENGTH).fill(""));
       codeRefs.current[0]?.focus();
     } finally {
@@ -341,10 +341,10 @@ export const MobileLoginScreen = ({ config }: Props) => {
     setCodeDigits(Array(CODE_LENGTH).fill(""));
     try {
       await ApiHelper.postAnonymous("/users/forgot", { userEmail: email }, "MembershipApi");
-      showInfo("A new code has been sent.");
+      showInfo(Locale.label("mobile.login.infoCodeResent"));
       setResendCooldown(RESEND_COOLDOWN_SECONDS);
     } catch (e: any) {
-      showError(e?.toString?.() || "Failed to resend code.");
+      showError(e?.toString?.() || Locale.label("mobile.login.errResendFailed"));
     } finally {
       setLoading(false);
     }
@@ -352,15 +352,15 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   const handleSetPasswordSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (newPassword.length < 8) { showError("Password must be at least 8 characters."); return; }
-    if (newPassword !== confirmPassword) { showError("Passwords do not match."); return; }
+    if (newPassword.length < 8) { showError(Locale.label("mobile.login.errPasswordLength")); return; }
+    if (newPassword !== confirmPassword) { showError(Locale.label("mobile.login.errPasswordsMismatch")); return; }
     setLoading(true);
     try {
       const resp: any = await ApiHelper.postAnonymous("/users/setPasswordGuid", { authGuid, newPassword }, "MembershipApi");
-      if (!resp?.success) { showError("Could not set password. Please request a new code."); setMode("forgot"); return; }
+      if (!resp?.success) { showError(Locale.label("mobile.login.errSetPasswordRetry")); setMode("forgot"); return; }
       await loginApiCall({ email, password: newPassword });
     } catch (e: any) {
-      showError(e?.toString?.() || "Could not set password.");
+      showError(e?.toString?.() || Locale.label("mobile.login.errSetPassword"));
     } finally {
       setLoading(false);
     }
@@ -392,18 +392,18 @@ export const MobileLoginScreen = ({ config }: Props) => {
   }, []);
 
   const heroTitle = () => {
-    if (mode === "register") return churchName ? `Join ${churchName}` : "Create your account";
-    if (mode === "forgot") return "Reset your password";
-    if (mode === "verify") return "Enter verification code";
-    if (mode === "setPassword") return setPasswordFirstName ? `Welcome, ${setPasswordFirstName}` : "Set your password";
+    if (mode === "register") return churchName ? Locale.label("mobile.login.titleJoin").replace("{}", churchName) : Locale.label("mobile.login.titleCreateAccount");
+    if (mode === "forgot") return Locale.label("mobile.login.titleResetPassword");
+    if (mode === "verify") return Locale.label("mobile.login.titleVerify");
+    if (mode === "setPassword") return setPasswordFirstName ? Locale.label("mobile.login.titleWelcome").replace("{}", setPasswordFirstName) : Locale.label("mobile.login.titleSetPassword");
     return churchName ? Locale.label("mobile.login.signInTo").replace("{}", churchName) : Locale.label("mobile.screenTitles.signIn");
   };
 
   const heroSubtitle = () => {
-    if (mode === "register") return churchName ? `Create an account for ${churchName}` : "Create a new account";
-    if (mode === "forgot") return "We'll email you a 6-digit code to reset it.";
-    if (mode === "verify") return `We emailed a 6-digit code to ${email}.`;
-    if (mode === "setPassword") return "Choose a password to finish signing in.";
+    if (mode === "register") return churchName ? Locale.label("mobile.login.ledeRegisterFor").replace("{}", churchName) : Locale.label("mobile.login.ledeRegister");
+    if (mode === "forgot") return Locale.label("mobile.login.ledeForgot");
+    if (mode === "verify") return Locale.label("mobile.login.ledeVerify").replace("{}", email);
+    if (mode === "setPassword") return Locale.label("mobile.login.ledeSetPassword");
     return Locale.label("mobile.login.lede");
   };
 
@@ -413,7 +413,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   const passwordToggle = (
     <InputAdornment position="end">
-      <IconButton onClick={() => setShowPassword(v => !v)} edge="end" aria-label={showPassword ? "Hide password" : "Show password"} size="small">
+      <IconButton onClick={() => setShowPassword(v => !v)} edge="end" aria-label={showPassword ? Locale.label("mobile.login.hidePassword") : Locale.label("mobile.login.showPassword")} size="small">
         <Icon sx={{ color: tc.textSecondary }}>{showPassword ? "visibility_off" : "visibility"}</Icon>
       </IconButton>
     </InputAdornment>
@@ -453,9 +453,9 @@ export const MobileLoginScreen = ({ config }: Props) => {
         disabled={loading}
       />
       <Button type="submit" variant="contained" fullWidth disabled={loading} size="large">
-        {loading ? spinner : "Sign In"}
+        {loading ? spinner : Locale.label("mobile.login.signIn")}
       </Button>
-      <TextLink onClick={() => setMode("forgot")} sx={{ alignSelf: "center" }}>Forgot password?</TextLink>
+      <TextLink onClick={() => setMode("forgot")} sx={{ alignSelf: "center" }}>{Locale.label("mobile.login.forgotPassword")}</TextLink>
       <Typography sx={{ ...centered, fontSize: 12.5 }}>
         By signing in, you agree to our{" "}
         <TextLink href="https://churchapps.org/privacy" sx={{ fontSize: 12.5 }}>{Locale.label("mobile.components.privacyPolicy")}</TextLink>.
@@ -477,10 +477,10 @@ export const MobileLoginScreen = ({ config }: Props) => {
       {emailField(e => prefillRegisterFromMatch(e.target.value))}
       <input ref={honeypotRef} type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: "1px", height: "1px", overflow: "hidden" }} />
       <Button type="submit" variant="contained" fullWidth disabled={loading} size="large">
-        {loading ? spinner : "Create account"}
+        {loading ? spinner : Locale.label("mobile.login.createAccountSubmit")}
       </Button>
       <Typography sx={centered}>
-        Already have an account? <TextLink onClick={() => setMode("login")}>Sign in</TextLink>
+        {Locale.label("mobile.login.alreadyHaveAccount")} <TextLink onClick={() => setMode("login")}>{Locale.label("mobile.login.signInLink")}</TextLink>
       </Typography>
     </Box>
   );
@@ -489,9 +489,9 @@ export const MobileLoginScreen = ({ config }: Props) => {
     <Box component="form" onSubmit={handleForgotSubmit} sx={formSx}>
       {emailField()}
       <Button type="submit" variant="contained" fullWidth disabled={loading} size="large">
-        {loading ? spinner : "Send code"}
+        {loading ? spinner : Locale.label("mobile.login.sendCode")}
       </Button>
-      <TextLink onClick={() => setMode("login")} sx={{ alignSelf: "center" }}>Back to sign in</TextLink>
+      <TextLink onClick={() => setMode("login")} sx={{ alignSelf: "center" }}>{Locale.label("mobile.login.backToSignIn")}</TextLink>
     </Box>
   );
 
@@ -532,13 +532,13 @@ export const MobileLoginScreen = ({ config }: Props) => {
         ))}
       </Box>
       <Button type="submit" variant="contained" fullWidth disabled={loading || codeDigits.some(d => d === "")} size="large">
-        {loading ? spinner : "Verify code"}
+        {loading ? spinner : Locale.label("mobile.login.verifyCode")}
       </Button>
       <Box sx={{ display: "flex", justifyContent: "center", gap: "16px" }}>
         <TextLink onClick={resendCode} disabled={resendCooldown > 0 || loading}>
-          {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend code"}
+          {resendCooldown > 0 ? Locale.label("mobile.login.resendIn").replace("{}", String(resendCooldown)) : Locale.label("mobile.login.resendCode")}
         </TextLink>
-        <TextLink onClick={() => setMode("login")}>Back to sign in</TextLink>
+        <TextLink onClick={() => setMode("login")}>{Locale.label("mobile.login.backToSignIn")}</TextLink>
       </Box>
     </Box>
   );
@@ -565,7 +565,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
         disabled={loading}
       />
       <Button type="submit" variant="contained" fullWidth disabled={loading || !newPassword || !confirmPassword} size="large">
-        {loading ? spinner : "Save & sign in"}
+        {loading ? spinner : Locale.label("mobile.login.saveAndSignIn")}
       </Button>
     </Box>
   );
