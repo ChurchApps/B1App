@@ -24,12 +24,16 @@ interface GroupMember {
 interface Props {
   groupId: string;
   members: GroupMember[];
+  initialDate?: string;
+  onSaved?: () => void;
 }
 
 interface Session {
   id?: string;
   groupId?: string;
+  serviceTimeId?: string;
   sessionDate?: string;
+  notes?: string;
 }
 
 interface VisitSession {
@@ -52,9 +56,10 @@ const toHtmlDate = (d: Date) => {
   return `${y}-${m}-${day}`;
 };
 
-export const GroupAttendanceTab = ({ groupId, members }: Props) => {
+export const GroupAttendanceTab = ({ groupId, members, initialDate, onSaved }: Props) => {
   const tc = mobileTheme.colors;
-  const [selectedDate, setSelectedDate] = React.useState<string>(toHtmlDate(new Date()));
+  const [selectedDate, setSelectedDate] = React.useState<string>(initialDate || toHtmlDate(new Date()));
+  const [notes, setNotes] = React.useState("");
   const [sessions, setSessions] = React.useState<Session[]>([]);
   const [currentSession, setCurrentSession] = React.useState<Session | null>(null);
   const [attendance, setAttendance] = React.useState<Record<string, boolean>>({});
@@ -104,7 +109,6 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
     let cancelled = false;
     const loadForDate = async () => {
       setLoading(true);
-      setMessage(null);
       const existing = sessions.find((s) => {
         if (!s.sessionDate) return false;
         const sd = typeof s.sessionDate === "string" ? s.sessionDate.slice(0, 10) : "";
@@ -112,6 +116,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
       });
       if (cancelled) return;
       setCurrentSession(existing || null);
+      setNotes(existing?.notes || "");
 
       if (existing?.id) {
         try {
@@ -208,17 +213,21 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
   const handleSave = async () => {
     setSaving(true);
     setMessage(null);
-    let createdSession: Session | null = null;
+    let savedSession: Session | null = null;
     try {
       let sessionId = currentSession?.id;
       if (!sessionId) {
-        const payload: Session = { groupId, sessionDate: selectedDate };
+        const payload: Session = { groupId, sessionDate: selectedDate, notes };
         const created = await ApiHelper.post("/sessions", [payload], "AttendanceApi");
         if (created && created.length > 0) {
           sessionId = created[0].id;
-          createdSession = created[0];
-          setCurrentSession(created[0]);
+          savedSession = { ...created[0], sessionDate: selectedDate, notes };
+          setCurrentSession(savedSession);
         }
+      } else if (notes !== (currentSession?.notes || "")) {
+        await ApiHelper.post("/sessions", [{ id: sessionId, groupId, serviceTimeId: currentSession?.serviceTimeId, sessionDate: selectedDate, notes }], "AttendanceApi");
+        savedSession = { ...currentSession, notes };
+        setCurrentSession(savedSession);
       }
       if (!sessionId) throw new Error("Session creation failed");
 
@@ -245,13 +254,14 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
       }
 
       setMessage({ type: "success", text: Locale.label("mobile.group.attendanceSaved") });
+      onSaved?.();
       setTimeout(() => setMessage(null), 3000);
     } catch {
       setMessage({ type: "error", text: Locale.label("mobile.group.failedAttendanceSave") });
     } finally {
       setSaving(false);
-      // Deferred: adding to sessions re-runs the load effect, which would reset attendance mid-save.
-      if (createdSession) setSessions((prev) => [...prev, createdSession!]);
+      // Deferred: changing sessions re-runs the load effect, which would reset attendance mid-save.
+      if (savedSession) setSessions((prev) => [...prev.filter((s) => s.id !== savedSession!.id), savedSession!]);
     }
   };
 
@@ -262,9 +272,20 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
           type="date"
           label={Locale.label("common.date")}
           value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
+          onChange={(e) => { setSelectedDate(e.target.value); setMessage(null); }}
           slotProps={{ htmlInput: { max: toHtmlDate(new Date()) }, inputLabel: { shrink: true } }}
           sx={{ minWidth: 200 }}
+        />
+        <TextField
+          fullWidth
+          multiline
+          minRows={2}
+          label={Locale.label("mobile.group.notes")}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          disabled={loading || saving}
+          sx={{ mt: "16px" }}
+          data-testid="attendance-notes"
         />
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap", mt: "14px" }}>
           <Typography sx={{ fontSize: 15, color: tc.textSecondary }}>
