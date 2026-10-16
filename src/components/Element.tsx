@@ -2,11 +2,13 @@
 
 import React from "react";
 import { Locale } from "@churchapps/apphelper";
-import { Element as AppHelperElement, ElementBlock, registerElementRenderer, setImageOptimizer } from "@churchapps/apphelper/website";
-import type { ChurchInterface } from "@churchapps/helpers";
+import { CalendarElement, Element as AppHelperElement, ElementBlock, registerElementRenderer, setImageOptimizer } from "@churchapps/apphelper/website";
+import type { ChurchInterface, EventInterface } from "@churchapps/helpers";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { LiveStream } from "./video/LiveStream";
 import { FormElement } from "./elements/FormElement";
+import { UpcomingEventsElement } from "./elements/UpcomingEventsElement";
+import { eventPageId } from "@/helpers/EventOccurrences";
 import { b1ImageOptimizer } from "@/helpers/imageOptimizer";
 
 interface Props {
@@ -38,6 +40,14 @@ registerElementRenderer("stream", (p) => p.church
 registerElementRenderer("form", (p) => p.church
   ? <FormElement element={p.element as ElementInterface} church={p.church} />
   : null);
+// Calendar: "upcoming" renders photo tiles; the month grid links each event to its page.
+registerElementRenderer("calendar", (p) => {
+  const churchId = p.church?.id || p.element.churchId || "";
+  if (p.element.answers?.display === "upcoming") return <UpcomingEventsElement key={p.element.id} element={p.element as ElementInterface} churchId={churchId} />;
+  // ponytail: eventUrl is spread untyped until @churchapps/apphelper publishes the prop
+  const eventUrl: any = { eventUrl: (e: EventInterface) => "/events/" + eventPageId(e) };
+  return <CalendarElement key={p.element.id} element={p.element} churchId={churchId} firstDayOfWeek={(p.church as any)?.firstDayOfWeek ?? 0} {...eventUrl} />;
+});
 
 // Route apphelper content images through the Next.js image optimizer (srcset/WebP/AVIF).
 setImageOptimizer(b1ImageOptimizer);
