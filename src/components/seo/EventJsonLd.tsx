@@ -1,13 +1,12 @@
 import React from "react";
 import { EventHelper } from "@churchapps/helpers";
 import type { EventInterface, ChurchInterface } from "@churchapps/helpers";
+import { buildOccurrences } from "@/helpers/EventOccurrences";
 import { fetchCached, type ConfigurationInterface } from "@/helpers/ConfigHelper";
 import type { PageInterface } from "@/helpers/interfaces";
 import { collectCuratedCalendarIds } from "./pageElements";
 
 interface Props { config: ConfigurationInterface; pageData?: PageInterface; sdSlug: string; }
-
-interface Occurrence { title?: string; description?: string; start: Date; end: Date; }
 
 const WINDOW_DAYS = 180;
 const MAX_EVENTS = 25;
@@ -25,28 +24,6 @@ const churchPlace = (church: ChurchInterface) => {
     };
   }
   return place;
-};
-
-const buildOccurrences = (events: EventInterface[], now: Date, windowEnd: Date): Occurrence[] => {
-  const result: Occurrence[] = [];
-  for (const event of events) {
-    if (!event.start) continue;
-    const baseStart = new Date(event.start);
-    if (isNaN(baseStart.getTime())) continue;
-    const baseEnd = event.end ? new Date(event.end) : new Date(baseStart.getTime() + 60 * 60 * 1000);
-    const durationMs = Math.max(0, baseEnd.getTime() - baseStart.getTime());
-
-    if (event.recurrenceRule) {
-      let dates: Date[] = [];
-      try { dates = EventHelper.getRange(event, now, windowEnd) || []; } catch { dates = []; }
-      for (const d of dates.slice(0, 5)) {
-        result.push({ title: event.title, description: event.description, start: d, end: new Date(d.getTime() + durationMs) });
-      }
-    } else if (baseEnd >= now) {
-      result.push({ title: event.title, description: event.description, start: baseStart, end: baseEnd });
-    }
-  }
-  return result;
 };
 
 export async function EventJsonLd({ config, pageData, sdSlug }: Props) {
@@ -79,14 +56,14 @@ export async function EventJsonLd({ config, pageData, sdSlug }: Props) {
       const event: Record<string, unknown> = {
         "@context": "https://schema.org",
         "@type": "Event",
-        name: o.title || church.name,
+        name: o.event.title || church.name,
         startDate: o.start.toISOString(),
         endDate: o.end.toISOString(),
         eventStatus: "https://schema.org/EventScheduled",
         location: place,
         organizer: { "@type": "Organization", name: church.name }
       };
-      if (o.description) event.description = o.description;
+      if (o.event.description) event.description = o.event.description;
       return event;
     });
 
