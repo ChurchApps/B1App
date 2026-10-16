@@ -166,6 +166,8 @@ export const NotificationPrefsPage = () => {
     return all;
   }, [deviceZone, timeZone]);
 
+  // Category names come from the API in English; translate by key and fall back to the server name for new categories.
+  const categoryName = (cat: { categoryKey: string; displayName: string }) => Locale.label("mobile.notificationPrefs.categoryNames." + cat.categoryKey, cat.displayName);
   const overrideKey = (categoryKey: string, channel: ChannelKey) => `${categoryKey}::${channel}`;
 
   const resolvedChannel = (cat: NotificationCategory, channel: ChannelKey): boolean => {
@@ -339,7 +341,7 @@ export const NotificationPrefsPage = () => {
                           <LockIcon sx={{ fontSize: 14, color: tc.textSecondary }} />
                         </Tooltip>
                       )}
-                      {cat.displayName}
+                      {categoryName(cat)}
                     </Box>
                   )}
                   trailing={(
@@ -350,7 +352,7 @@ export const NotificationPrefsPage = () => {
                           on={resolvedChannel(cat, ch.key)}
                           disabled={cat.locked}
                           label={ch.label}
-                          ariaLabel={`${cat.displayName} ${ch.label}`}
+                          ariaLabel={`${categoryName(cat)} ${ch.label}`}
                           onToggle={() => handleChannelToggle(cat, ch.key)}
                         />
                       ))}

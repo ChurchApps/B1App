@@ -1,4 +1,4 @@
-import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { WebPushHelperBase as SharedWebPushHelper } from "./WebPushHelperBase";
 
 // Configure once at module load so any caller of WebPushHelper.subscribe / .getRegistration
@@ -125,8 +125,8 @@ const requiresInstallForPush = () => SharedWebPushHelper.isSupported() && isIos(
 
 // On Android the installed app's notification toggle mirrors Chrome's site permission — App info alone can't unblock it.
 const getUnblockInstructions = () => {
-  if (isIos()) return "Open iPhone Settings, find this app under Notifications, and turn Allow Notifications on. Then return here.";
-  return "Open this site in Chrome, tap the icon next to the address bar, choose Permissions, and set Notifications to Allow. The phone's App info toggle follows this browser setting and won't stay on until Chrome allows it.";
+  if (isIos()) return Locale.label("mobile.notificationBanner.unblockIos");
+  return Locale.label("mobile.notificationBanner.unblockChrome");
 };
 
 const ensureServiceWorkerReady = async (): Promise<ServiceWorkerRegistration | null> => {
