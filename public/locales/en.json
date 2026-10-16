@@ -68,6 +68,18 @@
       "thisAndFollowing": "This and all following dates"
     }
   },
+  "eventPage": {
+    "addToCalendar": "Add to my calendar",
+    "allEvents": "All events",
+    "copied": "Copied to clipboard!",
+    "copyIcsLink": "Copy ICS Link",
+    "downloadIcs": "Download ICS File",
+    "noUpcoming": "No upcoming events",
+    "register": "Register for this Event",
+    "subscribe": "Subscribe",
+    "when": "When",
+    "where": "Where"
+  },
   "footer": {
     "give": "Give",
     "nav": "Footer"
