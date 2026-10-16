@@ -457,8 +457,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
       </Button>
       <TextLink onClick={() => setMode("forgot")} sx={{ alignSelf: "center" }}>{Locale.label("mobile.login.forgotPassword")}</TextLink>
       <Typography sx={{ ...centered, fontSize: 12.5 }}>
-        By signing in, you agree to our{" "}
-        <TextLink href="https://churchapps.org/privacy" sx={{ fontSize: 12.5 }}>{Locale.label("mobile.components.privacyPolicy")}</TextLink>.
+        {Locale.label("mobile.login.agreeBefore")}{" "}
+        <TextLink href="https://churchapps.org/privacy" sx={{ fontSize: 12.5 }}>{Locale.label("mobile.components.privacyPolicy")}</TextLink>{Locale.label("mobile.login.agreeAfter")}
       </Typography>
     </Box>
   );
@@ -467,7 +467,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
     <Box component="form" onSubmit={handleRegisterSubmit} sx={formSx}>
       {matchedChurchName && (
         <Alert severity="info">
-          We found your record at <b>{matchedChurchName}</b>. Complete registration to link your account.
+          {Locale.label("mobile.login.foundRecordBefore")}{" "}<b>{matchedChurchName}</b>{Locale.label("mobile.login.foundRecordAfter")}
         </Alert>
       )}
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
@@ -619,12 +619,12 @@ export const MobileLoginScreen = ({ config }: Props) => {
                 setMode("register");
               }}
             >
-              Register
+              {Locale.label("mobile.login.register")}
             </Button>
           }
           sx={{ width: "100%" }}
         >
-          We couldn&apos;t find an account with that email. Want to create one?
+          {Locale.label("mobile.login.noAccountForEmail")}
         </Alert>
       </Snackbar>
 
