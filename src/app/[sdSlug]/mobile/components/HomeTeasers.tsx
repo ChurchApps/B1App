@@ -8,6 +8,7 @@ import type { GroupInterface } from "@churchapps/helpers";
 import { ApiHelper, CurrencyHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "./mobileTheme";
+import { ConfirmDeclineSheet } from "./ConfirmDeclineSheet";
 import { BigNumber, PersonAvatar, PlateSection, Row, RowList, StatusBadge, TextLink } from "./kit";
 
 interface UpcomingAssignment {
@@ -72,6 +73,7 @@ export const ServingTeaser = ({ upcoming, queryKey }: ReturnType<typeof useUpcom
   const queryClient = useQueryClient();
   const [busyId, setBusyId] = useState("");
   const [error, setError] = useState("");
+  const [declineTarget, setDeclineTarget] = useState<UpcomingAssignment | null>(null);
   const needsReply = upcoming.filter((a) => isStatus(a, "unconfirmed"));
   const rows = (needsReply.length ? needsReply : upcoming).slice(0, 2);
 
@@ -109,7 +111,7 @@ export const ServingTeaser = ({ upcoming, queryKey }: ReturnType<typeof useUpcom
               {unconfirmed && (
                 <Box sx={{ display: "flex", gap: "8px", pb: "8px" }}>
                   <Button size="small" variant="contained" disabled={!!busyId} onClick={() => respond(a, "accept")}>{Locale.label("mobile.details.accept")}</Button>
-                  <Button size="small" variant="outlined" disabled={!!busyId} onClick={() => respond(a, "decline")}>{Locale.label("mobile.details.decline")}</Button>
+                  <Button size="small" variant="outlined" disabled={!!busyId} onClick={() => setDeclineTarget(a)}>{Locale.label("mobile.details.decline")}</Button>
                 </Box>
               )}
             </Box>
@@ -117,6 +119,7 @@ export const ServingTeaser = ({ upcoming, queryKey }: ReturnType<typeof useUpcom
         })}
       </RowList>
       {error && <Typography sx={{ color: mobileTheme.colors.error, fontSize: 14, mt: "6px" }}>{error}</Typography>}
+      <ConfirmDeclineSheet open={!!declineTarget} onClose={() => setDeclineTarget(null)} onConfirm={() => { if (declineTarget) respond(declineTarget, "decline"); }} />
     </PlateSection>
   );
 };

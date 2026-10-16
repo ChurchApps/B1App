@@ -24,7 +24,8 @@ import { ExpandedLessonView } from "@/app/[sdSlug]/mobile/components/plans/Expan
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
-import { BackVerb, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, Sheet, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
+import { ConfirmDeclineSheet } from "../ConfirmDeclineSheet";
+import { BackVerb, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
 
 interface Props {
   id: string;
@@ -566,6 +567,7 @@ const AssignmentBlock = ({
   const beforeService = !latestBoundary || new Date() < (latestBoundary as Date);
   const canRespond = assignment.status === "Unconfirmed" && beforeService;
   const canWithdraw = assignment.status === "Accepted" && beforeService;
+  const canReaccept = assignment.status === "Declined" && beforeService;
 
   const handleRespond = async (action: "accept" | "decline") => {
     if (!assignment.id || busy) return;
@@ -611,7 +613,7 @@ const AssignmentBlock = ({
       {canRespond && (
         <Box sx={{ display: "flex", gap: "8px", mt: "14px" }}>
           <Button variant="contained" size="small" onClick={() => handleRespond("accept")} disabled={busy}>{Locale.label("mobile.details.accept")}</Button>
-          <Button variant="outlined" size="small" onClick={() => handleRespond("decline")} disabled={busy}>{Locale.label("mobile.details.decline")}</Button>
+          <Button variant="outlined" size="small" onClick={() => setConfirmDecline(true)} disabled={busy}>{Locale.label("mobile.details.decline")}</Button>
         </Box>
       )}
 
@@ -621,18 +623,13 @@ const AssignmentBlock = ({
         </Box>
       )}
 
-      <Sheet
-        open={confirmDecline}
-        onClose={() => setConfirmDecline(false)}
-        title={Locale.label("mobile.details.declineAcceptedTitle")}
-        maxWidth="xs"
-        actions={<>
-          <Button variant="outlined" onClick={() => setConfirmDecline(false)}>{Locale.label("mobile.details.cancel")}</Button>
-          <Button variant="contained" color="error" onClick={() => { setConfirmDecline(false); handleRespond("decline"); }}>{Locale.label("mobile.details.decline")}</Button>
-        </>}
-      >
-        <Typography>{Locale.label("mobile.details.declineAcceptedMessage")}</Typography>
-      </Sheet>
+      {canReaccept && (
+        <Box sx={{ mt: "12px" }}>
+          <TextLink onClick={() => handleRespond("accept")} disabled={busy}>{Locale.label("mobile.details.accept")}</TextLink>
+        </Box>
+      )}
+
+      <ConfirmDeclineSheet open={confirmDecline} onClose={() => setConfirmDecline(false)} onConfirm={() => handleRespond("decline")} />
 
       {errorMessage && <Typography role="alert" sx={{ fontSize: 13, color: tc.error, mt: "8px" }}>{errorMessage}</Typography>}
     </Box>

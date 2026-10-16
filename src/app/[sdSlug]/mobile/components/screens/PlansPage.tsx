@@ -14,6 +14,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { BlockoutDatesSection } from "../plans/BlockoutDatesSection";
+import { ConfirmDeclineSheet } from "../ConfirmDeclineSheet";
 import { BackVerb, FilterPills, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
 
 interface Props {
@@ -56,6 +57,7 @@ export const PlansPage = ({ config: _config }: Props) => {
   const [view, setView] = useSliceView();
   const [respondingId, setRespondingId] = useState("");
   const [respondError, setRespondError] = useState("");
+  const [declineRow, setDeclineRow] = useState<AssignmentRow | null>(null);
 
   const assignmentsKey = ["/assignments/my", "DoingApi", context?.user?.id];
   const { data: assignments = [], isLoading: assignmentsLoading } = useQuery<AssignmentInterface[]>({
@@ -213,7 +215,7 @@ export const PlansPage = ({ config: _config }: Props) => {
         </Box>
         <Box sx={{ display: "flex", gap: "8px", mt: "14px" }}>
           <Button variant="contained" size="small" disabled={busy} onClick={() => respond(row, "accept")}>{Locale.label("mobile.details.accept")}</Button>
-          <Button variant="outlined" size="small" disabled={busy} onClick={() => respond(row, "decline")}>{Locale.label("mobile.details.decline")}</Button>
+          <Button variant="outlined" size="small" disabled={busy} onClick={() => setDeclineRow(row)}>{Locale.label("mobile.details.decline")}</Button>
         </Box>
       </Box>
     );
@@ -267,6 +269,7 @@ export const PlansPage = ({ config: _config }: Props) => {
           <PlateSection title={Locale.label("mobile.serving.needsReply")}>
             {needsReply.map(renderNeedsReply)}
             {respondError && <Typography role="alert" sx={{ mt: "10px", fontSize: 13.5, color: tc.error }}>{respondError}</Typography>}
+            <ConfirmDeclineSheet open={!!declineRow} onClose={() => setDeclineRow(null)} onConfirm={() => { if (declineRow) respond(declineRow, "decline"); }} />
           </PlateSection>
         )}
         <PlateSection

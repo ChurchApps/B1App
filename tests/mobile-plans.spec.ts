@@ -2,6 +2,13 @@ import { test, expect, Page, request } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 import { getApi, apiCall, doingUrl } from "./helpers/api";
 
+// One position block on the plan page: has the position name and its service times, not the other position.
+const positionCard = (page: Page, position: string, other: string) => page.locator("div")
+  .filter({ has: page.getByText(position, { exact: true }) })
+  .filter({ has: page.getByText("Service Times", { exact: true }) })
+  .filter({ hasNot: page.getByText(other, { exact: true }) })
+  .last();
+
 test.describe("Mobile plans", () => {
   // The decline test below flips the seeded Sound Tech assignment; run in order so the Upcoming tests see it Accepted first.
   test.describe.configure({ mode: "serial" });
@@ -61,15 +68,56 @@ test.describe("Mobile plans", () => {
 
   test("accepted assignment can be declined from the plan page", async ({ page }) => {
     await page.goto("/mobile/plans/PLA00000001");
-    const card = page.locator("div")
-      .filter({ has: page.getByText("Sound Tech", { exact: true }) })
-      .filter({ has: page.getByText("Service Times", { exact: true }) })
-      .filter({ hasNot: page.getByText("Projection Tech", { exact: true }) })
-      .last();
+    const card = positionCard(page, "Sound Tech", "Projection Tech");
     await expect(card.getByText("Accepted", { exact: true })).toBeVisible({ timeout: 30000 });
 
     await card.getByRole("button", { name: "Decline" }).click();
     await page.getByRole("dialog").getByRole("button", { name: "Decline" }).click();
+    await expect(card.getByText("Declined", { exact: true })).toBeVisible({ timeout: 15000 });
+  });
+
+  test("declined assignment can be accepted again before the service", async ({ page }) => {
+    await page.goto("/mobile/plans/PLA00000001");
+    const card = positionCard(page, "Sound Tech", "Projection Tech");
+    await expect(card.getByText("Declined", { exact: true })).toBeVisible({ timeout: 30000 });
+
+    const accept = page.waitForRequest((r) => r.method() === "POST" && r.url().includes("/assignments/accept/ASS00000008"));
+    await card.getByRole("button", { name: "Accept" }).click();
+    await accept;
+    await expect(card.getByText("Accepted", { exact: true })).toBeVisible({ timeout: 15000 });
+  });
+
+  test("Needs reply Decline asks first and Cancel keeps the assignment", async ({ page }) => {
+    const declines: string[] = [];
+    page.on("request", (r) => { if (r.method() === "POST" && r.url().includes("/assignments/decline/")) declines.push(r.url()); });
+    await page.goto("/mobile/plans");
+    const needsReply = page.getByRole("region", { name: "Needs your reply" });
+    await expect(needsReply).toContainText("Projection Tech", { timeout: 30000 });
+
+    await needsReply.getByRole("button", { name: "Decline" }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog.getByText("Decline this assignment?")).toBeVisible();
+    await dialog.getByRole("button", { name: "Cancel" }).click();
+    await expect(dialog).toBeHidden();
+    await expect(needsReply).toContainText("Projection Tech");
+    expect(declines).toEqual([]);
+  });
+
+  test("first Decline on the plan page asks before posting", async ({ page }) => {
+    const declines: string[] = [];
+    page.on("request", (r) => { if (r.method() === "POST" && r.url().includes("/assignments/decline/")) declines.push(r.url()); });
+    await page.goto("/mobile/plans/PLA00000001");
+    const card = positionCard(page, "Projection Tech", "Sound Tech");
+    await expect(card.getByText("Needs reply", { exact: true })).toBeVisible({ timeout: 30000 });
+
+    await card.getByRole("button", { name: "Decline" }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog.getByText("Decline this assignment?")).toBeVisible();
+    expect(declines).toEqual([]);
+
+    const decline = page.waitForRequest((r) => r.method() === "POST" && r.url().includes("/assignments/decline/ASS00000009"));
+    await dialog.getByRole("button", { name: "Decline" }).click();
+    await decline;
     await expect(card.getByText("Declined", { exact: true })).toBeVisible({ timeout: 15000 });
   });
 });
