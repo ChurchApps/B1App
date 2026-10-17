@@ -101,4 +101,25 @@ test.describe.serial("Public event pages and upcoming-event tiles", () => {
     await expect(page).toHaveURL(/\/events\/EVT\d+$/);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 30000 });
   });
+
+  test("Calendar element with a tag shows only events carrying that tag", async ({ page }) => {
+    const current = await (await ctx.get(`${API_BASE}/content/events/${EVENT_ID}`, auth)).json();
+    const tagRes = await ctx.post(`${API_BASE}/content/events`, { ...auth, data: [{ ...current, tags: "Youth, students" }] });
+    expect(tagRes.ok()).toBeTruthy();
+    const element = await (await ctx.get(`${API_BASE}/content/elements/${ELEMENT_ID}`, auth)).json();
+    const answers = { ...JSON.parse(element.answersJSON || "{}"), display: "upcoming", tag: "youth" };
+    const elementRes = await ctx.post(`${API_BASE}/content/elements`, { ...auth, data: [{ ...element, answersJSON: JSON.stringify(answers) }] });
+    expect(elementRes.ok()).toBeTruthy();
+
+    try {
+      await page.goto("/events");
+      const tiles = page.getByTestId("upcoming-event-tile");
+      await expect.poll(() => tiles.count(), { timeout: 30000 }).toBe(1);
+      await expect(tiles.first()).toContainText("Sunday Morning Service");
+    } finally {
+      await ctx.post(`${API_BASE}/content/events`, { ...auth, data: [{ ...current, tags: null }] });
+      delete answers.tag;
+      await ctx.post(`${API_BASE}/content/elements`, { ...auth, data: [{ ...element, answersJSON: JSON.stringify(answers) }] });
+    }
+  });
 });

@@ -22,6 +22,7 @@ const whenLine = (o: Occurrence) => {
 export const UpcomingEventsElement = ({ element, churchId }: Props) => {
   const calendarType = element.answers?.calendarType;
   const calendarId = element.answers?.calendarId as string | undefined;
+  const tag = ((element.answers?.tag as string | undefined) || "").trim().toLowerCase();
   const [items, setItems] = useState<Occurrence[] | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [copied, setCopied] = useState(false);
@@ -33,11 +34,13 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
       const now = new Date();
       const windowEnd = new Date(now);
       windowEnd.setFullYear(windowEnd.getFullYear() + 1);
-      const occurrences = buildOccurrences(Array.isArray(events) ? events : [], now, windowEnd, 1);
+      // ponytail: inline EventHelper.hasTag until @churchapps/helpers bumps past 2.7.1
+      const tagged = (Array.isArray(events) ? events : []).filter((e: any) => !tag || (e.tags || "").split(",").some((t: string) => t.trim().toLowerCase() === tag));
+      const occurrences = buildOccurrences(tagged, now, windowEnd, 1);
       occurrences.sort((a, b) => a.start.getTime() - b.start.getTime());
       setItems(occurrences.slice(0, MAX_TILES));
     }).catch(() => setItems([]));
-  }, [calendarType, calendarId, churchId]);
+  }, [calendarType, calendarId, churchId, tag]);
 
   const icsUrl = CommonEnvironmentHelper.ContentApi + "/events/subscribe?" + (calendarType === "group" ? "groupId" : "curatedCalendarId") + "=" + calendarId + "&churchId=" + churchId;
 
