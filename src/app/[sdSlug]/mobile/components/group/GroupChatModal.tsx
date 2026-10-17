@@ -15,9 +15,9 @@ import type { PersonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
 import { Eyebrow, PersonAvatar, QuietEmpty, Sheet, TextLink } from "../kit";
 
-export type ChatSubTab = "discussions" | "announcements";
+export type ChatSubTab = "discussions" | "announcements" | "notes";
 
-type ContentType = "group" | "groupAnnouncement";
+type ContentType = "group" | "groupAnnouncement" | "groupNote";
 
 interface MessageReaction {
   emoji: string;
@@ -70,10 +70,12 @@ export const GroupChatModal = ({
   const tc = mobileTheme.colors;
   const [requestedTab, setSubTab] = React.useState<ChatSubTab>(initialSubTab);
   // A disabled feed can never be the active one, whatever the caller or a stale deep link asked for.
+  // Leader notes are their own private feed (ChurchAppsSupport#1199): never mixed with the chat tabs.
   const subTab: ChatSubTab =
-    requestedTab === "discussions" && !discussionsEnabled ? "announcements"
-      : requestedTab === "announcements" && !announcementsEnabled ? "discussions"
-        : requestedTab;
+    requestedTab === "notes" ? (isLeader ? "notes" : "discussions")
+      : requestedTab === "discussions" && !discussionsEnabled ? "announcements"
+        : requestedTab === "announcements" && !announcementsEnabled ? "discussions"
+          : requestedTab;
   const [conversations, setConversations] = React.useState<Conversation[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [draft, setDraft] = React.useState("");
@@ -111,8 +113,8 @@ export const GroupChatModal = ({
     })));
   }, []);
 
-  const currentContentType: ContentType = subTab === "announcements" ? "groupAnnouncement" : "group";
-  const canPost = subTab === "announcements" ? isLeader : true;
+  const currentContentType: ContentType = subTab === "notes" ? "groupNote" : subTab === "announcements" ? "groupAnnouncement" : "group";
+  const canPost = subTab === "discussions" || isLeader;
 
   React.useEffect(() => {
     if (open) setSubTab(initialSubTab);
@@ -283,7 +285,7 @@ export const GroupChatModal = ({
           contentId: groupId,
           title: Locale.label("mobile.group.groupChatTitle")
             .replace("{}", groupName || Locale.label("mobile.components.group"))
-            .replace("{}", currentContentType === "groupAnnouncement" ? Locale.label("mobile.group.announcements") : Locale.label("mobile.group.chat")),
+            .replace("{}", currentContentType === "groupNote" ? Locale.label("mobile.group.leaderNotes") : currentContentType === "groupAnnouncement" ? Locale.label("mobile.group.announcements") : Locale.label("mobile.group.chat")),
           visibility: "hidden"
         };
         const result: Conversation[] = await ApiHelper.post(
@@ -481,7 +483,7 @@ export const GroupChatModal = ({
   );
 
   const showAnnouncementsFeed = announcementsEnabled && (isLeader || hasAnnouncements);
-  const feedLabel = subTab === "announcements" ? Locale.label("mobile.group.announcements") : Locale.label("mobile.group.chat");
+  const feedLabel = subTab === "notes" ? Locale.label("mobile.group.leaderNotes") : subTab === "announcements" ? Locale.label("mobile.group.announcements") : Locale.label("mobile.group.chat");
   const column = { width: "100%", maxWidth: 760, mx: "auto", px: "16px", boxSizing: "border-box" } as const;
 
   const renderStrip = () => {
@@ -549,12 +551,13 @@ export const GroupChatModal = ({
           {!loading && messages.length === 0 && (
             <Box sx={{ py: "32px", textAlign: "center" }}>
               <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-                {subTab === "announcements" ? Locale.label("mobile.group.noAnnouncementsYet") : Locale.label("mobile.group.startTheConversation")}
+                {subTab === "notes" ? Locale.label("mobile.group.noNotesYet") : subTab === "announcements" ? Locale.label("mobile.group.noAnnouncementsYet") : Locale.label("mobile.group.startTheConversation")}
               </Typography>
               <QuietEmpty>
-                {subTab === "announcements"
-                  ? isLeader ? Locale.label("mobile.group.postAnnouncementBelow") : Locale.label("mobile.group.leadersCanPost")
-                  : Locale.label("mobile.group.beFirstToShare")}
+                {subTab === "notes" ? Locale.label("mobile.group.notesPrivate")
+                  : subTab === "announcements"
+                    ? isLeader ? Locale.label("mobile.group.postAnnouncementBelow") : Locale.label("mobile.group.leadersCanPost")
+                    : Locale.label("mobile.group.beFirstToShare")}
               </QuietEmpty>
             </Box>
           )}
@@ -573,7 +576,7 @@ export const GroupChatModal = ({
             <TextField
               fullWidth
               size="small"
-              placeholder={subTab === "announcements" ? Locale.label("mobile.group.postAnnouncement") : Locale.label("mobile.group.sendAMessage")}
+              placeholder={subTab === "notes" ? Locale.label("mobile.group.addNote") : subTab === "announcements" ? Locale.label("mobile.group.postAnnouncement") : Locale.label("mobile.group.sendAMessage")}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => {

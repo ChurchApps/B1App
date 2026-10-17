@@ -233,23 +233,29 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const refreshSessions = () => queryClient.invalidateQueries({ queryKey: ["group-sessions", groupId] });
 
   const previewType = discussionsEnabled ? "group" : "groupAnnouncement";
+  const loadPreview = (type: string) => async () => {
+    const data = await ApiHelper.get(`/conversations/messages/${type}/${groupId}?page=1&limit=5`, "MessagingApi");
+    const latest: PreviewMessage[] = (Array.isArray(data) ? data : [])
+      .flatMap((c: { messages?: PreviewMessage[] }) => c.messages || [])
+      .filter((m: PreviewMessage) => m.messageType !== SUBSCRIPTION_MESSAGE_TYPE)
+      .sort((a: PreviewMessage, b: PreviewMessage) => new Date(b.timeSent || 0).getTime() - new Date(a.timeSent || 0).getTime())
+      .slice(0, 2);
+    const ids = Array.from(new Set(latest.map((m) => m.personId).filter(Boolean)));
+    let people: PersonInterface[] = [];
+    if (ids.length) {
+      try { people = await ApiHelper.get(`/people/basic?ids=${ids.join(",")}`, "MembershipApi"); } catch { people = []; }
+    }
+    return latest.map((m) => ({ ...m, name: (Array.isArray(people) ? people : []).find((p) => p.id === m.personId)?.name?.display || "" }));
+  };
   const { data: chatPreview = [] } = useQuery<PreviewMessage[]>({
     queryKey: ["group-chat-preview", groupId, previewType],
-    queryFn: async () => {
-      const data = await ApiHelper.get(`/conversations/messages/${previewType}/${groupId}?page=1&limit=5`, "MessagingApi");
-      const latest: PreviewMessage[] = (Array.isArray(data) ? data : [])
-        .flatMap((c: { messages?: PreviewMessage[] }) => c.messages || [])
-        .filter((m: PreviewMessage) => m.messageType !== SUBSCRIPTION_MESSAGE_TYPE)
-        .sort((a: PreviewMessage, b: PreviewMessage) => new Date(b.timeSent || 0).getTime() - new Date(a.timeSent || 0).getTime())
-        .slice(0, 2);
-      const ids = Array.from(new Set(latest.map((m) => m.personId).filter(Boolean)));
-      let people: PersonInterface[] = [];
-      if (ids.length) {
-        try { people = await ApiHelper.get(`/people/basic?ids=${ids.join(",")}`, "MembershipApi"); } catch { people = []; }
-      }
-      return latest.map((m) => ({ ...m, name: (Array.isArray(people) ? people : []).find((p) => p.id === m.personId)?.name?.display || "" }));
-    },
+    queryFn: loadPreview(previewType),
     enabled: !!groupId && isMember && chatEnabled
+  });
+  const { data: notesPreview = [] } = useQuery<PreviewMessage[]>({
+    queryKey: ["group-chat-preview", groupId, "groupNote"],
+    queryFn: loadPreview("groupNote"),
+    enabled: !!groupId && isLeader
   });
 
   const handleLeave = async () => {
@@ -310,6 +316,10 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
 
   const openChat = () => {
     setChatInitialTab(discussionsEnabled ? "discussions" : "announcements");
+    setView("messages");
+  };
+  const openNotes = () => {
+    setChatInitialTab("notes");
     setView("messages");
   };
 
@@ -480,6 +490,24 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           )}
         </PlateSection>
       )}
+      {isLeader && (
+        <PlateSection title={Locale.label("mobile.group.leaderNotes")} action={<TextLink onClick={openNotes}>{Locale.label("mobile.group.openNotes")}</TextLink>}>
+          {notesPreview.length === 0 ? <QuietEmpty>{Locale.label("mobile.group.noNotesYet")}</QuietEmpty> : (
+            <RowList>
+              {notesPreview.map((m, i) => (
+                <Row
+                  key={m.id || i}
+                  onClick={openNotes}
+                  leading={<PersonAvatar name={m.name} size={32} />}
+                  title={m.name || Locale.label("mobile.components.unknown")}
+                  subtitle={truncate(m.content || "")}
+                  trailing={<Typography sx={{ fontSize: 12.5, color: tc.textSecondary, flex: "none" }}>{timeAgo(m.timeSent)}</Typography>}
+                />
+              ))}
+            </RowList>
+          )}
+        </PlateSection>
+      )}
       {isMember && chatEnabled && (
         <PlateSection title={Locale.label("mobile.details.tabMessages")} action={<TextLink onClick={openChat}>{Locale.label("mobile.group.openChat")}</TextLink>}>
           {chatPreview.length === 0 ? <QuietEmpty>{Locale.label("mobile.components.noMessages")}</QuietEmpty> : (
@@ -585,7 +613,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     } : null
   } : {};
   const activeSlice = slice ? slices[slice] : null;
-  const chatOpen = view === "messages" && chatEnabled;
+  const chatOpen = view === "messages" && (chatEnabled || (isLeader && chatInitialTab === "notes"));
 
   return (
     <>
