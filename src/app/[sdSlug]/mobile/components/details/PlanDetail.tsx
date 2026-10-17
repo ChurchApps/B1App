@@ -158,11 +158,14 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
           peopleRes = [];
         }
       }
+      const rank = new Map(peopleRes.map((p, i) => [p.id, i]));
+      const assignments = (Array.isArray(assignmentsRes) ? [...assignmentsRes] : [])
+        .sort((a: AssignmentInterface, b: AssignmentInterface) => (rank.get(a.personId) ?? Infinity) - (rank.get(b.personId) ?? Infinity));
       return {
         plan: planRes,
         planItems: Array.isArray(itemsRes) ? itemsRes : [],
         positions: Array.isArray(positionsRes) ? positionsRes : [],
-        assignments: Array.isArray(assignmentsRes) ? assignmentsRes : [],
+        assignments,
         times: Array.isArray(timesRes) ? timesRes : [],
         people: peopleRes
       };

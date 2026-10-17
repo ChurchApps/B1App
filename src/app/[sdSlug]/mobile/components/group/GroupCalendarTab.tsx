@@ -536,12 +536,14 @@ const RsvpRosterSheet = ({ target, onClose }: { target: RosterTarget | null; onC
       .catch(() => { /* names fall back to Unknown */ });
   }, [roster]);
 
+  const rank = new Map(Object.keys(people).map((id, i) => [id, i]));
+
   return (
     <Sheet open={!!target} onClose={onClose} title={Locale.label("mobile.group.rsvpResponses")} maxWidth="xs">
       {isLoading && <Skeleton variant="rounded" height={80} />}
       {!isLoading && roster.length === 0 && <QuietEmpty>{Locale.label("mobile.group.rsvpNoResponses")}</QuietEmpty>}
       {!isLoading && rsvpOptions().map((g) => {
-        const rows = roster.filter((r) => r.response === g.value);
+        const rows = roster.filter((r) => r.response === g.value).sort((a, b) => (rank.get(a.personId) ?? Infinity) - (rank.get(b.personId) ?? Infinity));
         if (rows.length === 0) return null;
         return (
           <Box key={g.value} sx={{ mb: "16px" }}>
