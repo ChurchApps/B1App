@@ -1,24 +1,20 @@
-FROM node:22-slim
+FROM node:22-slim AS build
 WORKDIR /app
 RUN corepack enable
 COPY package.json yarn.lock .yarnrc.yml ./
-RUN yarn install --immutable
+RUN yarn install --immutable && yarn postinstall
 COPY . .
-# Next.js bakes NEXT_PUBLIC_* into the bundle at build time; pass as --build-arg.
-ARG NEXT_PUBLIC_STAGE
-ARG NEXT_PUBLIC_API_BASE
-ARG NEXT_PUBLIC_CONTENT_ROOT
-ARG NEXT_PUBLIC_MESSAGING_API_SOCKET
-ARG NEXT_PUBLIC_B1ADMIN_ROOT
-ARG NEXT_PUBLIC_LESSONS_API
-ARG NEXT_PUBLIC_GOOGLE_ANALYTICS
-ENV NEXT_PUBLIC_STAGE=$NEXT_PUBLIC_STAGE \
-    NEXT_PUBLIC_API_BASE=$NEXT_PUBLIC_API_BASE \
-    NEXT_PUBLIC_CONTENT_ROOT=$NEXT_PUBLIC_CONTENT_ROOT \
-    NEXT_PUBLIC_MESSAGING_API_SOCKET=$NEXT_PUBLIC_MESSAGING_API_SOCKET \
-    NEXT_PUBLIC_B1ADMIN_ROOT=$NEXT_PUBLIC_B1ADMIN_ROOT \
-    NEXT_PUBLIC_LESSONS_API=$NEXT_PUBLIC_LESSONS_API \
-    NEXT_PUBLIC_GOOGLE_ANALYTICS=$NEXT_PUBLIC_GOOGLE_ANALYTICS
+# Self-host image: every public URL is derived at runtime from the request origin / PUBLIC_URL.
+ENV NEXT_PUBLIC_STAGE=selfhost NEXT_OUTPUT_STANDALONE=1 NEXT_TELEMETRY_DISABLED=1
 RUN yarn build
+
+FROM node:22-slim
+WORKDIR /app
+ENV NODE_ENV=production NEXT_PUBLIC_STAGE=selfhost PORT=3000 HOSTNAME=0.0.0.0 NEXT_TELEMETRY_DISABLED=1
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/public ./public
 EXPOSE 3000
-CMD ["yarn", "start"]
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=6 \
+  CMD node -e "fetch('http://127.0.0.1:3000/robots.txt').then(r=>process.exit(r.status<500?0:1)).catch(()=>process.exit(1))"
+CMD ["node", "server.js"]
