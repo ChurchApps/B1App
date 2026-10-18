@@ -74,17 +74,8 @@ export const CommunityPage = ({ config }: Props) => {
       const firstRaw = (p.name?.first || "").trim();
       const displayRaw = (p.name?.display || "").trim();
 
-      let letter = otherLabel;
-      if (firstRaw) {
-        letter = firstRaw.charAt(0).toUpperCase();
-      } else if (displayRaw) {
-
-        const parts = displayRaw.split(" ");
-        const fallback = parts.length > 1 ? parts[parts.length - 1] : parts[0];
-        if (fallback) letter = fallback.charAt(0).toUpperCase();
-      } else if (lastRaw) {
-        letter = lastRaw.charAt(0).toUpperCase();
-      }
+      const sortName = lastRaw || displayRaw.split(" ").pop() || firstRaw;
+      let letter = sortName ? sortName.charAt(0).toUpperCase() : otherLabel;
 
       if (!/^[A-Z]$/.test(letter)) letter = otherLabel;
 

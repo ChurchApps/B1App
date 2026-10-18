@@ -45,7 +45,7 @@ interface VisitSession {
 
 interface AttendancePerson {
   id: string;
-  name: { display?: string };
+  name: { display?: string; first?: string; last?: string };
   photo?: string;
   isMember: boolean;
 }
@@ -87,7 +87,8 @@ export const GroupAttendanceTab = ({ groupId, members, initialDate, onSaved }: P
     const extras: AttendancePerson[] = additional
       .filter((p) => !members.some((m) => m.person.id === p.id))
       .map((p) => ({ id: p.id, name: p.name, photo: p.photo, isMember: false }));
-    return [...fromMembers, ...extras];
+    const key = (p: AttendancePerson) => `${p.name?.last || p.name?.display?.split(" ").pop() || ""}|${p.name?.first || p.name?.display || ""}`.toLowerCase();
+    return [...fromMembers, ...extras].sort((a, b) => key(a).localeCompare(key(b)));
   }, [members, additional]);
 
   React.useEffect(() => {
