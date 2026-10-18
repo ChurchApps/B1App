@@ -3,8 +3,9 @@ import { DefaultPageWrapper } from "@/app/[sdSlug]/(public)/[pageSlug]/component
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
-import { Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { VolunteerSignup } from "@/components/serving/VolunteerSignup";
 
 type PageParams = Promise<{ sdSlug: string; planId: string }>;
@@ -30,18 +31,14 @@ export default async function VolunteerPlanPage({ params }: { params: PageParams
   await EnvironmentHelper.initServerSide();
   const { sdSlug, planId } = await params;
   const { config, planData } = await loadSharedData(sdSlug, planId);
+  if (!planData) return notFound();
 
   return (
     <>
       <Theme config={config} />
       <DefaultPageWrapper config={config}>
         <Container maxWidth="md" sx={{ paddingTop: 4, paddingBottom: 4 }}>
-          {planData
-            ? <VolunteerSignup planData={planData} churchId={config.church.id || ""} />
-            : <Typography variant="h6" sx={{ textAlign: "center", color: "text.secondary", paddingTop: 8 }}>
-              {Locale.label("volunteer.noPositions")}
-            </Typography>
-          }
+          <VolunteerSignup planData={planData} churchId={config.church.id || ""} />
         </Container>
       </DefaultPageWrapper>
     </>

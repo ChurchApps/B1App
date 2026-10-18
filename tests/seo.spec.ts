@@ -85,4 +85,18 @@ test.describe("SEO", () => {
     const response = await request.get("/stream/missing-" + Date.now());
     expect(response.status()).toBe(404);
   });
+
+  test("an unknown volunteer plan is a real 404", async ({ request }) => {
+    const response = await request.get("/volunteer/missing-" + Date.now());
+    expect(response.status()).toBe(404);
+  });
+
+  // Registration, guest and sign-up pages are client components whose titles were h4–h6.
+  for (const [path, heading] of [["/register/EVT00000015", "Vacation Bible School"], ["/register/EVT00000001", "Registration is not available for this event."], ["/guest-register", "Guest registration is not enabled for this church."], ["/volunteer/PLA00000001", "Upcoming Worship Schedule"]]) {
+    test(`${path} has one h1 in the server HTML`, async ({ request }) => {
+      const html = await (await request.get(path)).text();
+      expect(h1Count(html)).toBe(1);
+      expect(h1Text(html)).toBe(heading);
+    });
+  }
 });

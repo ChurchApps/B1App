@@ -81,7 +81,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
       <Card sx={{ borderRadius: 2 }}>
         <CardContent sx={{ textAlign: "center", py: 4 }}>
           <Icon sx={{ fontSize: 48, color: "grey.400", mb: 1 }}>event_busy</Icon>
-          <Typography variant="h6">{Locale.label("registration.notOpen")}</Typography>
+          <Typography variant="h6" component="h1">{Locale.label("registration.notOpen")}</Typography>
           <Typography variant="body2" color="text.secondary">
             {event.registrationOpenDate && new Date(event.registrationOpenDate) > new Date()
               ? Locale.label("registration.opensOn").replace("{}", DateHelper.prettyDate(event.registrationOpenDate))
@@ -97,7 +97,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
       <Card sx={{ borderRadius: 2 }}>
         <CardContent sx={{ textAlign: "center", py: 4 }}>
           <Icon sx={{ fontSize: 48, color: "error.main", mb: 1 }}>group_off</Icon>
-          <Typography variant="h6">{Locale.label("registration.eventFull")}</Typography>
+          <Typography variant="h6" component="h1">{Locale.label("registration.eventFull")}</Typography>
           <Typography variant="body2" color="text.secondary">
             {Locale.label("registration.capacityReached").replace("{}", String(event.capacity))}
           </Typography>
@@ -359,7 +359,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
   return (
     <Card sx={{ borderRadius: 2 }}>
       <CardContent>
-        <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>{event.title}</Typography>
+        <Typography variant="h5" component="h1" sx={{ fontWeight: 700, mb: 1 }}>{event.title}</Typography>
         <Typography variant="body2" component="div" color="text.secondary" sx={{ mb: 1 }}>
           <Icon sx={{ fontSize: 16, verticalAlign: "text-bottom", mr: 0.5 }}>schedule</Icon>
           {getDisplayTime()}

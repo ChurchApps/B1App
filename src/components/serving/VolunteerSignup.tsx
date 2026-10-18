@@ -119,7 +119,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
 
   return (
     <>
-      <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>{plan.name}</Typography>
+      <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>{plan.name}</Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
         {DateHelper.prettyDate(new Date(plan.serviceDate || ""))}
         {times.length > 0 && (" \u00b7 " + times.map(t => t.displayName).join(", "))}
