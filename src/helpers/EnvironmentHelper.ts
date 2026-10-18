@@ -33,6 +33,7 @@ export class EnvironmentHelper {
       default: EnvironmentHelper.initDev(); break;
     }
     EnvironmentHelper.Common.init(stage || "");
+    if (stage === "selfhost") EnvironmentHelper.initSelfHost();
 
     ApiHelper.apiConfigs = [
       { keyName: "MembershipApi", url: EnvironmentHelper.Common.MembershipApi, jwt: "", permissions: [] },
@@ -49,6 +50,25 @@ export class EnvironmentHelper {
   static initLocale = async () => {
     const baseUrl = localeOrigin();
     await Locale.init([baseUrl + `/locales/{{lng}}.json?v=1`, baseUrl + `/apphelper/locales/{{lng}}.json`]);
+  };
+
+  // Self-hosted stack: the browser talks to /api on its own origin; the server talks to the api container directly.
+  // PUBLIC_URL and B1_API_INTERNAL_URL are plain (not NEXT_PUBLIC_) env vars so one image serves any domain.
+  static initSelfHost = () => {
+    const isBrowser = typeof window !== "undefined";
+    const publicUrl = (isBrowser ? window.location.origin : process.env.PUBLIC_URL || "http://localhost").replace(/\/$/, "");
+    const common = EnvironmentHelper.Common;
+    const apiBase = isBrowser ? publicUrl + "/api" : process.env.B1_API_INTERNAL_URL || "http://api:8084";
+    for (const mod of ["Membership", "Attendance", "Content", "Giving", "Messaging", "Doing", "Reporting"]) (common as any)[mod + "Api"] = apiBase + "/" + mod.toLowerCase();
+    common.MessagingApiSocket = publicUrl.replace(/^http/, "ws") + "/api/";
+    common.ContentRoot = publicUrl + "/api/content";
+    common.B1Root = publicUrl;
+    common.B1AdminRoot = publicUrl + "/admin";
+    common.LessonsRoot = "https://lessons.church";
+    common.AskApi = "https://askapi.churchapps.org";
+    common.GoogleAnalyticsTag = "";
+    EnvironmentHelper.LessonsApi = "https://api.lessons.church";
+    EnvironmentHelper.LessonsUrl = "https://lessons.church";
   };
 
   static initDev = () => {

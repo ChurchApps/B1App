@@ -176,8 +176,12 @@ const nextConfig = {
     ];
   },
 
+  // Self-host image (see Dockerfile): standalone server, images served as-is from the same origin.
+  output: process.env.NEXT_OUTPUT_STANDALONE ? "standalone" : undefined,
+
   // Image optimization
   images: {
+    unoptimized: process.env.NEXT_PUBLIC_STAGE === "selfhost",
     remotePatterns: [
       { protocol: "https", hostname: "content.staging.churchapps.org" },
       { protocol: "https", hostname: "content.churchapps.org" },

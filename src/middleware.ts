@@ -17,8 +17,9 @@ const hiddenCache = new Map<string, { hidden: boolean; exp: number }>();
 
 export const config = { matcher: ["/((?!_next/|api/|.*\\..*).*)", "/sitemap.xml", "/robots.txt", "/manifest.webmanifest"] };
 
+const SELF_HOSTED = process.env.NEXT_PUBLIC_STAGE === "selfhost";
 const apiRoot = () => {
-  const base = process.env.NEXT_PUBLIC_API_BASE
+  const base = (SELF_HOSTED && process.env.B1_API_INTERNAL_URL) || process.env.NEXT_PUBLIC_API_BASE
     || (process.env.NEXT_PUBLIC_STAGE === "prod" ? "https://api.churchapps.org" : "https://api.staging.churchapps.org");
   return base.replace(/\/$/, "");
 };
@@ -97,6 +98,8 @@ export async function middleware(req: NextRequest) {
     headers.set("x-site", entry.site || UNKNOWN_SITE);
     site = entry.site;
   }
+  // Self-hosted: whatever the host, an unmatched request renders the instance's default church.
+  if (SELF_HOSTED && !site) headers.set("x-site", (process.env.DEFAULT_CHURCH_SLUG || "church") + ".b1.church");
 
   const pathname = req.nextUrl.pathname;
   if (!isAllowedWhenPublicSiteHidden(pathname) && !hasSession(req)) {
