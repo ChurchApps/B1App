@@ -71,4 +71,13 @@ test.describe("SEO", () => {
     const sermon = entries.find((e) => e.loc.includes("/sermons/SER"));
     expect(sermon?.lastmod).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
+  test("an event page describes itself as an Event", async ({ request }) => {
+    const response = await request.get("/events/EVT00000001");
+    expect(response.status()).toBe(200);
+    const blocks = [...(await response.text()).matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
+    const event = blocks.find((b) => b["@type"] === "Event");
+    expect(event?.name).toBe("Sunday Morning Service");
+    expect(event?.startDate).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+    expect(event?.location?.name).toBe("Grace Community Church");
+  });
 });
