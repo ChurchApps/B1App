@@ -44,8 +44,6 @@
     "@youversion/platform-react-hooks": "^0.5.8",
     "@youversion/platform-react-ui": "^1.25.0",
     "axios": "^1.20.0",
-    "dayjs": "^1.11.20",
-    "flexsearch": "0.8.212",
     "idb-keyval": "^6.2.2",
     "js-cookie": "^3.0.5",
     "material-icons": "^1.13.14",
