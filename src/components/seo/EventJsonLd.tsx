@@ -1,7 +1,7 @@
 import React from "react";
 import { EventHelper } from "@churchapps/helpers";
 import type { EventInterface, ChurchInterface } from "@churchapps/helpers";
-import { buildOccurrences } from "@/helpers/EventOccurrences";
+import { buildOccurrences, type Occurrence } from "@/helpers/EventOccurrences";
 import { fetchCached, type ConfigurationInterface } from "@/helpers/ConfigHelper";
 import type { PageInterface } from "@/helpers/interfaces";
 import { collectCuratedCalendarIds } from "./pageElements";
@@ -52,24 +52,46 @@ export async function EventJsonLd({ config, pageData, sdSlug }: Props) {
     occurrences.sort((a, b) => a.start.getTime() - b.start.getTime());
     const place = churchPlace(church);
 
-    const data = occurrences.slice(0, MAX_EVENTS).map((o) => {
-      const event: Record<string, unknown> = {
-        "@context": "https://schema.org",
-        "@type": "Event",
-        name: o.event.title || church.name,
-        startDate: o.start.toISOString(),
-        endDate: o.end.toISOString(),
-        eventStatus: "https://schema.org/EventScheduled",
-        location: place,
-        organizer: { "@type": "Organization", name: church.name }
-      };
-      if (o.event.description) event.description = o.event.description;
-      return event;
-    });
-
-    const payload = data.length === 1 ? data[0] : data;
-    return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload).replace(/</g, "\\u003c") }} />;
+    const data = occurrences.slice(0, MAX_EVENTS).map((o) => eventData(o, church, place));
+    return jsonLdScript(data.length === 1 ? data[0] : data);
   } catch {
     return null;
   }
 }
+
+// The event's own page: its next occurrence (or its start date once it has passed).
+export async function EventPageJsonLd({ church, event }: { church: ChurchInterface; event: EventInterface & { photoUrl?: string } }) {
+  try {
+    if (!church?.id || !event?.start) return null;
+    await EventHelper.ensureInitialized();
+    const now = new Date();
+    const windowEnd = new Date(now);
+    windowEnd.setFullYear(windowEnd.getFullYear() + 1);
+    const start = new Date(event.start);
+    const occurrence = buildOccurrences([event], now, windowEnd, 1)[0]
+      || { event, start, end: event.end ? new Date(event.end) : start };
+    if (isNaN(occurrence.start.getTime())) return null;
+    const data = eventData(occurrence, church, churchPlace(church));
+    if (event.photoUrl?.startsWith("http")) data.image = event.photoUrl;
+    return jsonLdScript(data);
+  } catch {
+    return null;
+  }
+}
+
+const eventData = (o: Occurrence, church: ChurchInterface, place: Record<string, unknown>) => {
+  const event: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: o.event.title || church.name,
+    startDate: o.start.toISOString(),
+    endDate: o.end.toISOString(),
+    eventStatus: "https://schema.org/EventScheduled",
+    location: place,
+    organizer: { "@type": "Organization", name: church.name }
+  };
+  if (o.event.description) event.description = o.event.description;
+  return event;
+};
+
+const jsonLdScript = (payload: unknown) => <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload).replace(/</g, "\\u003c") }} />;

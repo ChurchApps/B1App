@@ -78,7 +78,7 @@ export function GuestRegister({ churchId }: Props) {
           <HeaderIconContainer>
             <Icon sx={{ fontSize: 48, color: colors.success }}>check_circle</Icon>
           </HeaderIconContainer>
-          <Typography variant="h4" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
+          <Typography variant="h4" component="h1" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
             {Locale.label("checkin.guestRegister.complete.title")}
           </Typography>
           <Typography variant="body1" sx={{ color: colors.textSecondary }}>
@@ -95,7 +95,7 @@ export function GuestRegister({ churchId }: Props) {
         <HeaderIconContainer>
           <Icon sx={{ fontSize: 48, color: colors.primary }}>person_add</Icon>
         </HeaderIconContainer>
-        <Typography variant="h4" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
+        <Typography variant="h4" component="h1" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
           {Locale.label("checkin.guestRegister.title")}
         </Typography>
         <Typography variant="body1" sx={{ color: colors.textSecondary }}>
