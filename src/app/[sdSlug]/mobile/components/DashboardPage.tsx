@@ -112,9 +112,6 @@ export const DashboardPage = ({ config }: Props) => {
   }, [links, latest, showServing, showGroups, showGiving]);
   const { sorted: sortedPills, increment: incrementViewCount } = useEngagementSort(pillLinks, LINK_VIEW_COUNTS_KEY, linkId);
 
-  if (isLoading && links.length === 0) return <ScreenSkeleton />;
-  if (links.length === 0) return <EmptyDashboardPlaceholder config={config} />;
-
   // Churches can hide the anonymous sign-in prompt or reword it (B1Admin > B1 Mobile).
   const appearance = config?.appearance as Record<string, string> | undefined;
   const hideSignInPrompt = appearance?.mobileHideSignInPrompt === "true";
@@ -131,6 +128,10 @@ export const DashboardPage = ({ config }: Props) => {
         )}
       </PageHead>
     );
+
+  if (isLoading && links.length === 0) return <ScreenSkeleton />;
+  // Signed-out visitors still get the sign-in prompt while Home has nothing else to show.
+  if (links.length === 0) return <EmptyDashboardPlaceholder config={config} head={signedIn || hideSignInPrompt ? undefined : head} />;
 
   const banner = <NotificationPermissionBanner enabled={!!jwt} />;
 

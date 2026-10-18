@@ -11,9 +11,10 @@ import { PageHead, Plate, PlateSection, QuietEmpty } from "./kit";
 
 interface Props {
   config: ConfigurationInterface;
+  head?: React.ReactNode;
 }
 
-export const EmptyDashboardPlaceholder = ({ config }: Props) => {
+export const EmptyDashboardPlaceholder = ({ config, head }: Props) => {
   const context = useContext(UserContext);
 
   const canAccessAdmin = !!UserHelper.currentUserChurch
@@ -30,7 +31,7 @@ export const EmptyDashboardPlaceholder = ({ config }: Props) => {
 
   return (
     <>
-      <PageHead title={config?.church?.name || Locale.label("mobile.empty.dashboardTitleFallback")} />
+      {head || <PageHead title={config?.church?.name || Locale.label("mobile.empty.dashboardTitleFallback")} />}
       <Plate>
         <PlateSection>
           <QuietEmpty>
