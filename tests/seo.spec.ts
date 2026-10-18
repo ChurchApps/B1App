@@ -80,4 +80,9 @@ test.describe("SEO", () => {
     expect(event?.startDate).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     expect(event?.location?.name).toBe("Grace Community Church");
   });
+
+  test("an unknown stream page is a real 404", async ({ request }) => {
+    const response = await request.get("/stream/missing-" + Date.now());
+    expect(response.status()).toBe(404);
+  });
 });
