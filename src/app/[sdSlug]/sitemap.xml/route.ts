@@ -46,6 +46,8 @@ export async function GET(request: NextRequest, context: { params: Promise<{ sdS
       const pagesResponse = await fetch(contentApi + "/pages/public/" + church.id + (siteId ? "?siteId=" + siteId : ""), { next: { revalidate: 3600, tags: [sdSlug] } } as RequestInit);
       if (pagesResponse.ok) {
         const pages: SitemapPage[] = await pagesResponse.json();
+        // Without a home page "/" redirects to /mobile (see (public)/page.tsx), which robots.txt disallows.
+        if (!pages.some((p) => p.url === "/")) urls.delete("/");
         pages.forEach((p) => { if (p.url?.startsWith("/")) urls.set(p.url, undefined); });
       }
       if (!siteId) {

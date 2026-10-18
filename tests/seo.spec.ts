@@ -99,4 +99,15 @@ test.describe("SEO", () => {
       expect(h1Text(html)).toBe(heading);
     });
   }
+
+  // A church without a website home page sends "/" to the app, so the sitemap must not list it.
+  test("the sitemap leaves out a home page that redirects to the app", async ({ request, baseURL }) => {
+    const accra = new URL(baseURL!);
+    accra.hostname = accra.hostname.replace(/^grace\./, "accra.");
+    const home = await request.get(accra.origin + "/", { maxRedirects: 0 });
+    expect(home.status()).toBe(307);
+    const xml = await (await request.get(accra.origin + "/sitemap.xml")).text();
+    expect(xml).toContain("<urlset");
+    expect(xml).not.toContain(`<loc>${accra.origin}/</loc>`);
+  });
 });
