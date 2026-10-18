@@ -5,6 +5,7 @@ import { ApiHelper, Locale } from "@churchapps/apphelper";
 import type { EventInterface } from "@churchapps/helpers";
 import { Theme } from "@/components/Theme";
 import { EventPageContent, type EventPageLabels } from "@/components/events/EventPageContent";
+import { EventPageJsonLd } from "@/components/seo/EventJsonLd";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { firstLine } from "@/helpers/EventOccurrences";
@@ -42,6 +43,7 @@ export default async function EventPage({ params }: { params: PageParams }) {
   return (
     <>
       <Theme config={config} />
+      <EventPageJsonLd church={config.church} event={event} />
       <DefaultPageWrapper config={config}>
         <EventPageContent event={event} icsUrl={icsUrl} labels={labels} />
       </DefaultPageWrapper>

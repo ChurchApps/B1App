@@ -41,7 +41,7 @@ export default async function GuestRegisterPage({ params }: { params: PageParams
         <Container maxWidth="sm" sx={{ paddingTop: 4, paddingBottom: 4 }}>
           {enabled
             ? <GuestRegister churchId={config.church.id || ""} />
-            : <Typography variant="h6" sx={{ textAlign: "center", color: "text.secondary", paddingTop: 8 }}>
+            : <Typography variant="h6" component="h1" sx={{ textAlign: "center", color: "text.secondary", paddingTop: 8 }}>
               {Locale.label("guestRegister.notEnabled")}
             </Typography>
           }

@@ -71,4 +71,43 @@ test.describe("SEO", () => {
     const sermon = entries.find((e) => e.loc.includes("/sermons/SER"));
     expect(sermon?.lastmod).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
+  test("an event page describes itself as an Event", async ({ request }) => {
+    const response = await request.get("/events/EVT00000001");
+    expect(response.status()).toBe(200);
+    const blocks = [...(await response.text()).matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
+    const event = blocks.find((b) => b["@type"] === "Event");
+    expect(event?.name).toBe("Sunday Morning Service");
+    expect(event?.startDate).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+    expect(event?.location?.name).toBe("Grace Community Church");
+  });
+
+  test("an unknown stream page is a real 404", async ({ request }) => {
+    const response = await request.get("/stream/missing-" + Date.now());
+    expect(response.status()).toBe(404);
+  });
+
+  test("an unknown volunteer plan is a real 404", async ({ request }) => {
+    const response = await request.get("/volunteer/missing-" + Date.now());
+    expect(response.status()).toBe(404);
+  });
+
+  // Registration, guest and sign-up pages are client components whose titles were h4–h6.
+  for (const [path, heading] of [["/register/EVT00000015", "Vacation Bible School"], ["/register/EVT00000001", "Registration is not available for this event."], ["/guest-register", "Guest registration is not enabled for this church."], ["/volunteer/PLA00000001", "Upcoming Worship Schedule"]]) {
+    test(`${path} has one h1 in the server HTML`, async ({ request }) => {
+      const html = await (await request.get(path)).text();
+      expect(h1Count(html)).toBe(1);
+      expect(h1Text(html)).toBe(heading);
+    });
+  }
+
+  // A church without a website home page sends "/" to the app, so the sitemap must not list it.
+  test("the sitemap leaves out a home page that redirects to the app", async ({ request, baseURL }) => {
+    const accra = new URL(baseURL!);
+    accra.hostname = accra.hostname.replace(/^grace\./, "accra.");
+    const home = await request.get(accra.origin + "/", { maxRedirects: 0 });
+    expect(home.status()).toBe(307);
+    const xml = await (await request.get(accra.origin + "/sitemap.xml")).text();
+    expect(xml).toContain("<urlset");
+    expect(xml).not.toContain(`<loc>${accra.origin}/</loc>`);
+  });
 });
