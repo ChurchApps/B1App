@@ -168,6 +168,7 @@
       "detailViewDescription": "Detail view for '{}' isn't available yet.",
       "detailViewTitle": "{} detail",
       "editProfile": "Edit Profile",
+      "explore": "Explore",
       "group": "Group",
       "home": "Home",
       "lightMode": "Light Mode",
@@ -1195,6 +1196,20 @@
       "startsInDays": "Starts in {} days, {} hours",
       "startsInHours": "Starts in {} hours, {} minutes",
       "startsInMinutes": "Starts in {} minutes"
+    },
+    "taglines": {
+      "bible": "Read scripture",
+      "checkin": "Check in for service",
+      "directory": "Browse the directory",
+      "donation": "Support the ministry",
+      "groups": "Find your people",
+      "lessons": "This week's lessons",
+      "plans": "View your serving plans",
+      "registrations": "Upcoming events",
+      "sermons": "Watch & listen",
+      "stream": "Live service",
+      "volunteer": "Sign up to serve",
+      "votd": "Today's verse"
     },
     "votd": {
       "copied": "Copied to clipboard",
