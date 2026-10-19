@@ -13,6 +13,10 @@ import MobileGoogleAnalytics from "./MobileGoogleAnalytics";
 import { useHydrateSession } from "./hooks/useHydrateSession";
 import { useHashScroll } from "@/hooks/useHashScroll";
 
+// Child effects run before this component's useEffect, and production runs them once.
+// Session restore posts /users/login from a child effect, so the API URLs have to exist first.
+if (typeof window !== "undefined") EnvironmentHelper.init();
+
 const mobileMuiTheme = createTheme({
   palette: { primary: { main: "#0D47A1" }, secondary: { main: "#444444" } },
   shape: { borderRadius: 14 },
