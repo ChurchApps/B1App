@@ -66,6 +66,13 @@ const lum = (hex: string) => {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 
+// A church text color picked for its white surface can vanish on a dark custom background (ICOM: #3c3c3c on #1c1c5e).
+const readableOn = (fg: string, bg: string) => {
+  const [hi, lo] = [lum(fg), lum(bg)].sort((a, b) => b - a);
+  if ((hi + 0.05) / (lo + 0.05) >= 3) return fg;
+  return lum(bg) > 0.18 ? "#141b24" : "#FFFFFF";
+};
+
 // Soft Blue (B1Admin default theme) with the church primary standing in for B1 blue: every surface,
 // hairline, chip and the desktop header are mixed from that one color; status colors stay fixed.
 const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) => {
@@ -100,6 +107,7 @@ const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) 
     "--mb-surface": surface,
     "--mb-surface-variant": background,
     "--mb-text": text,
+    "--mb-on-background": readableOn(text, background),
     "--mb-text-secondary": muted,
     "--mb-text-muted": muted,
     "--mb-text-hint": control,
