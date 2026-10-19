@@ -19,6 +19,7 @@ import { SermonsPage } from "./components/SermonsPage";
 import { DonatePage } from "./components/DonatePage";
 import { RestrictedPage } from "@/components/RestrictedPage";
 import { resolveRedirect } from "@/helpers/RedirectHelper";
+import { pageTreePath } from "@/helpers/pageTreePath";
 
 const VIRTUAL_PAGE_SLUGS = ["votd", "bible", "donate", "stream", "sermons"];
 
@@ -50,7 +51,9 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-  const pageData = await fetchCachedOrNull<PageInterface>("/pages/" + config.church.id + "/tree?url=" + pageSlug + (config.siteId ? "&siteId=" + config.siteId : ""), "ContentApi", sdSlug);
+  const treePath = pageTreePath(config.church?.id, pageSlug, config.siteId);
+  if (!treePath) notFound();
+  const pageData = await fetchCachedOrNull<PageInterface>(treePath, "ContentApi", sdSlug);
   return { pageData: pageData || ({} as PageInterface), config };
 };
 

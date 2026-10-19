@@ -5,6 +5,7 @@ import { GlobalStyleInterface, PageInterface } from "./interfaces";
 import { cache, startTransition } from "react";
 import { revalidate } from "@/app/actions";
 import { isPublicSiteHidden } from "./publicSite";
+import { notFound } from "next/navigation";
 
 export interface ColorsInterface { primary: string, contrast: string, header: string }
 export interface LogoInterface { url: string, image: string }
@@ -51,6 +52,8 @@ export class ConfigHelper {
     // Without a subdomain the lookup hits //churches/lookup/ and 404s (Sentry B1-APP-95/94).
     if (!keyName) throw new Error("ConfigHelper.load called without a church subdomain");
     const church: ChurchInterface = await fetchCached("/churches/lookup/?subDomain=" + keyName, "MembershipApi", keyName);
+    // An unknown subdomain comes back as {} (200). Every later call would ask for /…/undefined (Sentry B1-APP-EP).
+    if (!church?.id) notFound();
     const siteId = (church as any).siteId || "";
     const [appearance, tabs, homePage, gatewayConfigured, globalStyles, contentSettings] = await Promise.all([
       fetchCached<AppearanceInterface>("/settings/public/" + church.id, "MembershipApi", keyName),
