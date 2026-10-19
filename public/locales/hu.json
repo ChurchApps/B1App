@@ -68,6 +68,18 @@
       "thisAndFollowing": "Ez és az összes következő dátum"
     }
   },
+  "eventPage": {
+    "addToCalendar": "Hozzáadás a naptáramhoz",
+    "allEvents": "Összes esemény",
+    "copied": "Vágólapra másolva!",
+    "copyIcsLink": "ICS-link másolása",
+    "downloadIcs": "ICS-fájl letöltése",
+    "noUpcoming": "Nincsenek közelgő események",
+    "register": "Regisztrálás erre az eseményre",
+    "subscribe": "Feliratkozás",
+    "when": "Mikor",
+    "where": "Hol"
+  },
   "footer": {
     "give": "Adományozás",
     "nav": "Lábléc"
@@ -430,6 +442,7 @@
       "invalidUrl": "Adjon meg egy http:// vagy https:// kezdetű webcímet",
       "lastTaken": "Utoljára rögzítve: {}",
       "leaderLowercase": "vezető",
+      "leaderNotes": "Vezetői jegyzetek",
       "leaders": "Vezetők",
       "leadersCanPost": "A vezetők itt tehetnek közzé hirdetményeket.",
       "leadersLowercase": "vezető",
@@ -448,20 +461,22 @@
       "nextEvent": "Következő esemény",
       "nextMonth": "Következő hónap",
       "noAnnouncementsYet": "Még nincsenek hirdetmények",
-      "noAttendanceYet": "Még nem rögzítettek jelenlétet.",
       "noEventsToday": "Ezen a napon nincsenek események.",
       "noFiles": "Még nincsenek fájlok.",
       "noLinks": "Még nincsenek linkek.",
       "noMeetingsYet": "Még nincs alkalom.",
       "noMembersGuests": "Még nincsenek tagok. Használd a Hozzáadás gombot vendégek hozzáadásához.",
+      "noNotesYet": "Még nincsenek jegyzetek",
       "noResources": "Még nincsenek erőforrások.",
       "noResults": "Nincs találat.",
       "noUpcomingEvents": "Nincsenek közelgő események.",
       "noUpcomingEventsMonth": "Ebben a hónapban nincsenek közelgő események.",
       "notes": "Jegyzetek",
+      "notesPrivate": "Csak a csoport vezetői láthatják ezeket a jegyzeteket.",
       "onlyLeadersPost": "Csak a csoportvezetők tehetnek közzé hirdetményt.",
       "openChat": "Csevegés megnyitása",
       "openFile": "Fájl megnyitása",
+      "openNotes": "Jegyzetek megnyitása",
       "pendingCount": "{} függőben",
       "postAnnouncement": "Hirdetmény közzététele…",
       "postAnnouncementBelow": "Tegyél közzé egy hirdetményt alább.",
@@ -729,13 +744,13 @@
       "categories": "Értesítési kategóriák",
       "categoriesHelp": "Válaszd ki, melyik csatornát használjuk az egyes kategóriákhoz.",
       "categoryNames": {
+        "announcements": "Gyülekezeti hirdetések",
         "direct_messages": "Közvetlen üzenetek",
         "event_reminders": "Esemény-emlékeztetők",
-        "serving_schedule": "Szolgálat és beosztás",
-        "tasks": "Feladatok és utókövetés",
+        "group_activity": "Csoporttevékenység",
         "group_messages": "Csoportcsevegés",
-        "announcements": "Gyülekezeti hirdetések",
-        "group_activity": "Csoporttevékenység"
+        "serving_schedule": "Szolgálat és beosztás",
+        "tasks": "Feladatok és utókövetés"
       },
       "channelEmail": "E-mail",
       "channelInApp": "Alkalmazáson belül",
@@ -1362,7 +1377,6 @@
     "metaDescription": "Böngészd a nyitott önkéntes pozíciókat",
     "metaPlanDescription": "Jelentkezz önkéntesnek",
     "metaTitle": "Önkéntes lehetőségek",
-    "noPositions": "Jelenleg nincsenek elérhető önkéntes pozíciók ehhez a tervhez.",
     "volunteer": "Önkéntes"
   },
   "wrapper": {

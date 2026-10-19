@@ -68,6 +68,10 @@
       "thisAndFollowing": "Lolusuku nawo onkhe lalandzelako"
     }
   },
+  "eventPage": {
+    "allEvents": "Yonkhe imicimbi",
+    "subscribe": "Bhalisela"
+  },
   "footer": {
     "give": "Give",
     "nav": "Footer"
@@ -183,6 +187,7 @@
       "goodAfternoon": "Litfuba Lelihle",
       "goodEvening": "Kuhlwa Lokuhle",
       "goodMorning": "Livi Lelihle Ekuseni",
+      "history": "Umlandvo",
       "latestSermon": "Intshumayelo yakamuva",
       "signInPrompt": "Ngena kute ubone emacembu akho, kuniketela, nalokunye.",
       "welcome": "Wemukelekile",
@@ -486,6 +491,7 @@
       "tags": "Tilebula",
       "teardownMinutes": "Kususa (emaminithi ngemuva)",
       "title": "Sihloko",
+      "upcoming": "Lokutako",
       "upload": "Layisha",
       "uploadFailed": "Kulayishwa kwehlulekile.",
       "uploadingProgress": "Kulayishwa {}… {}%",
@@ -547,6 +553,8 @@
     "login": {
       "createAccount": "Vula i-akhawunti",
       "noAccount": "Awunayo i-akhawunti?",
+      "register": "Bhalisa",
+      "signIn": "Ngena",
       "signInTo": "Ngena ku-{}"
     },
     "me": {
@@ -564,10 +572,12 @@
       "upcoming": "Lokutako"
     },
     "messages": {
-      "new": "Lomusha"
+      "new": "Lomusha",
+      "recent": "Kwamanje"
     },
     "mobileApp": "Umakhalekhukhwini",
     "more": {
+      "account": "I-akhawunti",
       "signOut": "Phuma"
     },
     "notFound": {
@@ -575,9 +585,15 @@
       "body": "That screen is not part of the member portal.",
       "title": "Page not found"
     },
+    "notificationBanner": {
+      "installApp": "Faka Uhlelo"
+    },
     "notificationPrefs": {
       "categories": "Notification Categories",
       "categoriesHelp": "Choose which channels to use per category.",
+      "categoryNames": {
+        "group_messages": "Ingcubungulo Yelicembu"
+      },
       "channelEmail": "Email",
       "channelInApp": "In-App",
       "channelPush": "Push",
@@ -1117,7 +1133,6 @@
     "metaDescription": "Hlola tikhundla tekutikhandla letivulekile",
     "metaPlanDescription": "Bhalisela kutikhandla",
     "metaTitle": "Emathuba Ekutikhandla",
-    "noPositions": "Akukho tikhundla tekutikhandla letitfolakalako njengamanje kulelaplani.",
     "volunteer": "Kutikhandla"
   },
   "wrapper": {
