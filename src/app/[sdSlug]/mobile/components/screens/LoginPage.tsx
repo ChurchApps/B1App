@@ -90,7 +90,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const [regLastName, setRegLastName] = useState("");
   const [matchedChurchName, setMatchedChurchName] = useState("");
   const [matchedChurchId, setMatchedChurchId] = useState<string | undefined>(undefined);
-  const honeypotRef = useRef<HTMLInputElement>(null);
   const registerShownAtRef = useRef(0);
   useEffect(() => { if (mode === "register") registerShownAtRef.current = Date.now(); }, [mode]);
 
@@ -219,7 +218,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
     if (!regLastName.trim()) { showError(Locale.label("mobile.login.errLastName")); return; }
     setLoading(true);
     try {
-      const body: any = { email, firstName: regFirstName, lastName: regLastName, appName: "B1", appUrl: typeof window !== "undefined" ? window.location.origin : undefined, website: honeypotRef.current?.value || "", fillMs: Date.now() - registerShownAtRef.current };
+      const body: any = { email, firstName: regFirstName, lastName: regLastName, appName: "B1", appUrl: typeof window !== "undefined" ? window.location.origin : undefined, fillMs: Date.now() - registerShownAtRef.current };
       if (matchedChurchId) body.churchId = matchedChurchId;
       const resp: any = await ApiHelper.postAnonymous("/users/register", body, "MembershipApi");
       if (resp?.errors?.length) {
@@ -475,7 +474,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
         <TextField label={Locale.label("mobile.screens.lastNameRegister")} value={regLastName} onChange={e => setRegLastName(e.target.value)} fullWidth disabled={loading} inputProps={{ autoComplete: "family-name" }} />
       </Box>
       {emailField(e => prefillRegisterFromMatch(e.target.value))}
-      <input ref={honeypotRef} type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: "1px", height: "1px", overflow: "hidden" }} />
       <Button type="submit" variant="contained" fullWidth disabled={loading} size="large">
         {loading ? spinner : Locale.label("mobile.login.createAccountSubmit")}
       </Button>
