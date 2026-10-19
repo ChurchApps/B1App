@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import type { LoginResponseInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
+import { EnvironmentHelper } from "@/helpers";
 import { hydrateUserSession } from "./hydrateUserSession";
 
 type HydrationStatus = "idle" | "hydrating" | "ready" | "anonymous" | "error";
@@ -62,6 +63,9 @@ export function useHydrateSession(): HydrationStatus {
     let cancelled = false;
 
     const hydrate = async () => {
+      // This effect runs before MobileClientLayout's useEffect. Without this, the
+      // login post throws "API configuration not found" and the member looks signed out.
+      EnvironmentHelper.init();
       const loginPayload = getLoginPayload();
       const churchId = getChurchId();
 
