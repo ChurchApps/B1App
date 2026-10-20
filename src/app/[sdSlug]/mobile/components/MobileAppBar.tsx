@@ -10,7 +10,8 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { type LinkInterface } from "@churchapps/helpers";
 import { Locale, PersonHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
-import { mobileTheme, mobileSlugFromPath, linkTypeToRoute } from "./mobileTheme";
+import { mobileTheme, mobileSlugFromPath, linkTypeToRoute, onBackgroundVars } from "./mobileTheme";
+import { useMobileThemeMode } from "./MobileThemeProvider";
 import { getInitials, navigateBack } from "./util";
 import { NotificationBellMenu } from "./NotificationBellMenu";
 import { TextLink } from "./kit";
@@ -18,14 +19,22 @@ import { useRealtimeNotifications } from "../hooks/useRealtimeNotifications";
 
 const tc = mobileTheme.colors;
 
-// Internal church links that get a slot in the phone tab bar / desktop header nav.
+// Internal church links that get a slot in the phone tab bar / desktop header nav. Built-in screens
+// keep priority; page links only fill slots left over (conference churches are all pages).
 export const navLinks = (links: LinkInterface[], max: number) => links
-  .filter((l) => l.linkType !== "separator" && l.linkType !== "url" && l.linkType !== "page" && l.linkType !== "votd")
+  .filter((l) => l.linkType !== "separator" && l.linkType !== "url" && l.linkType !== "votd")
   .map((l) => ({ link: l, route: linkTypeToRoute(l.linkType, l.linkData, l.text, l.url) }))
   .filter((t): t is { link: LinkInterface; route: string } => !!t.route && !t.route.startsWith("http"))
+  .sort((a, b) => Number(a.link.linkType === "page") - Number(b.link.linkType === "page"))
   .slice(0, max);
 
 export const routeSlug = (route: string) => route.split("?")[0].split("/").filter(Boolean).pop() || "";
+
+// Every page link shares the /mobile/page slug, so pages also match on ?id.
+export const isRouteActive = (route: string, slug: string, params: URLSearchParams | null) => {
+  if (routeSlug(route) !== slug) return false;
+  return slug !== "page" || new URLSearchParams(route.split("?")[1] || "").get("id") === params?.get("id");
+};
 
 // Bell + avatar cluster. `onHeader` = white-on-brand variant for the desktop header.
 export const MobileHeaderActions = ({ onAvatarClick, onHeader }: { onAvatarClick: () => void; onHeader?: boolean }) => {
@@ -82,50 +91,63 @@ export const MobileHeaderActions = ({ onAvatarClick, onHeader }: { onAvatarClick
   );
 };
 
-export const BrandMark = ({ churchName, onHeader }: { churchName?: string; onHeader?: boolean }) => (
-  <Box component={Link} href="/mobile/dashboard" sx={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0, textDecoration: "none", color: onHeader ? "#fff" : tc.text }}>
-    <Box sx={{ width: 30, height: 30, flex: "none", borderRadius: "8px", display: "grid", placeItems: "center", bgcolor: onHeader ? "rgba(255,255,255,0.16)" : tc.primary, color: onHeader ? "#fff" : tc.onPrimary }}>
-      <ChurchIcon sx={{ fontSize: 18 }} />
+export const BrandMark = ({ churchName, onHeader }: { churchName?: string; onHeader?: boolean }) => {
+  const { logos } = useMobileThemeMode();
+  const logo = onHeader ? logos.header : logos.bar;
+  return (
+    <Box component={Link} href="/mobile/dashboard" aria-label={logo ? churchName : undefined} sx={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0, textDecoration: "none", color: onHeader ? "#fff" : tc.text }}>
+      {logo
+        ? <Box component="img" src={logo.src} alt="" sx={{ height: 32, maxWidth: 180, objectFit: "contain", objectPosition: "left center", display: "block", boxSizing: "border-box", ...(logo.chip && { bgcolor: logo.chip, borderRadius: "6px", p: "3px 8px" }) }} />
+        : (
+          <>
+            <Box sx={{ width: 30, height: 30, flex: "none", borderRadius: "8px", display: "grid", placeItems: "center", bgcolor: onHeader ? "rgba(255,255,255,0.16)" : tc.primary, color: onHeader ? "#fff" : tc.onPrimary }}>
+              <ChurchIcon sx={{ fontSize: 18 }} />
+            </Box>
+            <Typography noWrap sx={{ fontSize: onHeader ? 16 : 15, fontWeight: 600, color: "inherit" }}>{churchName}</Typography>
+          </>
+        )}
     </Box>
-    <Typography noWrap sx={{ fontSize: onHeader ? 16 : 15, fontWeight: 600, color: "inherit" }}>{churchName}</Typography>
-  </Box>
-);
+  );
+};
 
 interface Props {
   churchName?: string;
-  rootSlugs: string[];
+  rootRoutes: string[];
   onAvatarClick: () => void;
 }
 
 // Phone app bar: back on sub-screens, church mark on root screens; the page itself owns the title.
-export const useIsRootScreen = (rootSlugs: string[]) => {
+export const useIsRootScreen = (rootRoutes: string[]) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const parts = (pathname || "").split("/").filter(Boolean);
   const isDetail = parts.length > parts.indexOf("mobile") + 2;
-  return !isDetail && rootSlugs.includes(mobileSlugFromPath(pathname) || "dashboard");
+  const slug = mobileSlugFromPath(pathname) || "dashboard";
+  return !isDetail && rootRoutes.some((r) => isRouteActive(r, slug, searchParams));
 };
 
 // Desktop has no app bar, so sub-screens get a quiet back verb above the content; record slices bring their own.
-export const DesktopBack = ({ rootSlugs }: { rootSlugs: string[] }) => {
+export const DesktopBack = ({ rootRoutes }: { rootRoutes: string[] }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isRoot = useIsRootScreen(rootSlugs);
+  const isRoot = useIsRootScreen(rootRoutes);
   if (isRoot || searchParams?.get("view")) return null;
   return (
-    <Box sx={{ display: { xs: "none", md: "block" }, mb: "16px" }}>
+    <Box sx={{ ...onBackgroundVars, display: { xs: "none", md: "block" }, mb: "16px" }}>
       <TextLink onClick={() => navigateBack(router, "/mobile/dashboard")}><ArrowBackIcon sx={{ fontSize: 18 }} />{Locale.label("mobile.components.back")}</TextLink>
     </Box>
   );
 };
 
-export const MobileAppBar = ({ churchName, rootSlugs, onAvatarClick }: Props) => {
+export const MobileAppBar = ({ churchName, rootRoutes, onAvatarClick }: Props) => {
   const router = useRouter();
-  const isRoot = useIsRootScreen(rootSlugs);
+  const isRoot = useIsRootScreen(rootRoutes);
 
   return (
     <Box
       component="header"
       sx={{
+        ...onBackgroundVars,
         display: { xs: "block", md: "none" },
         position: "fixed",
         top: 0,
@@ -161,10 +183,11 @@ export const MobileAppBar = ({ churchName, rootSlugs, onAvatarClick }: Props) =>
 // Desktop header (md+): church-colored bar carrying the main nav, like B1Admin's header.
 export const MobileTopHeader = ({ churchName, links, onAvatarClick }: { churchName?: string; links: LinkInterface[]; onAvatarClick: () => void }) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const slug = mobileSlugFromPath(pathname) || "dashboard";
   const items = [
     { key: "home", href: "/mobile/dashboard", label: Locale.label("mobile.components.home"), active: slug === "dashboard" },
-    ...navLinks(links, 5).map(({ link, route }) => ({ key: link.id || route, href: route, label: link.text || "", active: slug === routeSlug(route) })),
+    ...navLinks(links, 5).map(({ link, route }) => ({ key: link.id || route, href: route, label: link.text || "", active: isRouteActive(route, slug, searchParams) })),
     { key: "more", href: "/mobile/more", label: Locale.label("mobile.components.more"), active: slug === "more" }
   ];
 

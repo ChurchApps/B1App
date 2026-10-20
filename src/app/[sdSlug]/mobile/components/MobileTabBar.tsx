@@ -2,23 +2,24 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Box, Icon, Typography } from "@mui/material";
 import { type LinkInterface } from "@churchapps/helpers";
 import { Locale } from "@churchapps/apphelper";
 import { mobileTheme, linkTypeToIcon, mobileSlugFromPath } from "./mobileTheme";
-import { navLinks, routeSlug } from "./MobileAppBar";
+import { isRouteActive, navLinks } from "./MobileAppBar";
 
 export const MAX_LINK_TABS = 3;
 
 export const MobileTabBar = ({ links }: { links: LinkInterface[] }) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const slug = mobileSlugFromPath(pathname) || "dashboard";
   const tc = mobileTheme.colors;
 
   const tabs = [
     { key: "home", href: "/mobile/dashboard", icon: "home", label: Locale.label("mobile.components.home"), active: slug === "dashboard" },
-    ...navLinks(links, MAX_LINK_TABS).map(({ link, route }) => ({ key: link.id || route, href: route, icon: linkTypeToIcon(link.linkType, link.icon), label: link.text || "", active: slug === routeSlug(route) })),
+    ...navLinks(links, MAX_LINK_TABS).map(({ link, route }) => ({ key: link.id || route, href: route, icon: linkTypeToIcon(link.linkType, link.icon), label: link.text || "", active: isRouteActive(route, slug, searchParams) })),
     { key: "more", href: "/mobile/more", icon: "more_horiz", label: Locale.label("mobile.components.more"), active: slug === "more" }
   ];
 

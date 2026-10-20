@@ -11,13 +11,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { Locale, PersonHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
-import { mobileTheme } from "./mobileTheme";
+import { mobileTheme, onBackgroundVars } from "./mobileTheme";
 import { getInitials } from "./util";
 
 const tc = mobileTheme.colors;
 
 export const PageHead = ({ title, lede, children, sx }: { title: React.ReactNode; lede?: React.ReactNode; children?: React.ReactNode; sx?: SxProps<Theme> }) => (
-  <Box sx={[{ px: { xs: "16px", md: 0 }, pt: { xs: "4px", md: 0 }, pb: { xs: "18px", md: "24px" } }, ...(Array.isArray(sx) ? sx : [sx])]}>
+  <Box sx={[{ ...onBackgroundVars, px: { xs: "16px", md: 0 }, pt: { xs: "4px", md: 0 }, pb: { xs: "18px", md: "24px" } }, ...(Array.isArray(sx) ? sx : [sx])]}>
     <Typography component="h1" sx={{ fontSize: { xs: 28, md: 30 }, lineHeight: { xs: "34px", md: "36px" }, fontWeight: 650, letterSpacing: "-0.02em", color: tc.text, overflowWrap: "anywhere" }}>
       {title}
     </Typography>
