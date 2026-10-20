@@ -1,6 +1,6 @@
 import { apiHymnRepository } from "./apiHymnRepository";
 import type { HymnRepository } from "./types";
 
-// The UI depends on this contract, not on a transport. Replace this binding with
-// a real ChurchApps API adapter only after the backend publishes its endpoints.
+// Public hymn browsing uses the church-scoped Content API. Keep the UI coupled
+// to the repository contract so the demo repository can still be selected locally.
 export const hymnRepository: HymnRepository = apiHymnRepository;

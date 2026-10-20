@@ -15,6 +15,8 @@ const matchesQuery = (hymn: Hymn, query: string): boolean => {
     hymn.hymnNumber.toString(),
     hymn.title,
     hymn.lyrics,
+    hymn.chorus,
+    ...(hymn.verses ?? []).flatMap((verse) => [verse.label, verse.text]),
     hymn.englishLyrics,
     hymn.yorubaLyrics,
     hymn.author,
