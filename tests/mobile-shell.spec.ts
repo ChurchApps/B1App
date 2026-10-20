@@ -4,7 +4,7 @@ import { DEMO_CHURCH, SEED_PEOPLE } from "./helpers/fixtures";
 
 const SAFE_TOP = 62;
 
-// /mobile entry point: greeting, verse of the day, b1Tab cards + Explore grid, More page, notifications
+// /mobile entry point: greeting, latest sermon, verse of the day, "More from" pills, More page, notifications
 
 test.describe("Mobile shell", () => {
   test("/mobile redirects to /mobile/dashboard", async ({ page }) => {
@@ -49,14 +49,25 @@ test.describe("Mobile shell", () => {
     await expect(page.getByRole("button", { name: /^Profile$/i })).toBeVisible();
   });
 
-  test("dashboard renders Explore section", async ({ page }) => {
+  test("dashboard teases giving in place of a Give pill", async ({ page }) => {
     await page.goto("/mobile/dashboard");
-    await expect(page.locator("main")).toContainText(/Explore/i, { timeout: 15000 });
+    const giving = page.getByRole("region", { name: /^Giving$/i });
+    await expect(giving).toBeVisible({ timeout: 15000 });
+    await expect(giving.getByRole("link", { name: "Give" })).toHaveAttribute("href", "/mobile/donate?view=give");
+    await expect(page.getByRole("region", { name: new RegExp(`More from ${DEMO_CHURCH.NAME}`, "i") }).getByRole("link", { name: "Give" })).toHaveCount(0);
   });
 
-  test("dashboard renders the Verse of the Day card", async ({ page }) => {
+  test("dashboard renders the Verse of the Day section", async ({ page }) => {
     await page.goto("/mobile/dashboard");
-    await expect(page.locator("main")).toContainText(/Verse of the Day/i, { timeout: 15000 });
+    await expect(page.getByRole("region", { name: /Verse of the Day/i })).toBeVisible({ timeout: 15000 });
+  });
+
+  test("dashboard teases the latest sermon with a link to all sermons", async ({ page }) => {
+    await page.goto("/mobile/dashboard");
+    const sermon = page.getByRole("region", { name: /Latest sermon/i });
+    await expect(sermon).toBeVisible({ timeout: 15000 });
+    await sermon.getByRole("link", { name: /All sermons/i }).click();
+    await expect(page).toHaveURL(/\/mobile\/sermons/, { timeout: 15000 });
   });
 
   test("More page lists the church's links", async ({ page }) => {
@@ -155,7 +166,7 @@ test.describe("Mobile dashboard sign-in prompt", () => {
   test.afterAll(async () => { await setSignInPrompt(false, ""); });
 
   // The Sign in button sits under the welcome title; the More and Me tabs have their own Sign In links.
-  const signInPill = (page: Page) => page.locator("main h1", { hasText: /^Welcome$/ }).locator("xpath=../..").getByRole("link", { name: /^Sign in$/i });
+  const signInPill = (page: Page) => page.locator("main h1", { hasText: /^Welcome$/ }).locator("xpath=..").getByRole("link", { name: /^Sign in$/i });
 
   test("shows the default prompt and Sign in button to visitors", async ({ page }) => {
     await setSignInPrompt(false, "");
