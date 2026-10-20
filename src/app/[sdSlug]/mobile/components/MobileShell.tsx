@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Box } from "@mui/material";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { DesktopBack, MobileAppBar, MobileTopHeader, navLinks, routeSlug } from "./MobileAppBar";
+import { DesktopBack, MobileAppBar, MobileTopHeader, navLinks } from "./MobileAppBar";
 import { MAX_LINK_TABS, MobileTabBar } from "./MobileTabBar";
 import { WebPushEnrollmentSync } from "./WebPushEnrollmentSync";
 import { ChatNotificationBridge } from "./ChatNotificationBridge";
@@ -34,7 +34,7 @@ const MobileShellInner = ({ config, children }: Props) => {
     () => filterVisibleLinks(rawLinks, jwt ? context?.userChurch : null),
     [rawLinks, jwt, context?.userChurch]
   );
-  const rootSlugs = useMemo(() => ["dashboard", "more", ...navLinks(links, MAX_LINK_TABS).map((t) => routeSlug(t.route))], [links]);
+  const rootRoutes = useMemo(() => ["/mobile/dashboard", "/mobile/more", ...navLinks(links, MAX_LINK_TABS).map((t) => t.route)], [links]);
   const goProfile = () => router.push("/mobile/profileEdit");
 
   return (
@@ -42,7 +42,7 @@ const MobileShellInner = ({ config, children }: Props) => {
       <WebPushEnrollmentSync />
       {jwt && <ChatNotificationBridge personId={context?.person?.id} churchId={context?.userChurch?.church?.id} />}
 
-      <MobileAppBar churchName={config?.church?.name} rootSlugs={rootSlugs} onAvatarClick={goProfile} />
+      <MobileAppBar churchName={config?.church?.name} rootRoutes={rootRoutes} onAvatarClick={goProfile} />
       <MobileTopHeader churchName={config?.church?.name} links={links} onAvatarClick={goProfile} />
 
       <Box component="main" sx={{
@@ -54,7 +54,7 @@ const MobileShellInner = ({ config, children }: Props) => {
         width: "100%",
         boxSizing: "border-box"
       }}>
-        <DesktopBack rootSlugs={rootSlugs} />
+        <DesktopBack rootRoutes={rootRoutes} />
         {children}
       </Box>
 

@@ -12,6 +12,8 @@ export const mobileTheme = {
     surfaceVariant: "var(--mb-surface-variant)",
     text: "var(--mb-text)",
     onBackground: "var(--mb-on-background)",
+    onBackgroundMuted: "var(--mb-on-background-muted)",
+    linkOnBackground: "var(--mb-link-on-background)",
     textSecondary: "var(--mb-text-secondary)",
     textMuted: "var(--mb-text-muted)",
     textHint: "var(--mb-text-hint)",
@@ -80,6 +82,13 @@ export const mobileTheme = {
     right: "var(--safe-right, env(safe-area-inset-right, 0px))"
   }
 };
+
+// Scope for chrome drawn straight on the page background: a church text color chosen for white surfaces may not read there.
+export const onBackgroundVars = {
+  "--mb-text": "var(--mb-on-background)",
+  "--mb-text-secondary": "var(--mb-on-background-muted)",
+  "--mb-link": "var(--mb-link-on-background)"
+} as const;
 
 export const SCREEN_TITLES: Record<string, string> = new Proxy({} as Record<string, string>, {
   get(_target, prop: string) {
