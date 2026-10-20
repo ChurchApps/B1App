@@ -183,24 +183,6 @@ export const linkTypeToRoute = (
   }
 };
 
-export const linkTypeToTagline = (linkType?: string): string | null => {
-  switch ((linkType || "").toLowerCase()) {
-    case "groups": return Locale.label("mobile.taglines.groups");
-    case "directory": return Locale.label("mobile.taglines.directory");
-    case "plans": return Locale.label("mobile.taglines.plans");
-    case "checkin": return Locale.label("mobile.taglines.checkin");
-    case "lessons": return Locale.label("mobile.taglines.lessons");
-    case "donation": return Locale.label("mobile.taglines.donation");
-    case "volunteer": return Locale.label("mobile.taglines.volunteer");
-    case "bible": return Locale.label("mobile.taglines.bible");
-    case "votd": return Locale.label("mobile.taglines.votd");
-    case "sermons": return Locale.label("mobile.taglines.sermons");
-    case "stream": return Locale.label("mobile.taglines.stream");
-    case "registrations": return Locale.label("mobile.taglines.registrations");
-    default: return null;
-  }
-};
-
 export const linkTypeToIcon = (linkType?: string, itemIcon?: string): string => {
   if (itemIcon) return itemIcon;
   switch ((linkType || "").toLowerCase()) {

@@ -29,8 +29,7 @@ test.describe.serial("Mobile home teasers", () => {
     await ctx.dispose();
   });
 
-  // Teaser home is parked in DashboardPageTeasers until the b1Tab card home is replaced again.
-  test.skip("shows serving, groups and giving previews", async ({ page }) => {
+  test("shows serving, groups and giving previews", async ({ page }) => {
     await page.goto("/mobile/dashboard");
     await expect(mobileSignedInChrome(page)).toBeVisible();
     const main = page.locator("main");
