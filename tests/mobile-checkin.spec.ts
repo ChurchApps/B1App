@@ -117,10 +117,10 @@ test.describe("Mobile checkin schedule", () => {
     await request.delete(API + "/attendance/services/" + serviceId, { headers });
   });
 
-  test("a service whose check-in window is closed says so instead of listing its times", async ({ page }) => {
+  test("a service whose check-in window is closed says when it opens instead of listing its times", async ({ page }) => {
     await page.goto("/mobile/checkin");
     await page.getByTestId("select-service-" + serviceId + "-button").click({ timeout: 30000 });
-    await expect(page.getByTestId("checkin-not-open")).toHaveText("Check-in isn't open for this service right now.", { timeout: 30000 });
+    await expect(page.getByTestId("checkin-not-open")).toHaveText(/^Check-in opens \w{3} 9:00\sAM\.$/, { timeout: 30000 });
     await expect(page.locator("main")).not.toContainText("Zacchaeus Closed Time");
   });
 });

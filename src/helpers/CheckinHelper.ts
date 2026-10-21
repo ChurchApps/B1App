@@ -18,6 +18,28 @@ export class CheckinHelper {
 
   static selectedServiceTime: ServiceTimeInterface;
 
+  public static isClosed(st: ServiceTimeInterface) {
+    return st.checkinOpen === false;
+  }
+
+  // Soonest upcoming check-in opening among the times, e.g. "Sun 9:30 AM". Schedules are church-local wall time.
+  public static opensLabel(times: ServiceTimeInterface[], now = new Date()): string {
+    const week = 7 * 1440;
+    const nowMinute = now.getDay() * 1440 + now.getHours() * 60 + now.getMinutes();
+    let best: number | null = null;
+    let bestWait = Infinity;
+    times.forEach((st) => {
+      const match = st.startTime?.match(/^(\d{1,2}):(\d{2})/);
+      if (st.dayOfWeek == null || !match) return;
+      const opens = st.dayOfWeek * 1440 + Number(match[1]) * 60 + Number(match[2]) - Math.max(0, st.checkinOpenMinutes ?? 0);
+      const wait = (((opens - nowMinute) % week) + week) % week;
+      if (wait < bestWait) { bestWait = wait; best = opens; }
+    });
+    if (best === null) return "";
+    // 2024-01-07 was a Sunday; Date rolls the minute offset into the right weekday.
+    return new Date(2024, 0, 7, 0, best).toLocaleString(undefined, { weekday: "short", hour: "numeric", minute: "2-digit" });
+  }
+
   public static getVisitByPersonId(visits: VisitInterface[], personId: string): VisitInterface | null {
     let result: VisitInterface | null = null;
     visits?.forEach((v) => {
