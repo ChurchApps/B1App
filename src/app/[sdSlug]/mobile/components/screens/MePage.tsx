@@ -28,6 +28,7 @@ interface UpcomingItem {
   subtitle?: string;
   href: string;
   key: string;
+  photoUrl?: string;
 }
 
 interface NotificationItem {
@@ -195,7 +196,7 @@ export const MePage = ({ config }: Props) => {
       if (!start) return;
       const date = new Date(start);
       if (isNaN(date.getTime()) || date < now || r.status === "cancelled") return;
-      items.push({ kind: "registration", date, title: (r as any).event?.title || Locale.label("mobile.me.registration"), href: "/mobile/registrations", key: `reg-${r.id}` });
+      items.push({ kind: "registration", date, title: (r as any).event?.title || Locale.label("mobile.me.registration"), href: "/mobile/registrations", key: `reg-${r.id}`, photoUrl: (r as any).event?.photoUrl || undefined });
     });
 
     // Expand recurring group events across the next few months, keep future occurrences.
@@ -209,7 +210,7 @@ export const MePage = ({ config }: Props) => {
         const key = `evt-${e.id}-${date.getTime()}`;
         if (seen.has(key)) return;
         seen.add(key);
-        items.push({ kind: "event", date, title: e.title || Locale.label("mobile.me.event"), href: e.groupId ? `/mobile/groups/${e.groupId}?activeTab=events` : "/mobile/groups", key });
+        items.push({ kind: "event", date, title: e.title || Locale.label("mobile.me.event"), href: e.groupId ? `/mobile/groups/${e.groupId}?activeTab=events` : "/mobile/groups", key, photoUrl: e.photoUrl || undefined });
       });
     });
 
@@ -248,6 +249,7 @@ export const MePage = ({ config }: Props) => {
       key={item.key}
       href={item.href}
       data-testid={`me-item-${item.kind}`}
+      leading={item.photoUrl ? <Box component="img" src={item.photoUrl} alt="" loading="lazy" data-testid="me-item-photo" sx={{ width: 64, height: 36, objectFit: "cover", borderRadius: "6px", flexShrink: 0, display: "block" }} /> : undefined}
       title={item.title}
       subtitle={`${DateHelper.prettyDateTime(item.date)}${item.subtitle ? ` · ${item.subtitle}` : ""}`}
       trailing={<StatusBadge tone={kindMeta[item.kind].tone}>{Locale.label(kindMeta[item.kind].label)}</StatusBadge>}

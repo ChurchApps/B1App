@@ -16,6 +16,23 @@ test.describe("Mobile Me page", () => {
     await expect(page).toHaveURL(/\/mobile\/groups\//, { timeout: 15000 });
   });
 
+  test("shows the event photo as a thumbnail on upcoming event rows", async ({ page }) => {
+    // Give the first timeline event a photo, the way B1Admin's calendar stores one.
+    await page.route("**/events/timeline", async (route) => {
+      const response = await route.fetch();
+      const events = await response.json();
+      if (Array.isArray(events) && events.length > 0) events[0].photoUrl = "/images/group.jpg";
+      await route.fulfill({ response, json: events });
+    });
+    await page.goto("/mobile/me?view=upcoming");
+    await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+    await expect(page.getByRole("button", { name: /Back to Me/i })).toBeVisible({ timeout: 15000 });
+    const photo = page.getByTestId("me-item-event").getByTestId("me-item-photo").first();
+    await expect(photo).toBeVisible({ timeout: 15000 });
+    await expect(photo).toHaveAttribute("src", "/images/group.jpg");
+    await expect(page.getByTestId("me-item-serving").getByTestId("me-item-photo")).toHaveCount(0);
+  });
+
   test("shows the record teasers and links, and Edit Profile opens the profile screen", async ({ page }) => {
     await page.goto("/mobile/me");
     await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
