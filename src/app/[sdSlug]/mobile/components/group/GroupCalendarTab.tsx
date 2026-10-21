@@ -52,6 +52,7 @@ export interface EventRow {
   tags?: string;
   registrationEnabled?: boolean;
   rsvpDisabled?: boolean;
+  photoUrl?: string;
 }
 
 type ViewMode = "month" | "list";
