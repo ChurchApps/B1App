@@ -109,6 +109,19 @@ test.describe("Mobile community", () => {
     }
   });
 
+  test("an admin sees the mobile directory when Show in Directory is Staff", async ({ page }) => {
+    // demo@b1.church is a Domain Admin whose own status is Member; People View lets them past the Staff tier.
+    await setDirectoryVisibility("Staff");
+    try {
+      await page.goto("/mobile/community");
+      await expect(page.getByRole("textbox", { name: /Search Members/i })).toBeVisible({ timeout: 30000 });
+      await expect(page.locator("main")).toContainText(/Donald/, { timeout: 30000 });
+      await expect(page.getByText("Members Only")).toHaveCount(0);
+    } finally {
+      await setDirectoryVisibility("Members");
+    }
+  });
+
   test("Show in Directory of Members keeps the directory open to a member", async ({ page }) => {
     await setDirectoryVisibility("Members");
     await page.goto("/mobile/community");
