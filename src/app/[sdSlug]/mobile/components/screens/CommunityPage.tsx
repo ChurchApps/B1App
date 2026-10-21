@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { Box, Button, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
-import type { PersonInterface } from "@churchapps/helpers";
+import { Permissions, type PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -20,7 +20,8 @@ interface PeopleSection {
   people: PersonInterface[];
 }
 
-const STATUS_RANK: Record<string, number> = { staff: 3, member: 2, "regular attendee": 1 };
+// Mirrors the Api gate (PersonController.shouldShowInDirectory): statuses not listed here (Guest, Inactive) never pass.
+const STATUS_RANK: Record<string, number> = { staff: 3, member: 2, "regular attendee": 1, visitor: 0 };
 const REQUIRED_RANK: Record<string, number> = { Staff: 3, Members: 2, "Regular Attendees": 1, Everyone: 0 };
 
 export const CommunityPage = ({ config }: Props) => {
@@ -37,7 +38,9 @@ export const CommunityPage = ({ config }: Props) => {
     enabled: loggedIn && !!churchId
   });
 
-  const canViewDirectory = loggedIn && (STATUS_RANK[membershipStatus] || 0) >= (REQUIRED_RANK[publicSettings?.directoryVisibility] ?? REQUIRED_RANK.Members);
+  // Staff with People View see everyone in B1Admin, so the Api lets them past the directory setting too.
+  const canViewPeople = loggedIn && UserHelper.checkAccess(Permissions.membershipApi.people.view);
+  const canViewDirectory = canViewPeople || (loggedIn && (STATUS_RANK[membershipStatus] ?? -1) >= (REQUIRED_RANK[publicSettings?.directoryVisibility] ?? REQUIRED_RANK.Members));
   const settingsSettled = !loggedIn || !churchId || settingsFetched;
 
   const { data: serverPeople = null, isFetching, isError: peopleError, refetch: refetchPeople } = useQuery<PersonInterface[]>({

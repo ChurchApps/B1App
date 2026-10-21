@@ -89,13 +89,22 @@ test.describe("Mobile community", () => {
     await expect(main.getByRole("button", { name: /Send message/i })).toHaveCount(0);
   });
 
-  test("Show in Directory of Staff hides the directory from a member", async ({ page }) => {
+  test("Show in Directory of Staff hides the directory from a member", async ({ browser }) => {
     await setDirectoryVisibility("Staff");
+    // demo@b1.church can view people, so the gate is checked as volunteer@b1.church, a plain member.
+    const context = await browser.newContext({ storageState: { cookies: [], origins: [] } });
+    const page = await context.newPage();
     try {
+      await page.goto("/mobile/login");
+      await page.locator('input[type="email"]').first().fill("volunteer@b1.church");
+      await page.locator('input[type="password"]').first().fill("password");
+      await page.locator('button[type="submit"]').first().click();
+      await page.waitForURL(/\/mobile\/dashboard/, { timeout: 30000 });
       await page.goto("/mobile/community");
       await expect(page.getByText("Members Only")).toBeVisible({ timeout: 30000 });
       await expect(page.getByRole("textbox", { name: /Search Members/i })).toHaveCount(0);
     } finally {
+      await context.close();
       await setDirectoryVisibility("Members");
     }
   });
