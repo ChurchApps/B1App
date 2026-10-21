@@ -194,6 +194,69 @@ test.describe("Mobile dashboard sign-in prompt", () => {
   });
 });
 
+// Issue #1313: a church picks how photo links appear on Home (B1Admin > B1 Mobile > Home screen tiles).
+// The demo church has no photo links, so the visitor's links request is answered with three.
+async function setTileLayout(layout: string) {
+  const ctx = await request.newContext();
+  const login = await ctx.post(API_BASE + "/membership/users/login", { data: { email: "demo@b1.church", password: "password" } });
+  if (!login.ok()) throw new Error(`login failed: ${login.status()}`);
+  const body = await login.json();
+  const uc = (body.userChurches || []).find((c: any) => c.church?.id === DEMO_CHURCH.ID);
+  const headers = { Authorization: `Bearer ${uc?.jwt}` };
+  const all = await (await ctx.get(API_BASE + "/membership/settings", { headers })).json();
+  const row = { ...((all as any[]).find(s => s.keyName === "mobileTileLayout") || { churchId: DEMO_CHURCH.ID, keyName: "mobileTileLayout" }), public: 1, value: layout };
+  const res = await ctx.post(API_BASE + "/membership/settings", { headers, data: [row] });
+  if (!res.ok()) throw new Error(`settings save failed: ${res.status()}`);
+  await ctx.post(BASE_URL + "/api/revalidate/" + DEMO_CHURCH.SUBDOMAIN);
+  await ctx.dispose();
+}
+
+const PHOTO_LINKS = [
+  { id: "TILE1", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "sermons", text: "Watch Sermons", sort: 1, photo: "/images/group.jpg", visibility: "everyone" },
+  { id: "TILE2", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "bible", text: "Read the Bible", sort: 2, photo: "/images/group.jpg", visibility: "everyone" },
+  { id: "TILE3", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "stream", text: "Join Live", sort: 3, photo: "/images/group.jpg", visibility: "everyone" }
+];
+
+test.describe("Mobile dashboard tile layout", () => {
+  test.describe.configure({ mode: "serial" });
+  test.use({ storageState: { cookies: [], origins: [] }, viewport: { width: 390, height: 844 } });
+  test.afterAll(async () => { await setTileLayout("grid"); });
+
+  const openDashboard = async (page: Page) => {
+    await page.route(/\/links\/church\/[^/]+\?category=b1Tab/, (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(PHOTO_LINKS) }));
+    await page.goto("/mobile/dashboard");
+    await expect(page.locator("main").getByText("Watch Sermons", { exact: true }).first()).toBeVisible({ timeout: 30000 });
+  };
+
+  test("keeps the photo grid by default", async ({ page }) => {
+    await setTileLayout("grid");
+    await openDashboard(page);
+    const main = page.locator("main");
+    for (const l of PHOTO_LINKS) await expect(main.getByRole("link", { name: l.text, exact: true }).first()).toBeVisible();
+    await expect(main.locator(".kit-row", { hasText: "Read the Bible" })).toHaveCount(0);
+  });
+
+  test("shows photo links as a list when the church picks List", async ({ page }) => {
+    await setTileLayout("list");
+    await openDashboard(page);
+    const main = page.locator("main");
+    await expect(page.getByTestId("home-tile-grid")).toHaveCount(0);
+    for (const l of PHOTO_LINKS) await expect(main.locator(".kit-row", { hasText: l.text })).toBeVisible();
+    await expect(main.locator(".kit-row", { hasText: "Read the Bible" })).toHaveAttribute("href", /\/mobile\/bible/);
+    await expect(main.locator(".kit-row", { hasText: "Read the Bible" }).locator("img")).toHaveCount(1);
+  });
+
+  test("shows photo links in one sideways-scrolling row when the church picks Scrolling row", async ({ page }) => {
+    await setTileLayout("scroll");
+    await openDashboard(page);
+    const row = page.getByTestId("home-tile-scroll");
+    await expect(row).toBeVisible();
+    await expect(row.getByRole("link")).toHaveCount(3);
+    const boxes = await Promise.all((await row.getByRole("link").all()).map(l => l.boundingBox()));
+    expect(new Set(boxes.map(b => Math.round(b!.y))).size).toBe(1);
+  });
+});
+
 async function applySafeTop(page: Page) {
   await page.addStyleTag({ content: `:root, .mobileAppRoot { --safe-top: ${SAFE_TOP}px !important; --safe-bottom: 34px !important; }` });
 }
