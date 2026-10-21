@@ -15,7 +15,7 @@ import { cssUrl, formatDate, formatDuration } from "./util";
 import { NotificationPermissionBanner } from "./NotificationPermissionBanner";
 import { navLinks } from "./MobileAppBar";
 import { MAX_LINK_TABS } from "./MobileTabBar";
-import { PageHead, Pill, PillRow, Plate, PlateSection, Row, TextLink, Thumb } from "./kit";
+import { PageHead, Pill, PillRow, Plate, PlateSection, Row, RowList, TextLink, Thumb } from "./kit";
 import { ScreenSkeleton } from "./ScreenSkeleton";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
 import { useEngagementSort } from "../hooks/useEngagementSort";
@@ -31,7 +31,8 @@ interface Props {
 const linkPhoto = (l: LinkInterface) => (l as unknown as { photo?: string }).photo;
 
 // Churches that built their app from photo page links (ICOM, SICOM) get those as tiles instead of pills.
-const PhotoTile = ({ link, wide }: { link: LinkInterface; wide: boolean }) => {
+// fixedWidth tiles sit in the sideways-scrolling row instead of the grid.
+const PhotoTile = ({ link, wide, fixedWidth }: { link: LinkInterface; wide: boolean; fixedWidth?: boolean }) => {
   const target = linkTarget(link)!;
   const external = target.external ? { component: "button" as const, type: "button" as const, onClick: () => openExternal(target.href) } : { component: Link, href: target.href };
   return (
@@ -39,6 +40,8 @@ const PhotoTile = ({ link, wide }: { link: LinkInterface; wide: boolean }) => {
       {...external}
       sx={{
         gridColumn: wide ? "1 / -1" : undefined,
+        flex: fixedWidth ? { xs: "0 0 150px", md: "0 0 220px" } : undefined,
+        scrollSnapAlign: fixedWidth ? "start" : undefined,
         position: "relative",
         height: wide ? { xs: 150, md: 260 } : { xs: 104, md: 180 },
         borderRadius: "10px",
@@ -151,6 +154,7 @@ export const DashboardPage = ({ config }: Props) => {
   // Churches can hide the anonymous sign-in prompt or reword it (B1Admin > B1 Mobile).
   const appearance = config?.appearance as Record<string, string> | undefined;
   const hideSignInPrompt = appearance?.mobileHideSignInPrompt === "true";
+  const tileLayout = appearance?.mobileTileLayout === "scroll" || appearance?.mobileTileLayout === "list" ? appearance.mobileTileLayout : "grid";
   const signInPrompt = (appearance?.mobileSignInPromptText || "").trim() || Locale.label("mobile.dashboard.signInPrompt");
 
   const head = signedIn
@@ -173,9 +177,23 @@ export const DashboardPage = ({ config }: Props) => {
 
   const tileSection = tileLinks.length > 0 && (
     <PlateSection title={churchName || undefined}>
-      <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-        {tileLinks.map((l, i) => <PhotoTile key={linkId(l)} link={l} wide={i === 0 && tileLinks.length % 2 === 1} />)}
-      </Box>
+      {tileLayout === "list" ? (
+        <RowList>
+          {tileLinks.map((l) => {
+            const target = linkTarget(l)!;
+            const nav = target.external ? { onClick: () => openExternal(target.href) } : { href: target.href };
+            return <Row key={linkId(l)} {...nav} title={l.text} leading={<Thumb src={linkPhoto(l)} width={56} height={56} />} chevron />;
+          })}
+        </RowList>
+      ) : tileLayout === "scroll" ? (
+        <Box data-testid="home-tile-scroll" sx={{ display: "flex", gap: "8px", overflowX: "auto", scrollSnapType: "x mandatory", pb: "4px", "&::-webkit-scrollbar": { display: "none" }, scrollbarWidth: "none" }}>
+          {tileLinks.map((l) => <PhotoTile key={linkId(l)} link={l} wide={false} fixedWidth />)}
+        </Box>
+      ) : (
+        <Box data-testid="home-tile-grid" sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+          {tileLinks.map((l, i) => <PhotoTile key={linkId(l)} link={l} wide={i === 0 && tileLinks.length % 2 === 1} />)}
+        </Box>
+      )}
     </PlateSection>
   );
 
