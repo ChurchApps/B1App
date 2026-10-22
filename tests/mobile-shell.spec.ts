@@ -255,6 +255,15 @@ test.describe("Mobile dashboard tile layout", () => {
     const boxes = await Promise.all((await row.getByRole("link").all()).map(l => l.boundingBox()));
     expect(new Set(boxes.map(b => Math.round(b!.y))).size).toBe(1);
   });
+
+  // Issue #1315: a verse-of-the-day link with a photo is a tile like the rest, not only the verse section.
+  test("shows a photo verse-of-the-day link as a tile", async ({ page }) => {
+    await setTileLayout("grid");
+    const links = [...PHOTO_LINKS, { id: "TILE4", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "votd", text: "Daily verse", sort: 4, photo: "/images/group.jpg", visibility: "everyone" }];
+    await page.route(/\/links\/church\/[^/]+\?category=b1Tab/, (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(links) }));
+    await page.goto("/mobile/dashboard");
+    await expect(page.getByTestId("home-tile-grid").getByRole("link", { name: "Daily verse" })).toHaveAttribute("href", /\/mobile\/votd/, { timeout: 30000 });
+  });
 });
 
 async function applySafeTop(page: Page) {

@@ -374,6 +374,7 @@
       "paymentMethods": "Payment methods",
       "pendingCount": "{} pending",
       "repeatLastGift": "Repeat last gift",
+      "statementUnavailable": "This giving statement isn't available. Contact your church for a copy.",
       "years": "Years"
     },
     "group": {

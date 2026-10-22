@@ -34,6 +34,7 @@ import { CampaignProgress } from "@/components/donate/CampaignProgress";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { memberGivingYearLimit } from "../../helpers/givingYears";
 import { BackVerb, BigNumber, FilterPills, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink, useSliceView } from "../kit";
 
 interface Props {
@@ -84,11 +85,16 @@ function DonatePageInner({ config }: Props) {
   const pathname = usePathname() || "/mobile/donate";
   const [view, setView] = useSliceView();
   const currentYear = new Date().getFullYear();
+  const settings = config?.appearance as Record<string, unknown> | undefined;
+  const yearLimit = memberGivingYearLimit(settings);
+  const historyVisible = yearLimit > 0;
+  const latestYear = Math.min(currentYear, yearLimit);
+  const givingNote = String(settings?.givingNote ?? "").trim();
 
   const [message, setMessage] = useState<string | null>(null);
-  const [historyYear, setHistoryYear] = useState<string>(String(currentYear));
+  const [historyYear, setHistoryYear] = useState<string>(String(latestYear));
 
-  const { data: donations = [], isLoading: donationsLoading } = useQuery<DonationInterface[]>({
+  const { data: allDonations = [], isLoading: donationsLoading } = useQuery<DonationInterface[]>({
     queryKey: ["donations", personId],
     queryFn: async () => {
       const data = await ApiHelper.get("/donations/my", "GivingApi");
@@ -193,6 +199,7 @@ function DonatePageInner({ config }: Props) {
     return giftCurrency !== pageCurrency.toUpperCase() && !!exchangeRates[giftCurrency];
   };
   const giftYear = (d: DonationInterface) => DateHelper.toDate(d.donationDate).getFullYear();
+  const donations = useMemo(() => allDonations.filter((d) => giftYear(d) <= yearLimit), [allDonations, yearLimit]);
 
   const sortedDonations = useMemo(
     () => [...donations].sort((a, b) => DateHelper.toDate(b.donationDate).getTime() - DateHelper.toDate(a.donationDate).getTime()),
@@ -207,15 +214,15 @@ function DonatePageInner({ config }: Props) {
   });
 
   const ytd = useMemo(
-    () => summarize(donations.filter((d) => giftYear(d) === currentYear)),
-    [donations, pageCurrency, exchangeRates, currentYear]
+    () => summarize(donations.filter((d) => giftYear(d) === latestYear)),
+    [donations, pageCurrency, exchangeRates, latestYear]
   );
 
   const years = useMemo(() => {
-    const set = new Set<number>([currentYear]);
+    const set = new Set<number>([latestYear]);
     donations.forEach((d) => set.add(giftYear(d)));
     return [...set].sort((a, b) => b - a);
-  }, [donations, currentYear]);
+  }, [donations, latestYear]);
 
   const historyDonations = useMemo(
     () => (historyYear === "all" ? sortedDonations : sortedDonations.filter((d) => String(giftYear(d)) === historyYear)),
@@ -240,6 +247,11 @@ function DonatePageInner({ config }: Props) {
 
   const sliceHref = (slice: string) => `${pathname}?view=${slice}`;
   const backToGiving = <BackVerb label={Locale.label("mobile.giving.backToGiving")} href={pathname} />;
+  const noteSection = givingNote && (
+    <PlateSection>
+      <Typography data-testid="giving-note" sx={{ fontSize: 14, color: tc.textSecondary, whiteSpace: "pre-line" }}>{givingNote}</Typography>
+    </PlateSection>
+  );
   const messageAlert = message && (
     <Alert severity="success" sx={{ mx: { xs: "12px", md: 0 }, mb: "12px", borderRadius: "10px" }}>{message}</Alert>
   );
@@ -304,6 +316,7 @@ function DonatePageInner({ config }: Props) {
         <PageHead title={Locale.label("mobile.giving.give")} />
         {messageAlert}
         <Plate>
+          {noteSection}
           <PlateSection sx={flatBoxes}>
             {isMethodsLoading
               ? <QuietEmpty>{Locale.label("mobile.screens.loadingForm")}</QuietEmpty>
@@ -352,7 +365,7 @@ function DonatePageInner({ config }: Props) {
     );
   }
 
-  if (view === "history") {
+  if (view === "history" && historyVisible) {
     const months: { key: string; label: string; items: DonationInterface[] }[] = [];
     historyDonations.forEach((d) => {
       const dt = DateHelper.toDate(d.donationDate);
@@ -370,6 +383,7 @@ function DonatePageInner({ config }: Props) {
         {backToGiving}
         <PageHead title={Locale.label("mobile.screens.tabHistory")} />
         <Plate>
+          {noteSection}
           <PlateSection>
             <FilterPills options={yearOptions} value={historyYear} onChange={setHistoryYear} label={Locale.label("mobile.giving.years")} />
             {donationsLoading
@@ -410,19 +424,24 @@ function DonatePageInner({ config }: Props) {
     <Box>
       <PageHead title={Locale.label("mobile.screenTitles.donation")} lede={church?.name}>
         <Button variant="contained" onClick={() => setView("give")}>{Locale.label("mobile.giving.give")}</Button>
-        {donations.length > 0 && <Button variant="outlined" onClick={() => handlePrintStatement()}>{Locale.label("mobile.screens.printStatement")}</Button>}
+        {donations.length > 0 && <Button variant="outlined" onClick={() => handlePrintStatement(String(latestYear))}>{Locale.label("mobile.screens.printStatement")}</Button>}
       </PageHead>
       {messageAlert}
       <Plate>
-        <PlateSection title={String(currentYear)} action={<TextLink href={sliceHref("history")}>{Locale.label("mobile.giving.allHistory")}</TextLink>}>
-          <Box data-testid="giving-ytd-total"><BigNumber>{CurrencyHelper.formatCurrencyWithLocale(ytd.total || 0, pageCurrency)}</BigNumber></Box>
-          <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
-            {(ytd.count === 1 ? Locale.label("mobile.screens.totalThisYearGift") : Locale.label("mobile.screens.totalThisYearGifts")).replace("{}", String(ytd.count))}
-          </Typography>
-          {ytd.isConverted && (
-            <Typography data-testid="giving-ytd-converted-note" sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("mobile.screens.convertedAtCurrentRates")}</Typography>
-          )}
-        </PlateSection>
+        {noteSection}
+        {historyVisible && (
+          <PlateSection title={String(latestYear)} action={<TextLink href={sliceHref("history")}>{Locale.label("mobile.giving.allHistory")}</TextLink>}>
+            <Box data-testid="giving-ytd-total"><BigNumber>{CurrencyHelper.formatCurrencyWithLocale(ytd.total || 0, pageCurrency)}</BigNumber></Box>
+            <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
+              {latestYear === currentYear
+                ? (ytd.count === 1 ? Locale.label("mobile.screens.totalThisYearGift") : Locale.label("mobile.screens.totalThisYearGifts")).replace("{}", String(ytd.count))
+                : giftsLabel(ytd.count)}
+            </Typography>
+            {ytd.isConverted && (
+              <Typography data-testid="giving-ytd-converted-note" sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("mobile.screens.convertedAtCurrentRates")}</Typography>
+            )}
+          </PlateSection>
+        )}
 
         <PlateSection title={Locale.label("mobile.screens.recurring")} action={<TextLink href={sliceHref("manage")}>{Locale.label("mobile.screens.tabManage")}</TextLink>}>
           {subscriptions.length === 0
@@ -446,14 +465,16 @@ function DonatePageInner({ config }: Props) {
             )}
         </PlateSection>
 
-        <PlateSection
-          title={Locale.label("mobile.screens.recentActivity")}
-          action={recent.length > 0 && <TextLink onClick={() => setView("give")}>{Locale.label("mobile.giving.repeatLastGift")}</TextLink>}
-        >
-          {donationsLoading && <QuietEmpty>{Locale.label("mobile.screens.loading")}</QuietEmpty>}
-          {!donationsLoading && recent.length === 0 && <QuietEmpty>{Locale.label("mobile.screens.donationsWillAppear")}</QuietEmpty>}
-          {recent.length > 0 && <RowList>{recent.map(donationRow)}</RowList>}
-        </PlateSection>
+        {historyVisible && (
+          <PlateSection
+            title={Locale.label("mobile.screens.recentActivity")}
+            action={recent.length > 0 && <TextLink onClick={() => setView("give")}>{Locale.label("mobile.giving.repeatLastGift")}</TextLink>}
+          >
+            {donationsLoading && <QuietEmpty>{Locale.label("mobile.screens.loading")}</QuietEmpty>}
+            {!donationsLoading && recent.length === 0 && <QuietEmpty>{Locale.label("mobile.screens.donationsWillAppear")}</QuietEmpty>}
+            {recent.length > 0 && <RowList>{recent.map(donationRow)}</RowList>}
+          </PlateSection>
+        )}
 
         <PlateSection title={Locale.label("mobile.giving.paymentMethods")} action={<TextLink href={sliceHref("manage")}>{Locale.label("mobile.screens.tabManage")}</TextLink>}>
           {isMethodsLoading && <QuietEmpty>{Locale.label("mobile.screens.loading")}</QuietEmpty>}

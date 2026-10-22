@@ -3,11 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import UserContext from "@/context/UserContext";
 import { AuthGuard } from "@/components/AuthGuard";
 import type { DonationInterface, FundDonationInterface, FundInterface } from "@churchapps/helpers";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { ArrayHelper, CurrencyHelper, DateHelper } from "@churchapps/helpers";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { loadChurchAppearance } from "../../loadChurchAppearance";
+import { memberGivingYearLimit } from "../../helpers/givingYears";
 
 type Params = Promise<{ sdSlug: string; }>;
 
@@ -41,9 +42,17 @@ export default function PrintPage({ params }: { params: Params }) {
   const [currency, setCurrency] = useState<string>("usd");
   const [churchSettings, setChurchSettings] = useState<Record<string, string>>({});
   const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
+  const [blocked, setBlocked] = useState(false);
 
 
   const loadData = async () => {
+    const churchId = context?.userChurch?.church?.id;
+    const settings: Record<string, string> = (churchId && await ApiHelper.get("/settings/public/" + churchId, "MembershipApi").catch((): null => null)) || {};
+    setChurchSettings(settings);
+    if (currYear > memberGivingYearLimit(settings)) {
+      setBlocked(true);
+      return;
+    }
     const requests = [
       ApiHelper.get("/funds", "GivingApi").then((f: FundInterface[]) => { setFunds(f); }),
       ApiHelper.get("/fundDonations/my", "GivingApi").then((fd: FundDonationInterface[]) => { setFundDonations(fd); }),
@@ -144,12 +153,6 @@ export default function PrintPage({ params }: { params: Params }) {
     return tableValues;
   };
 
-  const churchId = context?.userChurch?.church?.id;
-  useEffect(() => {
-    if (!churchId) return;
-    ApiHelper.get("/settings/public/" + churchId, "MembershipApi").then((s: Record<string, string>) => { setChurchSettings(s || {}); });
-  }, [churchId]);
-
   // ponytail: duplicate of B1Admin's GivingStatementDocument legal block. Ceiling: the two
   // templates drift apart. Upgrade path: move the statement document into apphelper.
   const legalBlock = () => {
@@ -193,6 +196,8 @@ export default function PrintPage({ params }: { params: Params }) {
   // Anonymous visitors are bounced to /mobile/login by AuthGuard; don't fire the
   // giving requests or the print/router.back() timer while that redirect is in flight.
   useEffect(() => { if (context?.user) loadData(); }, [context?.user]);
+
+  if (blocked) return <AuthGuard sdSlug={sdSlug}><p style={{ padding: "24px", fontFamily: "Roboto, sans-serif" }}>{Locale.label("mobile.giving.statementUnavailable")}</p></AuthGuard>;
 
   return (
     <AuthGuard sdSlug={sdSlug}>
@@ -272,6 +277,7 @@ export default function PrintPage({ params }: { params: Params }) {
           </table>
         </div>
 
+        {churchSettings.givingNote && <p data-testid="statement-giving-note" style={{ whiteSpace: "pre-line" }}>{churchSettings.givingNote}</p>}
       </div>
     </AuthGuard>
   );
