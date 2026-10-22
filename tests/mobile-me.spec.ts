@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
+import { apiCall, getApi, membershipUrl } from "./helpers/api";
 
 test.describe("Mobile Me page", () => {
   test("renders upcoming items and event rows navigate to the group", async ({ page }) => {
@@ -58,5 +59,49 @@ test.describe("Mobile Me page", () => {
       await servingRow.click();
       await expect(page).toHaveURL(/\/mobile\/plans/, { timeout: 15000 });
     }
+  });
+
+  test("lists the forms the member submitted and opens their answers read-only", async ({ page }) => {
+    // Demo User (PER00000082) fills in the public VBS form themselves; FormElement sends the signed-in person as submittedBy.
+    const childName = `E2E Child ${Date.now()}`;
+    const api = await getApi("demo", "MembershipApi");
+    const res = await apiCall(api, "post", membershipUrl("/formsubmissions"), [
+      {
+        formId: "FRM00000004",
+        contentType: "form",
+        contentId: "FRM00000004",
+        submittedBy: "PER00000082",
+        submissionDate: new Date().toISOString(),
+        answers: [{ questionId: "QST00000013", value: childName }, { questionId: "QST00000014", value: "(217) 555-0100" }]
+      }
+    ]);
+    expect(res.ok()).toBeTruthy();
+
+    await page.goto("/mobile/me");
+    await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+    const main = page.locator("main");
+    await expect(main.getByRole("heading", { name: "My Forms", exact: true })).toBeVisible({ timeout: 15000 });
+    const formRow = main.getByTestId("me-form-row").filter({ hasText: "VBS Registration (Public)" }).first();
+    await expect(formRow).toBeVisible({ timeout: 15000 });
+    await expect(formRow).toContainText(String(new Date().getFullYear()));
+
+    await main.getByTestId("me-shortcut-myForms").click();
+    await expect(page).toHaveURL(/\/mobile\/myForms/, { timeout: 15000 });
+    await page.getByTestId("my-form-row").filter({ hasText: "VBS Registration (Public)" }).first().click();
+    await expect(page.getByText(childName)).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText("Child Full Name").first()).toBeVisible();
+    await expect(page.locator("main").getByRole("button", { name: /edit|delete/i })).toHaveCount(0);
+  });
+
+  test("shows the member's attendance and its full history", async ({ page }) => {
+    await page.goto("/mobile/me");
+    await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+    const main = page.locator("main");
+    await expect(main.getByRole("heading", { name: "My Attendance", exact: true })).toBeVisible({ timeout: 15000 });
+    await expect(main.getByTestId("me-attendance-row").first()).toBeVisible({ timeout: 15000 });
+
+    await main.getByTestId("me-shortcut-myAttendance").click();
+    await expect(page).toHaveURL(/\/mobile\/myAttendance/, { timeout: 15000 });
+    await expect(page.getByTestId("my-attendance-row").first()).toBeVisible({ timeout: 15000 });
   });
 });
