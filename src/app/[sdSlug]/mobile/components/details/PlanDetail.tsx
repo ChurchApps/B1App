@@ -555,8 +555,6 @@ const AssignmentBlock = ({
 
   if (!position || !assignment) return null;
 
-  const meta = statusMeta(assignment.status);
-
   const sortedTimes = [...times].sort((a: any, b: any) => (a?.startTime > b?.startTime ? 1 : -1));
 
   let latestBoundary: Date | null = null;
@@ -571,6 +569,10 @@ const AssignmentBlock = ({
   const canRespond = assignment.status === "Unconfirmed" && beforeService;
   const canWithdraw = assignment.status === "Accepted" && beforeService;
   const canReaccept = assignment.status === "Declined" && beforeService;
+  const responseClosed = assignment.status === "Unconfirmed" && !beforeService;
+  const meta = responseClosed
+    ? { label: Locale.label("mobile.details.responseClosed"), tone: "neu" as const }
+    : statusMeta(assignment.status);
 
   const handleRespond = async (action: "accept" | "decline") => {
     if (!assignment.id || busy) return;
@@ -618,6 +620,12 @@ const AssignmentBlock = ({
           <Button variant="contained" size="small" onClick={() => handleRespond("accept")} disabled={busy}>{Locale.label("mobile.details.accept")}</Button>
           <Button variant="outlined" size="small" onClick={() => setConfirmDecline(true)} disabled={busy}>{Locale.label("mobile.details.decline")}</Button>
         </Box>
+      )}
+
+      {responseClosed && (
+        <Typography sx={{ fontSize: 14, color: tc.textSecondary, mt: "14px" }}>
+          {Locale.label("mobile.details.responseWindowPassed")}
+        </Typography>
       )}
 
       {canWithdraw && (
