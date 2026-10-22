@@ -6,12 +6,13 @@ import { Avatar, Box, Button, Skeleton, Typography } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { ApiHelper, ArrayHelper, CurrencyHelper, DateHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
-import type { AssignmentInterface, DonationInterface, GroupInterface, PersonInterface, PlanInterface, PositionInterface, RegistrationInterface } from "@churchapps/helpers";
+import type { AssignmentInterface, DonationInterface, PersonInterface, PlanInterface, PositionInterface, RegistrationInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { expandUpcomingEvents } from "../HomeTeasers";
 import { memberGivingYearLimit } from "../../helpers/givingYears";
+import { attendanceSubtitle, attendanceTitle, useMyAttendance, useMyFormSubmissions, useMyGroups } from "../../helpers/myRecords";
 import { formatRelative, deriveNotificationUrl, getInitials } from "../util";
 import type { EventRow } from "../group/GroupCalendarTab";
 import { BackVerb, BigNumber, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
@@ -158,16 +159,9 @@ export const MePage = ({ config }: Props) => {
     enabled: loggedIn && !!householdId
   });
 
-  const { data: groups = [] } = useQuery<GroupInterface[]>({
-    queryKey: ["my-groups", context?.user?.id],
-    queryFn: async () => {
-      const data = await ApiHelper.get("/groups/my", "MembershipApi");
-      return Array.isArray(data) ? data : [];
-    },
-    enabled: loggedIn,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000
-  });
+  const { data: groups = [] } = useMyGroups(loggedIn, context?.user?.id);
+  const { data: formSubmissions = [], isLoading: formsLoading } = useMyFormSubmissions(loggedIn);
+  const { data: attendance = [], isLoading: attendanceLoading } = useMyAttendance(loggedIn);
 
   const { data: donations = [] } = useQuery<DonationInterface[]>({
     queryKey: ["donations", personId],
@@ -217,6 +211,11 @@ export const MePage = ({ config }: Props) => {
     const total = currencies.size === 1 ? gifts.reduce((sum, d) => sum + Number((d as any).fund?.amount ?? d.amount ?? 0), 0) : null;
     return { year, count: gifts.length, total, currency: [...currencies][0] || "usd" };
   }, [donations]);
+
+  const attendedLast90 = useMemo(() => {
+    const cutoff = Date.now() - 90 * 24 * 60 * 60 * 1000;
+    return attendance.filter((r) => r.visitDate && new Date(r.visitDate).getTime() >= cutoff).length;
+  }, [attendance]);
 
   const otherHousehold = household.filter((h) => h.id !== personId);
   const activeRegistrations = registrations.filter((r) => r.status !== "cancelled").length;
@@ -323,6 +322,39 @@ export const MePage = ({ config }: Props) => {
                 )}
             </PlateSection>
           )}
+
+          <PlateSection title={Locale.label("mobile.me.myForms")} action={<TextLink href="/mobile/myForms" data-testid="me-shortcut-myForms">{Locale.label("mobile.me.allForms")}</TextLink>}>
+            {formsLoading
+              ? [0, 1].map((i) => <Skeleton key={i} variant="text" height={44} />)
+              : formSubmissions.length === 0
+                ? <QuietEmpty>{Locale.label("mobile.me.noForms")}</QuietEmpty>
+                : (
+                  <RowList>
+                    {formSubmissions.slice(0, TEASER_COUNT).map((s) => (
+                      <Row key={s.id} href="/mobile/myForms" data-testid="me-form-row" title={s.form?.name || Locale.label("mobile.me.form")} subtitle={s.submissionDate ? DateHelper.prettyDate(new Date(s.submissionDate)) : undefined} />
+                    ))}
+                  </RowList>
+                )}
+          </PlateSection>
+
+          <PlateSection title={Locale.label("mobile.me.myAttendance")} action={<TextLink href="/mobile/myAttendance" data-testid="me-shortcut-myAttendance">{Locale.label("mobile.screens.tabHistory")}</TextLink>}>
+            {attendanceLoading
+              ? [0, 1].map((i) => <Skeleton key={i} variant="text" height={44} />)
+              : attendance.length === 0
+                ? <QuietEmpty>{Locale.label("mobile.me.noAttendance")}</QuietEmpty>
+                : (
+                  <>
+                    <Typography sx={{ fontSize: 15, color: tc.text }}>
+                      {Locale.label("mobile.me.attendedLast90").replace("{}", String(attendedLast90))}
+                    </Typography>
+                    <RowList>
+                      {attendance.slice(0, TEASER_COUNT).map((r, idx) => (
+                        <Row key={idx} href="/mobile/myAttendance" data-testid="me-attendance-row" title={attendanceTitle(r, groups)} subtitle={attendanceSubtitle(r, groups)} />
+                      ))}
+                    </RowList>
+                  </>
+                )}
+          </PlateSection>
 
           <PlateSection title={Locale.label("mobile.me.requestsAndRegistrations")}>
             <Typography sx={{ fontSize: 15, color: tc.text }}>
