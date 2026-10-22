@@ -20,6 +20,7 @@ import { ScreenSkeleton } from "./ScreenSkeleton";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
 import { useEngagementSort } from "../hooks/useEngagementSort";
 import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
+import { memberGivingYearLimit } from "../helpers/givingYears";
 import { loadDailyVerse, type DailyVerse } from "../helpers/dailyVerses";
 import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget, openExternal } from "../helpers/dashboardLinks";
 import { EventsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, useGivingSummary, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
@@ -132,14 +133,15 @@ export const DashboardPage = ({ config }: Props) => {
   const serving = useUpcomingServing(has("plans"));
   const groups = useMyGroups(has("groups"));
   const events = useUpcomingEvents(signedIn);
-  const showGiving = has("donation") && config?.allowDonations !== false;
+  // The teaser shows this year's total, so it steps aside (donation link falls back to a pill) when the church hides this year.
+  const showGiving = has("donation") && config?.allowDonations !== false && memberGivingYearLimit(config?.appearance as Record<string, unknown>) >= new Date().getFullYear();
   const givingSummary = useGivingSummary(showGiving);
   const showServing = serving.upcoming.length > 0;
   const showGroups = has("groups") && groups.length > 0;
   const showEvents = signedIn && events.length > 0;
 
   // Tiles skip the tab-bar dedupe so a photo-link church still gets its whole menu on Home.
-  const tileLinks = useMemo(() => links.filter((l) => l.linkType !== "votd" && linkPhoto(l) && linkTarget(l)), [links]);
+  const tileLinks = useMemo(() => links.filter((l) => linkPhoto(l) && linkTarget(l)), [links]);
 
   // Links already in the tab bar, shown as tiles, or shown as their own section don't repeat as pills.
   const pillLinks = useMemo(() => {

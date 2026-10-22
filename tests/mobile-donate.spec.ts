@@ -52,6 +52,57 @@ test.describe("Mobile donate", () => {
   });
 });
 
+// Issue #1315: B1Admin > Settings > Giving limits which years members see and can print, and adds a giving note.
+test.describe.serial("Mobile donate member giving settings", () => {
+  const MAIN_API = process.env.API_BASE || "http://localhost:8084";
+  const APP = process.env.BASE_URL || "http://grace.localtest.me:3301";
+  const NOTE = "Refunds are handled by the church office.";
+  const year = new Date().getFullYear();
+
+  const saveSettings = async (values: Record<string, string>) => {
+    const ctx = await request.newContext();
+    const login = await (await ctx.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = (login.userChurches || []).find((c: any) => c.church?.id === "CHU00000001");
+    const headers = { Authorization: `Bearer ${uc.jwt}` };
+    const all = await (await ctx.get(`${MAIN_API}/membership/settings`, { headers })).json();
+    const rows = Object.entries(values).map(([keyName, value]) => ({ ...((all as any[]).find(s => s.keyName === keyName) || { churchId: "CHU00000001", keyName }), public: 1, value }));
+    const res = await ctx.post(`${MAIN_API}/membership/settings`, { headers, data: rows });
+    if (!res.ok()) throw new Error(`settings save failed: ${res.status()}`);
+    await ctx.post(`${APP}/api/revalidate/grace`);
+    await ctx.dispose();
+  };
+
+  test.afterAll(async () => { await saveSettings({ memberGivingYears: "", givingNote: "" }); });
+
+  test("shows the church's giving note on the giving page and history", async ({ page }) => {
+    await saveSettings({ memberGivingYears: "", givingNote: NOTE });
+    await page.goto("/mobile/donate");
+    await expect(page.getByTestId("giving-note")).toHaveText(NOTE, { timeout: 30000 });
+    await page.goto("/mobile/donate?view=history");
+    await expect(page.getByTestId("giving-note")).toHaveText(NOTE, { timeout: 30000 });
+  });
+
+  test("hides history, totals and statements when the church turns them off", async ({ page }) => {
+    await saveSettings({ memberGivingYears: "off", givingNote: "" });
+    await page.goto("/mobile/donate");
+    const main = page.locator("main");
+    await expect(main.getByRole("button", { name: /^Give$/ })).toBeVisible({ timeout: 30000 });
+    await expect(main.getByRole("link", { name: /All history/i })).toHaveCount(0);
+    await expect(main.getByRole("heading", { name: /Recent Activity/i })).toHaveCount(0);
+    await expect(main.getByRole("button", { name: /Print Statement/i })).toHaveCount(0);
+  });
+
+  test("stops at the year the church allows, for viewing and printing", async ({ page }) => {
+    await saveSettings({ memberGivingYears: String(year - 1), givingNote: "" });
+    await page.goto("/mobile/donate?view=history");
+    const years = page.getByRole("group", { name: "Years" });
+    await expect(years.getByRole("button", { name: String(year - 1), exact: true })).toBeVisible({ timeout: 30000 });
+    await expect(years.getByRole("button", { name: String(year), exact: true })).toHaveCount(0);
+    await page.goto(`/mobile/donate/print?year=${year}`);
+    await expect(page.getByText(/giving statement isn't available/i)).toBeVisible({ timeout: 30000 });
+  });
+});
+
 // Mixed-currency giving: each gift keeps its own currency in the history list, but the Year-to-Date and
 // history totals are converted into the church currency (USD on Grace) with the Api's own exchange rates.
 // The expected figures are rebuilt from the Api's gifts + read-only rate table, so they follow the live rate.

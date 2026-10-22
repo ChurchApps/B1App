@@ -11,6 +11,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { expandUpcomingEvents } from "../HomeTeasers";
+import { memberGivingYearLimit } from "../../helpers/givingYears";
 import { formatRelative, deriveNotificationUrl, getInitials } from "../util";
 import type { EventRow } from "../group/GroupCalendarTab";
 import { BackVerb, BigNumber, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
@@ -311,7 +312,7 @@ export const MePage = ({ config }: Props) => {
               )}
           </PlateSection>
 
-          {givingEnabled && (
+          {givingEnabled && memberGivingYearLimit(config?.appearance as Record<string, unknown>) >= givingThisYear.year && (
             <PlateSection title={Locale.label("mobile.screenTitles.donation")} action={<TextLink href="/mobile/donate" data-testid="me-shortcut-donate">{Locale.label("mobile.screens.tabHistory")}</TextLink>}>
               {givingThisYear.count === 0
                 ? <QuietEmpty>{Locale.label("mobile.me.noGiftsThisYear").replace("{}", String(givingThisYear.year))}</QuietEmpty>
