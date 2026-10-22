@@ -45,6 +45,22 @@ test.describe.serial("Mobile home teasers", () => {
     await expect(page.getByTestId("home-giving-total")).toContainText(/\d/);
     await expect(page.getByTestId("home-giving-total")).toContainText(`Given in ${new Date().getFullYear()}`);
   });
+
+  test("shows the next three upcoming events and links to the full list", async ({ page }) => {
+    await page.goto("/mobile/dashboard");
+    await expect(mobileSignedInChrome(page)).toBeVisible();
+    const events = page.getByRole("region", { name: "Upcoming events" });
+    await expect(events).toBeVisible({ timeout: 20000 });
+    const rows = events.getByTestId("dashboard-event-row");
+    await expect(rows.first()).toBeVisible();
+    expect(await rows.count()).toBeLessThanOrEqual(3);
+    await expect(rows.first()).toHaveAttribute("href", /\/mobile\/groups/);
+
+    await events.getByRole("link", { name: "All upcoming events" }).click();
+    await expect(page).toHaveURL(/\/mobile\/me\?view=upcoming/, { timeout: 15000 });
+    await expect(page.getByRole("button", { name: /Back to Me/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByTestId("me-item-event").first()).toBeVisible({ timeout: 15000 });
+  });
 });
 
 // When the church's app Home has no links yet, signed-out visitors still get the sign-in prompt.

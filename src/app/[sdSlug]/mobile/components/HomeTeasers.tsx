@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import Link from "next/link";
 import { Box, Button, Typography } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ import { ApiHelper, CurrencyHelper, DateHelper, Locale } from "@churchapps/apphe
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "./mobileTheme";
 import { ConfirmDeclineSheet } from "./ConfirmDeclineSheet";
+import { EventProcessor } from "../helpers/eventProcessor";
 import { BigNumber, PersonAvatar, PlateSection, Row, RowList, StatusBadge, TextLink } from "./kit";
 
 interface UpcomingAssignment {
@@ -19,6 +20,8 @@ interface UpcomingAssignment {
   planName?: string;
   serviceDate: string | Date;
 }
+
+export interface UpcomingEvent { key: string; date: Date; title: string; href: string; photoUrl?: string }
 
 interface GivingSummary { year: number; total: number; count: number; currency: string; isConverted?: boolean }
 
@@ -56,6 +59,39 @@ export const useMyGroups = (enabled: boolean) => {
     gcTime: 15 * 60 * 1000
   });
   return data;
+};
+
+// Expands recurring timeline events across this month and the next two, keeping future occurrences in date order.
+export const expandUpcomingEvents = (timeline: any[], now: Date = new Date()): UpcomingEvent[] => {
+  const normalized = EventProcessor.updateTime(timeline as any);
+  const months = [new Date(now.getFullYear(), now.getMonth(), 1), new Date(now.getFullYear(), now.getMonth() + 1, 1), new Date(now.getFullYear(), now.getMonth() + 2, 1)];
+  const seen = new Set<string>();
+  const items: UpcomingEvent[] = [];
+  months.forEach((month) => {
+    EventProcessor.expandEventsForMonth(normalized, month).forEach((e: any) => {
+      const date = e.start instanceof Date ? e.start : new Date(e.start);
+      if (isNaN(date.getTime()) || date < now) return;
+      const key = `evt-${e.id}-${date.getTime()}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      items.push({ key, date, title: e.title || Locale.label("mobile.me.event"), href: e.groupId ? `/mobile/groups/${e.groupId}?activeTab=events` : "/mobile/groups", photoUrl: e.photoUrl || undefined });
+    });
+  });
+  return items.sort((a, b) => a.date.getTime() - b.date.getTime());
+};
+
+export const useUpcomingEvents = (enabled: boolean) => {
+  // Same key as MePage, so both screens share one cache entry.
+  const { data } = useQuery<any[]>({
+    queryKey: ["/events/timeline"],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/events/timeline", "ContentApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled,
+    staleTime: 60 * 1000
+  });
+  return useMemo(() => (enabled && data ? expandUpcomingEvents(data) : []), [enabled, data]);
 };
 
 export const useGivingSummary = (enabled: boolean) => {
@@ -134,6 +170,23 @@ export const GroupsTeaser = ({ groups }: { groups: GroupInterface[] }) => (
           leading={<PersonAvatar name={g.name} src={g.photoUrl || undefined} />}
           title={g.name}
           subtitle={[g.meetingTime?.trim(), g.meetingLocation?.trim()].filter(Boolean).join(" · ") || undefined}
+        />
+      ))}
+    </RowList>
+  </PlateSection>
+);
+
+export const EventsTeaser = ({ events }: { events: UpcomingEvent[] }) => (
+  <PlateSection id="dashboard-events" title={Locale.label("mobile.dashboard.upcomingEvents")} action={<TextLink href="/mobile/me?view=upcoming">{Locale.label("mobile.dashboard.allUpcomingEvents")}</TextLink>}>
+    <RowList>
+      {events.slice(0, 3).map((e) => (
+        <Row
+          key={e.key}
+          href={e.href}
+          data-testid="dashboard-event-row"
+          leading={e.photoUrl ? <Box component="img" src={e.photoUrl} alt="" loading="lazy" data-testid="dashboard-event-photo" sx={{ width: 64, height: 36, objectFit: "cover", borderRadius: "6px", flexShrink: 0, display: "block" }} /> : undefined}
+          title={e.title}
+          subtitle={DateHelper.prettyDateTime(e.date)}
         />
       ))}
     </RowList>
