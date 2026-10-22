@@ -10,7 +10,7 @@ import type { AssignmentInterface, DonationInterface, GroupInterface, PersonInte
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { EventProcessor } from "../../helpers/eventProcessor";
+import { expandUpcomingEvents } from "../HomeTeasers";
 import { formatRelative, deriveNotificationUrl, getInitials } from "../util";
 import type { EventRow } from "../group/GroupCalendarTab";
 import { BackVerb, BigNumber, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
@@ -200,19 +200,7 @@ export const MePage = ({ config }: Props) => {
     });
 
     // Expand recurring group events across the next few months, keep future occurrences.
-    const normalized = EventProcessor.updateTime(timeline as any);
-    const months = [new Date(now.getFullYear(), now.getMonth(), 1), new Date(now.getFullYear(), now.getMonth() + 1, 1), new Date(now.getFullYear(), now.getMonth() + 2, 1)];
-    const seen = new Set<string>();
-    months.forEach((month) => {
-      EventProcessor.expandEventsForMonth(normalized, month).forEach((e: any) => {
-        const date = e.start instanceof Date ? e.start : new Date(e.start);
-        if (isNaN(date.getTime()) || date < now) return;
-        const key = `evt-${e.id}-${date.getTime()}`;
-        if (seen.has(key)) return;
-        seen.add(key);
-        items.push({ kind: "event", date, title: e.title || Locale.label("mobile.me.event"), href: e.groupId ? `/mobile/groups/${e.groupId}?activeTab=events` : "/mobile/groups", key, photoUrl: e.photoUrl || undefined });
-      });
-    });
+    expandUpcomingEvents(timeline, now).forEach((e) => items.push({ kind: "event", ...e }));
 
     items.sort((a, b) => a.date.getTime() - b.date.getTime());
     return items.slice(0, 12);

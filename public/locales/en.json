@@ -196,6 +196,7 @@
       "allGroups": "All groups",
       "allPlans": "All plans",
       "allSermons": "All sermons",
+      "allUpcomingEvents": "All upcoming events",
       "givenIn": "Given in {}",
       "giving": "Giving",
       "goodAfternoon": "Good afternoon",
@@ -205,6 +206,7 @@
       "latestSermon": "Latest sermon",
       "moreFrom": "More from {}",
       "signInPrompt": "Sign in to see your groups, giving, and more.",
+      "upcomingEvents": "Upcoming events",
       "welcome": "Welcome",
       "yourGroups": "Your groups",
       "youreServing": "You're serving"

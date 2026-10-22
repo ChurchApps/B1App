@@ -22,7 +22,7 @@ import { useEngagementSort } from "../hooks/useEngagementSort";
 import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
 import { loadDailyVerse, type DailyVerse } from "../helpers/dailyVerses";
 import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget, openExternal } from "../helpers/dashboardLinks";
-import { GivingTeaser, GroupsTeaser, ServingTeaser, useGivingSummary, useMyGroups, useUpcomingServing } from "./HomeTeasers";
+import { EventsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, useGivingSummary, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
 
 interface Props {
   config: ConfigurationInterface;
@@ -131,10 +131,12 @@ export const DashboardPage = ({ config }: Props) => {
   const has = (type: string) => signedIn && links.some((l) => l.linkType === type);
   const serving = useUpcomingServing(has("plans"));
   const groups = useMyGroups(has("groups"));
+  const events = useUpcomingEvents(signedIn);
   const showGiving = has("donation") && config?.allowDonations !== false;
   const givingSummary = useGivingSummary(showGiving);
   const showServing = serving.upcoming.length > 0;
   const showGroups = has("groups") && groups.length > 0;
+  const showEvents = signedIn && events.length > 0;
 
   // Tiles skip the tab-bar dedupe so a photo-link church still gets its whole menu on Home.
   const tileLinks = useMemo(() => links.filter((l) => l.linkType !== "votd" && linkPhoto(l) && linkTarget(l)), [links]);
@@ -245,8 +247,9 @@ export const DashboardPage = ({ config }: Props) => {
 
   const servingSection = showServing && <ServingTeaser {...serving} />;
   const groupsSection = showGroups && <GroupsTeaser groups={groups} />;
+  const eventsSection = showEvents && <EventsTeaser events={events} />;
   const givingSection = showGiving && <GivingTeaser summary={givingSummary} />;
-  const wide = [tileSection, sermonSection, servingSection, groupsSection].some(Boolean);
+  const wide = [tileSection, sermonSection, servingSection, groupsSection, eventsSection].some(Boolean);
   const narrow = [verseSection, givingSection, moreSection].some(Boolean);
 
   return (
@@ -254,12 +257,12 @@ export const DashboardPage = ({ config }: Props) => {
       {head}
       {desktop && wide && narrow ? (
         <Box sx={{ display: "grid", gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)", gap: "24px", alignItems: "start" }}>
-          <Plate>{banner}{tileSection}{sermonSection}{servingSection}{groupsSection}</Plate>
+          <Plate>{banner}{tileSection}{sermonSection}{servingSection}{groupsSection}{eventsSection}</Plate>
           <Plate>{verseSection}{givingSection}{moreSection}</Plate>
         </Box>
       ) : (
         // :empty hides the sheet when the only candidate (the push banner) renders nothing.
-        <Plate sx={{ "&:empty": { display: "none" } }}>{banner}{tileSection}{sermonSection}{verseSection}{servingSection}{groupsSection}{givingSection}{moreSection}</Plate>
+        <Plate sx={{ "&:empty": { display: "none" } }}>{banner}{tileSection}{sermonSection}{verseSection}{servingSection}{groupsSection}{eventsSection}{givingSection}{moreSection}</Plate>
       )}
     </Box>
   );
