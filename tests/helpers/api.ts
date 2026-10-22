@@ -9,7 +9,7 @@ export type ApiHandle = {
   churchId: string;
 };
 
-export async function getApi(identity: "demo" | "lessons-admin"): Promise<ApiHandle> {
+export async function getApi(identity: "demo" | "lessons-admin", apiKeyName?: string): Promise<ApiHandle> {
   const ctx = await request.newContext();
   const email = identity === "lessons-admin" ? (process.env.TEST_LESSONS_ADMIN_EMAIL || "lessons-admin@demo.churchapps.org") : "demo@b1.church";
   const password = identity === "lessons-admin" ? (process.env.TEST_LESSONS_ADMIN_PASSWORD || "password") : "password";
@@ -22,7 +22,7 @@ export async function getApi(identity: "demo" | "lessons-admin"): Promise<ApiHan
   if (!res.ok()) throw new Error(`login ${identity} failed: ${res.status()}`);
   const body = await res.json();
   const uc = (body.userChurches || []).find((c: any) => c.church?.id === churchId) || body.userChurches?.[0];
-  const keyName = identity === "lessons-admin" ? "LessonsApi" : "DoingApi";
+  const keyName = apiKeyName || (identity === "lessons-admin" ? "LessonsApi" : "DoingApi");
   const api = uc?.apis?.find((a: any) => a.keyName === keyName);
   if (!api?.jwt) throw new Error(`${keyName} JWT not present for ${identity}`);
   return { request: ctx, jwt: api.jwt, churchId };
@@ -36,3 +36,4 @@ export async function apiCall(api: ApiHandle, method: "get" | "post" | "delete",
 
 export const lessonsUrl = (path: string) => `${LESSONS_API}${path}`;
 export const doingUrl = (path: string) => `${MAIN_API}/doing${path}`;
+export const membershipUrl = (path: string) => `${MAIN_API}/membership${path}`;
