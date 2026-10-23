@@ -70,4 +70,20 @@ test.describe("Public home page", () => {
     await expect(paragraph).toBeVisible();
     expect(await paragraph.evaluate((el) => getComputedStyle(el).fontFamily)).toContain("Inter");
   });
+
+  // Issue #1340: sections styled with background: var(--primary) were transparent because the
+  // theme never defined --primary. Demo palette accent is #2A6F97 and has no primary key.
+  test("palette defines --primary so primary-colored sections get a background", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByText("Welcome Home to Grace Community Church")).toBeVisible({ timeout: 30000 });
+
+    const bg = await page.evaluate(() => {
+      const div = document.createElement("div");
+      div.className = "section sectionDark";
+      div.style.background = "var(--primary)";
+      document.querySelector(".page")?.appendChild(div);
+      return getComputedStyle(div).backgroundColor;
+    });
+    expect(bg).toBe("rgb(42, 111, 151)");
+  });
 });
