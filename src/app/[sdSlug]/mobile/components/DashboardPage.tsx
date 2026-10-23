@@ -23,7 +23,8 @@ import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
 import { memberGivingYearLimit } from "../helpers/givingYears";
 import { loadDailyVerse, type DailyVerse } from "../helpers/dailyVerses";
 import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget, openExternal } from "../helpers/dashboardLinks";
-import { EventsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, useGivingSummary, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
+import { useMyAttendance, useMyFormSubmissions } from "../helpers/myRecords";
+import { AttendanceTeaser, EventsTeaser, FormsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, useGivingSummary, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
 
 interface Props {
   config: ConfigurationInterface;
@@ -130,8 +131,15 @@ export const DashboardPage = ({ config }: Props) => {
 
   const signedIn = !!(context?.user);
   const has = (type: string) => signedIn && links.some((l) => l.linkType === type);
+  // Churches can hide the anonymous sign-in prompt or reword it, and opt in to the Me tab's attendance and forms on Home (B1Admin > B1 Mobile).
+  const appearance = config?.appearance as Record<string, string> | undefined;
+  const homeAttendance = signedIn && appearance?.mobileHomeAttendance === "true";
+  const homeForms = signedIn && appearance?.mobileHomeForms === "true";
   const serving = useUpcomingServing(has("plans"));
-  const groups = useMyGroups(has("groups"));
+  // Attendance rows are titled by group, so its groups load even when the church has no Groups link.
+  const groups = useMyGroups(has("groups") || homeAttendance);
+  const { data: attendance = [] } = useMyAttendance(homeAttendance);
+  const { data: formSubmissions = [] } = useMyFormSubmissions(homeForms);
   const events = useUpcomingEvents(signedIn);
   // The teaser shows this year's total, so it steps aside (donation link falls back to a pill) when the church hides this year.
   const showGiving = has("donation") && config?.allowDonations !== false && memberGivingYearLimit(config?.appearance as Record<string, unknown>) >= new Date().getFullYear();
@@ -155,8 +163,6 @@ export const DashboardPage = ({ config }: Props) => {
   }, [links, latest, showServing, showGroups, showGiving]);
   const { sorted: sortedPills, increment: incrementViewCount } = useEngagementSort(pillLinks, LINK_VIEW_COUNTS_KEY, linkId);
 
-  // Churches can hide the anonymous sign-in prompt or reword it (B1Admin > B1 Mobile).
-  const appearance = config?.appearance as Record<string, string> | undefined;
   const hideSignInPrompt = appearance?.mobileHideSignInPrompt === "true";
   const tileLayout = appearance?.mobileTileLayout === "scroll" || appearance?.mobileTileLayout === "list" ? appearance.mobileTileLayout : "grid";
   const signInPrompt = (appearance?.mobileSignInPromptText || "").trim() || Locale.label("mobile.dashboard.signInPrompt");
@@ -250,8 +256,10 @@ export const DashboardPage = ({ config }: Props) => {
   const servingSection = showServing && <ServingTeaser {...serving} />;
   const groupsSection = showGroups && <GroupsTeaser groups={groups} />;
   const eventsSection = showEvents && <EventsTeaser events={events} />;
+  const attendanceSection = homeAttendance && attendance.length > 0 && <AttendanceTeaser attendance={attendance} groups={groups} />;
+  const formsSection = homeForms && formSubmissions.length > 0 && <FormsTeaser submissions={formSubmissions} />;
   const givingSection = showGiving && <GivingTeaser summary={givingSummary} />;
-  const wide = [tileSection, sermonSection, servingSection, groupsSection, eventsSection].some(Boolean);
+  const wide = [tileSection, sermonSection, servingSection, groupsSection, eventsSection, attendanceSection, formsSection].some(Boolean);
   const narrow = [verseSection, givingSection, moreSection].some(Boolean);
 
   return (
@@ -259,12 +267,12 @@ export const DashboardPage = ({ config }: Props) => {
       {head}
       {desktop && wide && narrow ? (
         <Box sx={{ display: "grid", gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)", gap: "24px", alignItems: "start" }}>
-          <Plate>{banner}{tileSection}{sermonSection}{servingSection}{groupsSection}{eventsSection}</Plate>
+          <Plate>{banner}{tileSection}{sermonSection}{servingSection}{groupsSection}{eventsSection}{attendanceSection}{formsSection}</Plate>
           <Plate>{verseSection}{givingSection}{moreSection}</Plate>
         </Box>
       ) : (
         // :empty hides the sheet when the only candidate (the push banner) renders nothing.
-        <Plate sx={{ "&:empty": { display: "none" } }}>{banner}{tileSection}{sermonSection}{verseSection}{servingSection}{groupsSection}{eventsSection}{givingSection}{moreSection}</Plate>
+        <Plate sx={{ "&:empty": { display: "none" } }}>{banner}{tileSection}{sermonSection}{verseSection}{servingSection}{groupsSection}{eventsSection}{attendanceSection}{formsSection}{givingSection}{moreSection}</Plate>
       )}
     </Box>
   );

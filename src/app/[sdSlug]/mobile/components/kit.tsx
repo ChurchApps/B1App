@@ -83,11 +83,11 @@ export const TextLink = ({ href, onClick, children, danger, disabled, sx, ...res
   return <Box component="button" type="button" onClick={onClick} disabled={disabled} sx={style} {...(rest as React.ButtonHTMLAttributes<HTMLButtonElement>)}>{children}</Box>;
 };
 
-export const PlateSection = ({ title, action, children, sx, id }: { title?: React.ReactNode; action?: React.ReactNode; children?: React.ReactNode; sx?: SxProps<Theme>; id?: string }) => {
+export const PlateSection = ({ title, action, children, sx, id, "data-testid": testId }: { title?: React.ReactNode; action?: React.ReactNode; children?: React.ReactNode; sx?: SxProps<Theme>; id?: string; "data-testid"?: string }) => {
   const autoId = React.useId();
   const headingId = id ? `${id}-h` : autoId;
   return (
-    <Box component="section" id={id} aria-labelledby={title ? headingId : undefined} className="plate-sec" sx={[{ px: { xs: "16px", md: "24px" }, py: { xs: "18px", md: "22px" } }, ...(Array.isArray(sx) ? sx : [sx])]}>
+    <Box component="section" id={id} data-testid={testId} aria-labelledby={title ? headingId : undefined} className="plate-sec" sx={[{ px: { xs: "16px", md: "24px" }, py: { xs: "18px", md: "22px" } }, ...(Array.isArray(sx) ? sx : [sx])]}>
       {(title || action) && (
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", mb: "10px", minHeight: 22 }}>
           {title ? <Eyebrow id={headingId}>{title}</Eyebrow> : <span />}
