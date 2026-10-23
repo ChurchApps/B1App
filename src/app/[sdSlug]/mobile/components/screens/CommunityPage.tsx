@@ -20,9 +20,10 @@ interface PeopleSection {
   people: PersonInterface[];
 }
 
-// Mirrors the Api gate (PersonController.shouldShowInDirectory): statuses not listed here (Guest, Inactive) never pass.
+// Mirrors the Api gate (PersonController.canViewDirectory): statuses not listed here (Guest, Inactive) never pass,
+// and the "Staff" tier (Admins Only) is out of every status's reach, so only People View gets in.
 const STATUS_RANK: Record<string, number> = { staff: 3, member: 2, "regular attendee": 1, visitor: 0 };
-const REQUIRED_RANK: Record<string, number> = { Staff: 3, Members: 2, "Regular Attendees": 1, Everyone: 0 };
+const REQUIRED_RANK: Record<string, number> = { Staff: 4, Members: 2, "Regular Attendees": 1, Everyone: 0 };
 
 export const CommunityPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
