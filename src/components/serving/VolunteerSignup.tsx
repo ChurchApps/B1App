@@ -16,7 +16,7 @@ interface PositionWithCount extends PositionInterface {
 }
 
 interface SignupPlanData {
-  plan: PlanInterface;
+  plan: PlanInterface & { signupDeadline?: string | null };
   positions: PositionWithCount[];
   times: TimeInterface[];
 }
@@ -100,11 +100,10 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
 
   const getMyAssignment = (positionId: string) => myAssignments.find(a => a.positionId === positionId);
 
+  // The Api counts the deadline back from the first service time (#1325).
   const isDeadlinePassed = () => {
-    if (!plan.signupDeadlineHours || !plan.serviceDate) return false;
-    const deadline = new Date(plan.serviceDate);
-    deadline.setHours(deadline.getHours() - plan.signupDeadlineHours);
-    return new Date() > deadline;
+    if (!plan.signupDeadline) return false;
+    return new Date() > new Date(plan.signupDeadline);
   };
 
   const deadlinePassed = isDeadlinePassed();
