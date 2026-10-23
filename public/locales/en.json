@@ -306,6 +306,8 @@
       "removing": "Removing...",
       "requestPending": "Request Pending",
       "requestPendingNote": "Your request to join has been sent. A group leader will review it.",
+      "responseClosed": "Response closed",
+      "responseWindowPassed": "This serving time has passed, so you can no longer respond.",
       "retry": "Retry",
       "send": "Send",
       "sendMessage": "Send message",
