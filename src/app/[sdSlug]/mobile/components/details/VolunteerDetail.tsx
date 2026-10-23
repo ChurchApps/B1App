@@ -21,7 +21,7 @@ interface Props {
 }
 
 interface SignupPlanData {
-  plan: PlanInterface & { signupDeadlineHours?: number; notes?: string; showVolunteerNames?: boolean };
+  plan: PlanInterface & { signupDeadlineHours?: number; signupDeadline?: string | null; notes?: string; showVolunteerNames?: boolean };
   positions: (PositionInterface & { filledCount: number })[];
   times: TimeInterface[];
 }
@@ -94,11 +94,10 @@ export const VolunteerDetail = ({ id, config }: Props) => {
 
   const load = () => queryClient.invalidateQueries({ queryKey: ["volunteer-detail", churchId, id, signedIn] });
 
+  // The Api counts the deadline back from the first service time (#1325).
   const isDeadlinePassed = React.useMemo(() => {
-    if (!plan?.signupDeadlineHours || !plan?.serviceDate) return false;
-    const deadline = new Date(plan.serviceDate);
-    deadline.setHours(deadline.getHours() - (plan.signupDeadlineHours || 0));
-    return new Date() > deadline;
+    if (!plan?.signupDeadline) return false;
+    return new Date() > new Date(plan.signupDeadline);
   }, [plan]);
 
   const getMyAssignment = (positionId?: string) =>
