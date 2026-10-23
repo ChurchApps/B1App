@@ -10,6 +10,7 @@ import UserContext from "@/context/UserContext";
 import { mobileTheme } from "./mobileTheme";
 import { ConfirmDeclineSheet } from "./ConfirmDeclineSheet";
 import { EventProcessor } from "../helpers/eventProcessor";
+import { attendanceSubtitle, attendanceTitle, type MyAttendanceRecord, type MyFormSubmission } from "../helpers/myRecords";
 import { BigNumber, PersonAvatar, PlateSection, Row, RowList, StatusBadge, TextLink } from "./kit";
 
 interface UpcomingAssignment {
@@ -188,6 +189,34 @@ export const EventsTeaser = ({ events }: { events: UpcomingEvent[] }) => (
           title={e.title}
           subtitle={DateHelper.prettyDateTime(e.date)}
         />
+      ))}
+    </RowList>
+  </PlateSection>
+);
+
+// Same sections as the Me tab, shown on Home when the church turns them on (B1Admin > B1 Mobile).
+export const AttendanceTeaser = ({ attendance, groups }: { attendance: MyAttendanceRecord[]; groups: GroupInterface[] }) => {
+  const cutoff = Date.now() - 90 * 24 * 60 * 60 * 1000;
+  const attendedLast90 = attendance.filter((r) => r.visitDate && new Date(r.visitDate).getTime() >= cutoff).length;
+  return (
+    <PlateSection data-testid="home-attendance-section" title={Locale.label("mobile.me.myAttendance")} action={<TextLink href="/mobile/myAttendance">{Locale.label("mobile.screens.tabHistory")}</TextLink>}>
+      <Typography sx={{ fontSize: 15, color: mobileTheme.colors.text }}>
+        {Locale.label("mobile.me.attendedLast90").replace("{}", String(attendedLast90))}
+      </Typography>
+      <RowList>
+        {attendance.slice(0, 2).map((r, idx) => (
+          <Row key={idx} href="/mobile/myAttendance" data-testid="home-attendance-row" title={attendanceTitle(r, groups)} subtitle={attendanceSubtitle(r, groups)} />
+        ))}
+      </RowList>
+    </PlateSection>
+  );
+};
+
+export const FormsTeaser = ({ submissions }: { submissions: MyFormSubmission[] }) => (
+  <PlateSection data-testid="home-forms-section" title={Locale.label("mobile.me.myForms")} action={<TextLink href="/mobile/myForms">{Locale.label("mobile.me.allForms")}</TextLink>}>
+    <RowList>
+      {submissions.slice(0, 2).map((s) => (
+        <Row key={s.id} href="/mobile/myForms" data-testid="home-form-row" title={s.form?.name || Locale.label("mobile.me.form")} subtitle={s.submissionDate ? DateHelper.prettyDate(new Date(s.submissionDate)) : undefined} />
       ))}
     </RowList>
   </PlateSection>
