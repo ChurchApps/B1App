@@ -52,7 +52,7 @@ export function VolunteerBrowse({ signupPlans, defaultTitle }: Props) {
                   <Box>
                     <Typography variant="h6" sx={{ fontWeight: 600 }}>{plan.name}</Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {DateHelper.prettyDate(new Date(plan.serviceDate || ""))}
+                      {plan.serviceDate ? DateHelper.prettyDate(DateHelper.toDate(plan.serviceDate)) : ""}
                       {times.length > 0 && (" \u00b7 " + times.map(t => t.displayName).join(", "))}
                     </Typography>
                   </Box>
