@@ -37,6 +37,12 @@ export const Theme: React.FC<Props> = (props) => {
     pushKV(lines, "--accent", palette.accent);
     pushKV(lines, "--darkAccent", palette.darkAccent);
     pushKV(lines, "--dark", palette.dark);
+    // Semantic colors, defaulted the same way as the editor's theme (sections can use var(--primary)).
+    pushKV(lines, "--primary", palette.primary || palette.accent || "#1976D2");
+    pushKV(lines, "--secondary", palette.secondary || palette.darkAccent || "#424242");
+    pushKV(lines, "--success", palette.success || "#4CAF50");
+    pushKV(lines, "--warning", palette.warning || "#FF9800");
+    pushKV(lines, "--error", palette.error || "#F44336");
     paletteExtras = palette;
   }
 
