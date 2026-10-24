@@ -59,6 +59,22 @@ test.describe("Mobile content screens", () => {
     await expect(page.getByRole("button", { name: "Share Verse of the Day" })).toBeVisible();
   });
 
+  test("votd this week shows each verse in full and a tap opens that day's picture", async ({ page }) => {
+    await page.goto("/mobile/votd");
+    const week = page.getByRole("region", { name: "This week" });
+    const rows = week.getByTestId("votd-week-row");
+    await expect(rows).toHaveCount(3, { timeout: 15000 });
+    const subtitle = rows.first().locator(".MuiTypography-root").last();
+    await expect(subtitle).not.toHaveCSS("white-space", "nowrap");
+    const reference = (await rows.first().locator(".MuiTypography-root").first().textContent())!.trim();
+    await rows.first().click();
+    const dialog = page.getByRole("dialog", { name: reference });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("img")).toHaveAttribute("src", /^https:\/\/votd\.org\/v1\/\d+\/(1x1|16x9|9x16)\.jpg$/);
+    await dialog.getByRole("button", { name: "Close" }).click();
+    await expect(dialog).toBeHidden();
+  });
+
   test("votd share image hands the day's picture to the share sheet as a file", async ({ page }) => {
     await page.addInitScript(() => {
       const w = window as any;
