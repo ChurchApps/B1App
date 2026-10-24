@@ -7,7 +7,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import { Locale } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
-import { PageHead, Plate, PlateSection, Row, RowList } from "../kit";
+import { PageHead, Plate, PlateSection, Row, RowList, Sheet } from "../kit";
 import { getDayOfYear, loadDailyVerse, type DailyVerse } from "../../helpers/dailyVerses";
 
 const daysAgo = (n: number) => {
@@ -36,6 +36,7 @@ export const VotdPage = () => {
   const [imageError, setImageError] = useState(false);
   const [shareMessage, setShareMessage] = useState<string | null>(null);
   const [week, setWeek] = useState<{ date: Date; verse: DailyVerse }[]>([]);
+  const [selected, setSelected] = useState<{ date: Date; verse: DailyVerse } | null>(null);
 
   useEffect(() => {
     setDay(getDayOfYear());
@@ -163,18 +164,39 @@ export const VotdPage = () => {
         {week.length > 0 && (
           <PlateSection title={Locale.label("mobile.votd.thisWeek")}>
             <RowList>
-              {week.map(({ date, verse: v }) => (
+              {week.map((entry) => (
                 <Row
-                  key={date.toDateString()}
-                  title={v.reference}
-                  subtitle={`${date.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" })} · ${v.text}`}
-                  sx={{ "& .MuiTypography-root:last-of-type": { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }}
+                  key={entry.date.toDateString()}
+                  data-testid="votd-week-row"
+                  onClick={() => setSelected(entry)}
+                  title={entry.verse.reference}
+                  subtitle={`${entry.date.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" })} · ${entry.verse.text}`}
+                  chevron
                 />
               ))}
             </RowList>
           </PlateSection>
         )}
       </Plate>
+      <Sheet open={!!selected} onClose={() => setSelected(null)} title={selected?.verse.reference || ""}>
+        {selected && (
+          <>
+            <Box sx={{ borderRadius: "10px", overflow: "hidden", bgcolor: tc.primaryDeep, display: "flex", justifyContent: "center", mb: "14px" }}>
+              <img
+                src={`https://votd.org/v1/${getDayOfYear(selected.date)}/${shape}.jpg`}
+                alt={`${selected.verse.reference} — Verse of the Day`}
+                style={{ display: "block", maxWidth: "100%", maxHeight: "60vh", objectFit: "contain" }}
+              />
+            </Box>
+            <Typography sx={{ fontSize: 13.5, fontWeight: 600, color: tc.textSecondary, mb: "6px" }}>
+              {selected.date.toLocaleDateString(DateHelper.locale, { weekday: "long", month: "long", day: "numeric" })}
+            </Typography>
+            <Typography sx={{ fontFamily: mobileTheme.fonts.serif, fontStyle: "italic", fontSize: 19, lineHeight: "28px", color: tc.text }}>
+              &ldquo;{selected.verse.text}&rdquo;
+            </Typography>
+          </>
+        )}
+      </Sheet>
     </Box>
   );
 };

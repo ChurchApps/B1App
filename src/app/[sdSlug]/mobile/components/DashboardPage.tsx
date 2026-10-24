@@ -22,6 +22,7 @@ import { useEngagementSort } from "../hooks/useEngagementSort";
 import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
 import { memberGivingYearLimit } from "../helpers/givingYears";
 import { loadDailyVerse, type DailyVerse } from "../helpers/dailyVerses";
+import { useAutoScroll } from "../helpers/useAutoScroll";
 import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget, openExternal } from "../helpers/dashboardLinks";
 import { useMyAttendance, useMyFormSubmissions } from "../helpers/myRecords";
 import { AttendanceTeaser, EventsTeaser, FormsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, useGivingSummary, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
@@ -78,6 +79,7 @@ export const DashboardPage = ({ config }: Props) => {
   const [firstName, setFirstName] = React.useState("");
   const [dateLine, setDateLine] = React.useState("");
   const [verse, setVerse] = React.useState<DailyVerse | null>(null);
+  const [tileStrip, setTileStrip] = React.useState<HTMLElement | null>(null);
 
   React.useEffect(() => {
     setFirstName(context?.person?.name?.first || context?.user?.firstName || "");
@@ -164,7 +166,9 @@ export const DashboardPage = ({ config }: Props) => {
   const { sorted: sortedPills, increment: incrementViewCount } = useEngagementSort(pillLinks, LINK_VIEW_COUNTS_KEY, linkId);
 
   const hideSignInPrompt = appearance?.mobileHideSignInPrompt === "true";
-  const tileLayout = appearance?.mobileTileLayout === "scroll" || appearance?.mobileTileLayout === "list" ? appearance.mobileTileLayout : "grid";
+  const tileLayout = ["scroll", "autoscroll", "list"].includes(appearance?.mobileTileLayout || "") ? appearance!.mobileTileLayout : "grid";
+  // "autoscroll" is the scrolling row that also moves on its own (opt-in in B1Admin > B1 Mobile).
+  const tileAutoScroll = useAutoScroll(tileStrip, { enabled: tileLayout === "autoscroll" });
   const signInPrompt = (appearance?.mobileSignInPromptText || "").trim() || Locale.label("mobile.dashboard.signInPrompt");
 
   const head = signedIn
@@ -195,8 +199,8 @@ export const DashboardPage = ({ config }: Props) => {
             return <Row key={linkId(l)} {...nav} title={l.text} leading={<Thumb src={linkPhoto(l)} width={56} height={56} />} chevron />;
           })}
         </RowList>
-      ) : tileLayout === "scroll" ? (
-        <Box data-testid="home-tile-scroll" sx={{ display: "flex", gap: "8px", overflowX: "auto", scrollSnapType: "x mandatory", pb: "4px", "&::-webkit-scrollbar": { display: "none" }, scrollbarWidth: "none" }}>
+      ) : tileLayout === "scroll" || tileLayout === "autoscroll" ? (
+        <Box ref={setTileStrip} data-testid="home-tile-scroll" data-autoscroll={tileAutoScroll ? "on" : "off"} sx={{ display: "flex", gap: "8px", overflowX: "auto", scrollSnapType: "x mandatory", pb: "4px", "&::-webkit-scrollbar": { display: "none" }, scrollbarWidth: "none" }}>
           {tileLinks.map((l) => <PhotoTile key={linkId(l)} link={l} wide={false} fixedWidth />)}
         </Box>
       ) : (

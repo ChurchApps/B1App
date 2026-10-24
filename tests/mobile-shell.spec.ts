@@ -256,6 +256,26 @@ test.describe("Mobile dashboard tile layout", () => {
     expect(new Set(boxes.map(b => Math.round(b!.y))).size).toBe(1);
   });
 
+  test("moves the tile row on its own and loops back when the church picks Scrolling (automatic)", async ({ page }) => {
+    await setTileLayout("autoscroll");
+    await openDashboard(page);
+    const row = page.getByTestId("home-tile-scroll");
+    await expect(row.getByRole("link")).toHaveCount(3);
+    await page.mouse.move(0, 0);
+    await expect.poll(() => row.evaluate((el) => el.scrollLeft), { timeout: 15000 }).toBeGreaterThan(0);
+    // Past the last tile it returns to the first instead of stopping.
+    await expect.poll(() => row.evaluate((el) => el.scrollLeft), { timeout: 20000 }).toBe(0);
+  });
+
+  test("keeps the tile row still under reduced motion", async ({ page }) => {
+    await setTileLayout("autoscroll");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openDashboard(page);
+    const row = page.getByTestId("home-tile-scroll");
+    await expect(row.getByRole("link")).toHaveCount(3);
+    await expect(row).toHaveAttribute("data-autoscroll", "off");
+  });
+
   // Issue #1315: a verse-of-the-day link with a photo is a tile like the rest, not only the verse section.
   test("shows a photo verse-of-the-day link as a tile", async ({ page }) => {
     await setTileLayout("grid");
