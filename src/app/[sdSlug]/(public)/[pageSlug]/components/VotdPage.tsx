@@ -1,11 +1,15 @@
 "use client";
 
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Container, Dialog, DialogActions, DialogContent, Grid, Link, Snackbar, Stack, Typography } from "@mui/material";
+import ShareIcon from "@mui/icons-material/Share";
+import ImageIcon from "@mui/icons-material/Image";
+import DownloadIcon from "@mui/icons-material/Download";
 import { Locale } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/helpers";
 import { useState, useEffect } from "react";
 import { getDayOfYear, loadDailyVerse, type DailyVerse } from "../../../mobile/helpers/dailyVerses";
 import { useAutoScroll } from "../../../mobile/helpers/useAutoScroll";
+import { downloadVerseImage, groupByMonth, pastDatesThisYear, shareVerseImage, shareVerseText, type ShareResult } from "../../../mobile/helpers/shareVerse";
 
 const WEEK_DAYS = 6;
 
@@ -15,13 +19,21 @@ const daysAgo = (n: number) => {
   return d;
 };
 
+// The website always shares the wide picture.
+const SHARE_SHAPE = "16x9";
+
+type DayEntry = { date: Date; verse: DailyVerse | null };
+
 const imageUrl = (date: Date, shape: string) => `https://votd.org/v1/${getDayOfYear(date)}/${shape}.jpg`;
 
 export function VotdPage() {
   const [shape, setShape] = useState("16x9");
   const [today, setToday] = useState<Date | null>(null);
   const [verse, setVerse] = useState<DailyVerse | null>(null);
-  const [week, setWeek] = useState<{ date: Date; verse: DailyVerse | null }[]>([]);
+  const [week, setWeek] = useState<DayEntry[]>([]);
+  const [selected, setSelected] = useState<DayEntry | null>(null);
+  const [past, setPast] = useState<DayEntry[] | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [strip, setStrip] = useState<HTMLElement | null>(null);
   useAutoScroll(strip, { enabled: week.length > 0 });
 
@@ -61,6 +73,39 @@ export function VotdPage() {
 
   const title = Locale.label("pageSlug.verseOfTheDay", "Verse of the Day");
   const longDate = (d: Date) => d.toLocaleDateString(DateHelper.locale, { weekday: "long", month: "long", day: "numeric" });
+  const shortDate = (d: Date) => d.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" });
+
+  const report = (result: ShareResult) => {
+    if (result === "copied") setMessage(Locale.label("mobile.votd.copied"));
+    else if (result === "failed") setMessage(Locale.label("mobile.votd.unableToShare"));
+  };
+
+  const shareActions = (date: Date, v: DailyVerse | null) => {
+    const day = getDayOfYear(date);
+    return (
+      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap", mt: 2 }}>
+        <Button variant="contained" startIcon={<ShareIcon />} onClick={async () => report(await shareVerseText(v, day, SHARE_SHAPE))}>{Locale.label("mobile.votd.share")}</Button>
+        <Button variant="outlined" startIcon={<ImageIcon />} onClick={async () => report(await shareVerseImage(v, day, SHARE_SHAPE))}>{Locale.label("mobile.votd.shareImage")}</Button>
+        <Button variant="text" startIcon={<DownloadIcon />} onClick={async () => report(await downloadVerseImage(day, SHARE_SHAPE))}>{Locale.label("mobile.votd.download")}</Button>
+      </Stack>
+    );
+  };
+
+  const openOnKey = (entry: DayEntry) => (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setSelected(entry);
+    }
+  };
+
+  const togglePast = () => {
+    if (past) { setPast(null); return; }
+    const dates = pastDatesThisYear();
+    setPast(dates.map((date) => ({ date, verse: null })));
+    Promise.all(dates.map((d) => loadDailyVerse(d).catch((): DailyVerse | null => null))).then((verses) => {
+      setPast((current) => (current ? dates.map((date, i) => ({ date, verse: verses[i] })) : current));
+    });
+  };
 
   return (
     <Container sx={{ py: 3 }}>
@@ -85,28 +130,85 @@ export function VotdPage() {
               </Typography>
               {verse && <Typography sx={{ mt: 1.5, fontWeight: 600 }}>{verse.reference}</Typography>}
               <Typography sx={{ mt: 0.5, color: "text.secondary" }}>{longDate(today)}</Typography>
+              {shareActions(today, verse)}
             </Grid>
           </Grid>
 
-          <Typography component="h2" variant="h5" sx={{ mt: 5, mb: 2 }}>{Locale.label("pageSlug.thisWeek", "This week")}</Typography>
+          <Box sx={{ mt: 5, mb: 2, display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 2 }}>
+            <Typography component="h2" variant="h5">{Locale.label("pageSlug.thisWeek", "This week")}</Typography>
+            <Link component="button" type="button" onClick={togglePast} aria-expanded={!!past} sx={{ fontSize: 16 }}>{Locale.label("mobile.votd.pastVerses")}</Link>
+          </Box>
           <Box
             ref={setStrip}
             data-testid="votd-week-strip"
             sx={{ display: "flex", gap: 2, overflowX: "auto", scrollSnapType: "x mandatory", pb: 1, "&::-webkit-scrollbar": { display: "none" }, scrollbarWidth: "none" }}
           >
-            {week.map(({ date, verse: v }) => (
-              <Box key={date.toDateString()} data-testid="votd-week-day" sx={{ flex: "0 0 280px", scrollSnapAlign: "start", border: 1, borderColor: "divider", borderRadius: 2, overflow: "hidden", bgcolor: "background.paper" }}>
-                <img src={imageUrl(date, "16x9")} alt={v ? `${v.reference} — ${title}` : title} loading="lazy" style={{ display: "block", width: "100%", aspectRatio: "16 / 9", objectFit: "cover" }} />
-                <Box sx={{ p: 2 }}>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>{date.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" })}</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>{v?.reference}</Typography>
-                  <Typography variant="body2" sx={{ fontStyle: "italic", mt: 0.5 }}>{v?.text}</Typography>
+            {week.map((entry) => {
+              const { date, verse: v } = entry;
+              return (
+                <Box key={date.toDateString()} data-testid="votd-week-day" role="button" tabIndex={0} onClick={() => setSelected(entry)} onKeyDown={openOnKey(entry)} sx={{ cursor: "pointer", "&:hover, &:focus-visible": { boxShadow: 3 }, flex: "0 0 280px", scrollSnapAlign: "start", border: 1, borderColor: "divider", borderRadius: 2, overflow: "hidden", bgcolor: "background.paper" }}>
+                  <img src={imageUrl(date, "16x9")} alt={v ? `${v.reference} — ${title}` : title} loading="lazy" style={{ display: "block", width: "100%", aspectRatio: "16 / 9", objectFit: "cover" }} />
+                  <Box sx={{ p: 2 }}>
+                    <Typography variant="body2" sx={{ color: "text.secondary" }}>{date.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" })}</Typography>
+                    <Typography sx={{ fontWeight: 600 }}>{v?.reference}</Typography>
+                    <Typography variant="body2" sx={{ fontStyle: "italic", mt: 0.5 }}>{v?.text}</Typography>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              );
+            })}
           </Box>
+
+          {past && (
+            <Box data-testid="votd-past" sx={{ mt: 4 }}>
+              {groupByMonth(past).map((group) => (
+                <Box key={group.key} component="section" sx={{ mb: 3 }}>
+                  <Typography component="h3" variant="h6" sx={{ mb: 1 }}>{group.month.toLocaleDateString(DateHelper.locale, { month: "long" })}</Typography>
+                  <Box sx={{ border: 1, borderColor: "divider", borderRadius: 2, overflow: "hidden" }}>
+                    {group.entries.map((entry) => (
+                      <Box
+                        key={entry.date.toDateString()}
+                        data-testid="votd-past-row"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => setSelected(entry)}
+                        onKeyDown={openOnKey(entry)}
+                        sx={{ display: "flex", gap: 2, px: 2, py: 1.25, cursor: "pointer", "&:not(:last-of-type)": { borderBottom: 1, borderColor: "divider" }, "&:hover, &:focus-visible": { bgcolor: "action.hover" } }}
+                      >
+                        <Typography sx={{ color: "text.secondary", minWidth: 110 }}>{shortDate(entry.date)}</Typography>
+                        <Typography sx={{ fontWeight: 600 }}>{entry.verse?.reference}</Typography>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          )}
         </>
       )}
+
+      <Dialog open={!!selected} onClose={() => setSelected(null)} fullWidth maxWidth="md" aria-labelledby="votd-day-title" slotProps={{ paper: { "data-testid": "votd-day-dialog" } as any }}>
+        {selected && (
+          <>
+            <DialogContent>
+              <Box sx={{ borderRadius: 2, overflow: "hidden", bgcolor: "grey.900", display: "flex", justifyContent: "center", mb: 2 }}>
+                <img src={imageUrl(selected.date, SHARE_SHAPE)} alt={selected.verse ? `${selected.verse.reference} — ${title}` : title} style={{ display: "block", width: "100%", aspectRatio: "16 / 9", objectFit: "contain" }} />
+              </Box>
+              <Typography id="votd-day-title" sx={{ color: "text.secondary" }}>{longDate(selected.date)}</Typography>
+              {selected.verse && (
+                <>
+                  <Typography sx={{ fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic", fontSize: 22, lineHeight: 1.4, mt: 1 }}>&ldquo;{selected.verse.text}&rdquo;</Typography>
+                  <Typography sx={{ mt: 1, fontWeight: 600 }}>{selected.verse.reference}</Typography>
+                </>
+              )}
+              {shareActions(selected.date, selected.verse)}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setSelected(null)}>{Locale.label("common.close")}</Button>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
+      <Snackbar open={!!message} autoHideDuration={2500} onClose={() => setMessage(null)} message={message} />
     </Container>
   );
 }
