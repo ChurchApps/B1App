@@ -77,6 +77,22 @@ test.describe("Public built-in routes", () => {
     await expect(page.locator("body")).not.toContainText(/404|not found/i);
   });
 
+  test("/votd shows today's verse beside the picture and a looping strip of the past week", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/votd");
+    const hero = page.getByTestId("votd-today");
+    await expect(hero.getByRole("img", { name: /Verse of the Day/ })).toBeVisible({ timeout: 20000 });
+    await expect(hero.getByTestId("votd-today-text")).not.toBeEmpty();
+    const imgBox = await hero.getByRole("img").first().boundingBox();
+    expect(imgBox!.height).toBeLessThanOrEqual(800 * 0.5 + 1);
+    const strip = page.getByTestId("votd-week-strip");
+    await expect(strip.getByTestId("votd-week-day")).toHaveCount(6);
+    await expect(strip.getByTestId("votd-week-day").first().locator("p").last()).not.toBeEmpty();
+    // The strip moves on its own when nobody is touching it.
+    await page.mouse.move(0, 0);
+    await expect.poll(() => strip.evaluate((el) => el.scrollLeft), { timeout: 15000 }).toBeGreaterThan(0);
+  });
+
   test("/this-page-does-not-exist returns 404", async ({ page }) => {
     const response = await page.goto("/this-page-does-not-exist");
     expect(response?.status()).toBe(404);
