@@ -64,6 +64,7 @@ export function FormPage(props: Props) {
       formSubmissionId=""
       personId={PersonHelper?.person?.id}
       displayMode={form?.displayMode}
+      showHeader={false}
       updatedFunction={handleUpdate}
       cancelFunction={() => router.push("/")}
     />
