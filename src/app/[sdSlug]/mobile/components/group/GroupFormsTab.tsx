@@ -6,7 +6,7 @@ import PrintIcon from "@mui/icons-material/PrintOutlined";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import { mobileTheme } from "../mobileTheme";
-import { KeyValues, PlateSection, QuietEmpty, Row, RowList, Sheet, TextLink } from "../kit";
+import { PlateSection, QuietEmpty, Row, RowList, Sheet, TextLink } from "../kit";
 
 const tc = mobileTheme.colors;
 
@@ -54,8 +54,11 @@ const displayAnswer = (q: Question, s: Submission) => {
   return values.map((v) => q.choices!.find((c) => c.value === v)?.text || v).join(", ");
 };
 
+// The church's name and light-background logo, printed as a centered letterhead.
+export interface PrintChurch { name?: string; logoUrl?: string }
+
 // Prints through a hidden frame so only the answers reach the printer, not the app around them.
-const printAnswers = (title: string, items: { heading: string; rows: { label: string; value: string }[] }[]) => {
+const printAnswers = (church: PrintChurch, title: string, items: { heading: string; rows: { label: string; value: string }[] }[]) => {
   const frame = document.createElement("iframe");
   frame.setAttribute("aria-hidden", "true");
   Object.assign(frame.style, { position: "fixed", width: "0", height: "0", border: "0", right: "0", bottom: "0" });
@@ -65,8 +68,24 @@ const printAnswers = (title: string, items: { heading: string; rows: { label: st
   if (!doc || !win) { frame.remove(); return; }
   doc.title = title;
   const style = doc.createElement("style");
-  style.textContent = "body{font-family:sans-serif;margin:24px;color:#000}h1{font-size:20px}h2{font-size:16px;margin:24px 0 8px;break-after:avoid}dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;margin:0}dt{color:#555}dd{margin:0}section{break-inside:avoid}";
+  style.textContent = "body{font-family:sans-serif;margin:24px;color:#000}header{text-align:center;margin-bottom:16px}header img{display:block;margin:0 auto 8px;max-height:70px;max-width:240px;object-fit:contain}header p{font-size:16px;font-weight:600;margin:0}h1{font-size:20px;text-align:center}h2{font-size:16px;margin:24px 0 8px;break-after:avoid}dl{margin:0}dt{color:#555;font-weight:600;margin-top:12px}dd{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}section{break-inside:avoid}";
   doc.head.appendChild(style);
+  let logo: HTMLImageElement | null = null;
+  if (church.logoUrl || church.name) {
+    const header = doc.createElement("header");
+    if (church.logoUrl) {
+      logo = doc.createElement("img");
+      logo.src = church.logoUrl;
+      logo.alt = church.name || "";
+      header.appendChild(logo);
+    }
+    if (church.name) {
+      const name = doc.createElement("p");
+      name.textContent = church.name;
+      header.appendChild(name);
+    }
+    doc.body.appendChild(header);
+  }
   const h1 = doc.createElement("h1");
   h1.textContent = title;
   doc.body.appendChild(h1);
@@ -86,8 +105,14 @@ const printAnswers = (title: string, items: { heading: string; rows: { label: st
     doc.body.appendChild(section);
   });
   win.addEventListener("afterprint", () => frame.remove());
-  win.focus();
-  win.print();
+  const print = () => { win.focus(); win.print(); };
+  // Wait for the logo (or 3s) so it makes it onto the page.
+  if (!logo || logo.complete) { print(); return; }
+  let done = false;
+  const finish = () => { if (!done) { done = true; print(); } };
+  logo.onload = finish;
+  logo.onerror = finish;
+  setTimeout(finish, 3000);
 };
 
 const printItem = (a: GroupFormAnswers, s: Submission) => ({
@@ -136,7 +161,7 @@ export const GroupFormsList = ({ forms, answers, onOpen, limit }: { forms: Linke
 };
 
 // The Forms slice. Leaders pick a form or event to read and print its answers.
-export const GroupFormsTab = ({ groupId, isLeader, forms, initialKey }: { groupId: string; isLeader: boolean; forms: LinkedForm[]; initialKey?: string }) => {
+export const GroupFormsTab = ({ groupId, isLeader, forms, initialKey, church = {} }: { groupId: string; isLeader: boolean; forms: LinkedForm[]; initialKey?: string; church?: PrintChurch }) => {
   const { data: answers, isLoading } = useGroupFormAnswers(groupId, isLeader);
   const [selectedKey, setSelectedKey] = React.useState<string | undefined>(initialKey);
   const [submission, setSubmission] = React.useState<Submission | null>(null);
@@ -162,7 +187,7 @@ export const GroupFormsTab = ({ groupId, isLeader, forms, initialKey }: { groupI
           <Box sx={{ display: "flex", gap: "16px" }}>
             <TextLink onClick={() => setSelectedKey(undefined)}>{Locale.label("mobile.group.allForms")}</TextLink>
             {selected.submissions.length > 0 && (
-              <TextLink onClick={() => printAnswers(title, selected.submissions.map((s) => printItem(selected, s)))} data-testid="group-form-print-all">{Locale.label("mobile.group.printAll")}</TextLink>
+              <TextLink onClick={() => printAnswers(church, title, selected.submissions.map((s) => printItem(selected, s)))} data-testid="group-form-print-all">{Locale.label("mobile.group.printAll")}</TextLink>
             )}
           </Box>
         )}
@@ -184,7 +209,7 @@ export const GroupFormsTab = ({ groupId, isLeader, forms, initialKey }: { groupI
         actions={(
           <>
             <Button variant="outlined" onClick={() => setSubmission(null)}>{Locale.label("common.close")}</Button>
-            <Button variant="contained" startIcon={<PrintIcon />} onClick={() => submission && printAnswers(title, [printItem(selected, submission)])} data-testid="group-form-print">
+            <Button variant="contained" startIcon={<PrintIcon />} onClick={() => submission && printAnswers(church, title, [printItem(selected, submission)])} data-testid="group-form-print">
               {Locale.label("mobile.group.print")}
             </Button>
           </>
@@ -193,7 +218,15 @@ export const GroupFormsTab = ({ groupId, isLeader, forms, initialKey }: { groupI
         {submission && (
           <Box data-testid="group-form-answers">
             {submittedOn(submission) && <Typography sx={{ mb: "12px", fontSize: 14, color: tc.textSecondary }}>{submittedOn(submission)}</Typography>}
-            <KeyValues items={selected.questions.map((q) => ({ label: q.title, value: displayAnswer(q, submission) || "—" }))} />
+            {/* Question above answer: long questions in a side-by-side grid squeezed the answer to one letter wide (#1352). */}
+            <Box component="dl" sx={{ m: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
+              {selected.questions.map((q) => (
+                <Box key={q.id}>
+                  <Typography component="dt" sx={{ fontSize: 13.5, color: tc.textSecondary }}>{q.title}</Typography>
+                  <Typography component="dd" sx={{ m: 0, fontSize: 15, color: tc.text, overflowWrap: "anywhere", whiteSpace: "pre-wrap" }}>{displayAnswer(q, submission) || "—"}</Typography>
+                </Box>
+              ))}
+            </Box>
           </Box>
         )}
       </Sheet>
