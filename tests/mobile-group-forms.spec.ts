@@ -18,6 +18,8 @@ const LOGO = "/images/logo.png";
 const LONG_FORM_NAME = "Ministry Phone Agreement";
 const LONG_QUESTION = "I understand the ministry phone is not my personal property and must be returned when I leave the role.";
 const LONG_ANSWER = "Derrick Gyamfi — Elder Leader Pastor";
+// #1356: a long answer set left the letterhead alone on page one of the printout.
+const PRINT_FORM_NAME = "Volunteer Survey Printout";
 
 async function membershipHeaders(ctx: APIRequestContext, email: string) {
   const login = await ctx.post(`${MAIN_API}/membership/users/login`, {
@@ -162,6 +164,42 @@ test.describe("Group forms", () => {
       expect(printed.dlDisplay).toBe("block");
     } finally {
       await ctx.delete(`${MAIN_API}/membership/forms/${longFormId}`, { headers: admin });
+    }
+  });
+
+  test("a printout of many answers starts them on the first page under the letterhead", async ({ page }) => {
+    const forms = await (await ctx.post(`${MAIN_API}/membership/forms`, { headers: admin, data: [{ name: PRINT_FORM_NAME, contentType: "form", restricted: false, groupId: GROUP_ID }] })).json();
+    const printFormId = forms[0].id;
+    try {
+      const questionRows = Array.from({ length: 30 }, (_, i) => ({ formId: printFormId, fieldType: "Textbox", title: `Question ${i + 1}: what would you like us to know?`, required: false, sort: i + 1 }));
+      await ctx.post(`${MAIN_API}/membership/questions`, { headers: admin, data: questionRows });
+      const questions = (await (await ctx.get(`${MAIN_API}/membership/questions/unrestricted?formId=${printFormId}`)).json()) as any[];
+      const answers = questions.map((q, i) => ({ questionId: q.id, value: `Answer ${i + 1}` }));
+      const sub = await ctx.post(`${MAIN_API}/membership/formsubmissions`, { headers: admin, data: [{ formId: printFormId, contentType: "form", contentId: printFormId, answers }] });
+      expect(sub.ok()).toBeTruthy();
+
+      // Capture the print frame's whole document instead of opening the print dialog.
+      await page.addInitScript(() => {
+        window.print = function () { (window.top as any).__printed = document.documentElement.outerHTML; };
+      });
+      await page.goto(`/mobile/groups/${GROUP_ID}`);
+      const main = page.locator("main");
+      await main.getByTestId("group-form-row").filter({ hasText: PRINT_FORM_NAME }).click({ timeout: 20000 });
+      await main.getByTestId("group-form-submission").first().click();
+      await page.getByRole("dialog").getByTestId("group-form-print").click();
+      await expect.poll(() => page.evaluate(() => (window as any).__printed || ""), { timeout: 10000 }).toContain("Answer 30");
+      const html: string = await page.evaluate(() => (window as any).__printed);
+
+      // Lay the printout out on Letter paper and count the pages.
+      const printPage = await page.context().newPage();
+      await printPage.setContent(html.replace(/<img[^>]*>/g, ""));
+      const pdf = await printPage.pdf({ format: "Letter", margin: { top: "0", bottom: "0", left: "0", right: "0" } });
+      await printPage.close();
+      const pdfPages = (pdf.toString("latin1").match(/\/Type\s*\/Page[^s]/g) || []).length;
+      // 30 short answers plus the heading run a little over one Letter page; a gap under the heading makes it three.
+      expect(pdfPages, `printout took ${pdfPages} pages`).toBe(2);
+    } finally {
+      await ctx.delete(`${MAIN_API}/membership/forms/${printFormId}`, { headers: admin });
     }
   });
 });
