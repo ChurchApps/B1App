@@ -68,7 +68,7 @@ const printAnswers = (church: PrintChurch, title: string, items: { heading: stri
   if (!doc || !win) { frame.remove(); return; }
   doc.title = title;
   const style = doc.createElement("style");
-  style.textContent = "body{font-family:sans-serif;margin:24px;color:#000}header{text-align:center;margin-bottom:16px}header img{display:block;margin:0 auto 8px;max-height:70px;max-width:240px;object-fit:contain}header p{font-size:16px;font-weight:600;margin:0}h1{font-size:20px;text-align:center}h2{font-size:16px;margin:24px 0 8px;break-after:avoid}dl{margin:0}dt{color:#555;font-weight:600;margin-top:12px}dd{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}section{break-inside:avoid}";
+  style.textContent = "body{font-family:sans-serif;margin:24px;color:#000}header{text-align:center;margin-bottom:16px}header img{display:block;margin:0 auto 8px;max-height:70px;max-width:240px;object-fit:contain}header p{font-size:16px;font-weight:600;margin:0}h1{font-size:20px;text-align:center}h2{font-size:16px;margin:24px 0 8px;break-after:avoid}dl{margin:0}dt{color:#555;font-weight:600;margin-top:12px}dd{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.qa{break-inside:avoid}";
   doc.head.appendChild(style);
   let logo: HTMLImageElement | null = null;
   if (church.logoUrl || church.name) {
@@ -99,7 +99,11 @@ const printAnswers = (church: PrintChurch, title: string, items: { heading: stri
       dt.textContent = r.label;
       const dd = doc.createElement("dd");
       dd.textContent = r.value || "—";
-      dl.append(dt, dd);
+      // Keep each question with its answer, but let a long answer set flow onto the next page instead of leaving a gap under the heading.
+      const qa = doc.createElement("div");
+      qa.className = "qa";
+      qa.append(dt, dd);
+      dl.append(qa);
     });
     section.append(h2, dl);
     doc.body.appendChild(section);
