@@ -1041,6 +1041,7 @@
       "generalGroups": "General Groups",
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
+      "onlineGivingNotSetUp": "Online giving isn't set up for this church yet. Your recorded gifts and statements are below.",
       "groupFallback": "Group",
       "groupsSignInBody": "Sign in to see the groups you belong to and join new ones.",
       "groupsSignInTitle": "Sign in to see your groups",

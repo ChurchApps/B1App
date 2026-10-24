@@ -211,15 +211,15 @@ export default function PrintPage({ params }: { params: Params }) {
         </div>
         <div style={{ margin: "0px", padding: "0px", borderTop: "2px solid var(--print-accent)", width: "80%" }}></div>
 
-        <div style={{ display: "flex" }}>
-          <div style={{ width: "50%" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", columnGap: "16px", overflowWrap: "anywhere" }}>
+          <div style={{ flex: "1 1 280px", minWidth: 0 }}>
             <h1>{context?.person?.name?.display}</h1>
             <p>{context?.person?.contactInfo?.address1}</p>
             <p>{context?.person?.contactInfo?.address2}</p>
             <p>{context?.person?.contactInfo?.mobilePhone}</p>
             <p>{context?.person?.contactInfo?.email}</p>
           </div>
-          <div style={{ width: "50%" }}>
+          <div style={{ flex: "1 1 280px", minWidth: 0 }}>
             <h1>{context?.userChurch?.church?.name}</h1>
             <p>{context?.userChurch?.church?.address1}</p>
             <p>{context?.userChurch?.church?.address2}</p>
@@ -232,12 +232,12 @@ export default function PrintPage({ params }: { params: Params }) {
 
         <div>
           <h1>Statement Summary:</h1>
-          <div style={{ display: "flex" }}>
-            <div style={{ width: "50%" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", columnGap: "16px" }}>
+            <div style={{ flex: "1 1 280px", minWidth: 0 }}>
               <h2>Total Contributions:</h2>
-              <div style={{ height: "80px", lineHeight: "80px", width: "80%", textAlign: "center", border: "4px solid var(--print-accent)", fontSize: "40px" }}>{getTotalContributions()}</div>
+              <div style={{ minHeight: "80px", padding: "12px 0", boxSizing: "border-box", width: "80%", textAlign: "center", border: "4px solid var(--print-accent)", fontSize: "clamp(24px, 8vw, 40px)", overflowWrap: "anywhere", display: "flex", alignItems: "center", justifyContent: "center" }}>{getTotalContributions()}</div>
             </div>
-            <div style={{ width: "50%" }}>
+            <div style={{ flex: "1 1 280px", minWidth: 0 }}>
               <h2>Funds:</h2>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead style={{ height: "24px" }}>

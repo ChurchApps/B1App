@@ -222,7 +222,7 @@ export const FormsTeaser = ({ submissions }: { submissions: MyFormSubmission[] }
   </PlateSection>
 );
 
-export const GivingTeaser = ({ summary }: { summary?: GivingSummary }) => (
+export const GivingTeaser = ({ summary, canGive = true }: { summary?: GivingSummary; canGive?: boolean }) => (
   <PlateSection title={Locale.label("mobile.dashboard.giving")} action={<TextLink href="/mobile/donate?view=history">{Locale.label("mobile.dashboard.history")}</TextLink>}>
     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
       <Box data-testid="home-giving-total">
@@ -230,7 +230,7 @@ export const GivingTeaser = ({ summary }: { summary?: GivingSummary }) => (
           {summary ? CurrencyHelper.formatCurrencyWithLocale(summary.total || 0, summary.currency) : " "}
         </BigNumber>
       </Box>
-      <Button variant="contained" component={Link} href="/mobile/donate?view=give">{Locale.label("mobile.giving.give")}</Button>
+      {canGive && <Button variant="contained" component={Link} href="/mobile/donate?view=give">{Locale.label("mobile.giving.give")}</Button>}
     </Box>
   </PlateSection>
 );

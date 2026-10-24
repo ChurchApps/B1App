@@ -144,7 +144,7 @@ export const DashboardPage = ({ config }: Props) => {
   const { data: formSubmissions = [] } = useMyFormSubmissions(homeForms);
   const events = useUpcomingEvents(signedIn);
   // The teaser shows this year's total, so it steps aside (donation link falls back to a pill) when the church hides this year.
-  const showGiving = has("donation") && config?.allowDonations !== false && memberGivingYearLimit(config?.appearance as Record<string, unknown>) >= new Date().getFullYear();
+  const showGiving = has("donation") && memberGivingYearLimit(config?.appearance as Record<string, unknown>) >= new Date().getFullYear();
   const givingSummary = useGivingSummary(showGiving);
   const showServing = serving.upcoming.length > 0;
   const showGroups = has("groups") && groups.length > 0;
@@ -262,7 +262,7 @@ export const DashboardPage = ({ config }: Props) => {
   const eventsSection = showEvents && <EventsTeaser events={events} />;
   const attendanceSection = homeAttendance && attendance.length > 0 && <AttendanceTeaser attendance={attendance} groups={groups} />;
   const formsSection = homeForms && formSubmissions.length > 0 && <FormsTeaser submissions={formSubmissions} />;
-  const givingSection = showGiving && <GivingTeaser summary={givingSummary} />;
+  const givingSection = showGiving && <GivingTeaser summary={givingSummary} canGive={config?.allowDonations !== false} />;
   const wide = [tileSection, sermonSection, servingSection, groupsSection, eventsSection, attendanceSection, formsSection].some(Boolean);
   const narrow = [verseSection, givingSection, moreSection].some(Boolean);
 
