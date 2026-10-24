@@ -75,6 +75,59 @@ test.describe("Mobile content screens", () => {
     await expect(dialog).toBeHidden();
   });
 
+  test("votd past-day sheet can share the verse, share its picture and download it", async ({ page }) => {
+    await page.addInitScript(() => {
+      const w = window as any;
+      w.__shared = [];
+      Object.defineProperty(navigator, "canShare", { configurable: true, value: (data: any) => !!data?.files?.length });
+      Object.defineProperty(navigator, "share", { configurable: true, value: async (data: any) => { w.__shared.push({ text: data.text, url: data.url, files: (data.files || []).map((f: File) => f.type) }); } });
+    });
+    await page.goto("/mobile/votd");
+    await expect(page.getByRole("button", { name: "Download", exact: true })).toBeVisible({ timeout: 15000 });
+    const rows = page.getByRole("region", { name: "This week" }).getByTestId("votd-week-row");
+    await expect(rows).toHaveCount(3, { timeout: 15000 });
+    const reference = (await rows.first().locator(".MuiTypography-root").first().textContent())!.trim();
+    await rows.first().click();
+    const dialog = page.getByRole("dialog", { name: reference });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole("button", { name: "Share", exact: true }).click();
+    await expect.poll(() => page.evaluate(() => (window as any).__shared.length)).toBe(1);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const day = Math.round((Date.UTC(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate()) - Date.UTC(yesterday.getFullYear(), 0, 0)) / 86400000);
+    const textShare = await page.evaluate(() => (window as any).__shared[0]);
+    expect(textShare.text).toContain(reference);
+    expect(textShare.url).toMatch(new RegExp(`/v1/${day}/`));
+    await dialog.getByRole("button", { name: "Share image" }).click();
+    await expect.poll(() => page.evaluate(() => (window as any).__shared.length), { timeout: 20000 }).toBe(2);
+    expect((await page.evaluate(() => (window as any).__shared[1])).files).toEqual(["image/jpeg"]);
+    const downloadPromise = page.waitForEvent("download");
+    await dialog.getByRole("button", { name: "Download" }).click();
+    expect((await downloadPromise).suggestedFilename()).toBe(`votd-${day}.jpg`);
+  });
+
+  test("votd past verses lists this year's days by month, newest first, and opens a day", async ({ page }) => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    test.skip(yesterday.getFullYear() !== new Date().getFullYear(), "No past verses on January 1");
+    await page.goto("/mobile/votd");
+    await page.getByRole("button", { name: "Past verses" }).click();
+    await expect(page).toHaveURL(/view=past/);
+    const month = yesterday.toLocaleDateString("en-US", { month: "long" });
+    const section = page.getByRole("region", { name: month });
+    await expect(section).toBeVisible({ timeout: 15000 });
+    const rows = page.getByTestId("votd-past-row");
+    await expect(rows).toHaveCount(Math.round((Date.UTC(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate()) - Date.UTC(yesterday.getFullYear(), 0, 0)) / 86400000), { timeout: 15000 });
+    await expect(rows.first()).toContainText(yesterday.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }));
+    await rows.first().click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog.getByRole("img")).toBeVisible();
+    await expect(dialog.getByRole("button", { name: "Share image" })).toBeVisible();
+    await dialog.getByRole("button", { name: "Close" }).click();
+    await page.getByRole("button", { name: "Back" }).click();
+    await expect(page.getByRole("region", { name: "This week" })).toBeVisible();
+  });
+
   test("votd share image hands the day's picture to the share sheet as a file", async ({ page }) => {
     await page.addInitScript(() => {
       const w = window as any;

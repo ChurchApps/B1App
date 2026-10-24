@@ -4,11 +4,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import ImageIcon from "@mui/icons-material/Image";
+import DownloadIcon from "@mui/icons-material/Download";
 import { Locale } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
-import { PageHead, Plate, PlateSection, Row, RowList, Sheet } from "../kit";
+import { BackVerb, PageHead, Plate, PlateSection, Row, RowList, Sheet, TextLink, useSliceView } from "../kit";
 import { getDayOfYear, loadDailyVerse, type DailyVerse } from "../../helpers/dailyVerses";
+import { downloadVerseImage, groupByMonth, pastDatesThisYear, shareVerseImage, shareVerseText, type ShareResult } from "../../helpers/shareVerse";
 
 const daysAgo = (n: number) => {
   const d = new Date();
@@ -37,6 +39,9 @@ export const VotdPage = () => {
   const [shareMessage, setShareMessage] = useState<string | null>(null);
   const [week, setWeek] = useState<{ date: Date; verse: DailyVerse }[]>([]);
   const [selected, setSelected] = useState<{ date: Date; verse: DailyVerse } | null>(null);
+  const [past, setPast] = useState<{ date: Date; verse: DailyVerse | null }[]>([]);
+  const [view, setView] = useSliceView();
+  const showPast = view === "past";
 
   useEffect(() => {
     setDay(getDayOfYear());
@@ -62,80 +67,112 @@ export const VotdPage = () => {
     return () => { cancelled = true; };
   }, [day]);
 
+  useEffect(() => {
+    if (!showPast || day === null) return;
+    let cancelled = false;
+    const dates = pastDatesThisYear();
+    setPast(dates.map((date) => ({ date, verse: null })));
+    Promise.all(dates.map((d) => loadDailyVerse(d).catch((): DailyVerse | null => null))).then((verses) => {
+      if (!cancelled) setPast(dates.map((date, i) => ({ date, verse: verses[i] })));
+    });
+    return () => { cancelled = true; };
+  }, [showPast, day]);
+
   const imageUrl = useMemo(() => (day === null ? "" : `https://votd.org/v1/${day}/${shape}.jpg`), [day, shape]);
   const showImage = !!imageUrl && !imageError;
-  const shareText = verse ? `"${verse.text}" — ${verse.reference}` : "Verse of the Day";
 
   const flashMessage = (message: string) => {
     setShareMessage(message);
     setTimeout(() => setShareMessage(null), 2500);
   };
 
-  const handleShare = async () => {
-    const shareData = {
-      title: "Verse of the Day",
-      text: shareText,
-      url: imageUrl || window.location.href
-    };
-    try {
-      if (typeof navigator !== "undefined" && (navigator as any).share) {
-        await (navigator as any).share(shareData);
-        return;
-      }
-    } catch (e) {
-      if ((e as Error)?.name === "AbortError") return;
-    }
-    try {
-      if (typeof navigator !== "undefined" && navigator.clipboard) {
-        await navigator.clipboard.writeText(`${shareText}\n${shareData.url}`);
-        flashMessage(Locale.label("mobile.votd.copied"));
-      }
-    } catch {
-      flashMessage(Locale.label("mobile.votd.unableToShare"));
-    }
+  const report = (result: ShareResult) => {
+    if (result === "copied") flashMessage(Locale.label("mobile.votd.copied"));
+    else if (result === "failed") flashMessage(Locale.label("mobile.votd.unableToShare"));
   };
 
-  // Shares the picture itself (same-origin copy, since votd.org has no CORS); downloads it where file sharing isn't supported.
-  const handleShareImage = async () => {
-    if (day === null) return;
-    try {
-      const res = await fetch(`/mobile/votd-image/${day}/${shape}`);
-      if (!res.ok) throw new Error("Image unavailable");
-      const blob = await res.blob();
-      const file = new File([blob], "verse-of-the-day.jpg", { type: "image/jpeg" });
-      const nav = navigator as any;
-      if (nav.canShare?.({ files: [file] }) && nav.share) {
-        await nav.share({ files: [file], text: shareText });
-        return;
-      }
-      const objectUrl = URL.createObjectURL(file);
-      const link = document.createElement("a");
-      link.href = objectUrl;
-      link.download = file.name;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
-    } catch (e) {
-      if ((e as Error)?.name === "AbortError") return;
-      flashMessage(Locale.label("mobile.votd.unableToShare"));
-    }
-  };
+  const shareActions = (v: DailyVerse | null, d: number, withImage = true, labelToday = false) => (
+    <>
+      <Button variant="contained" onClick={async () => report(await shareVerseText(v, d, shape))} startIcon={<ShareIcon />} aria-label={labelToday ? Locale.label("mobile.screens.shareVotd") : undefined}>
+        {Locale.label("mobile.votd.share")}
+      </Button>
+      {withImage && (
+        <>
+          <Button variant="outlined" onClick={async () => report(await shareVerseImage(v, d, shape))} startIcon={<ImageIcon />} data-testid="votd-share-image">
+            {Locale.label("mobile.votd.shareImage")}
+          </Button>
+          <Button variant="text" onClick={async () => report(await downloadVerseImage(d, shape))} startIcon={<DownloadIcon />}>
+            {Locale.label("mobile.votd.download")}
+          </Button>
+        </>
+      )}
+    </>
+  );
 
   const today = day === null ? "" : new Date().toLocaleDateString(DateHelper.locale, { weekday: "long", month: "long", day: "numeric" });
+
+  const status = shareMessage && <Typography role="status" sx={{ fontSize: 13.5, color: tc.textSecondary }}>{shareMessage}</Typography>;
+  const shortDate = (d: Date) => d.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" });
+
+  const sheet = (
+    <Sheet open={!!selected} onClose={() => setSelected(null)} title={selected?.verse.reference || ""}>
+      {selected && (
+        <>
+          <Box sx={{ borderRadius: "10px", overflow: "hidden", bgcolor: tc.primaryDeep, display: "flex", justifyContent: "center", mb: "14px" }}>
+            <img
+              src={`https://votd.org/v1/${getDayOfYear(selected.date)}/${shape}.jpg`}
+              alt={`${selected.verse.reference} — Verse of the Day`}
+              style={{ display: "block", maxWidth: "100%", maxHeight: "60vh", objectFit: "contain" }}
+            />
+          </Box>
+          <Typography sx={{ fontSize: 13.5, fontWeight: 600, color: tc.textSecondary, mb: "6px" }}>
+            {selected.date.toLocaleDateString(DateHelper.locale, { weekday: "long", month: "long", day: "numeric" })}
+          </Typography>
+          <Typography sx={{ fontFamily: mobileTheme.fonts.serif, fontStyle: "italic", fontSize: 19, lineHeight: "28px", color: tc.text }}>
+            &ldquo;{selected.verse.text}&rdquo;
+          </Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "10px", mt: "16px" }}>
+            {shareActions(selected.verse, getDayOfYear(selected.date))}
+            {status}
+          </Box>
+        </>
+      )}
+    </Sheet>
+  );
+
+  if (showPast) {
+    return (
+      <Box>
+        <BackVerb label={Locale.label("mobile.components.back")} onClick={() => setView("")} />
+        <PageHead title={Locale.label("mobile.votd.pastVerses")} />
+        <Plate>
+          {groupByMonth(past).map((group) => (
+            <PlateSection key={group.key} title={group.month.toLocaleDateString(DateHelper.locale, { month: "long" })}>
+              <RowList>
+                {group.entries.map((entry) => (
+                  <Row
+                    key={entry.date.toDateString()}
+                    data-testid="votd-past-row"
+                    onClick={entry.verse ? () => setSelected({ date: entry.date, verse: entry.verse! }) : undefined}
+                    title={shortDate(entry.date)}
+                    subtitle={entry.verse?.reference}
+                    chevron
+                  />
+                ))}
+              </RowList>
+            </PlateSection>
+          ))}
+        </Plate>
+        {sheet}
+      </Box>
+    );
+  }
 
   return (
     <Box>
       <PageHead title={Locale.label("mobile.screenTitles.votd")} lede={today || undefined}>
-        <Button variant="contained" onClick={handleShare} startIcon={<ShareIcon />} aria-label={Locale.label("mobile.screens.shareVotd")}>
-          {Locale.label("mobile.votd.share")}
-        </Button>
-        {showImage && (
-          <Button variant="outlined" onClick={handleShareImage} startIcon={<ImageIcon />} data-testid="votd-share-image">
-            {Locale.label("mobile.votd.shareImage")}
-          </Button>
-        )}
-        {shareMessage && <Typography role="status" sx={{ fontSize: 13.5, color: tc.textSecondary }}>{shareMessage}</Typography>}
+        {day !== null && shareActions(verse, day, showImage, true)}
+        {!selected && status}
       </PageHead>
       <Plate>
         <PlateSection>
@@ -162,7 +199,7 @@ export const VotdPage = () => {
           )}
         </PlateSection>
         {week.length > 0 && (
-          <PlateSection title={Locale.label("mobile.votd.thisWeek")}>
+          <PlateSection title={Locale.label("mobile.votd.thisWeek")} action={<TextLink onClick={() => setView("past")}>{Locale.label("mobile.votd.pastVerses")}</TextLink>}>
             <RowList>
               {week.map((entry) => (
                 <Row
@@ -170,7 +207,7 @@ export const VotdPage = () => {
                   data-testid="votd-week-row"
                   onClick={() => setSelected(entry)}
                   title={entry.verse.reference}
-                  subtitle={`${entry.date.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" })} · ${entry.verse.text}`}
+                  subtitle={`${shortDate(entry.date)} · ${entry.verse.text}`}
                   chevron
                 />
               ))}
@@ -178,25 +215,7 @@ export const VotdPage = () => {
           </PlateSection>
         )}
       </Plate>
-      <Sheet open={!!selected} onClose={() => setSelected(null)} title={selected?.verse.reference || ""}>
-        {selected && (
-          <>
-            <Box sx={{ borderRadius: "10px", overflow: "hidden", bgcolor: tc.primaryDeep, display: "flex", justifyContent: "center", mb: "14px" }}>
-              <img
-                src={`https://votd.org/v1/${getDayOfYear(selected.date)}/${shape}.jpg`}
-                alt={`${selected.verse.reference} — Verse of the Day`}
-                style={{ display: "block", maxWidth: "100%", maxHeight: "60vh", objectFit: "contain" }}
-              />
-            </Box>
-            <Typography sx={{ fontSize: 13.5, fontWeight: 600, color: tc.textSecondary, mb: "6px" }}>
-              {selected.date.toLocaleDateString(DateHelper.locale, { weekday: "long", month: "long", day: "numeric" })}
-            </Typography>
-            <Typography sx={{ fontFamily: mobileTheme.fonts.serif, fontStyle: "italic", fontSize: 19, lineHeight: "28px", color: tc.text }}>
-              &ldquo;{selected.verse.text}&rdquo;
-            </Typography>
-          </>
-        )}
-      </Sheet>
+      {sheet}
     </Box>
   );
 };
