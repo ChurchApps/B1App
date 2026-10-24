@@ -31,6 +31,13 @@ interface UpcomingItem {
   href: string;
   key: string;
   photoUrl?: string;
+  allDay?: boolean;
+}
+
+interface PlanTime {
+  planId?: string;
+  startTime?: string | Date;
+  teams?: string;
 }
 
 interface NotificationItem {
@@ -92,6 +99,17 @@ export const MePage = ({ config }: Props) => {
     queryKey: ["/plans/ids", "DoingApi", planIdsKey],
     queryFn: async () => {
       const data = await ApiHelper.get("/plans/ids?ids=" + planIdsKey, "DoingApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: loggedIn && planIds.length > 0,
+    staleTime: 10 * 60 * 1000
+  });
+
+  // Plans store only a date; the service times carry the hour.
+  const { data: planTimes = [] } = useQuery<PlanTime[]>({
+    queryKey: ["/times/plans", "DoingApi", planIdsKey],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/times/plans?planIds=" + planIdsKey, "DoingApi");
       return Array.isArray(data) ? data : [];
     },
     enabled: loggedIn && planIds.length > 0,
@@ -181,9 +199,16 @@ export const MePage = ({ config }: Props) => {
       if (!position) return;
       const plan = plans.find((p) => p.id === position.planId);
       if (!plan?.serviceDate) return;
-      const date = DateHelper.toDate(plan.serviceDate);
-      if (date < new Date(now.getFullYear(), now.getMonth(), now.getDate())) return;
-      items.push({ kind: "serving", date, title: plan.name || Locale.label("mobile.me.serving"), subtitle: position.name, href: `/mobile/plans/${plan.id}`, key: `serv-${a.id}` });
+      const serviceDate = DateHelper.toDate(plan.serviceDate);
+      if (serviceDate < new Date(now.getFullYear(), now.getMonth(), now.getDate())) return;
+      const category = position.categoryName || "";
+      const times = planTimes
+        .filter((t) => t.planId === plan.id && t.startTime)
+        .map((t) => ({ start: new Date(t.startTime as string | Date), teams: (t.teams || "").split(",").map((s) => s.trim()) }))
+        .sort((x, y) => x.start.getTime() - y.start.getTime());
+      const time = times.find((t) => category && t.teams.includes(category)) || times[0];
+      const date = time ? time.start : serviceDate;
+      items.push({ kind: "serving", date, allDay: !time, title: plan.name || Locale.label("mobile.me.serving"), subtitle: position.name, href: `/mobile/plans/${plan.id}`, key: `serv-${a.id}` });
     });
 
     registrations.forEach((r) => {
@@ -199,7 +224,7 @@ export const MePage = ({ config }: Props) => {
 
     items.sort((a, b) => a.date.getTime() - b.date.getTime());
     return items.slice(0, 12);
-  }, [assignments, positions, plans, registrations, timeline]);
+  }, [assignments, positions, plans, planTimes, registrations, timeline]);
 
   const recentNotifications = useMemo(() => (notifications || []).slice(0, 2), [notifications]);
 
@@ -239,7 +264,7 @@ export const MePage = ({ config }: Props) => {
       data-testid={`me-item-${item.kind}`}
       leading={item.photoUrl ? <Box component="img" src={item.photoUrl} alt="" loading="lazy" data-testid="me-item-photo" sx={{ width: 64, height: 36, objectFit: "cover", borderRadius: "6px", flexShrink: 0, display: "block" }} /> : undefined}
       title={item.title}
-      subtitle={`${DateHelper.prettyDateTime(item.date)}${item.subtitle ? ` · ${item.subtitle}` : ""}`}
+      subtitle={`${item.allDay ? DateHelper.prettyDate(item.date) : DateHelper.prettyDateTime(item.date)}${item.subtitle ? ` · ${item.subtitle}` : ""}`}
       trailing={<StatusBadge tone={kindMeta[item.kind].tone}>{Locale.label(kindMeta[item.kind].label)}</StatusBadge>}
     />
   );
