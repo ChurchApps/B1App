@@ -612,7 +612,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     resources: { title: Locale.label("mobile.details.tabResources"), body: <GroupResourcesTab groupId={groupId} canEdit={canEditResources} /> },
     forms: hasForms ? {
       title: Locale.label("mobile.group.forms"),
-      body: <GroupFormsTab key={formKey || "all"} groupId={groupId} isLeader={isLeader} forms={linkedForms} initialKey={formKey} />
+      body: <GroupFormsTab key={formKey || "all"} groupId={groupId} isLeader={isLeader} forms={linkedForms} initialKey={formKey} church={{ name: config.church?.name, logoUrl: (config.appearance as { logoLight?: string } | undefined)?.logoLight }} />
     } : null,
     plans: hasPlans ? { title: Locale.label("groupsPage.plans"), body: <GroupPlansTab groupId={groupId} /> } : null,
     meetings: showMeetings ? {

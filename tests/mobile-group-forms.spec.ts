@@ -12,6 +12,12 @@ const QUESTION = "People reached";
 const MEMBER_EMAIL = "counter@b1.church";
 const MEMBER_PERSON_ID = "PER00000080";
 const MEMBER_NAME = "Donald Clark";
+const CHURCH_NAME = "Grace Community Church";
+const LOGO = "/images/logo.png";
+// #1352: a full-sentence question took the whole label column and left the answer one letter wide.
+const LONG_FORM_NAME = "Ministry Phone Agreement";
+const LONG_QUESTION = "I understand the ministry phone is not my personal property and must be returned when I leave the role.";
+const LONG_ANSWER = "Derrick Gyamfi — Elder Leader Pastor";
 
 async function membershipHeaders(ctx: APIRequestContext, email: string) {
   const login = await ctx.post(`${MAIN_API}/membership/users/login`, {
@@ -30,6 +36,8 @@ test.describe("Group forms", () => {
   let admin: Record<string, string>;
   let formId = "";
   let groupMemberId = "";
+  // The logoLight setting row as it was before the letterhead test set one; null when there was none.
+  let originalLogo: any = undefined;
 
   test.beforeAll(async () => {
     ctx = await request.newContext();
@@ -49,6 +57,11 @@ test.describe("Group forms", () => {
   });
 
   test.afterAll(async () => {
+    if (originalLogo !== undefined) {
+      const current = ((await (await ctx.get(`${MAIN_API}/membership/settings`, { headers: admin })).json()) as any[]).find((s) => s.keyName === "logoLight");
+      if (originalLogo) await ctx.post(`${MAIN_API}/membership/settings`, { headers: admin, data: [{ ...current, ...originalLogo }] });
+      else if (current?.id) await ctx.delete(`${MAIN_API}/membership/settings/${current.id}`, { headers: admin });
+    }
     if (formId) await ctx.delete(`${MAIN_API}/membership/forms/${formId}`, { headers: admin });
     if (groupMemberId) await ctx.delete(`${MAIN_API}/membership/groupmembers/${groupMemberId}`, { headers: admin });
     await ctx.dispose();
@@ -90,5 +103,65 @@ test.describe("Group forms", () => {
     await expect(dialog.getByTestId("group-form-answers")).toContainText(QUESTION);
     await expect(dialog.getByTestId("group-form-answers")).toContainText("12");
     await expect(dialog.getByTestId("group-form-print")).toBeVisible();
+  });
+
+  test("on a phone a long question leaves the answer the sheet's width, and the printout has a centered letterhead", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    // The demo church has no logo; give it one. config.appearance is server-rendered, so a route mock would not reach the page.
+    const settings = (await (await ctx.get(`${MAIN_API}/membership/settings`, { headers: admin })).json()) as any[];
+    const existing = settings.find((s) => s.keyName === "logoLight");
+    originalLogo = existing ? { ...existing } : null;
+    const saved = await ctx.post(`${MAIN_API}/membership/settings`, { headers: admin, data: [{ ...(existing || { churchId: CHURCH_ID, keyName: "logoLight" }), public: 1, value: LOGO }] });
+    expect(saved.ok()).toBeTruthy();
+
+    const forms = await (await ctx.post(`${MAIN_API}/membership/forms`, { headers: admin, data: [{ name: LONG_FORM_NAME, contentType: "form", restricted: false, groupId: GROUP_ID }] })).json();
+    const longFormId = forms[0].id;
+    try {
+      await ctx.post(`${MAIN_API}/membership/questions`, { headers: admin, data: [{ formId: longFormId, fieldType: "Textbox", title: LONG_QUESTION, required: false }] });
+      const questions = await (await ctx.get(`${MAIN_API}/membership/questions/unrestricted?formId=${longFormId}`)).json();
+      const member = await membershipHeaders(ctx, MEMBER_EMAIL);
+      const sub = await ctx.post(`${MAIN_API}/membership/formsubmissions`, {
+        headers: member,
+        data: [{ formId: longFormId, contentType: "form", contentId: longFormId, answers: [{ questionId: questions[0].id, value: LONG_ANSWER }] }]
+      });
+      expect(sub.ok()).toBeTruthy();
+
+      // Capture what reaches the printer (the hidden print frame) instead of opening the print dialog.
+      await page.addInitScript(() => {
+        window.print = function () {
+          const style = (sel: string) => getComputedStyle(document.querySelector(sel)!);
+          (window.top as any).__printed = {
+            html: document.body.innerHTML,
+            h1Align: style("h1").textAlign,
+            headerAlign: style("header").textAlign,
+            dlDisplay: style("dl").display
+          };
+        };
+      });
+      await page.goto(`/mobile/groups/${GROUP_ID}`);
+      const main = page.locator("main");
+      await main.getByTestId("group-form-row").filter({ hasText: LONG_FORM_NAME }).click({ timeout: 20000 });
+      await main.getByTestId("group-form-submission").filter({ hasText: MEMBER_NAME }).click();
+      const dialog = page.getByRole("dialog");
+      const answers = dialog.getByTestId("group-form-answers");
+      const value = answers.locator("dd").filter({ hasText: LONG_ANSWER });
+      await expect(value).toBeVisible();
+      const sheetWidth = (await answers.boundingBox())!.width;
+      const valueWidth = (await value.boundingBox())!.width;
+      expect(valueWidth, `answer is ${valueWidth}px wide in a ${sheetWidth}px sheet`).toBeGreaterThan(sheetWidth * 0.8);
+
+      await dialog.getByTestId("group-form-print").click();
+      await expect.poll(() => page.evaluate(() => (window as any).__printed?.html || ""), { timeout: 10000 }).toContain(LONG_ANSWER);
+      const printed = await page.evaluate(() => (window as any).__printed);
+      expect(printed.html).toContain(CHURCH_NAME);
+      expect(printed.html).toMatch(new RegExp(`<img[^>]*src="${LOGO}"`));
+      expect(printed.h1Align).toBe("center");
+      expect(printed.headerAlign).toBe("center");
+      // The old grid sized the question column to max-content; the iframe is 0x0, so check the layout, not pixels.
+      expect(printed.dlDisplay).toBe("block");
+    } finally {
+      await ctx.delete(`${MAIN_API}/membership/forms/${longFormId}`, { headers: admin });
+    }
   });
 });
