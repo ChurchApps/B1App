@@ -93,6 +93,40 @@ test.describe("Mobile Me page", () => {
     await expect(page.locator("main").getByRole("button", { name: /edit|delete/i })).toHaveCount(0);
   });
 
+  test("a submission an admin assigns to a member shows in that member's My Forms", async ({ browser }) => {
+    // #1356: /formsubmissions/my matched only submittedBy, so an anonymous submission moved to a person never reached them.
+    const formName = `Assigned Form ${Date.now()}`;
+    const api = await getApi("demo", "MembershipApi");
+    const forms = await (await apiCall(api, "post", membershipUrl("/forms"), [{ name: formName, contentType: "form", restricted: false }])).json();
+    const formId = forms[0].id;
+    try {
+      await apiCall(api, "post", membershipUrl("/questions"), [{ formId, fieldType: "Textbox", title: "Anything else?", required: false }]);
+      const questions = await (await api.request.get(membershipUrl(`/questions/unrestricted?formId=${formId}`))).json();
+      const sub = await api.request.post(membershipUrl("/formsubmissions"), {
+        headers: { "Content-Type": "application/json" },
+        data: [{ formId, contentType: "form", contentId: formId, answers: [{ questionId: questions[0].id, value: "Anonymous answer" }] }]
+      });
+      expect(sub.ok()).toBeTruthy();
+      const submissionId = (await sub.json())[0].id;
+      const moved = await apiCall(api, "post", membershipUrl(`/formsubmissions/${submissionId}/person`), { personId: "PER00000080" });
+      expect(moved.ok()).toBeTruthy();
+
+      const context = await browser.newContext({ storageState: { cookies: [], origins: [] }, serviceWorkers: "block" });
+      const page = await context.newPage();
+      await page.goto("/mobile/login");
+      await page.locator('input[type="email"]').first().fill("counter@b1.church");
+      await page.locator('input[type="password"]').first().fill("password");
+      await page.locator('button[type="submit"]').first().click();
+      await page.waitForURL(/\/mobile\/dashboard/, { timeout: 30000 });
+      await page.goto("/mobile/myForms");
+      await expect(page.locator("main").getByTestId("my-form-row").filter({ hasText: formName })).toBeVisible({ timeout: 20000 });
+      await context.close();
+    } finally {
+      await apiCall(api, "delete", membershipUrl(`/forms/${formId}`));
+      await api.request.dispose();
+    }
+  });
+
   test("shows the member's attendance and its full history", async ({ page }) => {
     await page.goto("/mobile/me");
     await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
