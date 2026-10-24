@@ -105,3 +105,17 @@ test.describe("Mobile Me page", () => {
     await expect(page.getByTestId("my-attendance-row").first()).toBeVisible({ timeout: 15000 });
   });
 });
+
+test.describe("Mobile Me page serving times", () => {
+  // Demo church is in Central time; plans store a date only, so the row used to show a made-up midnight time.
+  test.use({ timezoneId: "America/Chicago" });
+
+  test("serving rows show the team's service time, not midnight", async ({ page }) => {
+    await page.goto("/mobile/me?view=upcoming");
+    await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+    const servingRow = page.getByTestId("me-item-serving").filter({ hasText: "Sound Tech" });
+    await expect(servingRow).toBeVisible({ timeout: 15000 });
+    // demo.sql seeds the plan's service time at 10:00 on the service date.
+    await expect(servingRow).toContainText("10:00 AM");
+  });
+});

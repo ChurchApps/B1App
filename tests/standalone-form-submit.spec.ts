@@ -46,6 +46,12 @@ test.describe("Standalone form submission (anonymous)", () => {
     expect(descriptionBox!.y, "description should sit above the first field").toBeLessThan(inputBox!.y);
   });
 
+  test("unrestricted form: visitors do not see the Edit Form header", async ({ page }) => {
+    await page.goto("/forms/FRM00000004");
+    await expect(page.getByLabel(/Child Full Name/i)).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText("Edit Form", { exact: true })).toHaveCount(0);
+  });
+
   test("restricted form: anonymous parent is prompted to log in (not access-denied crash)", async ({ page }) => {
     await page.goto("/forms/FRM00000005");
     // FormPage shows a login link for restricted forms to anonymous users
