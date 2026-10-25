@@ -67,7 +67,7 @@ export const MePage = ({ config }: Props) => {
   const [view, setView] = useSliceView();
   const loggedIn = !!context?.user?.firstName;
   const personId = context?.person?.id || context?.userChurch?.person?.id;
-  const givingEnabled = config?.allowDonations !== false && !!personId;
+  const givingEnabled = !!personId;
 
   const { data: assignments = [], isLoading: assignmentsLoading } = useQuery<AssignmentInterface[]>({
     queryKey: ["/assignments/my", "DoingApi", context?.user?.id],

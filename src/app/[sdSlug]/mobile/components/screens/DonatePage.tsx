@@ -81,7 +81,9 @@ function DonatePageInner({ config }: Props) {
   const churchLogo = AppearanceHelper.getLogo(config?.appearance, "", "", "#FFF");
   const queryClient = useQueryClient();
   const isAuthenticated = !!context?.user?.firstName && !UniqueIdHelper.isMissing(personId);
-  const donationsEnabled = config?.allowDonations !== false && isAuthenticated;
+  // Recorded cash and check gifts don't need a payment gateway; only giving online does.
+  const canGiveOnline = config?.allowDonations !== false;
+  const donationsEnabled = isAuthenticated;
   const pathname = usePathname() || "/mobile/donate";
   const [view, setView] = useSliceView();
   const currentYear = new Date().getFullYear();
@@ -132,7 +134,7 @@ function DonatePageInner({ config }: Props) {
       }
       return { paymentMethods: pms, customerId, person: personResult || null, currency: gateways[0].currency || "usd", paymentGateways: gateways };
     },
-    enabled: donationsEnabled,
+    enabled: donationsEnabled && canGiveOnline,
     // Always refetch on mount — never serve stale financial state.
     staleTime: 0
   });
@@ -256,7 +258,7 @@ function DonatePageInner({ config }: Props) {
     <Alert severity="success" sx={{ mx: { xs: "12px", md: 0 }, mb: "12px", borderRadius: "10px" }}>{message}</Alert>
   );
 
-  if (config?.allowDonations === false) {
+  if (!canGiveOnline && !isAuthenticated) {
     return (
       <Box>
         <PageHead title={Locale.label("mobile.screenTitles.donation")} />
@@ -309,7 +311,7 @@ function DonatePageInner({ config }: Props) {
     );
   }
 
-  if (view === "give") {
+  if (view === "give" && canGiveOnline) {
     return (
       <Box>
         {backToGiving}
@@ -339,7 +341,7 @@ function DonatePageInner({ config }: Props) {
     );
   }
 
-  if (view === "manage") {
+  if (view === "manage" && canGiveOnline) {
     return (
       <Box>
         {backToGiving}
@@ -423,12 +425,15 @@ function DonatePageInner({ config }: Props) {
   return (
     <Box>
       <PageHead title={Locale.label("mobile.screenTitles.donation")} lede={church?.name}>
-        <Button variant="contained" onClick={() => setView("give")}>{Locale.label("mobile.giving.give")}</Button>
+        {canGiveOnline && <Button variant="contained" onClick={() => setView("give")}>{Locale.label("mobile.giving.give")}</Button>}
         {donations.length > 0 && <Button variant="outlined" onClick={() => handlePrintStatement(String(latestYear))}>{Locale.label("mobile.screens.printStatement")}</Button>}
       </PageHead>
       {messageAlert}
       <Plate>
         {noteSection}
+        {!canGiveOnline && (
+          <PlateSection><QuietEmpty>{Locale.label("mobile.screens.onlineGivingNotSetUp")}</QuietEmpty></PlateSection>
+        )}
         {historyVisible && (
           <PlateSection title={String(latestYear)} action={<TextLink href={sliceHref("history")}>{Locale.label("mobile.giving.allHistory")}</TextLink>}>
             <Box data-testid="giving-ytd-total"><BigNumber>{CurrencyHelper.formatCurrencyWithLocale(ytd.total || 0, pageCurrency)}</BigNumber></Box>
@@ -443,7 +448,7 @@ function DonatePageInner({ config }: Props) {
           </PlateSection>
         )}
 
-        <PlateSection title={Locale.label("mobile.screens.recurring")} action={<TextLink href={sliceHref("manage")}>{Locale.label("mobile.screens.tabManage")}</TextLink>}>
+        {canGiveOnline && <PlateSection title={Locale.label("mobile.screens.recurring")} action={<TextLink href={sliceHref("manage")}>{Locale.label("mobile.screens.tabManage")}</TextLink>}>
           {subscriptions.length === 0
             ? <QuietEmpty>{Locale.label("mobile.giving.noRecurring")}</QuietEmpty>
             : (
@@ -463,12 +468,12 @@ function DonatePageInner({ config }: Props) {
                 })}
               </RowList>
             )}
-        </PlateSection>
+        </PlateSection>}
 
         {historyVisible && (
           <PlateSection
             title={Locale.label("mobile.screens.recentActivity")}
-            action={recent.length > 0 && <TextLink onClick={() => setView("give")}>{Locale.label("mobile.giving.repeatLastGift")}</TextLink>}
+            action={canGiveOnline && recent.length > 0 && <TextLink onClick={() => setView("give")}>{Locale.label("mobile.giving.repeatLastGift")}</TextLink>}
           >
             {donationsLoading && <QuietEmpty>{Locale.label("mobile.screens.loading")}</QuietEmpty>}
             {!donationsLoading && recent.length === 0 && <QuietEmpty>{Locale.label("mobile.screens.donationsWillAppear")}</QuietEmpty>}
@@ -476,7 +481,7 @@ function DonatePageInner({ config }: Props) {
           </PlateSection>
         )}
 
-        <PlateSection title={Locale.label("mobile.giving.paymentMethods")} action={<TextLink href={sliceHref("manage")}>{Locale.label("mobile.screens.tabManage")}</TextLink>}>
+        {canGiveOnline && <PlateSection title={Locale.label("mobile.giving.paymentMethods")} action={<TextLink href={sliceHref("manage")}>{Locale.label("mobile.screens.tabManage")}</TextLink>}>
           {isMethodsLoading && <QuietEmpty>{Locale.label("mobile.screens.loading")}</QuietEmpty>}
           {!isMethodsLoading && !paymentMethods?.length && <QuietEmpty>{Locale.label("mobile.giving.noPaymentMethods")}</QuietEmpty>}
           {!!paymentMethods?.length && (
@@ -491,7 +496,7 @@ function DonatePageInner({ config }: Props) {
               ))}
             </RowList>
           )}
-        </PlateSection>
+        </PlateSection>}
 
         {church?.id && (
           <PlateSection sx={campaignSx}>
