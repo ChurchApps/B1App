@@ -15,7 +15,7 @@ interface Props extends WrapperPageProps {
   formId: string;
 }
 
-type StandaloneFormInterface = FormInterface & { description?: string; displayMode?: "standard" | "conversational"; thankYouMessage?: string };
+type StandaloneFormInterface = FormInterface & { description?: string; displayMode?: "standard" | "conversational"; thankYouMessage?: string; photoUrl?: string };
 
 export function FormPage(props: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -94,6 +94,9 @@ export function FormPage(props: Props) {
     <>
       <Container>
         <h1>{form?.name}</h1>
+        {!isFormSubmitted && form?.photoUrl && (
+          <img src={form.photoUrl} alt={form.name || ""} data-testid="form-header-photo" style={{ display: "block", width: "100%", aspectRatio: "16 / 9", objectFit: "cover", borderRadius: 8, marginBottom: 16 }} />
+        )}
         {!isFormSubmitted && form?.description && (
           <p data-testid="form-description" style={{ whiteSpace: "pre-wrap" }}>{form.description}</p>
         )}

@@ -46,6 +46,34 @@ test.describe("Standalone form submission (anonymous)", () => {
     expect(descriptionBox!.y, "description should sit above the first field").toBeLessThan(inputBox!.y);
   });
 
+  test("unrestricted form: shows the form's header photo above the description", async ({ page }) => {
+    const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", "base64");
+    const photoUrl = "https://content.example.com/CHU00000001/gallery/1.78/vbs-header.jpg";
+    // The Api's photoUrl column has its own Jest coverage; here the saved value is layered onto the real response.
+    await page.route(/\/forms\/standalone\/FRM00000004\?/, async (route) => {
+      const response = await route.fetch();
+      route.fulfill({ response, json: { ...(await response.json()), photoUrl } });
+    });
+    await page.route("**/vbs-header.jpg", (route) => route.fulfill({ contentType: "image/png", body: png }));
+
+    await page.goto("/forms/FRM00000004");
+    await expect(page.getByLabel(/Child Full Name/i)).toBeVisible({ timeout: 15000 });
+
+    const photo = page.getByTestId("form-header-photo");
+    await expect(photo).toBeVisible();
+    await expect(photo).toHaveAttribute("src", photoUrl);
+    await expect(photo).toHaveAttribute("alt", "VBS Registration (Public)");
+
+    const [photoBox, descriptionBox] = await Promise.all([photo.boundingBox(), page.getByTestId("form-description").boundingBox()]);
+    expect(photoBox!.y, "photo should sit above the description").toBeLessThan(descriptionBox!.y);
+  });
+
+  test("unrestricted form: no header photo when the form has none", async ({ page }) => {
+    await page.goto("/forms/FRM00000004");
+    await expect(page.getByLabel(/Child Full Name/i)).toBeVisible({ timeout: 15000 });
+    await expect(page.getByTestId("form-header-photo")).toHaveCount(0);
+  });
+
   test("unrestricted form: visitors do not see the Edit Form header", async ({ page }) => {
     await page.goto("/forms/FRM00000004");
     await expect(page.getByLabel(/Child Full Name/i)).toBeVisible({ timeout: 15000 });
