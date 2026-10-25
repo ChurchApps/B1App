@@ -1,10 +1,5 @@
-import type { ConversationInterface, SocketPayloadInterface, SermonInterface } from "@churchapps/helpers";
+import type { ConversationInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "./ConfigHelper";
-
-export interface ColumnInterface {
-  size: number;
-  elements: ElementInterface[];
-}
 
 export interface ElementInterface {
   id?: string;
@@ -74,38 +69,6 @@ export interface PostInterface {
   tags?: string;
 }
 
-export interface BlockInterface {
-  id?: string;
-  churchId?: string;
-  blockType?: string;
-  name?: string;
-
-  sections?: SectionInterface[];
-}
-
-export interface B1PageInterface {
-  id?: string;
-  churchId?: string;
-  name?: string;
-  lastModified?: Date;
-  content?: string;
-}
-
-export interface B1LinkInterface {
-  id?: string;
-  churchId: string;
-  category: string;
-  url?: string;
-  text: string;
-  sort: number;
-  linkType: string;
-  linkData: string;
-  icon: string;
-  photo?: string;
-  visibility?: "everyone" | "visitors" | "members" | "staff" | "groups" | "team";
-  groupIds?: string;
-}
-
 export interface WrapperPageProps {
   config: ConfigurationInterface
 }
@@ -115,13 +78,10 @@ export interface StreamingTabInterface { text: string, url: string, icon: string
 export interface StreamingServiceExtendedInterface { videoUrl: string, serviceTime: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string, id?: string, sermon?: SermonInterface }
 export interface StreamConfigInterface { keyName?: string, churchId?: string, buttons?: StreamingButtonInterface[], tabs?: StreamingTabInterface[], services?: StreamingServiceExtendedInterface[] }
 
-export interface ChatPayloadInterface extends SocketPayloadInterface { churchId: string, conversationId: string }
 export interface ChatStateInterface { mainConversation: ConversationInterface | null, hostConversation: ConversationInterface | null, user: ChatUserInterface }
 export interface ChatUserInterface { firstName: string, lastName: string, isHost: boolean }
 
 export type { FileInterface } from "@churchapps/helpers";
-
-
 
 export interface GlobalStyleInterface {
   id?: string,
@@ -133,65 +93,6 @@ export interface GlobalStyleInterface {
   customJS?: string
 }
 
-export interface InlineStylesInterface {
-  all: Record<string, string>,
-  desktop: Record<string, string>,
-  mobile: Record<string, string>
-}
-
-export interface AnimationsInterface {
-  onShow: string,
-  onShowSpeed: string
-}
-
-
-export interface StyleOption {
-  label: string,
-  key: string,
-  type: "color" | "px" | "select" | "text" | "text-shadow",
-  default: string | number,
-  options?: string[]
-}
-
-export const allStyleOptions: StyleOption[] = [
-  { label: "Border Color", key: "border-color", type: "color", default: "#FF0000" },
-  { label: "Border Radius", key: "border-radius", type: "px", default: "5" },
-  {
-    label: "Border Style",
-    key: "border-style",
-    type: "select",
-    default: "solid",
-    options: [
-      "none", "solid", "dotted", "dashed", "double", "groove", "ridge", "inset", "outset"
-    ]
-  },
-  { label: "Border Width", key: "border-width", type: "px", default: "1" },
-  { label: "Background Color", key: "background-color", type: "color", default: "#FF0000" },
-  { label: "Color", key: "color", type: "color", default: "#FF0000" },
-  { label: "Font Family", key: "font-family", type: "text", default: "Roboto" },
-  { label: "Font Size", key: "font-size", type: "px", default: "14" },
-  { label: "Font Style", key: "font-style", type: "select", default: "italic", options: ["normal", "italic"] },
-  { label: "Height", key: "height", type: "px", default: 500 },
-  { label: "Line Height", key: "line-height", type: "px", default: "14" },
-  { label: "Margin", key: "margin", type: "px", default: 0 },
-  { label: "Margin Left", key: "margin-left", type: "px", default: 0 },
-  { label: "Margin Right", key: "margin-right", type: "px", default: 0 },
-  { label: "Margin Top", key: "margin-top", type: "px", default: 0 },
-  { label: "Margin Bottom", key: "margin-bottom", type: "px", default: 0 },
-  { label: "Max Width", key: "max-width", type: "px", default: 500 },
-  { label: "Max Height", key: "max-height", type: "px", default: 500 },
-  { label: "Min Width", key: "min-width", type: "px", default: 500 },
-  { label: "Min Height", key: "min-height", type: "px", default: 500 },
-  { label: "Padding", key: "padding", type: "px", default: 0 },
-  { label: "Padding Left", key: "padding-left", type: "px", default: 0 },
-  { label: "Padding Right", key: "padding-right", type: "px", default: 0 },
-  { label: "Padding Top", key: "padding-top", type: "px", default: 0 },
-  { label: "Padding Bottom", key: "padding-bottom", type: "px", default: 0 },
-  { label: "Text Shadow", key: "text-shadow", type: "text-shadow", default: "1px 1px 2px black;" },
-  { label: "Width", key: "width", type: "px", default: 500 }
-];
-
-
 export interface PageLink {
   pageId?: string;
   title: string;
@@ -201,17 +102,7 @@ export interface PageLink {
   expanded?: boolean;
 }
 
-
-
-
 /* Temp for songs.  Move to Helpers when stable */
-
-
-export interface SongInterface {
-  id?: string,
-  name?: string,
-  dateAdded: Date
-}
 
 export interface SongDetailInterface {
   id?: string,
@@ -245,7 +136,6 @@ export interface ArrangementInterface {
   lyrics?: string
 }
 
-
 export interface ArrangementKeyInterface {
   id?: string,
   arrangementId?: string,
@@ -271,17 +161,6 @@ export interface PlanItemInterface {
   positionId?: string,
 
   children?: PlanItemInterface[]
-}
-
-export interface PlanInterface {
-  id?: string;
-  churchId?: string;
-  name?: string;
-  ministryId?: string;
-  serviceDate?: Date;
-  notes?: string;
-  contentType?: string;
-  contentId?: string;
 }
 
 export interface ExternalVenueRefInterface {
