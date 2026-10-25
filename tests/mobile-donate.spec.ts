@@ -1,4 +1,4 @@
-import { test, expect, request } from "@playwright/test";
+import { test, expect, request, type APIRequestContext, type Page } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
 test.describe("Mobile donate", () => {
@@ -252,5 +252,101 @@ test.describe("Public donate page links", () => {
     await expect(login).toBeVisible({ timeout: 30000 });
     await expect(page.locator('a[href="/mobile/login?returnUrl=/mobile/donate"]')).toBeVisible();
     await expect(page.getByTestId("donate-instructions-link")).toHaveAttribute("href", /b1-church\/giving\/making-donations/);
+  });
+});
+
+// Lessons.church (CHU00000099) records gifts but has no payment gateway. A signed-in member still sees
+// their history, year total and Print Statement on Giving, Me and Home; only online giving is hidden.
+test.describe.serial("Mobile donate without online giving", () => {
+  test.use({ storageState: { cookies: [], origins: [] }, baseURL: "http://lessonschurch.localtest.me:3301" });
+
+  const MAIN_API = process.env.API_BASE || "http://localhost:8084";
+  const CHURCH = "CHU00000099";
+  const EMAIL = "lessons-admin@demo.churchapps.org";
+  const PERSON = "PER00000099";
+
+  let ctx: APIRequestContext;
+  let headers: Record<string, string>;
+  const created: { fund?: string; batch?: string; donation?: string; link?: string } = {};
+
+  test.beforeAll(async () => {
+    ctx = await request.newContext();
+    const login = await (await ctx.post(`${MAIN_API}/membership/users/login`, { data: { email: EMAIL, password: "password" } })).json();
+    const uc = login.userChurches.find((c: any) => c.church?.id === CHURCH);
+    headers = { Authorization: `Bearer ${uc.jwt}` };
+    const configured = await (await ctx.get(`${MAIN_API}/giving/gateways/configured/${CHURCH}`)).json();
+    expect(configured.configured).toBe(false);
+
+    const [fund] = await (await ctx.post(`${MAIN_API}/giving/funds`, { headers, data: [{ name: "E2E General Fund", taxDeductible: true }] })).json();
+    created.fund = fund.id;
+    const [batch] = await (await ctx.post(`${MAIN_API}/giving/donationbatches`, { headers, data: [{ name: "E2E Check Batch", batchDate: new Date() }] })).json();
+    created.batch = batch.id;
+    const [donation] = await (await ctx.post(`${MAIN_API}/giving/donations`, {
+      headers,
+      data: [{ batchId: batch.id, personId: PERSON, donationDate: new Date(), amount: 75, method: "Check", methodDetails: "1001" }]
+    })).json();
+    created.donation = donation.id;
+    const fd = await ctx.post(`${MAIN_API}/giving/funddonations`, { headers, data: [{ donationId: donation.id, fundId: fund.id, amount: 75 }] });
+    expect(fd.ok()).toBeTruthy();
+
+    // Home only teases giving when the church's app nav has a donation link.
+    const [link] = await (await ctx.post(`${MAIN_API}/content/links`, {
+      headers,
+      data: [{ churchId: CHURCH, category: "b1Tab", linkType: "donation", text: "Giving", sort: 20, visibility: "everyone" }]
+    })).json();
+    created.link = link.id;
+  });
+
+  test.afterAll(async () => {
+    if (created.link) await ctx.delete(`${MAIN_API}/content/links/${created.link}`, { headers });
+    if (created.donation) await ctx.delete(`${MAIN_API}/giving/donations/${created.donation}`, { headers });
+    if (created.batch) await ctx.delete(`${MAIN_API}/giving/donationbatches/${created.batch}`, { headers });
+    if (created.fund) await ctx.delete(`${MAIN_API}/giving/funds/${created.fund}`, { headers });
+    await ctx.dispose();
+  });
+
+  const signIn = async (page: Page) => {
+    await page.goto("/mobile/login");
+    await page.locator('input[type="email"]').first().fill(EMAIL);
+    await page.locator('input[type="password"]').first().fill("password");
+    await page.locator('button[type="submit"]').first().click();
+    await page.waitForURL(/\/mobile\/dashboard/, { timeout: 30000 });
+  };
+
+  test("member sees recorded gifts and Print Statement without online giving", async ({ page }) => {
+    await signIn(page);
+    await page.goto("/mobile/donate");
+    const main = page.locator("main");
+    await expect(main.getByTestId("giving-ytd-total")).toContainText(/\$\s?75\.00/, { timeout: 30000 });
+    await expect(main.getByRole("button", { name: "Print Statement" })).toBeVisible();
+    await expect(main.getByRole("button", { name: "Give", exact: true })).toHaveCount(0);
+  });
+
+  test("statement header does not overlap at phone width", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.addInitScript(() => { window.print = () => {}; window.history.back = () => {}; });
+    await signIn(page);
+    await page.goto("/mobile/donate/print");
+    const email = page.getByText(EMAIL, { exact: true });
+    await expect(email).toBeVisible({ timeout: 30000 });
+    await expect(page.getByRole("heading", { name: "Lessons.church Free Curriculum" })).toBeVisible();
+    const fits = await email.evaluate((el) => el.scrollWidth <= el.clientWidth);
+    expect(fits, "email overflows its column").toBe(true);
+  });
+
+  test("Me shows the giving shortcut without a gateway", async ({ page }) => {
+    await signIn(page);
+    await page.goto("/mobile/me");
+    await expect(page.getByTestId("me-shortcut-donate")).toBeVisible({ timeout: 30000 });
+  });
+
+  test("Home shows the giving total without a Give button", async ({ page }) => {
+    await signIn(page);
+    await page.goto("/mobile/dashboard");
+    await expect(page.getByTestId("home-giving-total")).toBeVisible({ timeout: 30000 });
+    const main = page.locator("main");
+    await expect(main.getByRole("button", { name: "Give", exact: true })).toHaveCount(0);
+    // The teaser's Give is a link styled as a button.
+    await expect(main.getByRole("link", { name: "Give", exact: true })).toHaveCount(0);
   });
 });
