@@ -28,20 +28,43 @@
     },
     "guestRegister": {
       "addFamilyMember": "Add Family Member",
+      "address": "Home Address",
+      "address1": "Street Address",
+      "address2": "Address Line 2",
+      "birthDate": "Birth Date",
+      "city": "City",
       "complete": {
         "message": "You're all set! A staff member will check you in shortly.",
         "title": "Registration Complete"
       },
       "familyMember": "Family Member {}",
+      "gender": "Gender",
+      "genders": {
+        "Female": "Female",
+        "Male": "Male",
+        "Unspecified": "Unspecified"
+      },
+      "grade": "Grade",
+      "maritalStatus": "Marital Status",
+      "maritalStatuses": {
+        "Divorced": "Divorced",
+        "Married": "Married",
+        "Single": "Single",
+        "Unknown": "Unknown",
+        "Widowed": "Widowed"
+      },
       "phone": "Phone",
       "primaryContact": "Primary Contact",
       "registering": "Registering...",
       "registrationFailed": "Registration failed. Please try again.",
+      "state": "State",
       "subtitle": "Register your family as guests",
       "title": "Guest Registration",
       "validate": {
+        "fieldsRequired": "Please fill in every required field.",
         "namesRequired": "First name and last name are required for each member."
-      }
+      },
+      "zip": "Zip"
     }
   },
   "common": {
