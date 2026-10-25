@@ -71,6 +71,15 @@ test.describe("SEO", () => {
     const sermon = entries.find((e) => e.loc.includes("/sermons/SER"));
     expect(sermon?.lastmod).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
+  // Event pages are only linked from client-rendered calendar tiles, so the sitemap is how crawlers find them.
+  test("the sitemap lists the event pages on the church's calendars", async ({ request, baseURL }) => {
+    const xml = await (await request.get("/sitemap.xml")).text();
+    const events = [...xml.matchAll(/<loc>([^<]*\/events\/[^<]+)<\/loc>/g)].map((m) => m[1]);
+    for (const id of ["EVT00000001", "EVT00000016"]) expect(events, id).toContain(new URL("/events/" + id, baseURL).href);
+    expect(new Set(events).size).toBe(events.length);
+    for (const loc of events) expect((await request.get(new URL(loc).pathname)).status(), loc).toBe(200);
+  });
+
   test("an event page describes itself as an Event", async ({ request }) => {
     const response = await request.get("/events/EVT00000001");
     expect(response.status()).toBe(200);
