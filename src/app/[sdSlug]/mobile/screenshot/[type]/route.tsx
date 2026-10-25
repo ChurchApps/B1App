@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import sharp from "sharp";
+import { fetchPublicImage } from "@/helpers/podcastDownload";
 import { loadChurchAppearance } from "../../loadChurchAppearance";
 
 type Params = Promise<{ sdSlug: string; type: string }>;
@@ -11,9 +12,9 @@ const SIZES: Record<string, { width: number; height: number }> = {
 
 async function loadIconDataUrl(url: string, size: number): Promise<string | null> {
   try {
-    const res = await fetch(url, { next: { revalidate: 3600 } });
-    if (!res.ok) return null;
-    const png = await sharp(Buffer.from(await res.arrayBuffer()))
+    const buf = await fetchPublicImage(url);
+    if (!buf) return null;
+    const png = await sharp(buf)
       .resize(size, size, { fit: "contain", background: { r: 255, g: 255, b: 255, alpha: 1 } })
       .png()
       .toBuffer();

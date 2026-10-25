@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import sharp from "sharp";
+import { fetchPublicImage } from "@/helpers/podcastDownload";
 import { loadChurchAppearance } from "../../loadChurchAppearance";
 
 type Params = Promise<{ sdSlug: string; size: string }>;
@@ -25,9 +26,8 @@ export async function GET(_req: Request, { params }: { params: Params }) {
 
   if (favicon) {
     try {
-      const imgRes = await fetch(favicon, { next: { revalidate: 3600 } });
-      if (imgRes.ok) {
-        const buf = Buffer.from(await imgRes.arrayBuffer());
+      const buf = await fetchPublicImage(favicon);
+      if (buf) {
         const resized = await sharp(buf)
           .resize(n, n, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
           .png()
