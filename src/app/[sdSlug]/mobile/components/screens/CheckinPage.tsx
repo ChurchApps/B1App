@@ -66,7 +66,7 @@ const checkinErrorLabel = (e: any) => {
 
 const sessionGroupName = (vs: VisitSessionInterface) => {
   const st: ServiceTimeInterface | null = ArrayHelper.getOne(CheckinHelper.serviceTimes || [], "id", vs.session?.serviceTimeId || "");
-  const group: GroupInterface = ArrayHelper.getOne(st?.groups || [], "id", vs.session?.groupId || "");
+  const group: GroupInterface = ArrayHelper.getOne((st?.groups || []).filter((g) => g != null), "id", vs.session?.groupId || "");
   return { group: group?.name || Locale.label("mobile.screens.none"), time: st?.name || "" };
 };
 
@@ -159,7 +159,8 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
               "id",
               gst.groupId
             );
-            st.groups?.push(g);
+            // A link to an archived or deleted group finds nothing; skip it rather than leave a null slot.
+            if (g) st.groups?.push(g);
           }
         );
       });
