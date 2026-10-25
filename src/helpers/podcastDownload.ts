@@ -322,3 +322,56 @@ export async function preparePodcastDownload(feedUrl: string, guid: string, deps
     }
   };
 }
+
+// Church-saved image URLs (the favicon behind the PWA icon and store screenshots) are
+// fetched by this server too, so they get the same address guards as episode files.
+// No redirects, a small size cap, and raster images only: SVG never reaches sharp.
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const GENERIC_TYPES = new Set(["", "application/octet-stream", "binary/octet-stream"]);
+
+export interface ImageHop {
+  status: number;
+  contentType: string | null;
+  data: Buffer | null;
+}
+
+export interface ImageFetchDeps {
+  fetchImage?: (url: string) => Promise<ImageHop>;
+  lookup?: LookupFn;
+}
+
+async function defaultFetchImage(url: string): Promise<ImageHop> {
+  const response = await axios.get(url, {
+    responseType: "arraybuffer",
+    maxRedirects: 0,
+    timeout: 10000,
+    httpAgent,
+    httpsAgent,
+    validateStatus: () => true,
+    maxContentLength: MAX_IMAGE_BYTES,
+    headers: { Accept: "image/*", "User-Agent": "ChurchApps-Site-Icon/1.0" }
+  });
+  const headers = (response.headers || {}) as Record<string, unknown>;
+  return { status: response.status, contentType: headerValue(headers, "content-type"), data: response.data ? Buffer.from(response.data) : null };
+}
+
+function isRasterImage(contentType: string | null, data: Buffer): boolean {
+  const type = (contentType || "").split(";")[0].trim().toLowerCase();
+  if (type === "image/svg+xml") return false;
+  if (!type.startsWith("image/") && !GENERIC_TYPES.has(type)) return false;
+  const head = data.subarray(0, 512).toString("utf8").replace(/^\uFEFF/, "").trimStart();
+  if (head.startsWith("<")) return false;
+  return !(data[0] === 0x1f && data[1] === 0x8b);
+}
+
+export async function fetchPublicImage(url: string, deps: ImageFetchDeps = {}): Promise<Buffer | null> {
+  try {
+    await assertPublicUrl(url, deps.lookup);
+    const res = await (deps.fetchImage || defaultFetchImage)(url);
+    if (res.status < 200 || res.status >= 300 || !res.data || res.data.length === 0) return null;
+    if (res.data.length > MAX_IMAGE_BYTES || !isRasterImage(res.contentType, res.data)) return null;
+    return res.data;
+  } catch {
+    return null;
+  }
+}
