@@ -26,13 +26,14 @@ const loadData = async (sdSlug: string) => {
   const config = await ConfigHelper.load(sdSlug);
   const publicSettings: any = await ApiHelper.getAnonymous("/settings/public/" + config.church.id, "MembershipApi");
   const enabled = publicSettings?.enableQRGuestRegistration === "true";
-  return { config, enabled };
+  const imageUrl: string = publicSettings?.guestRegistrationImage || "";
+  return { config, enabled, imageUrl };
 };
 
 export default async function GuestRegisterPage({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug } = await params;
-  const { config, enabled } = await loadSharedData(sdSlug);
+  const { config, enabled, imageUrl } = await loadSharedData(sdSlug);
 
   return (
     <>
@@ -40,7 +41,7 @@ export default async function GuestRegisterPage({ params }: { params: PageParams
       <DefaultPageWrapper config={config}>
         <Container maxWidth="sm" sx={{ paddingTop: 4, paddingBottom: 4 }}>
           {enabled
-            ? <GuestRegister churchId={config.church.id || ""} />
+            ? <GuestRegister churchId={config.church.id || ""} imageUrl={imageUrl} />
             : <Typography variant="h6" component="h1" sx={{ textAlign: "center", color: "text.secondary", paddingTop: 8 }}>
               {Locale.label("guestRegister.notEnabled")}
             </Typography>
