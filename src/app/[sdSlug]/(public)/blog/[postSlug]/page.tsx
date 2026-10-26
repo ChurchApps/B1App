@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper";
 import { Theme } from "@/components/Theme";
+import { BlogFooterEmbed } from "@/components/BlogFooterEmbed";
 import { BlogPostingJsonLd } from "@/components/seo/BlogPostingJsonLd";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { publicOrigin } from "@/helpers/siteOrigin";
@@ -124,6 +125,12 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
                     <Chip size="small" variant="outlined" label={t} clickable />
                   </Link>
                 ))}
+              </Box>
+            )}
+
+            {config.blogFooterHtml && (
+              <Box sx={{ maxWidth: 720, mx: "auto", mt: 6 }}>
+                <BlogFooterEmbed key={post.id} html={config.blogFooterHtml} />
               </Box>
             )}
 
