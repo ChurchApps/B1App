@@ -189,6 +189,23 @@ test.describe("Plan downloads (lesson printables)", () => {
     await expect(page.getByTestId("teach-downloads").getByText("Rainbow Printables")).toBeVisible();
   });
 
+  test("Teach view shows the lesson sections before the Downloads list", async ({ page }) => {
+    const unique = `Teach order ${Date.now()}`;
+    const planId = await seedPlan({ name: unique, providerId: "lessonschurch", providerPlanId: PROVIDER_PATH, providerPlanName: unique, contentType: "provider", contentId: "VEN00000002" });
+    await mockLessonsChurch(page, printableFeed);
+
+    await page.goto(`/mobile/plans/${planId}`);
+    await page.getByRole("button", { name: /Teach/i }).click();
+    const dialog = page.getByRole("dialog");
+    const downloads = dialog.getByTestId("teach-downloads");
+    const firstSection = dialog.getByText("Warm Up", { exact: true }).last();
+    await expect(downloads).toBeVisible({ timeout: 10000 });
+    await expect(firstSection).toBeVisible();
+
+    const sectionFirst = await firstSection.evaluate((el, dl) => !!(el.compareDocumentPosition(dl as Node) & Node.DOCUMENT_POSITION_FOLLOWING), await downloads.elementHandle());
+    expect(sectionFirst, "first lesson section should come before the Downloads list").toBe(true);
+  });
+
   test("customized service order still shows the lesson's printables", async ({ page }) => {
     const unique = `Customized ${Date.now()}`;
     const planId = await seedPlan({ name: unique, providerId: "lessonschurch", providerPlanId: PROVIDER_PATH, providerPlanName: unique, contentType: "provider", contentId: "VEN00000002" });
