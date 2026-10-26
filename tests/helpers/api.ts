@@ -37,3 +37,4 @@ export async function apiCall(api: ApiHandle, method: "get" | "post" | "delete",
 export const lessonsUrl = (path: string) => `${LESSONS_API}${path}`;
 export const doingUrl = (path: string) => `${MAIN_API}/doing${path}`;
 export const membershipUrl = (path: string) => `${MAIN_API}/membership${path}`;
+export const messagingUrl = (path: string) => `${MAIN_API}/messaging${path}`;

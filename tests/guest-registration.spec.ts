@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { getApi, apiCall, membershipUrl, type ApiHandle } from "./helpers/api";
+import { getApi, apiCall, membershipUrl, messagingUrl, type ApiHandle } from "./helpers/api";
 import { DEMO_CHURCH } from "./helpers/fixtures";
 
 const BASE_URL = process.env.BASE_URL || "http://grace.localtest.me:3301";
@@ -99,5 +99,32 @@ test.describe("QR guest registration", () => {
     expect(String(head.birthDate)).toContain("1985-06-15");
     expect(child.contactInfo).toMatchObject({ address1: "12 Sycamore Ln", city: "Jericho", state: "TX", zip: "75001" });
     expect(child.grade).toBe("3");
+  });
+  // ChurchAppsSupport#1374: a Comments box the church can include, saved as a note on the head of household.
+  test("asks for comments when the church included them and saves them as a note", async ({ page }) => {
+    await removeCreated();
+    await saveSettings({ guestRegistrationFields: JSON.stringify({ email: "optional", phone: "off", comments: "required" }) });
+    await page.goto(BASE_URL + "/guest-register");
+    const comments = page.getByLabel(/^Comments/);
+    await expect(comments).toBeVisible({ timeout: 20000 });
+    await page.screenshot({ path: ".pr-screenshots/after.png", fullPage: true });
+
+    await page.getByLabel(/^First Name/).nth(0).fill("Zelda");
+    await page.getByLabel(/^Last Name/).nth(0).fill(LAST_NAME);
+    await page.getByLabel(/^First Name/).nth(1).fill("Zion");
+    await page.getByLabel(/^Last Name/).nth(1).fill(LAST_NAME);
+
+    await page.getByRole("button", { name: "Register" }).click();
+    await expect(page.getByText("Please fill in every required field.")).toBeVisible();
+    await comments.fill("Met you at the church picnic");
+    await page.getByRole("button", { name: "Register" }).click();
+    await expect(page.getByText("Registration Complete")).toBeVisible({ timeout: 15000 });
+
+    const head = (await findCreated()).find((p) => p.name?.first === "Zelda");
+    expect(head?.conversationId).toBeTruthy();
+    const messaging = await getApi("demo", "MessagingApi");
+    const messages = (await (await apiCall(messaging, "get", messagingUrl("/messages/conversation/" + head.conversationId))).json()) as any[];
+    await messaging.request.dispose();
+    expect(messages.map((m) => m.content)).toContain("Met you at the church picnic");
   });
 });
