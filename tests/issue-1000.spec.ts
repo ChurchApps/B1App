@@ -38,7 +38,8 @@ test.describe("Issue 1000 - attendance taking is leaders only", () => {
     await page.goto(`/mobile/groups/${MEMBER_GROUP}?activeTab=attendance`);
     await expect(membersSection(page)).toBeVisible({ timeout: 20000 });
     await expect(attendanceTab(page)).toHaveCount(0);
-    expect(attendanceCalls).toEqual([]);
+    // Members may load the meetings list. The attendance taker (visit rows) stays closed.
+    expect(attendanceCalls.filter((url) => !url.includes("/attendance/sessions?"))).toEqual([]);
   });
 
   test("a group leader still gets the attendance tab", async ({ page }) => {

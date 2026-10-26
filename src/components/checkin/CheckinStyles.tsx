@@ -13,6 +13,16 @@ export const HeaderIconContainer = styled(Box)({
   margin: "0 auto 16px"
 });
 
+// A church's own photo replaces the icon circle on the guest sign-up page.
+export const HeaderImage = styled("img")({
+  display: "block",
+  width: "100%",
+  aspectRatio: "16 / 9",
+  objectFit: "cover",
+  borderRadius: 8,
+  marginBottom: 16
+});
+
 export const HeaderSection = styled(Box)({
   backgroundColor: "#FFFFFF",
   padding: 24,
