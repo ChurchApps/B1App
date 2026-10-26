@@ -261,6 +261,7 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
             {next && <Button variant="outlined" size="small" endIcon={<ChevronRightIcon />} onClick={() => goToSection(next.domId)}>{next.item.label}</Button>}
           </PageHead>
           <Plate>
+            {instructions.items.flatMap((item, idx) => renderTopLevel(item, `top-${item.id || idx}`))}
             {!!instructions.downloads?.length && (
               <PlateSection title={Locale.label("mobile.details.downloads")}>
                 <Box data-testid="teach-downloads" sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -270,7 +271,6 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
                 </Box>
               </PlateSection>
             )}
-            {instructions.items.flatMap((item, idx) => renderTopLevel(item, `top-${item.id || idx}`))}
           </Plate>
         </Box>
       </Box>
