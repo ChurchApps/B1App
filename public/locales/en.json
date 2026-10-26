@@ -714,7 +714,11 @@
       "titleSetPassword": "Set your password",
       "titleVerify": "Enter verification code",
       "titleWelcome": "Welcome, {}",
-      "verifyCode": "Verify code"
+      "verifyCode": "Verify code",
+      "errMfaCode": "That code didn't work. Please try again.",
+      "ledeMfa": "Enter the 6-digit code from your authenticator app, or one of your backup codes.",
+      "mfaCode": "Code",
+      "titleMfa": "Two-factor sign-in"
     },
     "me": {
       "allForms": "All forms",
