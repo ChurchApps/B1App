@@ -27,7 +27,7 @@ test.describe("QR guest registration", () => {
   test.beforeAll(async () => {
     api = await getApi("demo", "MembershipApi");
     const all = await loadSettings();
-    originals = all.filter((s) => s.keyName === "enableQRGuestRegistration" || s.keyName === "guestRegistrationFields");
+    originals = all.filter((s) => ["enableQRGuestRegistration", "guestRegistrationFields", "guestRegistrationImage"].includes(s.keyName));
     await removeCreated();
     await saveSettings({
       enableQRGuestRegistration: "true",
@@ -39,7 +39,8 @@ test.describe("QR guest registration", () => {
     await removeCreated();
     await saveSettings({
       enableQRGuestRegistration: originals.find((s) => s.keyName === "enableQRGuestRegistration")?.value ?? "false",
-      guestRegistrationFields: originals.find((s) => s.keyName === "guestRegistrationFields")?.value ?? "{}"
+      guestRegistrationFields: originals.find((s) => s.keyName === "guestRegistrationFields")?.value ?? "{}",
+      guestRegistrationImage: originals.find((s) => s.keyName === "guestRegistrationImage")?.value ?? ""
     });
     await api.request.dispose();
   });
@@ -107,7 +108,6 @@ test.describe("QR guest registration", () => {
     await page.goto(BASE_URL + "/guest-register");
     const comments = page.getByLabel(/^Comments/);
     await expect(comments).toBeVisible({ timeout: 20000 });
-    await page.screenshot({ path: ".pr-screenshots/after.png", fullPage: true });
 
     await page.getByLabel(/^First Name/).nth(0).fill("Zelda");
     await page.getByLabel(/^Last Name/).nth(0).fill(LAST_NAME);
@@ -126,5 +126,23 @@ test.describe("QR guest registration", () => {
     const messages = (await (await apiCall(messaging, "get", messagingUrl("/messages/conversation/" + head.conversationId))).json()) as any[];
     await messaging.request.dispose();
     expect(messages.map((m) => m.content)).toContain("Met you at the church picnic");
+  });
+
+  // ChurchAppsSupport#1375: the church's header photo replaces the icon at the top of the sign-up page.
+  test("shows the church's header photo in place of the icon", async ({ page }) => {
+    await page.goto(BASE_URL + "/guest-register");
+    await expect(page.getByRole("heading", { name: "Guest Registration" })).toBeVisible({ timeout: 20000 });
+    await expect(page.getByTestId("guest-register-header-photo")).toHaveCount(0);
+    await expect(page.getByText("person_add")).toBeVisible();
+
+    const imageUrl = BASE_URL + "/images/about-bg.jpg";
+    await saveSettings({ guestRegistrationImage: imageUrl });
+    await page.reload();
+    await expect(page.getByRole("heading", { name: "Guest Registration" })).toBeVisible({ timeout: 20000 });
+    const photo = page.getByTestId("guest-register-header-photo");
+    await expect(photo).toHaveAttribute("src", imageUrl, { timeout: 20000 });
+    await expect(photo).toBeVisible();
+    await expect(page.getByText("person_add")).toHaveCount(0);
+    await page.screenshot({ path: ".pr-screenshots/after.png" });
   });
 });

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Icon, Box, Typography, TextField, IconButton, MenuItem } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
-import { HeaderSection, HeaderIconContainer, CheckinCard, colors } from "./CheckinStyles";
+import { HeaderSection, HeaderIconContainer, HeaderImage, CheckinCard, colors } from "./CheckinStyles";
 
 interface GuestMember {
   firstName: string;
@@ -38,9 +38,10 @@ const emptyMember = (lastName = ""): GuestMember => ({ firstName: "", lastName, 
 
 interface Props {
   churchId: string;
+  imageUrl?: string;
 }
 
-export function GuestRegister({ churchId }: Props) {
+export function GuestRegister({ churchId, imageUrl }: Props) {
   const [members, setMembers] = useState<GuestMember[]>([emptyMember(), emptyMember()]);
   const [address, setAddress] = useState<GuestAddress>({ address1: "", address2: "", city: "", state: "", zip: "" });
   const [maritalStatus, setMaritalStatus] = useState("");
@@ -134,9 +135,11 @@ export function GuestRegister({ churchId }: Props) {
     return (
       <>
         <HeaderSection>
-          <HeaderIconContainer>
-            <Icon sx={{ fontSize: 48, color: colors.success }}>check_circle</Icon>
-          </HeaderIconContainer>
+          {imageUrl
+            ? <HeaderImage src={imageUrl} alt="" data-testid="guest-register-header-photo" />
+            : <HeaderIconContainer>
+              <Icon sx={{ fontSize: 48, color: colors.success }}>check_circle</Icon>
+            </HeaderIconContainer>}
           <Typography variant="h4" component="h1" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
             {Locale.label("checkin.guestRegister.complete.title")}
           </Typography>
@@ -151,9 +154,11 @@ export function GuestRegister({ churchId }: Props) {
   return (
     <>
       <HeaderSection>
-        <HeaderIconContainer>
-          <Icon sx={{ fontSize: 48, color: colors.primary }}>person_add</Icon>
-        </HeaderIconContainer>
+        {imageUrl
+          ? <HeaderImage src={imageUrl} alt="" data-testid="guest-register-header-photo" />
+          : <HeaderIconContainer>
+            <Icon sx={{ fontSize: 48, color: colors.primary }}>person_add</Icon>
+          </HeaderIconContainer>}
         <Typography variant="h4" component="h1" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
           {Locale.label("checkin.guestRegister.title")}
         </Typography>
