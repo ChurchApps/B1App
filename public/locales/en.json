@@ -33,6 +33,7 @@
       "address2": "Address Line 2",
       "birthDate": "Birth Date",
       "city": "City",
+      "comments": "Comments",
       "complete": {
         "message": "You're all set! A staff member will check you in shortly.",
         "title": "Registration Complete"

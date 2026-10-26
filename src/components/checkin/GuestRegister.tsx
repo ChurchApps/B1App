@@ -24,11 +24,11 @@ interface GuestAddress {
 }
 
 type FieldMode = "off" | "optional" | "required";
-type FieldKey = "email" | "phone" | "address" | "birthDate" | "gender" | "maritalStatus" | "grade";
+type FieldKey = "email" | "phone" | "address" | "birthDate" | "gender" | "maritalStatus" | "grade" | "comments";
 type FieldModes = Record<FieldKey, FieldMode>;
 
 // Matches the Api default, so the form looks like it always has until the church changes the checklist.
-const DEFAULT_MODES: FieldModes = { email: "optional", phone: "optional", address: "off", birthDate: "off", gender: "off", maritalStatus: "off", grade: "off" };
+const DEFAULT_MODES: FieldModes = { email: "optional", phone: "optional", address: "off", birthDate: "off", gender: "off", maritalStatus: "off", grade: "off", comments: "off" };
 const GENDERS = ["Unspecified", "Male", "Female"];
 const MARITAL_STATUSES = ["Unknown", "Single", "Married", "Divorced", "Widowed"];
 const GRADES = [
@@ -44,6 +44,7 @@ export function GuestRegister({ churchId }: Props) {
   const [members, setMembers] = useState<GuestMember[]>([emptyMember(), emptyMember()]);
   const [address, setAddress] = useState<GuestAddress>({ address1: "", address2: "", city: "", state: "", zip: "" });
   const [maritalStatus, setMaritalStatus] = useState("");
+  const [comments, setComments] = useState("");
   const [modes, setModes] = useState<FieldModes>(DEFAULT_MODES);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -89,6 +90,7 @@ export function GuestRegister({ churchId }: Props) {
       || (required("phone") && !primary.phone?.trim())
       || (required("address") && (!address.address1.trim() || !address.city.trim() || !address.state.trim() || !address.zip.trim()))
       || (required("maritalStatus") && !maritalStatus)
+      || (required("comments") && !comments.trim())
       || members.some(m => (required("birthDate") && !m.birthDate) || (required("gender") && !m.gender) || (required("grade") && !m.grade));
     if (missingRequired) {
       setError(Locale.label("checkin.guestRegister.validate.fieldsRequired"));
@@ -116,7 +118,8 @@ export function GuestRegister({ churchId }: Props) {
           state: address.state.trim(),
           zip: address.zip.trim()
         } : undefined,
-        maritalStatus: (on("maritalStatus") && maritalStatus) || undefined
+        maritalStatus: (on("maritalStatus") && maritalStatus) || undefined,
+        comments: (on("comments") && comments.trim()) || undefined
       };
       await ApiHelper.postAnonymous("/people/guest-register", payload, "MembershipApi");
       setIsComplete(true);
@@ -298,6 +301,22 @@ export function GuestRegister({ churchId }: Props) {
           {Locale.label("checkin.guestRegister.addFamilyMember")}
         </Button>
       </Box>
+
+      {on("comments") && (
+        <CheckinCard sx={{ padding: 2 }}>
+          <TextField
+            label={Locale.label("checkin.guestRegister.comments")}
+            value={comments}
+            onChange={(e) => setComments(e.target.value)}
+            size="small"
+            required={required("comments")}
+            multiline
+            minRows={3}
+            fullWidth
+            slotProps={{ htmlInput: { maxLength: 1000 } }}
+          />
+        </CheckinCard>
+      )}
 
       {error && (
         <Typography sx={{ color: "error.main", marginBottom: 2 }}>{error}</Typography>
