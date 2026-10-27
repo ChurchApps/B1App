@@ -158,11 +158,11 @@ const printableFeed = {
 };
 
 // The lessonschurch provider fetches api.lessons.church from the browser; intercept so specs never depend on the live service.
-async function mockLessonsChurch(page: Page, feed: Record<string, unknown>) {
+async function mockLessonsChurch(page: Page, feed: Record<string, unknown>, items: unknown[] = [{ id: "sec1", itemType: "section", label: "Warm Up" }]) {
   await page.route("https://api.lessons.church/**", async (route) => {
     const url = route.request().url();
     let body: unknown = null;
-    if (url.includes("/venues/public/planItems/")) body = { venueName: "Kids Classroom", items: [{ id: "sec1", itemType: "section", label: "Warm Up" }] };
+    if (url.includes("/venues/public/planItems/")) body = { venueName: "Kids Classroom", items };
     else if (url.includes("/venues/public/actions/")) body = { venueName: "Kids Classroom", sections: [] };
     else if (url.includes("/venues/public/feed/")) body = feed;
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
@@ -237,6 +237,38 @@ test.describe("Plan downloads (lesson printables)", () => {
     await page.goto(`/mobile/plans/${planId}`);
     await expect(page.locator("main")).toContainText(/Warm Up/i, { timeout: 20000 });
     await expect(page.getByTestId("plan-downloads")).toHaveCount(0);
+  });
+});
+
+// The prev/next section buttons used to sit inside the scrolling lesson content, so one tap on "next" scrolled them off screen.
+test.describe("Teach view section navigation", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  const SECTIONS = ["Warm Up", "Bible Story", "Small Group", "Craft Time", "Prayer", "Goodbye"];
+  const LONG_SAY = Array.from({ length: 12 }, (_, i) => `Line ${i + 1} the teacher reads aloud to the class.`).join("\n\n");
+  const tallLesson = SECTIONS.map((label, i) => ({
+    id: `sec${i + 1}`,
+    itemType: "section",
+    label,
+    children: [{ id: `act${i + 1}`, itemType: "action", actionType: "say", label: `${label} script`, content: LONG_SAY }]
+  }));
+
+  test("next section button stays on screen after tapping it", async ({ page }) => {
+    const unique = `Teach nav ${Date.now()}`;
+    const planId = await seedPlan({ name: unique, providerId: "lessonschurch", providerPlanId: PROVIDER_PATH, providerPlanName: unique, contentType: "provider", contentId: "VEN00000002" });
+    await mockLessonsChurch(page, { lessonName: "I Can Pray" }, tallLesson);
+
+    await page.goto(`/mobile/plans/${planId}`);
+    await page.getByRole("button", { name: /Teach/i }).click();
+    const dialog = page.getByRole("dialog");
+
+    await dialog.getByRole("button", { name: "Bible Story" }).click();
+    await expect(dialog.getByText(/2 of 6/)).toBeAttached();
+
+    const next = dialog.getByRole("button", { name: "Small Group" });
+    await expect(next).toBeInViewport();
+    await next.click();
+    await expect(dialog.getByRole("button", { name: "Craft Time" })).toBeInViewport();
   });
 });
 
