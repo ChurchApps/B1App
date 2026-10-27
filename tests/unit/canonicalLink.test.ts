@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { canonicalLink } from "../../src/helpers/canonicalLink.ts";
+import { canonicalLink, ownsSubdomain } from "../../src/helpers/canonicalLink.ts";
 
 describe("canonicalLink", () => {
   it("points a church page at the host it was served on, without the query string", () => {
@@ -23,5 +23,14 @@ describe("canonicalLink", () => {
     for (const path of ["/mobile", "/mobile/dashboard", "/login", "/logout", "/robots.txt", "/sitemap.xml", "/manifest.webmanifest"]) {
       assert.equal(canonicalLink("grace.b1.church", "https", path), null, path);
     }
+  });
+});
+
+describe("ownsSubdomain", () => {
+  it("accepts a claimed domain only when it maps to the request host's own subdomain", () => {
+    assert.equal(ownsSubdomain("churchapps.b1.church", "churchapps.b1.church"), true);
+    assert.equal(ownsSubdomain("churchapps.b1.church", "other.b1.church"), false);
+    assert.equal(ownsSubdomain("churchapps.b1.church", null), false);
+    assert.equal(ownsSubdomain("churchapps.org", "churchapps.b1.church"), false);
   });
 });

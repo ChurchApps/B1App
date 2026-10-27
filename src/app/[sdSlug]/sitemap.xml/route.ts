@@ -21,7 +21,7 @@ const MAX_TREE_PAGES = 50;
 const escapeXml = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 
 const getBaseUrl = (request: NextRequest, sdSlug: string) => {
-  const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || sdSlug + ".b1.church";
+  const host = request.headers.get("x-public-host") || request.headers.get("x-forwarded-host") || request.headers.get("host") || sdSlug + ".b1.church";
   const proto = request.headers.get("x-forwarded-proto") || "https";
   return proto + "://" + host;
 };

@@ -13,3 +13,8 @@ export function canonicalLink(hostHeader: string | null | undefined, proto: stri
   if (SKIPPED_PATHS.some((re) => re.test(pathname))) return null;
   return "<" + proto + "://" + host + pathname + ">; rel=\"canonical\"";
 }
+
+// A spoofed claim can then only name the church's own domain: the request host's subdomain must be the one the claimed domain maps to.
+export function ownsSubdomain(requestHost: string, claimedSite: string | null): boolean {
+  return !!claimedSite && requestHost.endsWith(".b1.church") && claimedSite.split(".")[0] === requestHost.split(".")[0];
+}
