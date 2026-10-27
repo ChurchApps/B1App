@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { Locale } from "@churchapps/apphelper";
 import { ScreenSkeleton } from "./ScreenSkeleton";
@@ -43,15 +43,20 @@ interface Props {
   config: ConfigurationInterface;
 }
 
-const ALIAS_TO_CANONICAL: Record<string, string> = { membersSearch: "community" };
+const ALIAS_TO_CANONICAL: Record<string, string> = {
+  membersSearch: "community",
+  giving: "donate",
+  attendance: "checkin"
+};
 
 export function ScreenRouter({ pageSlug, config }: Props) {
   const router = useRouter();
+  const { sdSlug } = useParams<{ sdSlug: string }>();
 
   React.useEffect(() => {
     const canonical = ALIAS_TO_CANONICAL[pageSlug];
-    if (canonical) router.replace(`/mobile/${canonical}`);
-  }, [pageSlug, router]);
+    if (canonical) router.replace(`/${sdSlug}/mobile/${canonical}`);
+  }, [pageSlug, router, sdSlug]);
 
   const effectiveSlug = ALIAS_TO_CANONICAL[pageSlug] ?? pageSlug;
 
