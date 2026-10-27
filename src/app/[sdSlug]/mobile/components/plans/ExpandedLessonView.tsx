@@ -256,10 +256,7 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
           <PageHead
             title={lessonName || ""}
             lede={current ? Locale.label("mobile.serving.sectionOf").replace("{}", String(activeIndex + 1)).replace("{}", String(sectionList.length)).replace("{}", current.item.label || "") : undefined}
-          >
-            {prev && <Button variant="outlined" size="small" startIcon={<ChevronLeftIcon />} onClick={() => goToSection(prev.domId)}>{prev.item.label}</Button>}
-            {next && <Button variant="outlined" size="small" endIcon={<ChevronRightIcon />} onClick={() => goToSection(next.domId)}>{next.item.label}</Button>}
-          </PageHead>
+          />
           <Plate>
             {instructions.items.flatMap((item, idx) => renderTopLevel(item, `top-${item.id || idx}`))}
             {!!instructions.downloads?.length && (
@@ -274,6 +271,18 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
           </Plate>
         </Box>
       </Box>
+
+      {/* Outside the scroll container so prev/next stay on screen while stepping through sections. */}
+      {sectionList.length > 1 && (
+        <Box sx={{ display: "flex", gap: "8px", px: "12px", py: "8px", bgcolor: tc.surface, borderTop: `1px solid ${tc.border}`, flex: "none" }}>
+          <Box sx={{ flex: 1, minWidth: 0, display: "flex" }}>
+            {prev && <Button variant="outlined" size="small" fullWidth startIcon={<ChevronLeftIcon />} onClick={() => goToSection(prev.domId)} sx={{ minWidth: 0, justifyContent: "flex-start" }}><Box component="span" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{prev.item.label}</Box></Button>}
+          </Box>
+          <Box sx={{ flex: 1, minWidth: 0, display: "flex" }}>
+            {next && <Button variant="outlined" size="small" fullWidth endIcon={<ChevronRightIcon />} onClick={() => goToSection(next.domId)} sx={{ minWidth: 0, justifyContent: "flex-end" }}><Box component="span" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{next.item.label}</Box></Button>}
+          </Box>
+        </Box>
+      )}
 
       <Sheet open={showSections} onClose={() => setShowSections(false)} title={Locale.label("mobile.serving.sections")} maxWidth="xs">
         <Box sx={{ display: "flex", flexDirection: "column", gap: "8px", pb: "8px" }}>
