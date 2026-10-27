@@ -36,13 +36,18 @@ const WebsiteUrlPage = dynamic(() => import("./screens/WebsiteUrlPage").then(m =
 const MessageComposePage = dynamic(() => import("./screens/MessageComposePage").then(m => ({ default: m.MessageComposePage })), { loading });
 const MobileLoginScreen = dynamic(() => import("./screens/LoginPage").then(m => ({ default: m.MobileLoginScreen })), { loading });
 const MoreCardsPage = dynamic(() => import("./screens/MoreCardsPage").then(m => ({ default: m.MoreCardsPage })), { loading });
+const HymnsPage = dynamic(() => import("./screens/HymnsPage").then(m => ({ default: m.HymnsPage })), { loading });
 
 interface Props {
   pageSlug: string;
   config: ConfigurationInterface;
 }
 
-const ALIAS_TO_CANONICAL: Record<string, string> = { membersSearch: "community" };
+const ALIAS_TO_CANONICAL: Record<string, string> = {
+  membersSearch: "community",
+  giving: "donate",
+  attendance: "checkin"
+};
 
 export function ScreenRouter({ pageSlug, config }: Props) {
   const router = useRouter();
@@ -57,6 +62,7 @@ export function ScreenRouter({ pageSlug, config }: Props) {
   switch (effectiveSlug) {
     case "dashboard": return <DashboardPage config={config} />;
     case "more": return <MoreCardsPage config={config} />;
+    case "hymns": return <HymnsPage churchId={config?.church?.id} />;
     case "sermons": return <SermonsPage config={config} />;
     case "groups":
     case "myGroups": return <GroupsPage config={config} />;

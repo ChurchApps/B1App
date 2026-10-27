@@ -17,6 +17,7 @@ const VolunteerDetail = dynamic(() => import("./details/VolunteerDetail").then(m
 const PlaylistDetail = dynamic(() => import("./details/PlaylistDetail").then(m => ({ default: m.PlaylistDetail })), { loading });
 const MessageComposePage = dynamic(() => import("./screens/MessageComposePage").then(m => ({ default: m.MessageComposePage })), { loading });
 const EventRegisterPage = dynamic(() => import("./screens/EventRegisterPage").then(m => ({ default: m.EventRegisterPage })), { loading });
+const HymnDetail = dynamic(() => import("./details/HymnDetail").then(m => ({ default: m.HymnDetail })), { loading });
 
 interface Props {
   pageSlug: string;
@@ -29,6 +30,7 @@ export function DetailRouter({ pageSlug, id, config }: Props) {
     return <MessageComposePage config={config} />;
   }
   switch (pageSlug) {
+    case "hymns": return <HymnDetail id={id} churchId={config?.church?.id} />;
     case "register": return <EventRegisterPage eventId={id} config={config} />;
     case "sermons":
     case "sermonDetails": return <SermonDetail id={id} config={config} />;

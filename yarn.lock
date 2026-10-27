@@ -263,8 +263,8 @@ __metadata:
   linkType: hard
 
 "@churchapps/helpers@npm:^2.12.0":
-  version: 2.12.0
-  resolution: "@churchapps/helpers@npm:2.12.0"
+  version: 2.13.0
+  resolution: "@churchapps/helpers@npm:2.13.0"
   dependencies:
     dayjs: "npm:^1.11.20"
   peerDependencies:
@@ -272,7 +272,7 @@ __metadata:
   peerDependenciesMeta:
     rrule:
       optional: true
-  checksum: 10c0/e62ff6c39e728f7ac98babda60f8b9e8775f973bc2a62dbc0c624e4ffa714b3786d44a3a6308386051f49e5f37da702e1bb5ee2016ef337a5a88148c5807836b
+  checksum: 10c0/32f08c482c4b2bd6fb2d57054b8d9a62028809a407bef68543ceea8d68c8059b1cbb3bb43e4b62fe7a8860a0d702ad236bc9cbc5ab4dac43ec3fc62eb83b781e
   languageName: node
   linkType: hard
 
@@ -3780,18 +3780,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@youversion/platform-core@npm:0.5.8":
-  version: 0.5.8
-  resolution: "@youversion/platform-core@npm:0.5.8"
-  dependencies:
-    zod: "npm:4.1.12"
-  checksum: 10c0/70ec9a393696e3f894069a5e3ba0627349b640353decef05e389537ed73b742c06fbbe55e76f71e9c4a959ae8cd3f9e8a3ccb669d7772efa02225f3bd867a9ca
-  languageName: node
-  linkType: hard
-
-"@youversion/platform-core@npm:1.30.0":
-  version: 1.30.0
-  resolution: "@youversion/platform-core@npm:1.30.0"
+"@youversion/platform-core@npm:1.32.0":
+  version: 1.32.0
+  resolution: "@youversion/platform-core@npm:1.32.0"
   dependencies:
     zod: "npm:4.1.12"
   peerDependencies:
@@ -3799,35 +3790,24 @@ __metadata:
   peerDependenciesMeta:
     linkedom:
       optional: true
-  checksum: 10c0/ff3074a15bb3c9542a1925a50f13131626fbf3f2765e3ac93b785e085b1d1e61f0ad3d761761a590ce025a33f3ff0325b3bd9028000348b5d8bdd849bd792751
+  checksum: 10c0/f7fc016c2b18faed3d0eb9a8a2e40f23cc0c595dab0ad548a6218e6570b05400be10c96666f93aa7ac9d1ffb5597c0f7511514115bf12542f3c56169a238700e
   languageName: node
   linkType: hard
 
-"@youversion/platform-react-hooks@npm:1.30.0":
-  version: 1.30.0
-  resolution: "@youversion/platform-react-hooks@npm:1.30.0"
+"@youversion/platform-react-hooks@npm:1.32.0, @youversion/platform-react-hooks@npm:^1.32.0":
+  version: 1.32.0
+  resolution: "@youversion/platform-react-hooks@npm:1.32.0"
   dependencies:
-    "@youversion/platform-core": "npm:1.30.0"
+    "@youversion/platform-core": "npm:1.32.0"
   peerDependencies:
     react: ">=19.1.0 <20.0.0"
-  checksum: 10c0/3ac06a0f3b82b57cd915c3203f823107a90f9e3556ef3cb8ff1e5f8c1f7dea94c0d7cf38221c8a68a23cd5f33dd9f58089fa444842886012b89758b4691cfc7f
+  checksum: 10c0/a9fdf886dba04303fdfb57e3406d5d3948336fb5dbf3d9cfc5fabc817d1849bf25d8a45ef0ba6fc1f35d9e2d24111591a5e1cec98423f56082f0f0a78e491831
   languageName: node
   linkType: hard
 
-"@youversion/platform-react-hooks@npm:^0.5.8":
-  version: 0.5.8
-  resolution: "@youversion/platform-react-hooks@npm:0.5.8"
-  dependencies:
-    "@youversion/platform-core": "npm:0.5.8"
-  peerDependencies:
-    react: ">=19.1.0 <20.0.0"
-  checksum: 10c0/b8753948b1452152225b0e3a1faaf7a359d4133f0e9b40438eee45fea6c9cd38ca8a9cf35d7249dcec3dd546066c8aa78eac0c369a2b1ec3e7222f95968b827a
-  languageName: node
-  linkType: hard
-
-"@youversion/platform-react-ui@npm:^1.25.0":
-  version: 1.30.0
-  resolution: "@youversion/platform-react-ui@npm:1.30.0"
+"@youversion/platform-react-ui@npm:^1.32.0":
+  version: 1.32.0
+  resolution: "@youversion/platform-react-ui@npm:1.32.0"
   dependencies:
     "@radix-ui/react-accordion": "npm:1.2.12"
     "@radix-ui/react-dialog": "npm:1.1.15"
@@ -3836,8 +3816,8 @@ __metadata:
     "@radix-ui/react-slot": "npm:1.2.3"
     "@radix-ui/react-tabs": "npm:1.1.13"
     "@radix-ui/react-use-controllable-state": "npm:^1.2.2"
-    "@youversion/platform-core": "npm:1.30.0"
-    "@youversion/platform-react-hooks": "npm:1.30.0"
+    "@youversion/platform-core": "npm:1.32.0"
+    "@youversion/platform-react-hooks": "npm:1.32.0"
     class-variance-authority: "npm:0.7.1"
     clsx: "npm:2.1.1"
     i18next: "npm:^26.0.0"
@@ -3847,7 +3827,7 @@ __metadata:
   peerDependencies:
     react: ">=19.1.0 <20.0.0"
     react-dom: ">=19.1.0 <20.0.0"
-  checksum: 10c0/3dabeaa2c94075e3010008b4a46d60307502e15b8d60020468646224e84ce32ad15a4e643e44496792e46a97038134f307f8a4c5fa402b80f565e7198a3b1f79
+  checksum: 10c0/b26f0e2d6e18dfdbf5401a847d6691990769db750d193f5d06b157228ac0de1a4595f9221709bac01e4d8669f93c3cb85a6b423ba114d2a84d6717942222efb0
   languageName: node
   linkType: hard
 
@@ -4149,8 +4129,8 @@ __metadata:
     "@types/react-dom": "npm:^19.2.3"
     "@typescript-eslint/eslint-plugin": "npm:^8.59.2"
     "@typescript-eslint/parser": "npm:^8.59.2"
-    "@youversion/platform-react-hooks": "npm:^0.5.8"
-    "@youversion/platform-react-ui": "npm:^1.25.0"
+    "@youversion/platform-react-hooks": "npm:^1.32.0"
+    "@youversion/platform-react-ui": "npm:^1.32.0"
     axios: "npm:^1.20.0"
     babel-plugin-react-compiler: "npm:^1.0.0"
     copyfiles: "npm:^2.4.1"

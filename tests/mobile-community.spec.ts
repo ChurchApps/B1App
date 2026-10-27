@@ -47,7 +47,8 @@ test.describe("Mobile community", () => {
 
   test("legacy /mobile/membersSearch slug redirects to /mobile/community", async ({ page }) => {
     await page.goto("/mobile/membersSearch");
-    await expect(page).toHaveURL(/\/mobile\/community/);
+    await expect(page).toHaveURL((url) => new URL(url).pathname === "/mobile/community");
+    await expect(page.getByRole("textbox", { name: /Search Members/i })).toBeVisible();
   });
 
   test("tapping a member opens their profile", async ({ page }) => {
