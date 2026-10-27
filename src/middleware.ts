@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildContentSecurityPolicy, generateNonce } from "@/helpers/contentSecurityPolicy";
-import { canonicalLink } from "@/helpers/canonicalLink";
+import { canonicalLink, ownsSubdomain } from "@/helpers/canonicalLink";
 import { isNoindexHost } from "@/helpers/noindexHost";
 import { isAllowedWhenPublicSiteHidden, isPublicSiteHidden } from "@/helpers/publicSite";
 
@@ -66,12 +66,40 @@ const hasSession = (req: NextRequest) => {
   } catch { return false; }
 };
 
+// Resolves a custom domain to its {sub}.b1.church site. Only confirmed answers are cached; 5xx blips and errors are not.
+const lookupSite = async (host: string) => {
+  let entry = cache.get(host);
+  if (!entry || entry.exp < Date.now()) {
+    entry = { site: null, exp: 0 };
+    try {
+      const res = await fetch(apiBase() + "/domains/public/lookup/" + encodeURIComponent(host), { signal: AbortSignal.timeout(3000) });
+      if (res.ok) {
+        const data = await res.json().catch((): null => null);
+        if (data?.subDomain) entry.site = data.subDomain + ".b1.church";
+        entry.exp = Date.now() + CACHE_TTL;
+        if (cache.size >= CACHE_MAX) cache.clear();
+        cache.set(host, entry);
+      }
+    } catch { /* lookup unreachable — treated as no site */ }
+  }
+  return entry.site;
+};
+
 export async function middleware(req: NextRequest) {
   const host = (req.headers.get("x-forwarded-host") || req.headers.get("host") || "").split(",")[0].split(":")[0].trim().toLowerCase();
   const isInternal = !host || INTERNAL_HOSTS.includes(host) || INTERNAL_SUFFIXES.some((s) => host.endsWith(s));
 
   const headers = new Headers(req.headers);
   headers.delete("x-site"); // never trust a client-supplied x-site (spoofable rewrite input)
+  headers.delete("x-public-host");
+
+  // Caddy sends the visitor's domain in X-Church-Host because Vercel overwrites x-forwarded-host; trusted only if it maps to this subdomain.
+  let publicHost: string | null = null;
+  const claimed = (req.headers.get("x-church-host") || "").split(":")[0].trim().toLowerCase();
+  if (claimed && host.endsWith(".b1.church") && !INTERNAL_SUFFIXES.some((s) => claimed.endsWith(s)) && ownsSubdomain(host, await lookupSite(claimed))) {
+    publicHost = claimed;
+    headers.set("x-public-host", claimed);
+  }
 
   // Next reads the nonce off the request-side CSP header and stamps it onto the
   // scripts it renders, which is what lets script-src drop 'unsafe-inline'.
@@ -81,22 +109,8 @@ export async function middleware(req: NextRequest) {
 
   let site: string | null = null;
   if (!isInternal) {
-    let entry = cache.get(host);
-    if (!entry || entry.exp < Date.now()) {
-      entry = { site: null, exp: 0 };
-      try {
-        const res = await fetch(apiBase() + "/domains/public/lookup/" + encodeURIComponent(host), { signal: AbortSignal.timeout(3000) });
-        if (res.ok) {
-          const data = await res.json().catch((): null => null);
-          if (data?.subDomain) entry.site = data.subDomain + ".b1.church";
-          entry.exp = Date.now() + CACHE_TTL; // cache hits and confirmed misses; 5xx blips and errors are never cached
-          if (cache.size >= CACHE_MAX) cache.clear();
-          cache.set(host, entry);
-        }
-      } catch { /* lookup unreachable — fall through with no x-site */ }
-    }
-    headers.set("x-site", entry.site || UNKNOWN_SITE);
-    site = entry.site;
+    site = await lookupSite(host);
+    headers.set("x-site", site || UNKNOWN_SITE);
   }
   // Self-hosted: whatever the host, an unmatched request renders the instance's default church.
   if (SELF_HOSTED && !site) headers.set("x-site", (process.env.DEFAULT_CHURCH_SLUG || "church") + ".b1.church");
@@ -115,7 +129,7 @@ export async function middleware(req: NextRequest) {
   if (isNoindexHost(host)) res.headers.set("X-Robots-Tag", "noindex, nofollow");
   else {
     const proto = (req.headers.get("x-forwarded-proto") || req.nextUrl.protocol.replace(":", "")).split(",")[0].trim();
-    const link = canonicalLink(req.headers.get("x-forwarded-host") || req.headers.get("host"), proto, pathname);
+    const link = canonicalLink(publicHost || req.headers.get("x-forwarded-host") || req.headers.get("host"), proto, pathname);
     if (link) res.headers.append("Link", link);
   }
   return res;

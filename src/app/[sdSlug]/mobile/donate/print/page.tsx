@@ -121,7 +121,7 @@ export default function PrintPage({ params }: { params: Params }) {
       const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
       if (donation) {
         result.push(<tr key={fd.id || fd.donationId} style={{ height: "28px" }}>
-          <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "20%", paddingLeft: "5px" }}>{DateHelper.prettyDate(donation?.donationDate).toString()}</td>
+          <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "20%", paddingLeft: "5px" }}>{DateHelper.prettyDate(DateHelper.toDate(donation.donationDate))}</td>
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>{donation?.method}</td>
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "45%", paddingLeft: "5px" }}>{fund?.name}</td>
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderLeft: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrencyWithLocale(fd.amount || 0, donation?.currency || currency)}</td>
