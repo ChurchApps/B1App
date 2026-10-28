@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { Locale } from "@churchapps/apphelper";
 import { ScreenSkeleton } from "./ScreenSkeleton";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { HYMNS_ENABLED } from "@/features/hymns/enabled";
 import { PlaceholderPage } from "./PlaceholderPage";
 
 const loading = () => <ScreenSkeleton />;
@@ -62,7 +63,9 @@ export function ScreenRouter({ pageSlug, config }: Props) {
   switch (effectiveSlug) {
     case "dashboard": return <DashboardPage config={config} />;
     case "more": return <MoreCardsPage config={config} />;
-    case "hymns": return <HymnsPage churchId={config?.church?.id} />;
+    case "hymns": return HYMNS_ENABLED
+      ? <HymnsPage churchId={config?.church?.id} />
+      : <PlaceholderPage title={Locale.label("mobile.notFound.title")} description={Locale.label("mobile.notFound.body")} actionLabel={Locale.label("mobile.notFound.backToHome")} actionHref="/mobile/dashboard" />;
     case "sermons": return <SermonsPage config={config} />;
     case "groups":
     case "myGroups": return <GroupsPage config={config} />;
