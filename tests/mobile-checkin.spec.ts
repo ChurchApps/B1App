@@ -92,6 +92,26 @@ test.describe("Mobile checkin pickup code", () => {
     await expect(page.getByRole("heading", { level: 1, name: /You're checked in/i })).toBeVisible();
     await expect(page.locator("main")).toContainText(securityCode);
   });
+
+  // Issue #1408: someone already checked in today is marked, and checking in again asks first.
+  test("a person checked in today is marked and checking in again asks first", async ({ page, request }) => {
+    const jwt = await attendanceJwt(request);
+    await clearTodaysVisits(request, jwt);
+    const visit = { personId: EMMA, serviceId: SERVICE, visitSessions: [{ session: { serviceTimeId: "SST00000001", groupId: "GRP00000009" } }] };
+    const res = await request.post(API + "/attendance/visits/checkin?serviceId=" + SERVICE + "&peopleIds=" + EMMA + "&acknowledgeWarnings=true", { headers: { Authorization: "Bearer " + jwt }, data: [visit] });
+    expect(res.ok()).toBeTruthy();
+
+    await page.goto("/mobile/checkin");
+    await page.getByTestId("select-service-" + SERVICE + "-button").click({ timeout: 30000 });
+    await expect(page.getByTestId("select-member-" + EMMA)).toContainText("Already Checked In", { timeout: 30000 });
+
+    await page.getByTestId("checkin-submit-button").click();
+    const sheet = page.getByRole("dialog");
+    await expect(sheet).toContainText(/already checked in for this service/);
+    await expect(sheet.getByRole("button", { name: "Check In Again" })).toBeVisible();
+    await sheet.getByRole("button", { name: "Cancel" }).click();
+    await expect(sheet).toHaveCount(0);
+  });
 });
 
 // A service time still linked to an archived group crashed mobile check-in with a client-side exception.

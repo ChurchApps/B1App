@@ -282,7 +282,7 @@ const HouseholdStep = ({
 
   const isCheckedIn = (personId: string): boolean => {
     const visit = CheckinHelper.getVisitByPersonId(CheckinHelper.existingVisits, personId);
-    return !!(visit && visit.id);
+    return CheckinHelper.isVisitToday(visit);
   };
 
   const selectServiceTime = (member: PersonInterface, st: ServiceTimeInterface) => {
@@ -400,7 +400,7 @@ const HouseholdStep = ({
           CheckinHelper.existingVisits,
           pv.personId || ""
         );
-        if (existing && existing.id) {
+        if (CheckinHelper.isVisitToday(existing)) {
           const person = CheckinHelper.householdMembers.find((m) => m.id === pv.personId);
           if (person) already.push(person.name?.display || "Unknown");
         }
