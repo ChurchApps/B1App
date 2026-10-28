@@ -1,4 +1,5 @@
 import { Locale } from "@churchapps/apphelper";
+import { HYMNS_ENABLED } from "@/features/hymns/enabled";
 
 // `radius` is numeric for backwards-compat; `radiusVar` is CSS-variable for new code inheriting admin overrides.
 export const mobileTheme = {
@@ -167,7 +168,7 @@ export const linkTypeToRoute = (
     case "bible": return "/mobile/bible";
     case "votd": return "/mobile/votd";
     case "sermons": return "/mobile/sermons";
-    case "hymns": return "/mobile/hymns";
+    case "hymns": return HYMNS_ENABLED ? "/mobile/hymns" : null;
     case "stream": return "/mobile/stream";
     case "registrations": return "/mobile/registrations";
     case "page": {
