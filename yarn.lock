@@ -187,9 +187,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@churchapps/apphelper@npm:^1.10.0":
-  version: 1.10.0
-  resolution: "@churchapps/apphelper@npm:1.10.0"
+"@churchapps/apphelper@npm:^1.10.1":
+  version: 1.10.1
+  resolution: "@churchapps/apphelper@npm:1.10.1"
   dependencies:
     "@emotion/cache": "npm:^11.14.0"
     "@emotion/react": "npm:^11.14.0"
@@ -251,14 +251,14 @@ __metadata:
       optional: true
     react-google-recaptcha:
       optional: true
-  checksum: 10c0/0074f470304eb12a8f332184866d771ee79b15a388723f5b6315f2dab00150199f84eef5fc7ced3cafa1f0de1a5cd74a76c0b6df51ab8cf00afcd0a4626ee818
+  checksum: 10c0/d49498425e892ae8bde9d6d3f8f8687ade21bf79fc41d80ae1b6f5cfa37be298279af420104ef10cbbc2af3ac1247a6113249255b3d3452882adafb9365f4447
   languageName: node
   linkType: hard
 
-"@churchapps/content-providers@npm:^0.15.1":
-  version: 0.15.1
-  resolution: "@churchapps/content-providers@npm:0.15.1"
-  checksum: 10c0/437412d99c90c855d27d9459f89c400c2ef99934492cee10b316dd52a3a17a731425d5c22f27ae55b6bf4693d9d23dd461a3aa894b6b2366364c31068e3f7d0b
+"@churchapps/content-providers@npm:^0.15.2":
+  version: 0.15.2
+  resolution: "@churchapps/content-providers@npm:0.15.2"
+  checksum: 10c0/f5fc86a6a08c4c9bb078a78e6a4c10f6bc1db342f94da4842150cd4cc11bb8780f9e752c28197746a27b721c290984967735b88624c2fafb2f9818a073cf5b63
   languageName: node
   linkType: hard
 
@@ -4106,8 +4106,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "b1-app@workspace:."
   dependencies:
-    "@churchapps/apphelper": "npm:^1.10.0"
-    "@churchapps/content-providers": "npm:^0.15.1"
+    "@churchapps/apphelper": "npm:^1.10.1"
+    "@churchapps/content-providers": "npm:^0.15.2"
     "@churchapps/helpers": "npm:^2.12.0"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
