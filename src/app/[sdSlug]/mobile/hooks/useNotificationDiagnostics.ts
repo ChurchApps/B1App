@@ -9,6 +9,7 @@ const EMPTY_DIAGNOSTICS: WebPushDiagnostics = {
   canPromptNow: false,
   serverRegistrationEnabled: false,
   publicKeyConfigured: false,
+  serverPushDisabled: false,
   hasServiceWorkerRegistration: false,
   hasSubscription: false,
   hasConfirmedServerEnrollment: false,

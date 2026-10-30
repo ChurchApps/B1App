@@ -1111,6 +1111,7 @@
       "phoneOptional": "Phone (optional)",
       "printStatement": "Print Statement",
       "pushBlocked": "Blocked. {}",
+      "pushDisabledOnServer": "Push notifications aren't turned on for this site. An administrator needs to add the push keys.",
       "pushInstallRequired": "Install this app to finish notification setup on this device",
       "pushNotifications": "Push notifications",
       "pushOff": "Turn on to get alerts on this device",
