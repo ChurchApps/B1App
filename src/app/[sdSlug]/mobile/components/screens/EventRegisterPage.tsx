@@ -41,11 +41,12 @@ const formatEventTime = (event: EventInterface) => {
   if (!event.start) return "";
   const start = new Date(event.start);
   if (isNaN(start.getTime())) return "";
-  if (event.allDay) return DateHelper.prettyDate(start);
-  if (!event.end) return DateHelper.prettyDateTime(start);
-  const end = new Date(event.end);
-  if (isNaN(end.getTime())) return DateHelper.prettyDateTime(start);
-  return `${DateHelper.prettyDateTime(start)} - ${DateHelper.prettyTime(end)}`;
+  const end = event.end ? new Date(event.end) : null;
+  const validEnd = end && !isNaN(end.getTime()) ? end : null;
+  const sameDay = !validEnd || DateHelper.prettyDate(start) === DateHelper.prettyDate(validEnd);
+  if (event.allDay) return sameDay ? DateHelper.prettyDate(start) : `${DateHelper.prettyDate(start)} - ${DateHelper.prettyDate(validEnd)}`;
+  if (!validEnd) return DateHelper.prettyDateTime(start);
+  return `${DateHelper.prettyDateTime(start)} - ${sameDay ? DateHelper.prettyTime(validEnd) : DateHelper.prettyDateTime(validEnd)}`;
 };
 
 const StatusPlate = ({ title, heading, body }: { title: string; heading: string; body: string }) => (
@@ -237,6 +238,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
               onPay={(p) => reg.submit(p)}
               onFinalized={(result) => reg.finishConfirm(result)}
               onBack={() => reg.setStep(reg.hasSelections ? "selections" : "members")}
+              onPayLater={() => reg.submit()}
             />
           </PlateSection>
           {eventSection}

@@ -1351,6 +1351,8 @@
       "noGateway": "Online payment is not available for this event.",
       "orderSummary": "Order Summary",
       "payAndRegister": "Pay {} & Register",
+      "payLaterNote": "You can register now and pay the church directly.",
+      "registerPayLater": "Register and Pay Later",
       "subtotalNote": "subtotal before discounts",
       "title": "Payment",
       "total": "Total"
