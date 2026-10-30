@@ -35,6 +35,8 @@ interface Props {
   onFinalized: (result: any) => void;
   onBack: () => void;
   hideCoupon?: boolean;
+  // Churches with no online giving: register now with a balance due, paid to the church later.
+  onPayLater?: () => Promise<any>;
 }
 
 // Runs inside the provider's wrapper so its SDK context is available for finalize (e.g. 3DS).
@@ -161,6 +163,7 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
   const [savedMethods, setSavedMethods] = useState<SavedMethod[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
+  const [payingLater, setPayingLater] = useState(false);
   const displayCurrency = gateway?.currency || props.currency;
 
   useEffect(() => {
@@ -250,6 +253,25 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
       {!props.hideCoupon && couponField}
       {loading && <Box sx={{ textAlign: "center", py: 3 }}><CircularProgress size={28} /></Box>}
       {!loading && loadError && <Alert severity="error">{loadError}</Alert>}
+      {!loading && !loadError && !gateway && (
+        <Box>
+          <Alert severity="info" data-testid="reg-no-gateway">
+            {Locale.label("registration.payment.noGateway")} {Locale.label("registration.payment.payLaterNote")}
+          </Alert>
+          {props.onPayLater && (
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2 }}
+              disabled={payingLater}
+              data-testid="reg-pay-later"
+              onClick={async () => { setPayingLater(true); try { await props.onPayLater?.(); } finally { setPayingLater(false); } }}
+            >
+              {payingLater ? Locale.label("registration.registering") : Locale.label("registration.payment.registerPayLater")}
+            </Button>
+          )}
+        </Box>
+      )}
       {!loading && !loadError && gateway && provider && (
         provider.MemberWrapper ? (
           <provider.MemberWrapper gateway={gateway}>

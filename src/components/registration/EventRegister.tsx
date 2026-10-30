@@ -64,8 +64,9 @@ export function EventRegister({ churchId, eventId, event }: Props) {
       return start === end ? start : `${start} - ${end}`;
     }
     const start = DateHelper.prettyDateTime(event.start);
-    const endTime = DateHelper.prettyTime(event.end as Date);
-    return `${start} - ${endTime}`;
+    if (!event.end) return start;
+    const sameDay = DateHelper.prettyDate(event.start) === DateHelper.prettyDate(event.end as Date);
+    return `${start} - ${sameDay ? DateHelper.prettyTime(event.end as Date) : DateHelper.prettyDateTime(event.end as Date)}`;
   };
 
   const typeLabel = (t: RegType) => {
@@ -165,6 +166,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
             onPay={(p) => reg.submit(p)}
             onFinalized={(result) => reg.finishConfirm(result)}
             onBack={() => reg.setStep(reg.hasSelections ? "selections" : "members")}
+            onPayLater={() => reg.submit()}
           />
         </CardContent>
       </Card>
