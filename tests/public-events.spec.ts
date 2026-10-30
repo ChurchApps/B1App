@@ -11,6 +11,9 @@ const REGISTERABLE_EVENT_ID = "EVT00000015";
 const ELEMENT_ID = "ELE00000054";
 const PHOTO = "/tempLibrary/backgrounds/worship.jpg";
 
+// Both describes rewrite ELE00000054, so keep them on one worker, in order.
+test.describe.configure({ mode: "serial" });
+
 test.describe.serial("Public event pages and upcoming-event tiles", () => {
   let ctx: APIRequestContext;
   let auth: { headers: Record<string, string> };
@@ -121,5 +124,42 @@ test.describe.serial("Public event pages and upcoming-event tiles", () => {
       delete answers.tag;
       await ctx.post(`${API_BASE}/content/elements`, { ...auth, data: [{ ...element, answersJSON: JSON.stringify(answers) }] });
     }
+  });
+});
+
+// ChurchAppsSupport#1399: the Calendar element's Upcoming events can scroll on its own, like the Verse of the Day week.
+// ELE00000054 is the Events page calendar element (Api/tools/dbScripts/content/demo.sql).
+test.describe.serial("Upcoming events scrolling layout", () => {
+  let ctx: APIRequestContext;
+  let auth: { headers: Record<string, string> };
+  let originalElement: any;
+
+  test.beforeAll(async () => {
+    ctx = await request.newContext();
+    const body = await (await ctx.post(`${API_BASE}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = (body.userChurches || []).find((c: any) => c.church?.id === DEMO_CHURCH.ID) || body.userChurches?.[0];
+    auth = { headers: { Authorization: "Bearer " + uc.jwt } };
+    originalElement = await (await ctx.get(`${API_BASE}/content/elements/${ELEMENT_ID}`, auth)).json();
+    const answers = { ...JSON.parse(originalElement.answersJSON || "{}"), display: "upcoming", layout: "autoscroll" };
+    const res = await ctx.post(`${API_BASE}/content/elements`, { ...auth, data: [{ ...originalElement, answersJSON: JSON.stringify(answers) }] });
+    expect(res.ok()).toBeTruthy();
+  });
+
+  test.afterAll(async () => {
+    if (originalElement?.id) await ctx.post(`${API_BASE}/content/elements`, { ...auth, data: [originalElement] }).catch(() => { });
+    await ctx.dispose();
+  });
+
+  test("scrolling layout puts the event tiles in one row that moves by itself", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/events");
+    const strip = page.getByTestId("upcoming-events-strip");
+    await expect(strip).toBeVisible({ timeout: 30000 });
+    await expect.poll(() => strip.getByTestId("upcoming-event-tile").count(), { timeout: 30000 }).toBeGreaterThanOrEqual(5);
+    // The layout remounts once the client locale loads, so poll the row check rather than reading it once.
+    const rowTops = () => strip.getByTestId("upcoming-event-tile").evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().top)));
+    await expect.poll(async () => { const tops = await rowTops(); return tops.length >= 5 ? new Set(tops).size : -1; }, { message: "all tiles share one row", timeout: 15000 }).toBe(1);
+    await page.mouse.move(0, 0);
+    await expect.poll(() => strip.evaluate((el) => el.scrollLeft), { timeout: 15000 }).toBeGreaterThan(0);
   });
 });
