@@ -8,6 +8,7 @@ import { ApiHelper, CommonEnvironmentHelper, Locale } from "@churchapps/apphelpe
 import { EventHelper } from "@churchapps/helpers";
 import type { ElementInterface } from "@/helpers";
 import { buildOccurrences, eventPageId, firstLine, timeRange, type Occurrence } from "@/helpers/EventOccurrences";
+import { useAutoScroll } from "@/app/[sdSlug]/mobile/helpers/useAutoScroll";
 
 interface Props { element: ElementInterface; churchId: string; }
 
@@ -26,6 +27,10 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
   const [items, setItems] = useState<Occurrence[] | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [copied, setCopied] = useState(false);
+  // "autoscroll" puts the tiles in one row that steps along by itself, like the Verse of the Day week.
+  const autoScroll = element.answers?.layout === "autoscroll";
+  const [strip, setStrip] = useState<HTMLElement | null>(null);
+  useAutoScroll(strip, { enabled: autoScroll && !!items?.length });
 
   useEffect(() => {
     if (!calendarId) return;
@@ -65,7 +70,10 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
         </Menu>
       </Box>
       {items && items.length === 0 && <Typography sx={{ textAlign: "center", color: "text.secondary", py: 4 }}>{Locale.label("eventPage.noUpcoming")}</Typography>}
-      <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" } }}>
+      <Box ref={autoScroll ? setStrip : undefined} data-testid={autoScroll ? "upcoming-events-strip" : undefined}
+        sx={autoScroll
+          ? { display: "flex", gap: 3, overflowX: "auto", scrollSnapType: "x mandatory", pb: 1, "& > *": { flex: "0 0 280px", scrollSnapAlign: "start" }, "&::-webkit-scrollbar": { display: "none" }, scrollbarWidth: "none" }
+          : { display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" } }}>
         {(items || []).map((o) => {
           const photo = (o.event as any).photoUrl as string | undefined;
           return (
