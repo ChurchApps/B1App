@@ -42,7 +42,7 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
     }
   };
 
-  if (!enabled || loading || diagnostics.permission === "unsupported") return null;
+  if (!enabled || loading || diagnostics.permission === "unsupported" || diagnostics.serverPushDisabled) return null;
 
   const installRequired = WebPushHelper.requiresInstallForPush();
   let title = "";
