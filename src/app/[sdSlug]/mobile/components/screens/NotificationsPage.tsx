@@ -154,6 +154,13 @@ export const NotificationsPage = ({ config: _config }: Props) => {
 
   const renderPushSection = () => {
     if (!loggedIn || diagnostics.permission === "unsupported") return null;
+    if (diagnostics.serverPushDisabled) {
+      return (
+        <PlateSection title={Locale.label("mobile.screens.pushNotifications")}>
+          <Typography sx={{ fontSize: 15, color: tc.text }}>{Locale.label("mobile.screens.pushDisabledOnServer")}</Typography>
+        </PlateSection>
+      );
+    }
     const on = diagnostics.hasSubscription && (!diagnostics.serverRegistrationEnabled || diagnostics.hasConfirmedServerEnrollment);
     const blocked = diagnostics.permission === "denied";
     const pendingRegistration = diagnostics.permission === "granted" && (!diagnostics.hasSubscription || (diagnostics.serverRegistrationEnabled && !diagnostics.hasConfirmedServerEnrollment));

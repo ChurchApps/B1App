@@ -18,6 +18,7 @@ export interface WebPushDiagnostics {
   canPromptNow: boolean;
   serverRegistrationEnabled: boolean;
   publicKeyConfigured: boolean;
+  serverPushDisabled: boolean;
   hasServiceWorkerRegistration: boolean;
   hasSubscription: boolean;
   hasConfirmedServerEnrollment: boolean;
@@ -40,6 +41,8 @@ interface PublicKeyConfig {
 
 let cachedPublicKeyConfig: PublicKeyConfig | null = null;
 let cachedPublicKeyLoadedAt = 0;
+// True only when the server answered that push is off; a failed request can still be retried.
+let serverPushDisabled = false;
 
 const urlBase64ToUint8Array = (base64: string) => {
   const padding = "=".repeat((4 - (base64.length % 4)) % 4);
@@ -172,6 +175,7 @@ const getPublicKeyConfig = async (): Promise<PublicKeyConfig | null> => {
   if (cachedPublicKeyConfig && Date.now() - cachedPublicKeyLoadedAt < 60 * 1000) return cachedPublicKeyConfig;
   try {
     const config = await ApiHelper.get("/webpush/publicKey", "MessagingApi");
+    serverPushDisabled = config?.enabled === false;
     const publicKey = config?.publicKey;
     if (!publicKey || !config?.enabled) return null;
     cachedPublicKeyConfig = {
@@ -181,6 +185,7 @@ const getPublicKeyConfig = async (): Promise<PublicKeyConfig | null> => {
     cachedPublicKeyLoadedAt = Date.now();
     return cachedPublicKeyConfig;
   } catch (error) {
+    serverPushDisabled = false;
     console.error("[webpush] failed to load public key config:", error);
     return null;
   }
@@ -349,9 +354,7 @@ export const WebPushHelper = {
   getDiagnostics: async (): Promise<WebPushDiagnostics> => {
     const permission = getPermissionState();
     const isStandalone = SharedWebPushHelper.isStandalone();
-    const publicKeyConfig = permission === "granted" || permission === "default"
-      ? await getPublicKeyConfig()
-      : null;
+    const publicKeyConfig = permission === "unsupported" ? null : await getPublicKeyConfig();
     const registration = await WebPushHelper.getRegistration();
     const subscription = await WebPushHelper.getExistingSubscription();
     const hasConfirmedEnrollment = permission === "granted"
@@ -381,6 +384,7 @@ export const WebPushHelper = {
       canPromptNow: SharedWebPushHelper.canPromptNow(),
       serverRegistrationEnabled: isWebPushServerEnabled(),
       publicKeyConfigured: !!publicKeyConfig,
+      serverPushDisabled: permission !== "unsupported" && serverPushDisabled,
       hasServiceWorkerRegistration: !!registration,
       hasSubscription: !!subscription,
       hasConfirmedServerEnrollment: hasConfirmedEnrollment,
