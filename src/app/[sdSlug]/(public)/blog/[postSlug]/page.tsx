@@ -40,6 +40,9 @@ const loadData = async (sdSlug: string, postSlug: string) => {
 
 const excerptOf = (post: PostInterface) => post.excerpt || (post.content || "").replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*_`~]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
 
+// The post title is the page's h1, so a "# Heading" in the body becomes an h2.
+const demoteTopHeadings = (content: string) => content.replace(/^#(?=\s)/gm, "##");
+
 const getBaseUrl = (sdSlug: string) => publicOrigin(sdSlug);
 
 const formatDate = (value: string | undefined, region?: string) => {
@@ -114,7 +117,7 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
                 "& li": { mb: 0.75 },
                 "& hr": { border: 0, borderTop: "1px solid", borderColor: "divider", my: 4 }
               }}>
-                <MarkdownPreviewLight value={post.content} />
+                <MarkdownPreviewLight value={demoteTopHeadings(post.content)} />
               </Box>
             )}
 
