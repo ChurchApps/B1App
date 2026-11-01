@@ -10,7 +10,7 @@ import type { EventInterface } from "@churchapps/helpers";
 import type { PageInterface } from "@/helpers/interfaces";
 
 interface SitemapPage { url?: string; title?: string; }
-interface SitemapPost { slug?: string; }
+interface SitemapPost { slug?: string; publishDate?: string; }
 interface SitemapSermon { id?: string; publishDate?: string; }
 interface SitemapRedirect { fromPath?: string; }
 
@@ -66,8 +66,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ sdS
         if (postsResponse.ok) {
           const posts: SitemapPost[] = await postsResponse.json();
           if (Array.isArray(posts) && posts.length > 0) {
-            urls.set("/blog", undefined);
-            posts.forEach((p) => { if (p.slug) urls.set("/blog/" + p.slug, undefined); });
+            const dates = posts.map((p) => toDate(p.publishDate)).filter(Boolean) as string[];
+            urls.set("/blog", dates.sort().pop());
+            posts.forEach((p) => { if (p.slug) urls.set("/blog/" + p.slug, toDate(p.publishDate)); });
           }
         }
       }
