@@ -1,4 +1,6 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, request as playwrightRequest, type APIRequestContext } from "@playwright/test";
+
+const MAIN_API = process.env.API_BASE || "http://localhost:8084";
 
 // What a crawler sees: the server HTML, before any JavaScript runs.
 const metaContent = (html: string, name: string) => html.match(new RegExp(`<meta[^>]*name="${name}"[^>]*content="([^"]*)"`))?.[1];
@@ -108,6 +110,46 @@ test.describe("SEO", () => {
       expect(h1Text(html)).toBe(heading);
     });
   }
+
+  test("the guest sign-up page is noindex while sign-up is off", async ({ request }) => {
+    expect(metaContent(await (await request.get("/guest-register")).text(), "robots")).toBe("noindex, follow");
+  });
+
+  test.describe("a blog post", () => {
+    const slug = "seo-blog-post-" + Date.now();
+    const publishDate = "2026-10-01T12:00:00.000Z";
+    let api: APIRequestContext;
+    let headers: Record<string, string>;
+    let postId: string;
+
+    test.beforeAll(async () => {
+      api = await playwrightRequest.newContext();
+      const login = await (await api.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+      const church = login.userChurches.find((c: any) => c.church?.id === "CHU00000001");
+      headers = { Authorization: `Bearer ${church.apis.find((a: any) => a.keyName === "ContentApi").jwt}`, "Content-Type": "application/json" };
+      const posts = await (await api.post(`${MAIN_API}/content/posts`, { headers, data: [{ title: "Seo Blog Post", slug, excerpt: "Why posts need dates.", content: "# A heading in the body\n\nThe body of the post.", publishDate }] })).json();
+      postId = posts[0].id;
+    });
+
+    test.afterAll(async () => {
+      if (postId) await api.delete(`${MAIN_API}/content/posts/${postId}`, { headers });
+      await api.dispose();
+    });
+
+    test("is in the sitemap with its publish date", async ({ request, baseURL }) => {
+      // no-cache: the route's API fetches are cached for an hour and this post is seconds old.
+      const xml = await (await request.get("/sitemap.xml", { headers: { "Cache-Control": "no-cache" } })).text();
+      const lastmod = (path: string) => xml.match(new RegExp(`<loc>${new URL(path, baseURL).href}</loc><lastmod>([^<]*)</lastmod>`))?.[1];
+      expect(lastmod("/blog/" + slug)).toBe("2026-10-01");
+      expect(lastmod("/blog")).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    });
+
+    test("has one h1, even with a heading in the body", async ({ request }) => {
+      const html = await (await request.get("/blog/" + slug)).text();
+      expect(h1Count(html)).toBe(1);
+      expect(h1Text(html)).toBe("Seo Blog Post");
+    });
+  });
 
   // A church without a website home page sends "/" to the app, so the sitemap must not list it.
   test("the sitemap leaves out a home page that redirects to the app", async ({ request, baseURL }) => {
