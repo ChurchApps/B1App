@@ -101,6 +101,29 @@ test.describe.serial("Mobile donate member giving settings", () => {
     await page.goto(`/mobile/donate/print?year=${year}`);
     await expect(page.getByText(/giving statement isn't available/i)).toBeVisible({ timeout: 30000 });
   });
+
+  // Issue #1437: the member's statement carries the admin statement's note and disclaimer, centered with margins.
+  test("printed statement has the note, disclaimer and giving note, centered", async ({ page }) => {
+    await saveSettings({ memberGivingYears: "", givingNote: NOTE });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.addInitScript(() => { window.print = () => {}; window.close = () => {}; window.history.back = () => {}; });
+    await page.goto(`/mobile/donate/print?year=${year}`);
+    const note = page.getByTestId("statement-note");
+    await expect(note).toBeVisible({ timeout: 30000 });
+    await expect(note).toContainText(`summarizes all contributions received by`);
+    await expect(note).toContainText(`during ${year}.`);
+    const disclaimer = page.getByTestId("statement-disclaimer");
+    await expect(disclaimer).toContainText("No goods or services were provided");
+    await expect(page.getByTestId("statement-giving-note")).toHaveText(NOTE);
+    const order = await page.evaluate(() => ["statement-note", "statement-disclaimer", "statement-giving-note"]
+      .map((id) => document.querySelector(`[data-testid="${id}"]`)!.getBoundingClientRect().top));
+    expect(order[0]).toBeLessThan(order[1]);
+    expect(order[1]).toBeLessThan(order[2]);
+    const title = page.getByRole("heading", { name: `${year} Annual Giving Statement` });
+    await expect(title).toHaveCSS("text-align", "center");
+    const box = await title.boundingBox();
+    expect(box!.x, "statement has a left margin").toBeGreaterThan(0);
+  });
 });
 
 // Mixed-currency giving: each gift keeps its own currency in the history list, but the Year-to-Date and
