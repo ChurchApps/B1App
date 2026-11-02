@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Box, Button, Skeleton, Typography, useMediaQuery } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface, GroupJoinRequestInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -25,6 +25,7 @@ const tc = mobileTheme.colors;
 
 export const GroupsPage = ({ config: _config }: Props) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const context = useContext(UserContext);
   const loggedIn = !!context?.user?.firstName;
   const desktop = useMediaQuery("(min-width:900px)");
@@ -59,6 +60,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
     try {
       await ApiHelper.delete(`/groupjoinrequests/${id}`, "MembershipApi");
       refetchPending();
+      queryClient.invalidateQueries({ queryKey: ["my-join-requests"] });
     } catch {
       setCancelRequestError(Locale.label("mobile.screens.unableToSaveChanges"));
     }

@@ -26,6 +26,26 @@ async function membershipHeaders(ctx: APIRequestContext, email: string) {
   return { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" };
 }
 
+async function clearMyPendingRequests(ctx: APIRequestContext, headers: Record<string, string>, groupId: string) {
+  const mine: any[] = await (await ctx.get(`${MAIN_API}/membership/groupjoinrequests/my`, { headers })).json();
+  for (const r of mine) {
+    if (r.groupId === groupId && r.status === "pending") await ctx.delete(`${MAIN_API}/membership/groupjoinrequests/${r.id}`, { headers });
+  }
+}
+
+// The mobile shell persists its react-query cache to IndexedDB under keyval-store / b1-mobile-query-cache.
+async function persistedCacheHas(page: Page, queryKey: string) {
+  return page.evaluate((key) => new Promise<boolean>((resolve) => {
+    const open = indexedDB.open("keyval-store");
+    open.onsuccess = () => {
+      const get = open.result.transaction("keyval").objectStore("keyval").get("b1-mobile-query-cache");
+      get.onsuccess = () => resolve(JSON.stringify(get.result || {}).includes(key));
+      get.onerror = () => resolve(false);
+    };
+    open.onerror = () => resolve(false);
+  }), queryKey);
+}
+
 test.describe("Mobile groups — signed out", () => {
   test.use({ storageState: { cookies: [], origins: [] } });
 
@@ -47,6 +67,8 @@ test.describe("Mobile groups — signed out", () => {
 });
 
 test.describe("Mobile groups — request-to-join UX", () => {
+  // These tests all change demo@b1.church's join requests for Financial Peace, so run them in order on one worker.
+  test.describe.configure({ mode: "default" });
   const NON_MEMBER_GROUP_ID = "GRP00000005";
 
   test("non-member sees join button on an open-policy group", async ({ page }) => {
@@ -61,6 +83,69 @@ test.describe("Mobile groups — request-to-join UX", () => {
     await page.goto("/mobile/groups");
     await expect(page.locator("main")).toContainText(/Sunday Morning Service|Adult Bible Class|Men's Bible Study/i, { timeout: 15000 });
     await expect(page.locator('[data-testid="my-pending-requests"]')).toHaveCount(0);
+  });
+
+  test("a new join request shows under Pending Requests on the Groups tab right away", async ({ page }) => {
+    const ctx = await request.newContext();
+    const headers = await membershipHeaders(ctx, "demo@b1.church");
+    const originalGroup = await (await ctx.get(`${MAIN_API}/membership/groups/${LEADER_GROUP_ID}`, { headers })).json();
+    try {
+      const saveRes = await ctx.post(`${MAIN_API}/membership/groups`, { headers, data: [{ ...originalGroup, joinPolicy: "request" }] });
+      expect(saveRes.ok()).toBeTruthy();
+      await clearMyPendingRequests(ctx, headers, LEADER_GROUP_ID);
+
+      // Visit the Groups tab first so its pending-requests list is cached (and persisted) as empty.
+      await page.goto("/mobile/groups");
+      await expect(page.locator("main")).toContainText(/Sunday Morning Service|Adult Bible Class|Men's Bible Study/i, { timeout: 20000 });
+      await expect(page.getByTestId("my-pending-requests")).toHaveCount(0);
+      await expect.poll(() => persistedCacheHas(page, "my-pending-requests"), { timeout: 15000 }).toBe(true);
+
+      await page.goto(`/mobile/groups/${LEADER_GROUP_ID}`);
+      await page.getByTestId("request-to-join-button").click();
+      await page.getByTestId("request-submit").click();
+      await expect(page.getByTestId("request-pending-notice")).toBeVisible();
+
+      await page.locator("main").getByRole("button", { name: "Back", exact: true }).click();
+      await page.waitForURL((url) => url.pathname === "/mobile/groups");
+      const pending = page.getByTestId("my-pending-requests");
+      await expect(pending).toBeVisible();
+      await expect(pending).toContainText(LEADER_GROUP_NAME);
+    } finally {
+      await clearMyPendingRequests(ctx, headers, LEADER_GROUP_ID).catch(() => {});
+      if (originalGroup?.id) await ctx.post(`${MAIN_API}/membership/groups`, { headers, data: [originalGroup] }).catch(() => {});
+      await ctx.dispose();
+    }
+  });
+
+  test("cancelling a pending request on the Groups tab clears it on the group page", async ({ page }) => {
+    const ctx = await request.newContext();
+    const headers = await membershipHeaders(ctx, "demo@b1.church");
+    const originalGroup = await (await ctx.get(`${MAIN_API}/membership/groups/${LEADER_GROUP_ID}`, { headers })).json();
+    try {
+      const saveRes = await ctx.post(`${MAIN_API}/membership/groups`, { headers, data: [{ ...originalGroup, joinPolicy: "request" }] });
+      expect(saveRes.ok()).toBeTruthy();
+      await clearMyPendingRequests(ctx, headers, LEADER_GROUP_ID);
+      const reqRes = await ctx.post(`${MAIN_API}/membership/groupjoinrequests`, { headers, data: { groupId: LEADER_GROUP_ID, message: "cancel from groups tab" } });
+      expect(reqRes.ok()).toBeTruthy();
+      const requestId = (await reqRes.json())?.id;
+      expect(requestId).toBeTruthy();
+
+      // Visit the group page first so its my-join-requests list is cached with the pending request.
+      await page.goto(`/mobile/groups/${LEADER_GROUP_ID}`);
+      await expect(page.getByTestId("request-pending-notice")).toBeVisible({ timeout: 20000 });
+
+      await page.goto("/mobile/groups");
+      await page.getByTestId(`cancel-request-${requestId}`).click();
+      await expect(page.getByTestId(`cancel-request-${requestId}`)).toHaveCount(0);
+
+      await page.goto(`/mobile/groups/${LEADER_GROUP_ID}`);
+      await expect(page.getByTestId("request-to-join-button")).toBeVisible({ timeout: 20000 });
+      await expect(page.getByTestId("request-pending-notice")).toHaveCount(0);
+    } finally {
+      await clearMyPendingRequests(ctx, headers, LEADER_GROUP_ID).catch(() => {});
+      if (originalGroup?.id) await ctx.post(`${MAIN_API}/membership/groups`, { headers, data: [originalGroup] }).catch(() => {});
+      await ctx.dispose();
+    }
   });
 
   test.describe("leader notification for an incoming join request", () => {
