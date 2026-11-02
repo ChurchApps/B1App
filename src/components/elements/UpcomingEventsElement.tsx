@@ -8,7 +8,7 @@ import { ApiHelper, CommonEnvironmentHelper, Locale } from "@churchapps/apphelpe
 import { EventHelper } from "@churchapps/helpers";
 import type { ElementInterface } from "@/helpers";
 import { buildOccurrences, eventPageId, firstLine, timeRange, type Occurrence } from "@/helpers/EventOccurrences";
-import { useAutoScroll } from "@/app/[sdSlug]/mobile/helpers/useAutoScroll";
+import { AutoScrollStrip } from "./AutoScrollStrip";
 
 interface Props { element: ElementInterface; churchId: string; }
 
@@ -32,8 +32,6 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
   const [groupNames, setGroupNames] = useState<Record<string, string>>({});
   // "autoscroll" puts the tiles in one row that steps along by itself, like the Verse of the Day week.
   const autoScroll = element.answers?.layout === "autoscroll";
-  const [strip, setStrip] = useState<HTMLElement | null>(null);
-  useAutoScroll(strip, { enabled: autoScroll && !!items?.length });
 
   useEffect(() => {
     if (!calendarId) return;
@@ -73,6 +71,29 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
     setAnchorEl(null);
   };
 
+  const tiles = (items || []).map((o) => {
+    const photo = (o.event as any).photoUrl as string | undefined;
+    const groupName = showGroupBadge && o.event.groupId ? groupNames[o.event.groupId] : undefined;
+    return (
+      <Box key={eventPageId(o.event) + o.start.toISOString()} component={Link} href={"/events/" + eventPageId(o.event)} data-testid="upcoming-event-tile" data-start={o.start.toISOString()}
+        sx={{ display: "block", textDecoration: "none", color: "inherit", border: "1px solid", borderColor: "divider", borderRadius: 3, overflow: "hidden", bgcolor: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,.06)", "&:hover": { boxShadow: 4 } }}>
+        <Box sx={{ position: "relative", aspectRatio: "16 / 9", backgroundImage: photo ? "url(" + photo + ")" : undefined, backgroundSize: "cover", backgroundPosition: "center", bgcolor: photo ? undefined : "var(--dark, #1B4965)", display: "flex", alignItems: "center", justifyContent: "center", px: 3 }}>
+          <Box sx={{ position: "absolute", left: 14, top: 14, bgcolor: "#fff", borderRadius: 2, px: 1.25, py: 0.75, textAlign: "center", lineHeight: 1.05, boxShadow: "0 1px 3px rgba(0,0,0,.2)" }}>
+            <Typography component="span" sx={{ display: "block", fontSize: 11, letterSpacing: ".08em", fontWeight: 700, color: "primary.main", textTransform: "uppercase" }}>{o.start.toLocaleDateString(undefined, { month: "short" })}</Typography>
+            <Typography component="span" sx={{ display: "block", fontSize: 20, fontWeight: 700, color: "text.primary" }}>{o.start.getDate()}</Typography>
+          </Box>
+          {groupName && <Typography component="span" data-testid="upcoming-event-group-badge" sx={{ position: "absolute", right: 14, top: 14, maxWidth: "55%", bgcolor: EventHelper.groupColor(o.event.groupId), color: "#fff", borderRadius: 2, px: 1.25, py: 0.5, fontSize: 12, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }}>{groupName}</Typography>}
+          {!photo && <Typography sx={{ color: "#fff", fontWeight: 700, fontSize: 22, textAlign: "center", fontFamily: "var(--headingFont, inherit)" }}>{o.event.title}</Typography>}
+        </Box>
+        <Box sx={{ px: 2.25, pt: 2, pb: 2.25 }}>
+          <Typography component="h3" sx={{ m: 0, mb: 0.75, fontSize: 18, fontWeight: 700, color: "text.primary" }}>{o.event.title}</Typography>
+          <Typography sx={{ color: "primary.main", fontWeight: 500, fontSize: 15, mb: 1 }}>{whenLine(o)}</Typography>
+          <Typography sx={{ color: "text.secondary", fontSize: 15, lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{firstLine(o.event.description)}</Typography>
+        </Box>
+      </Box>
+    );
+  });
+
   if (!calendarId) return <div style={{ textAlign: "center", padding: 20 }}><p>No calendar selected. Please configure this element.</p></div>;
 
   return (
@@ -85,33 +106,9 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
         </Menu>
       </Box>
       {items && items.length === 0 && <Typography sx={{ textAlign: "center", color: "text.secondary", py: 4 }}>{Locale.label("eventPage.noUpcoming")}</Typography>}
-      <Box ref={autoScroll ? setStrip : undefined} data-testid={autoScroll ? "upcoming-events-strip" : undefined}
-        sx={autoScroll
-          ? { display: "flex", gap: 3, overflowX: "auto", scrollSnapType: "x mandatory", pb: 1, "& > *": { flex: "0 0 280px", scrollSnapAlign: "start" }, "&::-webkit-scrollbar": { display: "none" }, scrollbarWidth: "none" }
-          : { display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" } }}>
-        {(items || []).map((o) => {
-          const photo = (o.event as any).photoUrl as string | undefined;
-          const groupName = showGroupBadge && o.event.groupId ? groupNames[o.event.groupId] : undefined;
-          return (
-            <Box key={eventPageId(o.event) + o.start.toISOString()} component={Link} href={"/events/" + eventPageId(o.event)} data-testid="upcoming-event-tile" data-start={o.start.toISOString()}
-              sx={{ display: "block", textDecoration: "none", color: "inherit", border: "1px solid", borderColor: "divider", borderRadius: 3, overflow: "hidden", bgcolor: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,.06)", "&:hover": { boxShadow: 4 } }}>
-              <Box sx={{ position: "relative", height: 190, backgroundImage: photo ? "url(" + photo + ")" : undefined, backgroundSize: "cover", backgroundPosition: "center", bgcolor: photo ? undefined : "var(--dark, #1B4965)", display: "flex", alignItems: "center", justifyContent: "center", px: 3 }}>
-                <Box sx={{ position: "absolute", left: 14, top: 14, bgcolor: "#fff", borderRadius: 2, px: 1.25, py: 0.75, textAlign: "center", lineHeight: 1.05, boxShadow: "0 1px 3px rgba(0,0,0,.2)" }}>
-                  <Typography component="span" sx={{ display: "block", fontSize: 11, letterSpacing: ".08em", fontWeight: 700, color: "primary.main", textTransform: "uppercase" }}>{o.start.toLocaleDateString(undefined, { month: "short" })}</Typography>
-                  <Typography component="span" sx={{ display: "block", fontSize: 20, fontWeight: 700, color: "text.primary" }}>{o.start.getDate()}</Typography>
-                </Box>
-                {groupName && <Typography component="span" data-testid="upcoming-event-group-badge" sx={{ position: "absolute", right: 14, top: 14, maxWidth: "55%", bgcolor: EventHelper.groupColor(o.event.groupId), color: "#fff", borderRadius: 2, px: 1.25, py: 0.5, fontSize: 12, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }}>{groupName}</Typography>}
-                {!photo && <Typography sx={{ color: "#fff", fontWeight: 700, fontSize: 22, textAlign: "center", fontFamily: "var(--headingFont, inherit)" }}>{o.event.title}</Typography>}
-              </Box>
-              <Box sx={{ px: 2.25, pt: 2, pb: 2.25 }}>
-                <Typography component="h3" sx={{ m: 0, mb: 0.75, fontSize: 18, fontWeight: 700, color: "text.primary" }}>{o.event.title}</Typography>
-                <Typography sx={{ color: "primary.main", fontWeight: 500, fontSize: 15, mb: 1 }}>{whenLine(o)}</Typography>
-                <Typography sx={{ color: "text.secondary", fontSize: 15, lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{firstLine(o.event.description)}</Typography>
-              </Box>
-            </Box>
-          );
-        })}
-      </Box>
+      {autoScroll
+        ? <AutoScrollStrip enabled={!!items?.length} testId="upcoming-events-strip">{tiles}</AutoScrollStrip>
+        : <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" } }}>{tiles}</Box>}
       <Snackbar open={copied} onClose={() => setCopied(false)} autoHideDuration={2000} message={Locale.label("eventPage.copied")} anchorOrigin={{ vertical: "bottom", horizontal: "center" }} />
     </div>
   );
