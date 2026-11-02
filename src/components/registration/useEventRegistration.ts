@@ -41,6 +41,7 @@ export interface RegistrationPayment {
   paymentMethodId?: string;
   type?: string;
   currency?: string;
+  captchaPass?: string;
 }
 
 export interface WizardMember {

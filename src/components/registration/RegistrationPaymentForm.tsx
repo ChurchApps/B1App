@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Alert, Box, Button, CircularProgress, Divider, Icon, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
-import { getPaymentProvider } from "@churchapps/apphelper/donations";
+import { getPaymentProvider, GuestCaptcha } from "@churchapps/apphelper/donations";
 import type { MemberEntryHandle, PaymentGateway } from "@churchapps/apphelper/donations";
 import { formatMoney, type RegistrationPayment } from "./useEventRegistration";
 
@@ -61,6 +62,32 @@ const PaymentEntry: React.FC<{
 
   const useNew = selectedMethod === "new" || !hasSaved;
 
+  // Guests must pass the captcha; the Api refuses their card saves and charges without its pass.
+  const isGuest = !personId;
+  const bypassCaptcha = process.env.NEXT_PUBLIC_BYPASS_RECAPTCHA === "true";
+  const captchaRef = useRef<ReCAPTCHA>(null);
+  const captchaPass = useRef("");
+  const [captchaPassed, setCaptchaPassed] = useState(bypassCaptcha);
+
+  const clearCaptcha = () => {
+    captchaPass.current = "";
+    setCaptchaPassed(bypassCaptcha);
+  };
+
+  const handleCaptchaChange = (value: string | null) => {
+    if (!value) { clearCaptcha(); return; }
+    GuestCaptcha.verify(value, churchId)
+      .then((result) => { captchaPass.current = result.pass; setCaptchaPassed(result.status === "success"); })
+      .catch(clearCaptcha);
+  };
+
+  // A failed payment needs a fresh check, so the retry carries a new pass.
+  const resetCaptcha = () => {
+    if (!isGuest) return;
+    clearCaptcha();
+    captchaRef.current?.reset();
+  };
+
   const getContext = (): {
     provider: string;
     gatewayId?: string;
@@ -69,6 +96,7 @@ const PaymentEntry: React.FC<{
     funds: { id: string; amount: number }[];
     person: { id?: string; email?: string; name?: string };
     currency?: string;
+    captchaPass?: string;
   } => ({
     provider: provider.key,
     gatewayId: gateway?.id,
@@ -76,11 +104,16 @@ const PaymentEntry: React.FC<{
     amount,
     funds: [],
     person: { id: personId, email: personEmail, name: personName },
-    currency
+    currency,
+    captchaPass: captchaPass.current
   });
 
   const handlePay = async () => {
     setError("");
+    if (isGuest && !captchaPassed) {
+      setError(Locale.label("registration.payment.captchaRequired"));
+      return;
+    }
     setProcessing(true);
     try {
       let payment: RegistrationPayment;
@@ -93,9 +126,11 @@ const PaymentEntry: React.FC<{
         const m = savedMethods.find((s) => s.id === selectedMethod);
         payment = { provider: m?.provider || provider.key, gatewayId: gateway?.id, token: m?.id, customerId: m?.customerId, paymentMethodId: m?.id, type: m?.type || "card" };
       }
+      if (captchaPass.current) payment.captchaPass = captchaPass.current;
       const result = await onPay(payment);
       if (result?.error) {
         setError(result.error);
+        resetCaptcha();
         return;
       }
       // Provider finalize (e.g. 3DS). Test cards 4242 never require this.
@@ -109,6 +144,7 @@ const PaymentEntry: React.FC<{
       onFinalized(result);
     } catch (e: any) {
       setError(e?.message || Locale.label("registration.errors.registrationFailed"));
+      resetCaptcha();
     } finally {
       setProcessing(false);
     }
@@ -137,6 +173,12 @@ const PaymentEntry: React.FC<{
       {useNew && MemberEntry && (
         <Box sx={{ p: 1.5, border: "1px solid", borderColor: "divider", borderRadius: 1, mb: 2 }}>
           <MemberEntry ref={entryRef} gateway={gateway} getContext={getContext} />
+        </Box>
+      )}
+
+      {isGuest && !bypassCaptcha && (
+        <Box sx={{ mb: 2 }}>
+          <ReCAPTCHA sitekey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY || ""} ref={captchaRef} onChange={handleCaptchaChange} onExpired={clearCaptcha} onErrored={clearCaptcha} />
         </Box>
       )}
 

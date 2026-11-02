@@ -1351,6 +1351,7 @@
       "newCard": "Use a new card",
       "noGateway": "Online payment is not available for this event.",
       "orderSummary": "Order Summary",
+      "captchaRequired": "Please complete the reCAPTCHA verification",
       "payAndRegister": "Pay {} & Register",
       "payLaterNote": "You can register now and pay the church directly.",
       "registerPayLater": "Register and Pay Later",

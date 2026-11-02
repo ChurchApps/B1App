@@ -187,9 +187,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@churchapps/apphelper@npm:^1.10.6":
-  version: 1.10.6
-  resolution: "@churchapps/apphelper@npm:1.10.6"
+"@churchapps/apphelper@npm:^1.10.7":
+  version: 1.10.7
+  resolution: "@churchapps/apphelper@npm:1.10.7"
   dependencies:
     "@emotion/cache": "npm:^11.14.0"
     "@emotion/react": "npm:^11.14.0"
@@ -251,7 +251,7 @@ __metadata:
       optional: true
     react-google-recaptcha:
       optional: true
-  checksum: 10c0/795a7c3f14f8d938b487c18a190cb00e89196890b193b5264e7d8c87b8cb7fa180dc35d628a0c9c47460b438a45cb2d8e9ad3f374be6468e7e490b6420ba9f24
+  checksum: 10c0/af2801d95974ccb39729b5583cef0fef318fa7ef110fa2c8c572b43d423382c34508f2f1daa3f138b3b72f7f49c1c3b2837b8991854b85a74ed6c064f14508c2
   languageName: node
   linkType: hard
 
@@ -3446,6 +3446,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-google-recaptcha@npm:2.1.9":
+  version: 2.1.9
+  resolution: "@types/react-google-recaptcha@npm:2.1.9"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/12b1806ef4083524cf108fb7c83f7438feb5746e672af2589a2645de26d2ac1ed0f4b687a1e7d482f51a92a75850c074a8696396c1024a3f80e8902a780d4f95
+  languageName: node
+  linkType: hard
+
 "@types/react-transition-group@npm:^4.4.12":
   version: 4.4.12
   resolution: "@types/react-transition-group@npm:4.4.12"
@@ -4106,7 +4115,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "b1-app@workspace:."
   dependencies:
-    "@churchapps/apphelper": "npm:^1.10.6"
+    "@churchapps/apphelper": "npm:^1.10.7"
     "@churchapps/content-providers": "npm:^0.15.2"
     "@churchapps/helpers": "npm:^2.12.0"
     "@emotion/react": "npm:^11.14.0"
@@ -4127,6 +4136,7 @@ __metadata:
     "@types/react": "npm:^19.2.14"
     "@types/react-big-calendar": "npm:^1.16.3"
     "@types/react-dom": "npm:^19.2.3"
+    "@types/react-google-recaptcha": "npm:2.1.9"
     "@typescript-eslint/eslint-plugin": "npm:^8.59.2"
     "@typescript-eslint/parser": "npm:^8.59.2"
     "@youversion/platform-react-hooks": "npm:^1.32.0"
