@@ -27,6 +27,9 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
   const [items, setItems] = useState<Occurrence[] | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [copied, setCopied] = useState(false);
+  // A group calendar is a single group, so the badge only applies to curated calendars.
+  const showGroupBadge = element.answers?.groupBadge === "show" && calendarType !== "group";
+  const [groupNames, setGroupNames] = useState<Record<string, string>>({});
   // "autoscroll" puts the tiles in one row that steps along by itself, like the Verse of the Day week.
   const autoScroll = element.answers?.layout === "autoscroll";
   const [strip, setStrip] = useState<HTMLElement | null>(null);
@@ -43,9 +46,21 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
       const tagged = (Array.isArray(events) ? events : []).filter((e: any) => !tag || (e.tags || "").split(",").some((t: string) => t.trim().toLowerCase() === tag));
       const occurrences = buildOccurrences(tagged, now, windowEnd, 1);
       occurrences.sort((a, b) => a.start.getTime() - b.start.getTime());
-      setItems(occurrences.slice(0, MAX_TILES));
+      const shown = occurrences.slice(0, MAX_TILES);
+      setItems(shown);
+      if (showGroupBadge) loadGroupNames(shown);
     }).catch(() => setItems([]));
-  }, [calendarType, calendarId, churchId, tag]);
+  }, [calendarType, calendarId, churchId, tag, showGroupBadge]);
+
+  // The public group endpoint hides archived and confidential groups, so their events get no badge.
+  const loadGroupNames = (occurrences: Occurrence[]) => {
+    const ids = Array.from(new Set(occurrences.map((o) => o.event.groupId).filter((id): id is string => !!id)));
+    Promise.all(ids.map((id) => ApiHelper.getAnonymous("/groups/public/" + churchId + "/" + id, "MembershipApi").then((g: any) => [id, g?.name] as const).catch(() => [id, undefined] as const))).then((pairs) => {
+      const names: Record<string, string> = {};
+      pairs.forEach(([id, name]) => { if (name) names[id] = name; });
+      setGroupNames(names);
+    });
+  };
 
   const icsUrl = CommonEnvironmentHelper.ContentApi + "/events/subscribe?" + (calendarType === "group" ? "groupId" : "curatedCalendarId") + "=" + calendarId + "&churchId=" + churchId;
 
@@ -76,6 +91,7 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
           : { display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" } }}>
         {(items || []).map((o) => {
           const photo = (o.event as any).photoUrl as string | undefined;
+          const groupName = showGroupBadge && o.event.groupId ? groupNames[o.event.groupId] : undefined;
           return (
             <Box key={eventPageId(o.event) + o.start.toISOString()} component={Link} href={"/events/" + eventPageId(o.event)} data-testid="upcoming-event-tile" data-start={o.start.toISOString()}
               sx={{ display: "block", textDecoration: "none", color: "inherit", border: "1px solid", borderColor: "divider", borderRadius: 3, overflow: "hidden", bgcolor: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,.06)", "&:hover": { boxShadow: 4 } }}>
@@ -84,6 +100,7 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
                   <Typography component="span" sx={{ display: "block", fontSize: 11, letterSpacing: ".08em", fontWeight: 700, color: "primary.main", textTransform: "uppercase" }}>{o.start.toLocaleDateString(undefined, { month: "short" })}</Typography>
                   <Typography component="span" sx={{ display: "block", fontSize: 20, fontWeight: 700, color: "text.primary" }}>{o.start.getDate()}</Typography>
                 </Box>
+                {groupName && <Typography component="span" data-testid="upcoming-event-group-badge" sx={{ position: "absolute", right: 14, top: 14, maxWidth: "55%", bgcolor: EventHelper.groupColor(o.event.groupId), color: "#fff", borderRadius: 2, px: 1.25, py: 0.5, fontSize: 12, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }}>{groupName}</Typography>}
                 {!photo && <Typography sx={{ color: "#fff", fontWeight: 700, fontSize: 22, textAlign: "center", fontFamily: "var(--headingFont, inherit)" }}>{o.event.title}</Typography>}
               </Box>
               <Box sx={{ px: 2.25, pt: 2, pb: 2.25 }}>
