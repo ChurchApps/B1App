@@ -43,12 +43,25 @@ export default function PrintPage({ params }: { params: Params }) {
   const [churchSettings, setChurchSettings] = useState<Record<string, string>>({});
   const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
   const [blocked, setBlocked] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [logoReady, setLogoReady] = useState(false);
+
+  // Wait for the church logo before printing so it isn't blank on paper, same as B1Admin's usePrintLogo.
+  const preloadLogo = (url: string) => {
+    if (!url) { setLogoReady(true); return; }
+    const img = new Image();
+    img.onload = () => setLogoReady(true);
+    img.onerror = () => setLogoReady(true);
+    img.src = url;
+    setTimeout(() => setLogoReady(true), 3000);
+  };
 
 
   const loadData = async () => {
     const churchId = context?.userChurch?.church?.id;
     const settings: Record<string, string> = (churchId && await ApiHelper.get("/settings/public/" + churchId, "MembershipApi").catch((): null => null)) || {};
     setChurchSettings(settings);
+    preloadLogo(settings.logoLight || "");
     if (currYear > memberGivingYearLimit(settings)) {
       setBlocked(true);
       return;
@@ -72,13 +85,18 @@ export default function PrintPage({ params }: { params: Params }) {
       })
     ];
     await Promise.allSettled(requests);
+    setDataLoaded(true);
+  };
 
-    setTimeout(() => {
+  useEffect(() => {
+    if (!dataLoaded || !logoReady) return;
+    const t = setTimeout(() => {
       window.print();
       if (window.history.length > 1) router.back();
       else window.close();
     }, 300);
-  };
+    return () => clearTimeout(t);
+  }, [dataLoaded, logoReady]);
 
   const toStatementCurrency = (amount: number, donation: DonationInterface) =>
     CurrencyHelper.convertAmount(amount, donation?.currency || currency, currency, exchangeRates);
@@ -213,6 +231,7 @@ export default function PrintPage({ params }: { params: Params }) {
 
         <div className="statement-page">
           <div style={{ margin: "0px 0px 32px 0px", padding: "0px", width: "100%", textAlign: "center" }}>
+            {churchSettings.logoLight && <img src={churchSettings.logoLight} alt={churchName} data-testid="print-church-logo" style={{ display: "block", maxHeight: 60, maxWidth: 240, objectFit: "contain", margin: "0 auto 16px" }} />}
             <h1>{currYear} Annual Giving Statement</h1>
             <p>Period: Jan 1 - Dec 31, {currYear}</p>
             <p>Issued: {getDate()}</p>

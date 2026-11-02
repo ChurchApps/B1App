@@ -72,7 +72,7 @@ test.describe.serial("Mobile donate member giving settings", () => {
     await ctx.dispose();
   };
 
-  test.afterAll(async () => { await saveSettings({ memberGivingYears: "", givingNote: "" }); });
+  test.afterAll(async () => { await saveSettings({ memberGivingYears: "", givingNote: "", logoLight: "" }); });
 
   test("shows the church's giving note on the giving page and history", async ({ page }) => {
     await saveSettings({ memberGivingYears: "", givingNote: NOTE });
@@ -123,6 +123,28 @@ test.describe.serial("Mobile donate member giving settings", () => {
     await expect(title).toHaveCSS("text-align", "center");
     const box = await title.boundingBox();
     expect(box!.x, "statement has a left margin").toBeGreaterThan(0);
+  });
+
+  // Issue #1440: the member's statement shows the church's light-background logo, like the admin statement.
+  test("printed statement shows the church logo above the title", async ({ page }) => {
+    const logo = `${APP}/images/logo.png`;
+    await saveSettings({ memberGivingYears: "", givingNote: "", logoLight: logo });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.addInitScript(() => { window.print = () => {}; window.close = () => {}; window.history.back = () => {}; });
+    await page.goto(`/mobile/donate/print?year=${year}`);
+    const img = page.getByTestId("print-church-logo");
+    await expect(img).toBeVisible({ timeout: 30000 });
+    await expect(img).toHaveAttribute("src", logo);
+    const title = page.getByRole("heading", { name: `${year} Annual Giving Statement` });
+    expect((await img.boundingBox())!.y).toBeLessThan((await title.boundingBox())!.y);
+  });
+
+  test("printed statement has no logo when the church has none", async ({ page }) => {
+    await saveSettings({ memberGivingYears: "", givingNote: "", logoLight: "" });
+    await page.addInitScript(() => { window.print = () => {}; window.close = () => {}; window.history.back = () => {}; });
+    await page.goto(`/mobile/donate/print?year=${year}`);
+    await expect(page.getByRole("heading", { name: `${year} Annual Giving Statement` })).toBeVisible({ timeout: 30000 });
+    await expect(page.getByTestId("print-church-logo")).toHaveCount(0);
   });
 });
 
