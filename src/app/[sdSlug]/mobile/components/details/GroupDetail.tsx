@@ -730,6 +730,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           onSubmitted={() => {
             setRequestDialogOpen(false);
             refetchMyRequests();
+            queryClient.invalidateQueries({ queryKey: ["my-pending-requests"] });
           }}
         />
       )}
