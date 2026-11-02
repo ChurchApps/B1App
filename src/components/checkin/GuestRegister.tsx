@@ -6,6 +6,7 @@ import { Locale } from "@churchapps/apphelper";
 import { HeaderSection, HeaderIconContainer, HeaderImage, CheckinCard, colors } from "./CheckinStyles";
 
 interface GuestMember {
+  title?: string;
   firstName: string;
   lastName: string;
   email?: string;
@@ -24,17 +25,21 @@ interface GuestAddress {
 }
 
 type FieldMode = "off" | "optional" | "required";
-type FieldKey = "email" | "phone" | "address" | "birthDate" | "gender" | "maritalStatus" | "grade" | "comments";
+type FieldKey = "title" | "email" | "phone" | "address" | "birthDate" | "gender" | "maritalStatus" | "grade" | "comments";
 type FieldModes = Record<FieldKey, FieldMode>;
 
 // Matches the Api default, so the form looks like it always has until the church changes the checklist.
-const DEFAULT_MODES: FieldModes = { email: "optional", phone: "optional", address: "off", birthDate: "off", gender: "off", maritalStatus: "off", grade: "off", comments: "off" };
+const DEFAULT_MODES: FieldModes = { title: "off", email: "optional", phone: "optional", address: "off", birthDate: "off", gender: "off", maritalStatus: "off", grade: "off", comments: "off" };
 const GENDERS = ["Unspecified", "Male", "Female"];
+// Same suggestions as the Title field on B1Admin's person edit.
+const TITLES = [
+  "Mr", "Mrs", "Miss", "Ms", "Dr", "Prof", "Rev", "Pastor"
+];
 const MARITAL_STATUSES = ["Unknown", "Single", "Married", "Divorced", "Widowed"];
 const GRADES = [
   "PreK", "K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "Graduated"
 ];
-const emptyMember = (lastName = ""): GuestMember => ({ firstName: "", lastName, email: "", phone: "", birthDate: "", gender: "", grade: "" });
+const emptyMember = (lastName = ""): GuestMember => ({ title: "", firstName: "", lastName, email: "", phone: "", birthDate: "", gender: "", grade: "" });
 
 interface Props {
   churchId: string;
@@ -92,7 +97,7 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
       || (required("address") && (!address.address1.trim() || !address.city.trim() || !address.state.trim() || !address.zip.trim()))
       || (required("maritalStatus") && !maritalStatus)
       || (required("comments") && !comments.trim())
-      || members.some(m => (required("birthDate") && !m.birthDate) || (required("gender") && !m.gender) || (required("grade") && !m.grade));
+      || members.some(m => (required("title") && !m.title) || (required("birthDate") && !m.birthDate) || (required("gender") && !m.gender) || (required("grade") && !m.grade));
     if (missingRequired) {
       setError(Locale.label("checkin.guestRegister.validate.fieldsRequired"));
       return;
@@ -104,6 +109,7 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
       const payload = {
         churchId,
         members: members.map((m, i) => ({
+          title: (on("title") && m.title) || undefined,
           firstName: m.firstName.trim(),
           lastName: m.lastName.trim(),
           email: (i === 0 && on("email") && m.email?.trim()) || undefined,
@@ -180,6 +186,20 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
             )}
           </Box>
           <Box sx={{ display: "flex", gap: 2, marginBottom: 1 }}>
+            {on("title") && (
+              <TextField
+                select
+                label={Locale.label("checkin.guestRegister.personTitle")}
+                value={member.title}
+                onChange={(e) => updateMember(index, "title", e.target.value)}
+                size="small"
+                required={required("title")}
+                sx={{ minWidth: 110 }}
+              >
+                <MenuItem value="">&nbsp;</MenuItem>
+                {TITLES.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
+              </TextField>
+            )}
             <TextField
               label={Locale.label("person.firstName")}
               value={member.firstName}
