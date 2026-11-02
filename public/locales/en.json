@@ -54,6 +54,7 @@
         "Unknown": "Unknown",
         "Widowed": "Widowed"
       },
+      "personTitle": "Title",
       "phone": "Phone",
       "primaryContact": "Primary Contact",
       "registering": "Registering...",

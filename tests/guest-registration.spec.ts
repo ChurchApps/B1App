@@ -145,4 +145,35 @@ test.describe("QR guest registration", () => {
     await expect(page.getByText("person_add")).toHaveCount(0);
     await page.screenshot({ path: ".pr-screenshots/after.png" });
   });
+
+  // ChurchAppsSupport#1444: a Title row in the checklist asks each guest for Mr/Mrs/Dr and saves it
+  // to the same Title (name prefix) staff edit in People.
+  test("asks each guest for a title when the church included it and saves it on the person", async ({ page }) => {
+    const titleLastName = "Zebedeetitle";
+    const findTitled = async () => ((await (await apiCall(api, "get", membershipUrl("/people/search?term=" + titleLastName))).json()) as any[]) || [];
+    const removeTitled = async () => { for (const p of await findTitled()) await apiCall(api, "delete", membershipUrl("/people/" + p.id)); };
+    await removeTitled();
+    await saveSettings({ guestRegistrationFields: JSON.stringify({ title: "optional", email: "optional", phone: "off" }) });
+    try {
+      await page.goto(BASE_URL + "/guest-register");
+      await expect(page.getByRole("heading", { name: "Guest Registration" })).toBeVisible({ timeout: 20000 });
+      const titles = page.getByRole("combobox", { name: /^Title/ });
+      await expect(titles).toHaveCount(2, { timeout: 15000 });
+
+      await titles.nth(0).click();
+      await page.getByRole("option", { name: "Dr", exact: true }).click();
+      await page.getByLabel(/^First Name/).nth(0).fill("Zadok");
+      await page.getByLabel(/^Last Name/).nth(0).fill(titleLastName);
+      await page.getByLabel(/^First Name/).nth(1).fill("Zara");
+      await page.getByLabel(/^Last Name/).nth(1).fill(titleLastName);
+      await page.getByRole("button", { name: "Register" }).click();
+      await expect(page.getByText("Registration Complete")).toBeVisible({ timeout: 15000 });
+
+      const people = await findTitled();
+      expect(people.find((p) => p.name?.first === "Zadok")?.name?.prefix).toBe("Dr");
+      expect(people.find((p) => p.name?.first === "Zara")?.name?.prefix || "").toBe("");
+    } finally {
+      await removeTitled();
+    }
+  });
 });
