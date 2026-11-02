@@ -197,87 +197,100 @@ export default function PrintPage({ params }: { params: Params }) {
   // giving requests or the print/router.back() timer while that redirect is in flight.
   useEffect(() => { if (context?.user) loadData(); }, [context?.user]);
 
+  const churchName = context?.userChurch?.church?.name || "";
+
   if (blocked) return <AuthGuard sdSlug={sdSlug}><p style={{ padding: "24px", fontFamily: "Roboto, sans-serif" }}>{Locale.label("mobile.giving.statementUnavailable")}</p></AuthGuard>;
 
   return (
     <AuthGuard sdSlug={sdSlug}>
       <div style={{ margin: "0px", padding: "0px", height: "100%", width: "100%", backgroundColor: "white", fontFamily: "Roboto, sans-serif", ["--print-accent" as any]: accentColor }}>
+        <style>{`
+          .statement-page { max-width: 800px; margin: 0 auto; padding: 32px 40px; box-sizing: border-box; }
+          @media (max-width: 480px) { .statement-page { padding: 16px; } }
+          @media print { @page { margin: 0; } body { margin: 0; } }
+        `}</style>
         <div style={{ margin: "0px", padding: "0px", borderTop: "24px solid var(--print-accent)", width: "100%" }}></div>
 
-        <div style={{ margin: "0px", padding: "0px", width: "100%" }}>
-          <h1>{currYear} Annual Giving Statement</h1>
-          <p>Period: Jan 1 - Dec 31, {currYear}</p>
-          <p>Issued: {getDate()}</p>
-        </div>
-        <div style={{ margin: "0px", padding: "0px", borderTop: "2px solid var(--print-accent)", width: "80%" }}></div>
-
-        <div style={{ display: "flex", flexWrap: "wrap", columnGap: "16px", overflowWrap: "anywhere" }}>
-          <div style={{ flex: "1 1 280px", minWidth: 0 }}>
-            <h1>{context?.person?.name?.display}</h1>
-            <p>{context?.person?.contactInfo?.address1}</p>
-            <p>{context?.person?.contactInfo?.address2}</p>
-            <p>{context?.person?.contactInfo?.mobilePhone}</p>
-            <p>{context?.person?.contactInfo?.email}</p>
+        <div className="statement-page">
+          <div style={{ margin: "0px 0px 32px 0px", padding: "0px", width: "100%", textAlign: "center" }}>
+            <h1>{currYear} Annual Giving Statement</h1>
+            <p>Period: Jan 1 - Dec 31, {currYear}</p>
+            <p>Issued: {getDate()}</p>
           </div>
-          <div style={{ flex: "1 1 280px", minWidth: 0 }}>
-            <h1>{context?.userChurch?.church?.name}</h1>
-            <p>{context?.userChurch?.church?.address1}</p>
-            <p>{context?.userChurch?.church?.address2}</p>
-            <p>{context?.userChurch?.church?.city}, {context?.userChurch?.church?.country}, {context?.userChurch?.church?.zip}</p>
-          </div>
-        </div>
-        <div style={{ margin: "0px", padding: "0px", borderTop: "2px solid var(--print-accent)", width: "80%" }}></div>
+          <div style={{ margin: "0px", padding: "0px", borderTop: "2px solid var(--print-accent)", width: "100%" }}></div>
 
-        {legalBlock()}
-
-        <div>
-          <h1>Statement Summary:</h1>
-          <div style={{ display: "flex", flexWrap: "wrap", columnGap: "16px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", columnGap: "16px", overflowWrap: "anywhere" }}>
             <div style={{ flex: "1 1 280px", minWidth: 0 }}>
-              <h2>Total Contributions:</h2>
-              <div style={{ minHeight: "80px", padding: "12px 0", boxSizing: "border-box", width: "80%", textAlign: "center", border: "4px solid var(--print-accent)", fontSize: "clamp(24px, 8vw, 40px)", overflowWrap: "anywhere", display: "flex", alignItems: "center", justifyContent: "center" }}>{getTotalContributions()}</div>
+              <h1>{context?.person?.name?.display}</h1>
+              <p>{context?.person?.contactInfo?.address1}</p>
+              <p>{context?.person?.contactInfo?.address2}</p>
+              <p>{context?.person?.contactInfo?.mobilePhone}</p>
+              <p>{context?.person?.contactInfo?.email}</p>
             </div>
             <div style={{ flex: "1 1 280px", minWidth: 0 }}>
-              <h2>Funds:</h2>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead style={{ height: "24px" }}>
-                  <tr>
-                    <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "70%", paddingLeft: "5px" }}>Fund</th>
-                    <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "30%", paddingRight: "5px" }}>Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tableFundTotal()}
-                </tbody>
-              </table>
+              <h1>{context?.userChurch?.church?.name}</h1>
+              <p>{context?.userChurch?.church?.address1}</p>
+              <p>{context?.userChurch?.church?.address2}</p>
+              <p>{context?.userChurch?.church?.city}, {context?.userChurch?.church?.country}, {context?.userChurch?.church?.zip}</p>
             </div>
           </div>
-        </div>
+          <div style={{ margin: "0px", padding: "0px", borderTop: "2px solid var(--print-accent)", width: "100%" }}></div>
 
-        <div>
-          <h1>Contribution Details:</h1>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead style={{ height: "28px" }}>
-              <tr>
-                <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>Date</th>
-                <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>Method</th>
-                <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "50%", paddingLeft: "5px" }}>Fund</th>
-                <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tableDonations()}
-              <tr style={{ height: "28px" }}>
-                <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}></td>
-                <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}></td>
-                <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "50%", paddingRight: "5px", fontWeight: "bold" }}>Total Contributions:</td>
-                <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px", fontWeight: "bold" }}>{getTotalContributions()}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+          {legalBlock()}
 
-        {churchSettings.givingNote && <p data-testid="statement-giving-note" style={{ whiteSpace: "pre-line" }}>{churchSettings.givingNote}</p>}
+          <div>
+            <h1>Statement Summary:</h1>
+            <div style={{ display: "flex", flexWrap: "wrap", columnGap: "16px" }}>
+              <div style={{ flex: "1 1 280px", minWidth: 0 }}>
+                <h2>Total Contributions:</h2>
+                <div style={{ minHeight: "80px", padding: "12px 0", boxSizing: "border-box", width: "100%", textAlign: "center", border: "4px solid var(--print-accent)", fontSize: "clamp(24px, 8vw, 40px)", overflowWrap: "anywhere", display: "flex", alignItems: "center", justifyContent: "center" }}>{getTotalContributions()}</div>
+              </div>
+              <div style={{ flex: "1 1 280px", minWidth: 0 }}>
+                <h2>Funds:</h2>
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <thead style={{ height: "24px" }}>
+                    <tr>
+                      <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "70%", paddingLeft: "5px" }}>Fund</th>
+                      <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "30%", paddingRight: "5px" }}>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tableFundTotal()}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h1>Contribution Details:</h1>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead style={{ height: "28px" }}>
+                <tr>
+                  <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>Date</th>
+                  <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>Method</th>
+                  <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "50%", paddingLeft: "5px" }}>Fund</th>
+                  <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableDonations()}
+                <tr style={{ height: "28px" }}>
+                  <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}></td>
+                  <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}></td>
+                  <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "50%", paddingRight: "5px", fontWeight: "bold" }}>Total Contributions:</td>
+                  <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px", fontWeight: "bold" }}>{getTotalContributions()}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ marginTop: "40px", padding: "16px", backgroundColor: "#F8F9FA", borderRadius: "4px", fontSize: "12px", color: "#666", lineHeight: 1.6 }}>
+            <p data-testid="statement-note" style={{ margin: 0 }}><strong>{Locale.label("mobile.giving.statementNoteLabel")}</strong> {Locale.label("mobile.giving.statementNote").replace("{churchName}", churchName).replace("{year}", String(currYear))}</p>
+            <p data-testid="statement-disclaimer" style={{ fontSize: "10px", margin: "4px 0 0 0" }}>{Locale.label("mobile.giving.statementDisclaimer").split("{churchName}").join(churchName)}</p>
+            {churchSettings.givingNote && <p data-testid="statement-giving-note" style={{ whiteSpace: "pre-line", margin: "8px 0 0 0" }}>{churchSettings.givingNote}</p>}
+          </div>
+        </div>
       </div>
     </AuthGuard>
   );
