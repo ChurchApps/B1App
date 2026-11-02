@@ -162,4 +162,58 @@ test.describe.serial("Upcoming events scrolling layout", () => {
     await page.mouse.move(0, 0);
     await expect.poll(() => strip.evaluate((el) => el.scrollLeft), { timeout: 15000 }).toBeGreaterThan(0);
   });
+
+  // ChurchAppsSupport#1442: tiles are half the row on a desktop with a full 16:9 photo, so three already overflow.
+  test("scrolling tiles are two per desktop row with a 16:9 photo", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/events");
+    const strip = page.getByTestId("upcoming-events-strip");
+    await expect(strip).toBeVisible({ timeout: 30000 });
+    const tiles = strip.getByTestId("upcoming-event-tile");
+    await expect.poll(() => tiles.count(), { timeout: 30000 }).toBeGreaterThanOrEqual(3);
+    // Two tiles and the 24px gap fill the row.
+    const halfRowGap = () => strip.evaluate((el) => Math.abs((el.firstElementChild as HTMLElement).offsetWidth - (el.clientWidth - 24) / 2));
+    await expect.poll(halfRowGap, { timeout: 15000 }).toBeLessThanOrEqual(2);
+    expect(await strip.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+    const ratio = await tiles.first().locator("div").first().evaluate((el) => el.getBoundingClientRect().width / el.getBoundingClientRect().height);
+    expect(ratio).toBeCloseTo(16 / 9, 1);
+  });
+});
+
+// ChurchAppsSupport#1442: the Group List element gets the same Scrolling (automatic) layout.
+// The demo seed has three public groups labelled "worship" (Api/tools/dbScripts/membership/demo.sql); SEC00000019 is the Events page section.
+test.describe.serial("Group list scrolling layout", () => {
+  let ctx: APIRequestContext;
+  let auth: { headers: Record<string, string> };
+  let elementId: string | undefined;
+
+  test.beforeAll(async () => {
+    ctx = await request.newContext();
+    const body = await (await ctx.post(`${API_BASE}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = (body.userChurches || []).find((c: any) => c.church?.id === DEMO_CHURCH.ID) || body.userChurches?.[0];
+    auth = { headers: { Authorization: "Bearer " + uc.jwt } };
+    const res = await ctx.post(`${API_BASE}/content/elements`, { ...auth, data: [{ churchId: DEMO_CHURCH.ID, sectionId: "SEC00000019", elementType: "groupList", sort: 3, answersJSON: JSON.stringify({ label: "worship", layout: "autoscroll" }) }] });
+    expect(res.ok()).toBeTruthy();
+    elementId = (await res.json())[0]?.id;
+    expect(elementId).toBeTruthy();
+  });
+
+  test.afterAll(async () => {
+    if (elementId) await ctx.delete(`${API_BASE}/content/elements/${elementId}`, auth).catch(() => { });
+    await ctx.dispose();
+  });
+
+  test("scrolling layout puts three group cards in one row that moves by itself on a desktop", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/events");
+    const strip = page.getByTestId("group-list-strip");
+    await expect(strip).toBeVisible({ timeout: 30000 });
+    const tiles = strip.getByTestId("group-list-tile");
+    await expect.poll(() => tiles.count(), { timeout: 30000 }).toBe(3);
+    const rowTops = () => tiles.evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().top)));
+    await expect.poll(async () => new Set(await rowTops()).size, { message: "all cards share one row", timeout: 15000 }).toBe(1);
+    expect(await strip.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+    await page.mouse.move(0, 0);
+    await expect.poll(() => strip.evaluate((el) => el.scrollLeft), { timeout: 15000 }).toBeGreaterThan(0);
+  });
 });
