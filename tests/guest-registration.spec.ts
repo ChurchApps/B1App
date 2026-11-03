@@ -128,6 +128,34 @@ test.describe("QR guest registration", () => {
     expect(messages.map((m) => m.content)).toContain("Met you at the church picnic");
   });
 
+  // ChurchAppsSupport#1448: everyone after the first person picks a household role, and each person can leave a phone.
+  test("asks each later person's household role and phone, and files them that way", async ({ page }) => {
+    await removeCreated();
+    await saveSettings({ guestRegistrationFields: JSON.stringify({ email: "optional", phone: "optional", householdRole: "optional" }) });
+    await page.goto(BASE_URL + "/guest-register");
+    const roles = page.getByRole("combobox", { name: /Household Role/ });
+    await expect(roles).toHaveCount(1, { timeout: 20000 });
+    await expect(page.getByLabel(/^Phone/)).toHaveCount(2);
+
+    await page.getByLabel(/^First Name/).nth(0).fill("Zillah");
+    await page.getByLabel(/^Last Name/).nth(0).fill(LAST_NAME);
+    await page.getByLabel(/^First Name/).nth(1).fill("Zerah");
+    await page.getByLabel(/^Last Name/).nth(1).fill(LAST_NAME);
+    await page.getByLabel(/^Phone/).nth(1).fill("555-301-1448");
+    await roles.click();
+    await page.getByRole("option", { name: "Spouse", exact: true }).click();
+    await page.getByRole("button", { name: "Register" }).click();
+    await expect(page.getByText("Registration Complete")).toBeVisible({ timeout: 15000 });
+
+    const people = await findCreated();
+    const head = people.find((p) => p.name?.first === "Zillah");
+    const spouse = people.find((p) => p.name?.first === "Zerah");
+    expect(head.householdRole).toBe("Head");
+    expect(spouse.householdRole).toBe("Spouse");
+    expect(spouse.householdId).toBe(head.householdId);
+    expect(spouse.contactInfo.mobilePhone).toContain("555");
+  });
+
   // ChurchAppsSupport#1375: the church's header photo replaces the icon at the top of the sign-up page.
   test("shows the church's header photo in place of the icon", async ({ page }) => {
     await page.goto(BASE_URL + "/guest-register");

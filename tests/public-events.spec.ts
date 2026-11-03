@@ -217,3 +217,40 @@ test.describe.serial("Group list scrolling layout", () => {
     await expect.poll(() => strip.evaluate((el) => el.scrollLeft), { timeout: 15000 }).toBeGreaterThan(0);
   });
 });
+
+// ChurchAppsSupport#1448: the Groups Browser element offers the same Scrolling (automatic) layout as the Group List.
+test.describe.serial("Groups browser scrolling layout", () => {
+  let ctx: APIRequestContext;
+  let auth: { headers: Record<string, string> };
+  let elementId: string | undefined;
+
+  test.beforeAll(async () => {
+    ctx = await request.newContext();
+    const body = await (await ctx.post(`${API_BASE}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = (body.userChurches || []).find((c: any) => c.church?.id === DEMO_CHURCH.ID) || body.userChurches?.[0];
+    auth = { headers: { Authorization: "Bearer " + uc.jwt } };
+    const res = await ctx.post(`${API_BASE}/content/elements`, { ...auth, data: [{ churchId: DEMO_CHURCH.ID, sectionId: "SEC00000019", elementType: "groups", sort: 4, answersJSON: JSON.stringify({ title: "Worship Groups", label: "worship", layout: "autoscroll" }) }] });
+    expect(res.ok()).toBeTruthy();
+    elementId = (await res.json())[0]?.id;
+    expect(elementId).toBeTruthy();
+  });
+
+  test.afterAll(async () => {
+    if (elementId) await ctx.delete(`${API_BASE}/content/elements/${elementId}`, auth).catch(() => { });
+    await ctx.dispose();
+  });
+
+  test("scrolling layout puts the browser's group cards in one row that moves by itself on a desktop", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/events");
+    const strip = page.getByTestId("groups-browser-strip");
+    await expect(strip).toBeVisible({ timeout: 30000 });
+    const tiles = strip.getByTestId("groups-browser-tile");
+    await expect.poll(() => tiles.count(), { timeout: 30000 }).toBe(3);
+    const rowTops = () => tiles.evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().top)));
+    await expect.poll(async () => new Set(await rowTops()).size, { message: "all cards share one row", timeout: 15000 }).toBe(1);
+    expect(await strip.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+    await page.mouse.move(0, 0);
+    await expect.poll(() => strip.evaluate((el) => el.scrollLeft), { timeout: 15000 }).toBeGreaterThan(0);
+  });
+});

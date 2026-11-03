@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
+import { getApi, apiCall, membershipUrl, type ApiHandle } from "./helpers/api";
 
 test.describe("Mobile profile edit", () => {
   // The old Profile/Household/Account/Privacy tabs are sections of one plate; each edits in a sheet.
@@ -128,5 +129,69 @@ test.describe("Mobile profile privacy levels", () => {
     await savePrivacy(page);
     await openPrivacyTab(page);
     await expect(page.getByLabel("Email Visibility", { exact: true })).toHaveText("Members Only", { timeout: 15000 });
+  });
+});
+
+// ChurchAppsSupport#1448: members set their own title, and Add Family Member asks last name, title,
+// mobile phone and household role. The demo church has no Directory Approval Group, so both save directly.
+test.describe.serial("Mobile profile title and family member details", () => {
+  const FAMILY_FIRST = "Zimrifamily";
+  let api: ApiHandle;
+  let demoPersonId = "";
+
+  const findFamily = async () => ((await (await apiCall(api, "get", membershipUrl("/people/search?term=" + FAMILY_FIRST))).json()) as any[]) || [];
+
+  test.beforeAll(async () => {
+    api = await getApi("demo", "MembershipApi");
+    for (const p of await findFamily()) await apiCall(api, "delete", membershipUrl("/people/" + p.id));
+  });
+
+  test.afterAll(async () => {
+    for (const p of await findFamily()) await apiCall(api, "delete", membershipUrl("/people/" + p.id));
+    if (demoPersonId) {
+      const me = await (await apiCall(api, "get", membershipUrl("/people/" + demoPersonId))).json();
+      await apiCall(api, "post", membershipUrl("/people"), [{ ...me, name: { ...me.name, prefix: "" } }]);
+    }
+    await api.request.dispose();
+  });
+
+  test("Photo & name sheet saves a title", async ({ page }) => {
+    await page.goto("/mobile/profileEdit");
+    await page.getByTestId("profile-edit-name").click({ timeout: 30000 });
+    const title = page.getByTestId("profile-title");
+    await expect(title).toBeVisible({ timeout: 15000 });
+    await title.fill("Dr");
+    const saved = page.waitForRequest((r) => r.method() === "POST" && /\/membership\/people$/.test(r.url()), { timeout: 30000 });
+    await page.getByRole("button", { name: "Save Changes" }).click();
+    demoPersonId = (await saved).postDataJSON()[0].id;
+    await expect(page.getByText("Your changes have been saved.")).toBeVisible({ timeout: 15000 });
+    const me = await (await apiCall(api, "get", membershipUrl("/people/" + demoPersonId))).json();
+    expect(me.name.prefix).toBe("Dr");
+  });
+
+  test("Add Family Member saves last name, title, phone and household role", async ({ page }) => {
+    await page.goto("/mobile/profileEdit");
+    await page.getByTestId("profile-edit-household").click({ timeout: 30000 });
+    const sheet = page.getByRole("dialog");
+    await sheet.getByTestId("family-member-first").fill(FAMILY_FIRST);
+    await sheet.getByTestId("family-member-last").fill("Userson");
+    await sheet.getByTestId("family-member-title").fill("Mr");
+    await sheet.getByTestId("family-member-phone").fill("555-401-1448");
+    await sheet.getByTestId("family-member-role").click();
+    await page.getByRole("option", { name: "Child", exact: true }).click();
+    await sheet.getByTestId("family-member-add").click();
+    await expect(sheet).toContainText(`Mr ${FAMILY_FIRST} Userson`);
+
+    const created = page.waitForResponse((r) => r.request().method() === "POST" && r.url().includes("/people/familyMember"), { timeout: 30000 });
+    await sheet.getByRole("button", { name: "Save Changes" }).click();
+    expect((await created).ok()).toBeTruthy();
+    await expect(page.getByText("Your changes have been saved.")).toBeVisible({ timeout: 15000 });
+
+    const [member] = await findFamily();
+    expect(member).toBeTruthy();
+    const full = await (await apiCall(api, "get", membershipUrl("/people/" + member.id))).json();
+    expect(full.name).toMatchObject({ first: FAMILY_FIRST, last: "Userson", prefix: "Mr" });
+    expect(full.householdRole).toBe("Child");
+    expect(full.contactInfo.mobilePhone).toContain("555");
   });
 });
