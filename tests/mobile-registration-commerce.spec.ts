@@ -280,6 +280,22 @@ test.describe("Registration status and messages", () => {
     }
   });
 
+  // ChurchAppsSupport#1451: registering again ended in a generic "Registration failed" instead of the server's reason.
+  test("registering again for an event shows the server's reason", async ({ page }) => {
+    const eventId = await createEvent(page, a, { title: "Already Registered " + Date.now() });
+    try {
+      const reg = await apiPost(page, "/content/registrations/register", { churchId: CHURCH, eventId, personId: a.personId }, a);
+      expect(reg.ok(), "registered the demo member").toBeTruthy();
+      await page.goto("/mobile/register/" + eventId);
+      await page.getByRole("button", { name: /Continue/i }).click();
+      await page.getByRole("button", { name: /Complete Registration/i }).click();
+      await expect(page.getByText("Already registered for this event")).toBeVisible({ timeout: 20000 });
+      await expect(page.getByText(/Registration failed/)).toHaveCount(0);
+    } finally {
+      await page.request.delete(API + "/content/events/" + eventId, { headers: { Authorization: a.auth } });
+    }
+  });
+
   test("Register and Pay Later shows Pending with the balance due, not Registration Confirmed", async ({ page }) => {
     await cancelExisting(page, a, VBS);
     // The demo church has Stripe, so stand in for a church with no online giving: empty gateway
