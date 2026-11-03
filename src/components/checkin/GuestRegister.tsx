@@ -11,6 +11,7 @@ interface GuestMember {
   lastName: string;
   email?: string;
   phone?: string;
+  householdRole?: string;
   birthDate?: string;
   gender?: string;
   grade?: string;
@@ -25,21 +26,23 @@ interface GuestAddress {
 }
 
 type FieldMode = "off" | "optional" | "required";
-type FieldKey = "title" | "email" | "phone" | "address" | "birthDate" | "gender" | "maritalStatus" | "grade" | "comments";
+type FieldKey = "title" | "email" | "phone" | "householdRole" | "address" | "birthDate" | "gender" | "maritalStatus" | "grade" | "comments";
 type FieldModes = Record<FieldKey, FieldMode>;
 
 // Matches the Api default, so the form looks like it always has until the church changes the checklist.
-const DEFAULT_MODES: FieldModes = { title: "off", email: "optional", phone: "optional", address: "off", birthDate: "off", gender: "off", maritalStatus: "off", grade: "off", comments: "off" };
+const DEFAULT_MODES: FieldModes = { title: "off", email: "optional", phone: "optional", householdRole: "optional", address: "off", birthDate: "off", gender: "off", maritalStatus: "off", grade: "off", comments: "off" };
 const GENDERS = ["Unspecified", "Male", "Female"];
 // Same suggestions as the Title field on B1Admin's person edit.
 const TITLES = [
   "Mr", "Mrs", "Miss", "Ms", "Dr", "Prof", "Rev", "Pastor"
 ];
+// The first person heads the household; everyone after them picks one of these.
+const HOUSEHOLD_ROLES = ["Spouse", "Child", "Other"];
 const MARITAL_STATUSES = ["Unknown", "Single", "Married", "Divorced", "Widowed"];
 const GRADES = [
   "PreK", "K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "Graduated"
 ];
-const emptyMember = (lastName = ""): GuestMember => ({ title: "", firstName: "", lastName, email: "", phone: "", birthDate: "", gender: "", grade: "" });
+const emptyMember = (lastName = ""): GuestMember => ({ title: "", firstName: "", lastName, email: "", phone: "", householdRole: "", birthDate: "", gender: "", grade: "" });
 
 interface Props {
   churchId: string;
@@ -97,7 +100,7 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
       || (required("address") && (!address.address1.trim() || !address.city.trim() || !address.state.trim() || !address.zip.trim()))
       || (required("maritalStatus") && !maritalStatus)
       || (required("comments") && !comments.trim())
-      || members.some(m => (required("title") && !m.title) || (required("birthDate") && !m.birthDate) || (required("gender") && !m.gender) || (required("grade") && !m.grade));
+      || members.some((m, i) => (required("title") && !m.title) || (i > 0 && required("householdRole") && !m.householdRole) || (required("birthDate") && !m.birthDate) || (required("gender") && !m.gender) || (required("grade") && !m.grade));
     if (missingRequired) {
       setError(Locale.label("checkin.guestRegister.validate.fieldsRequired"));
       return;
@@ -113,7 +116,8 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
           firstName: m.firstName.trim(),
           lastName: m.lastName.trim(),
           email: (i === 0 && on("email") && m.email?.trim()) || undefined,
-          phone: (i === 0 && on("phone") && m.phone?.trim()) || undefined,
+          phone: (on("phone") && m.phone?.trim()) || undefined,
+          householdRole: (i > 0 && on("householdRole") && m.householdRole) || undefined,
           birthDate: (on("birthDate") && m.birthDate) || undefined,
           gender: (on("gender") && m.gender) || undefined,
           grade: (on("grade") && m.grade) || undefined
@@ -217,9 +221,22 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
               fullWidth
             />
           </Box>
-          {index === 0 && (on("email") || on("phone")) && (
+          {((index === 0 && on("email")) || on("phone") || (index > 0 && on("householdRole"))) && (
             <Box sx={{ display: "flex", gap: 2, marginBottom: 1 }}>
-              {on("email") && (
+              {index > 0 && on("householdRole") && (
+                <TextField
+                  select
+                  label={Locale.label("checkin.guestRegister.householdRole")}
+                  value={member.householdRole}
+                  onChange={(e) => updateMember(index, "householdRole", e.target.value)}
+                  size="small"
+                  required={required("householdRole")}
+                  fullWidth
+                >
+                  {HOUSEHOLD_ROLES.map(r => <MenuItem key={r} value={r}>{Locale.label("checkin.guestRegister.householdRoles." + r)}</MenuItem>)}
+                </TextField>
+              )}
+              {index === 0 && on("email") && (
                 <TextField
                   label={Locale.label("person.email")}
                   type="email"
@@ -237,7 +254,7 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
                   value={member.phone}
                   onChange={(e) => updateMember(index, "phone", e.target.value)}
                   size="small"
-                  required={required("phone")}
+                  required={index === 0 && required("phone")}
                   fullWidth
                 />
               )}

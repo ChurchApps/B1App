@@ -46,6 +46,13 @@
         "Unspecified": "Unspecified"
       },
       "grade": "Grade",
+      "householdRole": "Household Role",
+      "householdRoles": {
+        "Child": "Child",
+        "Head": "Head",
+        "Other": "Other",
+        "Spouse": "Spouse"
+      },
       "maritalStatus": "Marital Status",
       "maritalStatuses": {
         "Divorced": "Divorced",

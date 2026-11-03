@@ -4,6 +4,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } 
 import { useRouter } from "next/navigation";
 import {
   Alert,
+  Autocomplete,
   Avatar,
   Box,
   Button,
@@ -58,7 +59,13 @@ const scopeDescKeys: Record<VisibilityScope, string> = {
 // PersonHelper only recognizes PNG data URLs; the cropper produces JPEG.
 const photoSrc = (p: PersonInterface) => (p.photo ? (p.photo.startsWith("data:") ? p.photo : PersonHelper.getPhotoUrl(p)) : undefined);
 
+const TITLE_SUGGESTIONS = [
+  "Mr", "Mrs", "Miss", "Ms", "Dr", "Prof", "Rev", "Pastor"
+];
+const HOUSEHOLD_ROLES = ["Head", "Spouse", "Child", "Other"];
+
 const fieldLabelKeys: Record<string, string> = {
+  "name.prefix": "checkin.guestRegister.personTitle",
   "name.first": "person.firstName",
   "name.middle": "mobile.profileEdit.middleName",
   "name.last": "person.lastName",
@@ -89,6 +96,10 @@ const emptyPerson: PersonInterface = {
     zip: ""
   }
 } as PersonInterface;
+
+// Sent as JSON in the familyMember requested change; staff approval reads the same shape.
+interface PendingFamilyMember { first: string; last: string; prefix: string; mobilePhone: string; householdRole: string }
+const blankFamilyMember = (last = ""): PendingFamilyMember => ({ first: "", last, prefix: "", mobilePhone: "", householdRole: "Other" });
 
 interface HouseholdMember extends PersonInterface {
   householdRole?: string;
@@ -177,8 +188,8 @@ export const ProfileEditPage = ({ config }: Props) => {
   const [person, setPerson] = useState<PersonWithPrivacy | null>(null);
   const [initial, setInitial] = useState<PersonWithPrivacy | null>(null);
   const [modifiedFields, setModifiedFields] = useState<Set<string>>(new Set());
-  const [pendingFamilyMembers, setPendingFamilyMembers] = useState<string[]>([]);
-  const [newMemberName, setNewMemberName] = useState("");
+  const [pendingFamilyMembers, setPendingFamilyMembers] = useState<PendingFamilyMember[]>([]);
+  const [newMember, setNewMember] = useState<PendingFamilyMember>(blankFamilyMember());
   const [saving, setSaving] = useState(false);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [snack, setSnack] = useState<{ open: boolean; msg: string; severity: "success" | "error" | "info" }>({
@@ -324,8 +335,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       const value = key === "photo" ? person.photo || "" : readField(person, key);
       changes.push({ field: key, label: Locale.label(labelKey), value });
     });
-    pendingFamilyMembers.forEach((name) => {
-      changes.push({ field: "familyMember", label: Locale.label("mobile.profileEdit.addFamilyMember"), value: name });
+    pendingFamilyMembers.forEach((m) => {
+      changes.push({ field: "familyMember", label: Locale.label("mobile.profileEdit.addFamilyMember"), value: JSON.stringify(m) });
     });
     return changes;
   }, [person, modifiedFields, pendingFamilyMembers]);
@@ -377,9 +388,11 @@ export const ProfileEditPage = ({ config }: Props) => {
         await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
       } else {
         // Nobody would ever review an unassigned task, so save the record itself. Edit Self
-        // only covers the member's own row, so pending family members stay unsaved here,
-        // exactly as they did under the old unassigned-task path.
-        await ApiHelper.post("/people", [{ ...person, id }], "MembershipApi");
+        // only covers the member's own row, so family members go through their own endpoint,
+        // which files them in this member's household.
+        if (modifiedFields.size > 0) await ApiHelper.post("/people", [{ ...person, id }], "MembershipApi");
+        for (const m of pendingFamilyMembers) await ApiHelper.post("/people/familyMember", m, "MembershipApi");
+        if (pendingFamilyMembers.length > 0) queryClient.invalidateQueries({ queryKey: ["household", householdId] });
       }
 
       // Photo uploads on submit, so refresh to show new image without sign-out.
@@ -428,11 +441,18 @@ export const ProfileEditPage = ({ config }: Props) => {
   };
 
   const handleAddFamilyMember = () => {
-    const trimmed = newMemberName.trim();
-    if (!trimmed) return;
-    setPendingFamilyMembers((prev) => [...prev, trimmed]);
-    setNewMemberName("");
+    const first = newMember.first.trim();
+    if (!first) return;
+    const member = { ...newMember, first, last: newMember.last.trim() || person?.name?.last || "", prefix: newMember.prefix.trim(), mobilePhone: newMember.mobilePhone.trim() };
+    setPendingFamilyMembers((prev) => [...prev, member]);
+    setNewMember(blankFamilyMember(person?.name?.last || ""));
   };
+
+  // A new family member usually shares the member's last name, so it starts filled in.
+  const memberLastName = initial?.name?.last || "";
+  useEffect(() => {
+    setNewMember((m) => (m.first || m.last ? m : { ...m, last: memberLastName }));
+  }, [memberLastName]);
 
   const handleRemoveFamilyMember = (index: number) => {
     setPendingFamilyMembers((prev) => prev.filter((_, i) => i !== index));
@@ -659,6 +679,13 @@ export const ProfileEditPage = ({ config }: Props) => {
           <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleFileSelected} />
         </Box>
       </Box>
+      <Autocomplete
+        freeSolo
+        options={TITLE_SUGGESTIONS}
+        value={readField(person, "name.prefix")}
+        onInputChange={(_, val) => { if (val !== readField(person, "name.prefix")) setField("name.prefix", val); }}
+        renderInput={(params) => <TextField {...params} fullWidth label={Locale.label("checkin.guestRegister.personTitle")} inputProps={{ ...params.inputProps, maxLength: 10, "data-testid": "profile-title" } as any} />}
+      />
       {renderField("name.first", Locale.label("person.firstName"), { autoComplete: "given-name" })}
       {renderField("name.middle", Locale.label("mobile.profileEdit.middleName"), { autoComplete: "additional-name" })}
       {renderField("name.last", Locale.label("person.lastName"), { autoComplete: "family-name" })}
@@ -686,26 +713,41 @@ export const ProfileEditPage = ({ config }: Props) => {
   const renderHouseholdSheet = () => (
     <Box sx={fieldStack}>
       <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("mobile.profileEdit.familyMemberHint")}</Typography>
-      <Box sx={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
-        <TextField
-          label={Locale.label("person.firstName")}
-          value={newMemberName}
-          onChange={(e) => setNewMemberName(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAddFamilyMember(); } }}
-          fullWidth
-        />
-        <Button variant="outlined" onClick={handleAddFamilyMember} disabled={!newMemberName.trim()} sx={{ height: 56, flex: "none" }}>
-          {Locale.label("mobile.group.add")}
-        </Button>
-      </Box>
+      <TextField
+        label={Locale.label("person.firstName")}
+        value={newMember.first}
+        onChange={(e) => setNewMember({ ...newMember, first: e.target.value })}
+        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAddFamilyMember(); } }}
+        inputProps={{ "data-testid": "family-member-first" }}
+        fullWidth
+      />
+      <TextField label={Locale.label("person.lastName")} value={newMember.last} onChange={(e) => setNewMember({ ...newMember, last: e.target.value })} inputProps={{ "data-testid": "family-member-last" }} fullWidth />
+      <Autocomplete
+        freeSolo
+        options={TITLE_SUGGESTIONS}
+        value={newMember.prefix}
+        onInputChange={(_, val) => setNewMember((m) => ({ ...m, prefix: val }))}
+        renderInput={(params) => <TextField {...params} fullWidth label={Locale.label("checkin.guestRegister.personTitle")} inputProps={{ ...params.inputProps, maxLength: 10, "data-testid": "family-member-title" } as any} />}
+      />
+      <TextField label={Locale.label("mobile.details.mobilePhone")} type="tel" value={newMember.mobilePhone} onChange={(e) => setNewMember({ ...newMember, mobilePhone: e.target.value })} inputProps={{ inputMode: "tel", "data-testid": "family-member-phone" }} fullWidth />
+      <FormControl fullWidth>
+        <InputLabel id="family-member-role">{Locale.label("checkin.guestRegister.householdRole")}</InputLabel>
+        <Select labelId="family-member-role" label={Locale.label("checkin.guestRegister.householdRole")} value={newMember.householdRole} onChange={(e: SelectChangeEvent) => setNewMember({ ...newMember, householdRole: e.target.value })} data-testid="family-member-role">
+          {HOUSEHOLD_ROLES.map((r) => <MenuItem key={r} value={r}>{Locale.label("checkin.guestRegister.householdRoles." + r)}</MenuItem>)}
+        </Select>
+      </FormControl>
+      <Button variant="outlined" onClick={handleAddFamilyMember} disabled={!newMember.first.trim()} data-testid="family-member-add">
+        {Locale.label("mobile.group.add")}
+      </Button>
       {pendingFamilyMembers.length > 0 && (
         <Box>
           <Eyebrow component="h3">{Locale.label("mobile.profileEdit.pendingFamilyMembers")}</Eyebrow>
           <RowList>
-            {pendingFamilyMembers.map((name, idx) => (
+            {pendingFamilyMembers.map((m, idx) => (
               <Row
-                key={`${name}-${idx}`}
-                title={name}
+                key={`${m.first}-${idx}`}
+                title={[m.prefix, m.first, m.last].filter(Boolean).join(" ")}
+                subtitle={Locale.label("checkin.guestRegister.householdRoles." + m.householdRole)}
                 trailing={<TextLink danger onClick={() => handleRemoveFamilyMember(idx)}>{Locale.label("mobile.screens.remove")}</TextLink>}
                 sx={{ minHeight: 44 }}
               />
