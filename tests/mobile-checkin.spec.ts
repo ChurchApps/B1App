@@ -198,3 +198,47 @@ test.describe("Mobile checkin schedule", () => {
     await expect(page.locator("main")).not.toContainText("Zacchaeus Closed Time");
   });
 });
+
+// Issue #1449: a room short on volunteers used to read as a connection error.
+test.describe("Mobile checkin volunteer ratio", () => {
+  const API = process.env.API_BASE || "http://localhost:8084";
+  const EMMA = "PER00000085";
+  const SERVICE = "SER00000001";
+
+  const attendanceHeaders = async (request: APIRequestContext) => {
+    const res = await request.post(API + "/membership/users/login", { data: { email: "demo@b1.church", password: "password" } });
+    const church = (await res.json()).userChurches.find((c: any) => c.church.id === "CHU00000001");
+    return { Authorization: "Bearer " + church.apis.find((a: any) => a.keyName === "AttendanceApi").jwt };
+  };
+
+  const clearTodaysVisits = async (request: APIRequestContext) => {
+    const headers = await attendanceHeaders(request);
+    const today = new Date().toLocaleDateString("en-CA");
+    const visits = await (await request.get(API + "/attendance/visits?personId=" + EMMA, { headers })).json();
+    for (const v of Array.isArray(visits) ? visits : []) {
+      if (v.id && String(v.visitDate).slice(0, 10) === today) await request.delete(API + "/attendance/visits/" + v.id, { headers });
+    }
+  };
+
+  test("check-in into a room short on volunteers names the room instead of blaming the connection", async ({ page, request }) => {
+    await clearTodaysVisits(request);
+    try {
+      // Elementary (K-2) seeds volunteerRatio 5 / minVolunteers 1 with no volunteers checked in, so the Api answers 409 ratio.
+      const checkin = page.waitForResponse((r) => r.url().includes("/attendance/visits/checkin") && r.request().method() === "POST");
+      await page.goto("/mobile/checkin");
+      await page.getByTestId("select-service-" + SERVICE + "-button").click({ timeout: 30000 });
+      await page.getByTestId("select-member-" + EMMA).click({ timeout: 30000 });
+      await page.getByTestId("service-time-SST00000001").click();
+      await page.getByText("Elementary (K-2)", { exact: true }).click({ timeout: 30000 });
+      await page.getByTestId("checkin-submit-button").click({ timeout: 30000 });
+      const resp = await checkin;
+      expect(resp.status()).toBe(409);
+      expect((await resp.json()).error).toBe("ratio");
+      const main = page.locator("main");
+      await expect(main).toContainText("Elementary (K-2) doesn't have enough volunteers", { timeout: 15000 });
+      await expect(main).not.toContainText("check your connection");
+    } finally {
+      await clearTodaysVisits(request);
+    }
+  });
+});
