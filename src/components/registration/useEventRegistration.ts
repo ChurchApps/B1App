@@ -200,10 +200,10 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   };
 
   const buildMembersPayload = (): WizardMember[] => {
-    if (!hasTypes) return members.map((m) => ({ firstName: m.firstName.trim(), lastName: m.lastName.trim(), ...(m.personId ? { personId: m.personId } : {}) }));
+    // The registrant is always the first attendee, with or without attendee types.
     const primary: WizardMember = { firstName: primaryFirstName.trim(), lastName: primaryLastName.trim() };
     if (isLoggedIn && person?.id) primary.personId = person.id;
-    if (primaryTypeId) primary.registrationTypeId = primaryTypeId;
+    if (hasTypes && primaryTypeId) primary.registrationTypeId = primaryTypeId;
     const extra = members.map((m) => {
       const out: WizardMember = { firstName: m.firstName.trim(), lastName: m.lastName.trim() };
       if (m.personId) out.personId = m.personId;
