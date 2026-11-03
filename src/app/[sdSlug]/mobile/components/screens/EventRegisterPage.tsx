@@ -70,6 +70,8 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   const userContext = useContext(UserContext);
   const churchId = config?.church?.id || "";
   const person = userContext?.userChurch?.person;
+  // The login's userChurch.person carries only the id; the full profile (name, email) is userContext.person.
+  const profile = userContext?.person;
   const personId = person?.id;
   const personName = person?.name?.display || userContext?.person?.name?.display
     || [person?.name?.first, person?.name?.last].filter(Boolean).join(" ") || "";
@@ -96,7 +98,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     eventId,
     event: event || {},
     isLoggedIn,
-    person: { id: personId, email: person?.contactInfo?.email, firstName: person?.name?.first, lastName: person?.name?.last, householdId: userContext?.person?.householdId }
+    person: { id: personId, email: person?.contactInfo?.email || profile?.contactInfo?.email, firstName: person?.name?.first || profile?.name?.first, lastName: person?.name?.last || profile?.name?.last, householdId: profile?.householdId }
   });
 
   const handleBack = () => navigateBack(router, "/mobile/dashboard");
@@ -162,6 +164,11 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
 
   if (reg.step === "confirm" && reg.registration) {
     const waitlisted = reg.registration.status === "waitlisted";
+    const pending = reg.registration.status === "pending";
+    const balance = (reg.registration.totalAmount || 0) - (reg.registration.amountPaid || 0);
+    const heading = waitlisted ? Locale.label("registration.waitlist.confirmedTitle") : pending ? Locale.label("registration.pendingTitle") : Locale.label("registration.confirmed");
+    const badge = waitlisted ? Locale.label("mobile.registrations.statusWaitlisted") : pending ? Locale.label("mobile.registrations.statusPending") : Locale.label("mobile.registrations.statusRegistered");
+    const body = waitlisted ? Locale.label("registration.waitlist.confirmedBody") : pending ? Locale.label("registration.pendingBody") : Locale.label("registration.youAreRegistered");
     return (
       <Box>
         {head}
@@ -169,16 +176,21 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           <PlateSection>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
               <Typography component="h2" sx={{ fontSize: 18, fontWeight: 650, color: tc.text }}>
-                {waitlisted ? Locale.label("registration.waitlist.confirmedTitle") : Locale.label("registration.confirmed")}
+                {heading}
               </Typography>
-              <StatusBadge tone={waitlisted ? "warn" : "ok"} dot={!waitlisted}>
-                {waitlisted ? Locale.label("mobile.registrations.statusWaitlisted") : Locale.label("mobile.registrations.statusRegistered")}
+              <StatusBadge tone={waitlisted || pending ? "warn" : "ok"} dot={!waitlisted && !pending}>
+                {badge}
               </StatusBadge>
             </Box>
             <QuietEmpty sx={{ mt: "4px" }}>
-              {waitlisted ? Locale.label("registration.waitlist.confirmedBody") : Locale.label("registration.youAreRegistered")} {event.title}
+              {body} {event.title}
             </QuietEmpty>
-            {reg.registration.totalAmount > 0 && (
+            {pending && balance > 0 && (
+              <Typography sx={{ mt: "8px", fontSize: 14, color: tc.text }}>
+                {Locale.label("mobile.registrations.balanceOf").replace("{}", formatMoney(balance)).replace("{}", formatMoney(reg.registration.totalAmount))}
+              </Typography>
+            )}
+            {reg.registration.totalAmount > 0 && !pending && (
               <Typography sx={{ mt: "8px", fontSize: 14, color: tc.textSecondary }}>
                 {Locale.label("registration.payment.total")}: {formatMoney(reg.registration.amountPaid || 0)} / {formatMoney(reg.registration.totalAmount)}
               </Typography>
@@ -222,7 +234,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
             <RegistrationPaymentForm
               churchId={churchId}
               personId={isLoggedIn ? personId : undefined}
-              personEmail={isLoggedIn ? person?.contactInfo?.email : reg.guestEmail}
+              personEmail={isLoggedIn ? person?.contactInfo?.email || profile?.contactInfo?.email : reg.guestEmail}
               personName={`${reg.primaryFirstName} ${reg.primaryLastName}`.trim()}
               amount={reg.total}
               currency={(event as any).currency}

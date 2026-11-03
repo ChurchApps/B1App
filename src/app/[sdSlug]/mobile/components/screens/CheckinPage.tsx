@@ -57,9 +57,14 @@ const Intro = ({ children }: { children: React.ReactNode }) => (
 // The Api answers a blocked check-in with 409 and a JSON body; ApiHelper rethrows that body as the message.
 const checkinErrorLabel = (e: any) => {
   try {
-    const reason = JSON.parse(e?.message || "")?.error;
+    const body = JSON.parse(e?.message || "");
+    const reason = body?.error;
     if (reason === "notOpen") return Locale.label("mobile.screens.checkinNotOpen");
     if (reason === "capacity") return Locale.label("mobile.screens.checkinFull");
+    if (reason === "ratio") {
+      const room = body?.groups?.[0]?.groupName || Locale.label("mobile.screens.checkinRatioRoom");
+      return Locale.label("mobile.screens.checkinRatio").replace("{}", room);
+    }
   } catch { /* not a gate response */ }
   return Locale.label("mobile.details.checkConnection");
 };

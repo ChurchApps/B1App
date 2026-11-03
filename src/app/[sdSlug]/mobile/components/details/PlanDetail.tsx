@@ -486,7 +486,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
                 <Typography sx={{ mt: "10px", fontSize: 13.5, color: tc.textSecondary }}>
                   {Locale.label("mobile.serving.servingCount").replace("{}", String(members.length))}
                   {" · "}
-                  {Locale.label("mobile.serving.teamsCount").replace("{}", String(teamGroups.length))}
+                  {teamGroups.length === 1 ? Locale.label("mobile.serving.teamCount") : Locale.label("mobile.serving.teamsCount").replace("{}", String(teamGroups.length))}
                 </Typography>
               </>
             )}

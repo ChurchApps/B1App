@@ -310,7 +310,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
         setAppliedCoupon({ code, discountType: result.discountType, value: Number(result.value) });
       } else {
         setAppliedCoupon(null);
-        setCouponError(Locale.label("registration.coupon." + (result?.reason || "invalid")) || Locale.label("registration.coupon.invalid"));
+        setCouponError(Locale.label("registration.coupon." + (result?.reason || "invalid"), Locale.label("registration.coupon.invalid")));
       }
     } catch {
       setAppliedCoupon(null);
