@@ -1,6 +1,6 @@
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
-import type { AnswerInterface, GroupInterface, QuestionInterface } from "@churchapps/helpers";
+import type { AnswerInterface, GroupInterface, QuestionInterface, RegistrationInterface } from "@churchapps/helpers";
 
 export interface MyFormSubmission {
   id?: string;
@@ -26,6 +26,17 @@ export const useMyFormSubmissions = (enabled: boolean) => useQuery<MyFormSubmiss
     return Array.isArray(data) ? data : [];
   },
   enabled,
+  staleTime: 60 * 1000
+});
+
+// Same key on Me, Home and the group event cards, so they share one cache entry.
+export const useMyRegistrations = (personId: string | undefined, enabled: boolean) => useQuery<RegistrationInterface[]>({
+  queryKey: ["/registrations/person", personId],
+  queryFn: async () => {
+    const data = await ApiHelper.get("/registrations/person/" + personId, "ContentApi");
+    return Array.isArray(data) ? data : [];
+  },
+  enabled: enabled && !!personId,
   staleTime: 60 * 1000
 });
 

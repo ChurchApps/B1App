@@ -20,7 +20,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { EventInterface, FormSubmissionInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -100,6 +100,11 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     isLoggedIn,
     person: { id: personId, email: person?.contactInfo?.email || profile?.contactInfo?.email, firstName: person?.name?.first || profile?.name?.first, lastName: person?.name?.last || profile?.name?.last, householdId: profile?.householdId }
   });
+
+  // A new registration changes the status Home, Me and the group event cards show.
+  const queryClient = useQueryClient();
+  const registrationId = reg.registration?.id;
+  useEffect(() => { if (registrationId) void queryClient.invalidateQueries({ queryKey: ["/registrations/person"] }); }, [registrationId, queryClient]);
 
   const handleBack = () => navigateBack(router, "/mobile/dashboard");
 

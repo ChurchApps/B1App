@@ -417,8 +417,11 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
       setRegistration(result);
       setStep("confirm");
       return result;
-    } catch {
-      setError(Locale.label("registration.errors.registrationFailed"));
+    } catch (e: any) {
+      // ApiHelper throws on a refusal with the response body as the message; show the server's reason.
+      let body: any = null;
+      try { body = JSON.parse(e?.message); } catch { /* not a JSON body */ }
+      setError(mapError(body));
       return null;
     } finally {
       setIsSubmitting(false);
