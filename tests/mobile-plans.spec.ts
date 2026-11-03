@@ -272,6 +272,29 @@ test.describe("Teach view section navigation", () => {
   });
 });
 
+// Issue #1449: a plan with one serving team said "1 teams".
+test.describe("Mobile plan serving summary", () => {
+  test("a plan with one serving team says 1 team", async ({ page }) => {
+    const demo = await getApi("demo");
+    const login = await (await demo.request.post(MAIN_API + "/membership/users/login", { data: { email: "demo@b1.church", password: "password" } })).json();
+    const personId = (login.userChurches || []).find((c: any) => c.church?.id === "CHU00000001")?.person?.id;
+    expect(personId, "demo personId").toBeTruthy();
+    let planId = "";
+    try {
+      const plan = await (await apiCall(demo, "post", doingUrl("/plans"), [{ ministryId: "GRP0000000a", planTypeId: "PLT00000001", name: "One Team " + Date.now(), serviceDate: new Date().toISOString().slice(0, 10), notes: "", serviceOrder: true }])).json();
+      planId = plan[0].id;
+      const pos = await (await apiCall(demo, "post", doingUrl("/positions"), [{ planId, categoryName: "Greeters", name: "Door Greeter", count: 1, groupId: "GRP0000000b" }])).json();
+      await apiCall(demo, "post", doingUrl("/assignments"), [{ positionId: pos[0].id, personId, status: "Accepted" }]);
+
+      await page.goto("/mobile/plans/" + planId);
+      await expect(page.getByText(/1 serving · 1 team$/)).toBeVisible({ timeout: 30000 });
+    } finally {
+      if (planId) await apiCall(demo, "delete", doingUrl("/plans/" + planId));
+      await demo.request.dispose();
+    }
+  });
+});
+
 const MAIN_API = process.env.API_BASE || "http://localhost:8084";
 
 async function setChurchRegion(region: string) {

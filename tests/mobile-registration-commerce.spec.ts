@@ -87,6 +87,16 @@ async function pickOption(page: Page, testid: string, optionText: RegExp) {
   await page.getByRole("option", { name: optionText }).click();
 }
 
+// VBS as a Chaperone ($15), no selections, through to the payment step.
+async function goToVbsPayment(page: Page) {
+  await page.goto("/mobile/register/" + VBS);
+  await pickOption(page, "primary-type", /Chaperone/i);
+  await page.getByRole("button", { name: /Continue/i }).click(); // info -> members
+  await page.getByRole("button", { name: /Continue/i }).click(); // members -> selections
+  await page.getByRole("button", { name: /Continue/i }).click(); // selections -> payment
+  await expect(page.getByTestId("reg-total")).toHaveText("$15.00", { timeout: 20000 });
+}
+
 test.describe.serial("Registration commerce (paid checkout, coupon, waitlist, edit)", () => {
   let a: Auth;
 
@@ -238,5 +248,65 @@ test.describe.serial("Registration commerce (paid checkout, coupon, waitlist, ed
     await page.goto("/mobile/registrations");
     const card = page.locator("div").filter({ hasText: "Waitlist Test" }).first();
     await expect(card.getByText(/waitlisted/i).first()).toBeVisible({ timeout: 20000 });
+  });
+});
+
+// Issue #1449: member-app registration rough edges.
+test.describe("Registration status and messages", () => {
+  let a: Auth;
+
+  test.beforeAll(async ({ browser }) => {
+    const page = await browser.newPage();
+    a = await getAuth(page);
+    expect(a.personId, "captured demo personId").toBeTruthy();
+    await page.close();
+  });
+
+  test("a signed-in registration saves and lists the member's own name", async ({ page }) => {
+    const eventId = await createEvent(page, a, { title: "Name Check " + Date.now() });
+    try {
+      await page.goto("/mobile/register/" + eventId);
+      await page.getByRole("button", { name: /Continue/i }).click(); // info -> members
+      await page.getByRole("button", { name: /Complete Registration/i }).click();
+      await expect(page.getByRole("button", { name: "Done" })).toBeVisible({ timeout: 30000 });
+      await expect(page.locator("main")).toContainText("Demo User");
+      const mine = (await personRegs(page, a)).find((r) => r.eventId === eventId && r.status !== "cancelled");
+      const full = await (await apiGet(page, "/content/registrations/" + mine.id, a)).json();
+      const me = (full.members || []).find((m: any) => m.personId === a.personId);
+      expect(me?.firstName).toBe("Demo");
+      expect(me?.lastName).toBe("User");
+    } finally {
+      await page.request.delete(API + "/content/events/" + eventId, { headers: { Authorization: a.auth } });
+    }
+  });
+
+  test("Register and Pay Later shows Pending with the balance due, not Registration Confirmed", async ({ page }) => {
+    await cancelExisting(page, a, VBS);
+    // The demo church has Stripe, so stand in for a church with no online giving: empty gateway
+    // lookup, and the pending registration the Api returns for an unpaid total.
+    await page.route("**/donate/gateways/**", (route) => route.fulfill({ json: { gateways: [] } }));
+    await page.route("**/registrations/register", (route) => route.fulfill({ json: { id: "REGPAYLATER", eventId: VBS, status: "pending", totalAmount: 15, amountPaid: 0, members: [{ firstName: "Demo", lastName: "User" }] } }));
+    await goToVbsPayment(page);
+    await page.getByTestId("reg-pay-later").click();
+    const main = page.locator("main");
+    await expect(main.getByRole("heading", { level: 2, name: "Registration Pending" })).toBeVisible({ timeout: 30000 });
+    await expect(main).not.toContainText("Registration Confirmed");
+    await expect(main.getByText("Pending", { exact: true })).toBeVisible();
+    await expect(main).toContainText("Balance due $15.00 of $15.00");
+  });
+
+  test("an expired discount code says it has expired instead of a raw key", async ({ page }) => {
+    await cancelExisting(page, a, VBS);
+    const code = "OLD" + Date.now();
+    const saved = await (await apiPost(page, "/content/registrations/coupons", [{ eventId: VBS, code, discountType: "percent", value: 10, endDate: "2020-01-01", active: true }], a)).json();
+    try {
+      await goToVbsPayment(page);
+      await page.getByTestId("reg-coupon-input").locator("input").fill(code);
+      await page.getByTestId("reg-coupon-apply").click();
+      await expect(page.getByText("This code has expired.")).toBeVisible({ timeout: 15000 });
+      await expect(page.locator("main")).not.toContainText("registration.coupon");
+    } finally {
+      if (saved?.[0]?.id) await page.request.delete(API + "/content/registrations/coupons/" + saved[0].id, { headers: { Authorization: a.auth } });
+    }
   });
 });

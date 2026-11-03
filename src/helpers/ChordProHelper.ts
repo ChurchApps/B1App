@@ -96,7 +96,7 @@ export class ChordProHelper {
     lines.forEach((line: string) => {
       let l = line.trim();
       let lineType = "line";
-      if (line.startsWith("[") && line.endsWith("]")) lineType = "header";
+      if (/^\[[^[\]]*\]$/.test(l)) lineType = "header";
       else if (l.length === 0) lineType = "empty";
       switch (lineType) {
         case "header": result.push("<h3 style=\"margin-bottom:0px\">" + this.escapeHtml(l.substring(1, l.length - 1)) + "</h3>"); break;
