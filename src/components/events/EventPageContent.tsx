@@ -47,7 +47,7 @@ export const EventPageContent = ({ event, icsUrl, labels }: Props) => {
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
       <Link href="/" onClick={goBack} data-testid="event-back-link" style={{ display: "inline-block", color: "var(--accent, #2A6F97)", textDecoration: "none", marginBottom: 14 }}>← {labels.allEvents}</Link>
-      {event.photoUrl && <Box component="img" src={event.photoUrl} alt={event.title || ""} data-testid="event-photo" sx={{ width: "100%", height: { xs: 200, md: 360 }, objectFit: "cover", borderRadius: 3, display: "block" }} />}
+      {event.photoUrl && <Box component="img" src={event.photoUrl} alt={event.title || ""} data-testid="event-photo" sx={{ width: "100%", aspectRatio: "16 / 9", objectFit: "cover", borderRadius: 3, display: "block" }} />}
       <Box sx={{ display: "grid", gap: { xs: 3, md: 6 }, gridTemplateColumns: { xs: "1fr", md: "1fr 320px" }, pt: 3.5, pb: 6 }}>
         <Box>
           <Typography variant="h3" component="h1" sx={{ fontWeight: 700, fontSize: { xs: "1.75rem", md: "2.125rem" }, mb: 1 }}>{event.title}</Typography>
