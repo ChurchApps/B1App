@@ -179,8 +179,8 @@ const toneColors: Record<BadgeTone, [string, string]> = {
   pri: [tc.chip, tc.onChip]
 };
 
-export const StatusBadge = ({ tone = "neu", dot, children }: { tone?: BadgeTone; dot?: boolean; children: React.ReactNode }) => (
-  <Box component="span" sx={{
+export const StatusBadge = ({ tone = "neu", dot, children, "data-testid": testId }: { tone?: BadgeTone; dot?: boolean; children: React.ReactNode; "data-testid"?: string }) => (
+  <Box component="span" data-testid={testId} sx={{
     display: "inline-flex",
     alignItems: "center",
     gap: "6px",
