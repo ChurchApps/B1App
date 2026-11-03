@@ -6,25 +6,23 @@ import { Avatar, Box, Button, Skeleton, Typography } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { ApiHelper, ArrayHelper, CurrencyHelper, DateHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
-import type { AssignmentInterface, DonationInterface, PersonInterface, PlanInterface, PositionInterface, RegistrationInterface } from "@churchapps/helpers";
+import type { AssignmentInterface, DonationInterface, PersonInterface, PlanInterface, PositionInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { expandUpcomingEvents } from "../HomeTeasers";
+import { expandUpcomingEvents, upcomingKindMeta, type UpcomingKind } from "../HomeTeasers";
 import { memberGivingYearLimit } from "../../helpers/givingYears";
-import { attendanceSubtitle, attendanceTitle, useMyAttendance, useMyFormSubmissions, useMyGroups } from "../../helpers/myRecords";
+import { attendanceSubtitle, attendanceTitle, useMyAttendance, useMyFormSubmissions, useMyGroups, useMyRegistrations } from "../../helpers/myRecords";
 import { formatRelative, deriveNotificationUrl, getInitials } from "../util";
 import type { EventRow } from "../group/GroupCalendarTab";
-import { BackVerb, BigNumber, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
+import { BackVerb, BigNumber, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, StatusBadge, TextLink, useSliceView } from "../kit";
 
 interface Props {
   config: ConfigurationInterface;
 }
 
-type ItemKind = "serving" | "event" | "registration";
-
 interface UpcomingItem {
-  kind: ItemKind;
+  kind: UpcomingKind;
   date: Date;
   title: string;
   subtitle?: string;
@@ -52,12 +50,6 @@ interface NotificationItem {
 interface HouseholdMember extends PersonInterface {
   householdRole?: string;
 }
-
-const kindMeta: Record<ItemKind, { tone: BadgeTone; label: string }> = {
-  serving: { tone: "warn", label: "mobile.me.serving" },
-  event: { tone: "pri", label: "mobile.me.event" },
-  registration: { tone: "ok", label: "mobile.me.registration" }
-};
 
 const TEASER_COUNT = 3;
 
@@ -116,15 +108,7 @@ export const MePage = ({ config }: Props) => {
     staleTime: 10 * 60 * 1000
   });
 
-  const { data: registrations = [], isLoading: registrationsLoading } = useQuery<RegistrationInterface[]>({
-    queryKey: ["/registrations/person", personId],
-    queryFn: async () => {
-      const data = await ApiHelper.get("/registrations/person/" + personId, "ContentApi");
-      return Array.isArray(data) ? data : [];
-    },
-    enabled: loggedIn && !!personId,
-    staleTime: 60 * 1000
-  });
+  const { data: registrations = [], isLoading: registrationsLoading } = useMyRegistrations(personId, loggedIn);
 
   const { data: timeline = [], isLoading: timelineLoading } = useQuery<EventRow[]>({
     queryKey: ["/events/timeline"],
@@ -265,7 +249,7 @@ export const MePage = ({ config }: Props) => {
       leading={item.photoUrl ? <Box component="img" src={item.photoUrl} alt="" loading="lazy" data-testid="me-item-photo" sx={{ width: 64, height: 36, objectFit: "cover", borderRadius: "6px", flexShrink: 0, display: "block" }} /> : undefined}
       title={item.title}
       subtitle={`${item.allDay ? DateHelper.prettyDate(item.date) : DateHelper.prettyDateTime(item.date)}${item.subtitle ? ` · ${item.subtitle}` : ""}`}
-      trailing={<StatusBadge tone={kindMeta[item.kind].tone}>{Locale.label(kindMeta[item.kind].label)}</StatusBadge>}
+      trailing={<StatusBadge tone={upcomingKindMeta[item.kind].tone}>{Locale.label(upcomingKindMeta[item.kind].label)}</StatusBadge>}
     />
   );
 

@@ -65,6 +65,39 @@ test.describe.serial("Mobile home teasers", () => {
   });
 });
 
+// ChurchAppsSupport#1451: an event the member already registered for showed no status on Home's Upcoming events.
+test.describe("Mobile home registered event", () => {
+  test("Upcoming events tags an event the member registered for", async ({ page }) => {
+    const ctx = await request.newContext();
+    const login = await (await ctx.post(`${API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = login.userChurches.find((c: any) => c.church?.id === DEMO_CHURCH.ID);
+    const headers = { Authorization: `Bearer ${uc.jwt}` };
+    const title = "Home Registered Event " + Date.now();
+    // Sooner than any seeded event, so it is among the first rows on Home.
+    const start = new Date(Date.now() + 20 * 60 * 1000);
+    const end = new Date(start.getTime() + 60 * 60 * 1000);
+    const created = await ctx.post(`${API}/content/events`, {
+      headers,
+      data: [{ churchId: DEMO_CHURCH.ID, groupId: "GRP00000030", title, description: "", start: start.toISOString(), end: end.toISOString(), allDay: false, visibility: "public", registrationEnabled: true, capacity: 100 }]
+    });
+    const eventId = (await created.json())[0]?.id;
+    try {
+      expect(eventId, "created event id").toBeTruthy();
+      const reg = await ctx.post(`${API}/content/registrations/register`, { headers, data: { churchId: DEMO_CHURCH.ID, eventId, personId: uc.person?.id } });
+      expect(reg.ok(), "registered the demo member").toBeTruthy();
+
+      await page.goto("/mobile/dashboard");
+      const events = page.getByRole("region", { name: "Upcoming events" });
+      const row = events.getByTestId("dashboard-event-row").filter({ hasText: title });
+      await expect(row).toHaveCount(1, { timeout: 20000 });
+      await expect(row.getByTestId("dashboard-event-badge")).toHaveText("Registration");
+    } finally {
+      if (eventId) await ctx.delete(`${API}/content/events/${eventId}`, { headers });
+      await ctx.dispose();
+    }
+  });
+});
+
 // When the church's app Home has no links yet, signed-out visitors still get the sign-in prompt.
 test.describe("Mobile home signed out", () => {
   test.use({ storageState: { cookies: [], origins: [] } });

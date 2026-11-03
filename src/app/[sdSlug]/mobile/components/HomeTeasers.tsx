@@ -10,8 +10,8 @@ import UserContext from "@/context/UserContext";
 import { mobileTheme } from "./mobileTheme";
 import { ConfirmDeclineSheet } from "./ConfirmDeclineSheet";
 import { EventProcessor } from "../helpers/eventProcessor";
-import { attendanceSubtitle, attendanceTitle, type MyAttendanceRecord, type MyFormSubmission } from "../helpers/myRecords";
-import { BigNumber, PersonAvatar, PlateSection, Row, RowList, StatusBadge, TextLink } from "./kit";
+import { attendanceSubtitle, attendanceTitle, useMyRegistrations, type MyAttendanceRecord, type MyFormSubmission } from "../helpers/myRecords";
+import { BigNumber, PersonAvatar, PlateSection, Row, RowList, StatusBadge, TextLink, type BadgeTone } from "./kit";
 
 interface UpcomingAssignment {
   assignmentId: string;
@@ -22,7 +22,17 @@ interface UpcomingAssignment {
   serviceDate: string | Date;
 }
 
-export interface UpcomingEvent { key: string; date: Date; title: string; href: string; photoUrl?: string }
+export interface UpcomingEvent { key: string; eventId?: string; date: Date; title: string; href: string; photoUrl?: string }
+
+export type UpcomingKind = "serving" | "event" | "registration";
+export type HomeUpcomingEvent = UpcomingEvent & { kind: "event" | "registration" };
+
+// Status tag for each upcoming row, shared by Me and Home.
+export const upcomingKindMeta: Record<UpcomingKind, { tone: BadgeTone; label: string }> = {
+  serving: { tone: "warn", label: "mobile.me.serving" },
+  event: { tone: "pri", label: "mobile.me.event" },
+  registration: { tone: "ok", label: "mobile.me.registration" }
+};
 
 interface GivingSummary { year: number; total: number; count: number; currency: string; isConverted?: boolean }
 
@@ -75,7 +85,7 @@ export const expandUpcomingEvents = (timeline: any[], now: Date = new Date()): U
       const key = `evt-${e.id}-${date.getTime()}`;
       if (seen.has(key)) return;
       seen.add(key);
-      items.push({ key, date, title: e.title || Locale.label("mobile.me.event"), href: e.groupId ? `/mobile/groups/${e.groupId}?activeTab=events` : "/mobile/groups", photoUrl: e.photoUrl || undefined });
+      items.push({ key, eventId: e.id, date, title: e.title || Locale.label("mobile.me.event"), href: e.groupId ? `/mobile/groups/${e.groupId}?activeTab=events` : "/mobile/groups", photoUrl: e.photoUrl || undefined });
     });
   });
   return items.sort((a, b) => a.date.getTime() - b.date.getTime());
@@ -92,7 +102,26 @@ export const useUpcomingEvents = (enabled: boolean) => {
     enabled,
     staleTime: 60 * 1000
   });
-  return useMemo(() => (enabled && data ? expandUpcomingEvents(data) : []), [enabled, data]);
+  const context = useContext(UserContext);
+  const personId = context?.person?.id || context?.userChurch?.person?.id;
+  const { data: registrations } = useMyRegistrations(personId, enabled);
+  return useMemo<HomeUpcomingEvent[]>(() => {
+    if (!enabled) return [];
+    const now = new Date();
+    const items: HomeUpcomingEvent[] = [];
+    const registered = new Set<string>();
+    (registrations || []).forEach((r: any) => {
+      const date = r.event?.start ? new Date(r.event.start) : null;
+      if (!date || isNaN(date.getTime()) || date < now || r.status === "cancelled") return;
+      registered.add(`${r.eventId}-${date.getTime()}`);
+      items.push({ kind: "registration", key: `reg-${r.id}`, eventId: r.eventId, date, title: r.event?.title || Locale.label("mobile.me.registration"), href: "/mobile/registrations", photoUrl: r.event?.photoUrl || undefined });
+    });
+    // A registered occurrence shows once, as the registration.
+    expandUpcomingEvents(data || [], now).forEach((e) => {
+      if (!registered.has(`${e.eventId}-${e.date.getTime()}`)) items.push({ kind: "event", ...e });
+    });
+    return items.sort((a, b) => a.date.getTime() - b.date.getTime());
+  }, [enabled, data, registrations]);
 };
 
 export const useGivingSummary = (enabled: boolean) => {
@@ -177,7 +206,7 @@ export const GroupsTeaser = ({ groups }: { groups: GroupInterface[] }) => (
   </PlateSection>
 );
 
-export const EventsTeaser = ({ events }: { events: UpcomingEvent[] }) => (
+export const EventsTeaser = ({ events }: { events: HomeUpcomingEvent[] }) => (
   <PlateSection id="dashboard-events" title={Locale.label("mobile.dashboard.upcomingEvents")} action={<TextLink href="/mobile/me?view=upcoming">{Locale.label("mobile.dashboard.allUpcomingEvents")}</TextLink>}>
     <RowList>
       {events.slice(0, 3).map((e) => (
@@ -188,6 +217,7 @@ export const EventsTeaser = ({ events }: { events: UpcomingEvent[] }) => (
           leading={e.photoUrl ? <Box component="img" src={e.photoUrl} alt="" loading="lazy" data-testid="dashboard-event-photo" sx={{ width: 64, height: 36, objectFit: "cover", borderRadius: "6px", flexShrink: 0, display: "block" }} /> : undefined}
           title={e.title}
           subtitle={DateHelper.prettyDateTime(e.date)}
+          trailing={<StatusBadge tone={upcomingKindMeta[e.kind].tone} data-testid="dashboard-event-badge">{Locale.label(upcomingKindMeta[e.kind].label)}</StatusBadge>}
         />
       ))}
     </RowList>
