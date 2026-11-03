@@ -67,6 +67,15 @@ test.describe.serial("Public event pages and upcoming-event tiles", () => {
     expect(await ics.text()).toContain("SUMMARY:Sunday Morning Service");
   });
 
+  test("desktop event page shows the whole 16:9 photo", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(`/events/${EVENT_ID}`);
+    const photo = page.getByTestId("event-photo");
+    await expect(photo).toHaveAttribute("src", /worship\.jpg/, { timeout: 30000 });
+    const ratio = await photo.evaluate((el) => el.getBoundingClientRect().width / el.getBoundingClientRect().height);
+    expect(ratio).toBeCloseTo(16 / 9, 1);
+  });
+
   test("event page offers Register for this Event when registration is on", async ({ page }) => {
     await page.goto(`/events/${REGISTERABLE_EVENT_ID}`);
     await expect(page.getByRole("heading", { level: 1, name: /Vacation Bible School/i })).toBeVisible({ timeout: 30000 });
