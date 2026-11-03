@@ -5,6 +5,7 @@ import { Box, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typogr
 import { ApiHelper, Loading, Locale } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import GroupCard from "./GroupCard";
+import { AutoScrollStrip } from "../elements/AutoScrollStrip";
 
 interface Props {
   churchId: string;
@@ -15,6 +16,8 @@ interface Props {
   defaultTitle?: string;
   showSearch?: boolean;
   showCategory?: boolean;
+  // "autoscroll" shows the matching groups in one row that steps along by itself.
+  layout?: "grid" | "autoscroll";
 }
 
 export const GroupsBrowser = (props: Props) => {
@@ -132,21 +135,27 @@ export const GroupsBrowser = (props: Props) => {
           )}
         </Grid>
       )}
-      <Grid container spacing={3}>
-        {filtered.length > 0 ? (
-          filtered.map((group) => (
-            <Grid key={group.id} size={{ xs: 12, sm: 6, md: 4 }}>
-              <GroupCard group={group} />
-            </Grid>
-          ))
-        ) : (
-          <Grid size={{ xs: 12 }}>
-            <Box data-testid="groups-browser-empty" sx={{ textAlign: "center", py: 4, color: "text.secondary" }}>
+      {props.layout === "autoscroll" && filtered.length > 0 ? (
+        <AutoScrollStrip enabled testId="groups-browser-strip">
+          {filtered.map((group) => <Box key={group.id} data-testid="groups-browser-tile"><GroupCard group={group} /></Box>)}
+        </AutoScrollStrip>
+      ) : (
+        <Grid container spacing={3}>
+          {filtered.length > 0 ? (
+            filtered.map((group) => (
+              <Grid key={group.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                <GroupCard group={group} />
+              </Grid>
+            ))
+          ) : (
+            <Grid size={{ xs: 12 }}>
+              <Box data-testid="groups-browser-empty" sx={{ textAlign: "center", py: 4, color: "text.secondary" }}>
               No groups match your filters.
-            </Box>
-          </Grid>
-        )}
-      </Grid>
+              </Box>
+            </Grid>
+          )}
+        </Grid>
+      )}
     </Box>
   );
 };
