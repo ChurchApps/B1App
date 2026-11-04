@@ -172,6 +172,28 @@ test.describe.serial("Upcoming events scrolling layout", () => {
     await expect.poll(() => strip.evaluate((el) => el.scrollLeft), { timeout: 15000 }).toBeGreaterThan(0);
   });
 
+  // ChurchAppsSupport#1454: one dot per event under the row, the current one marked; a dot jumps to its tile.
+  test("scrolling layout shows a dot per event and a dot jumps to that event", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/events");
+    const strip = page.getByTestId("upcoming-events-strip");
+    await expect(strip).toBeVisible({ timeout: 30000 });
+    await expect.poll(() => strip.getByTestId("upcoming-event-tile").count(), { timeout: 30000 }).toBeGreaterThanOrEqual(5);
+    const count = await strip.getByTestId("upcoming-event-tile").count();
+    const dots = page.getByTestId("upcoming-events-strip-dots").getByRole("button");
+    await expect(dots).toHaveCount(count);
+    await page.mouse.move(0, 0);
+    await expect(dots.nth(1)).toHaveAttribute("aria-current", "true", { timeout: 15000 });
+    await expect(dots.first()).not.toHaveAttribute("aria-current", "true");
+    await dots.nth(2).click();
+    await expect(dots.nth(2)).toHaveAttribute("aria-current", "true");
+    const thirdAtEdge = () => strip.evaluate((el) => {
+      const third = el.children[2] as HTMLElement;
+      return Math.abs(third.getBoundingClientRect().left - el.getBoundingClientRect().left);
+    });
+    await expect.poll(thirdAtEdge, { timeout: 5000 }).toBeLessThanOrEqual(2);
+  });
+
   // ChurchAppsSupport#1442: tiles are half the row on a desktop with a full 16:9 photo, so three already overflow.
   test("scrolling tiles are two per desktop row with a 16:9 photo", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });

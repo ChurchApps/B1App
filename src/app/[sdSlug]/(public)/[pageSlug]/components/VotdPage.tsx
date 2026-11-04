@@ -8,7 +8,7 @@ import { Locale } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/helpers";
 import { useState, useEffect } from "react";
 import { getDayOfYear, loadDailyVerse, type DailyVerse } from "../../../mobile/helpers/dailyVerses";
-import { useAutoScroll } from "../../../mobile/helpers/useAutoScroll";
+import { AutoScrollStrip } from "@/components/elements/AutoScrollStrip";
 import { downloadVerseImage, groupByMonth, pastDatesThisYear, shareVerseImage, shareVerseText, type ShareResult } from "../../../mobile/helpers/shareVerse";
 
 const WEEK_DAYS = 6;
@@ -34,8 +34,6 @@ export function VotdPage() {
   const [selected, setSelected] = useState<DayEntry | null>(null);
   const [past, setPast] = useState<DayEntry[] | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [strip, setStrip] = useState<HTMLElement | null>(null);
-  useAutoScroll(strip, { enabled: week.length > 0 });
 
   const getShape = () => {
     const width = window.innerWidth;
@@ -138,15 +136,11 @@ export function VotdPage() {
             <Typography component="h2" variant="h5">{Locale.label("pageSlug.thisWeek", "This week")}</Typography>
             <Link component="button" type="button" onClick={togglePast} aria-expanded={!!past} sx={{ fontSize: 16 }}>{Locale.label("mobile.votd.pastVerses")}</Link>
           </Box>
-          <Box
-            ref={setStrip}
-            data-testid="votd-week-strip"
-            sx={{ display: "flex", gap: 2, overflowX: "auto", scrollSnapType: "x mandatory", pb: 1, "&::-webkit-scrollbar": { display: "none" }, scrollbarWidth: "none" }}
-          >
+          <AutoScrollStrip enabled={week.length > 0} testId="votd-week-strip" gap={2} tileWidth="280px">
             {week.map((entry) => {
               const { date, verse: v } = entry;
               return (
-                <Box key={date.toDateString()} data-testid="votd-week-day" role="button" tabIndex={0} onClick={() => setSelected(entry)} onKeyDown={openOnKey(entry)} sx={{ cursor: "pointer", "&:hover, &:focus-visible": { boxShadow: 3 }, flex: "0 0 280px", scrollSnapAlign: "start", border: 1, borderColor: "divider", borderRadius: 2, overflow: "hidden", bgcolor: "background.paper" }}>
+                <Box key={date.toDateString()} data-testid="votd-week-day" role="button" tabIndex={0} onClick={() => setSelected(entry)} onKeyDown={openOnKey(entry)} sx={{ cursor: "pointer", "&:hover, &:focus-visible": { boxShadow: 3 }, border: 1, borderColor: "divider", borderRadius: 2, overflow: "hidden", bgcolor: "background.paper" }}>
                   <img src={imageUrl(date, "16x9")} alt={v ? `${v.reference} — ${title}` : title} loading="lazy" style={{ display: "block", width: "100%", aspectRatio: "16 / 9", objectFit: "cover" }} />
                   <Box sx={{ p: 2 }}>
                     <Typography variant="body2" sx={{ color: "text.secondary" }}>{date.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" })}</Typography>
@@ -156,7 +150,7 @@ export function VotdPage() {
                 </Box>
               );
             })}
-          </Box>
+          </AutoScrollStrip>
 
           {past && (
             <Box data-testid="votd-past" sx={{ mt: 4 }}>
