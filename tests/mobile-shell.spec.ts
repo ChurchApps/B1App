@@ -256,15 +256,33 @@ test.describe("Mobile dashboard tile layout", () => {
     expect(new Set(boxes.map(b => Math.round(b!.y))).size).toBe(1);
   });
 
-  test("moves the tile row on its own and loops back when the church picks Scrolling (automatic)", async ({ page }) => {
+  // ChurchAppsSupport#1454: the row keeps moving forward and wraps to the first tile instead of sliding back,
+  // with one dot per tile under it and the current one marked.
+  test("moves the tile row on its own and wraps forward to the first tile when the church picks Scrolling (automatic)", async ({ page }) => {
+    test.setTimeout(90000);
     await setTileLayout("autoscroll");
     await openDashboard(page);
     const row = page.getByTestId("home-tile-scroll");
     await expect(row.getByRole("link")).toHaveCount(3);
+    const dots = page.getByTestId("home-tile-scroll-dots").getByRole("button");
+    await expect(dots).toHaveCount(3);
+    await expect(dots.first()).toHaveAttribute("aria-current", "true");
+    // Every time the row moves left it should land straight on the start, never pass back over the tiles.
+    await row.evaluate((el) => {
+      const w = window as unknown as { stepsBack: number[] };
+      w.stepsBack = [];
+      let last = el.scrollLeft;
+      el.addEventListener("scroll", () => { if (el.scrollLeft < last - 1) w.stepsBack.push(el.scrollLeft); last = el.scrollLeft; });
+    });
     await page.mouse.move(0, 0);
-    await expect.poll(() => row.evaluate((el) => el.scrollLeft), { timeout: 15000 }).toBeGreaterThan(0);
-    // Past the last tile it returns to the first instead of stopping.
-    await expect.poll(() => row.evaluate((el) => el.scrollLeft), { timeout: 20000 }).toBe(0);
+    await expect(dots.nth(1)).toHaveAttribute("aria-current", "true", { timeout: 15000 });
+    await expect(dots.nth(2)).toHaveAttribute("aria-current", "true", { timeout: 15000 });
+    // Past the last tile it wraps to the first instead of stopping.
+    await expect(dots.first()).toHaveAttribute("aria-current", "true", { timeout: 15000 });
+    await expect.poll(() => row.evaluate((el) => el.scrollLeft), { timeout: 5000 }).toBeLessThan(2);
+    const stepsBack = await page.evaluate(() => (window as unknown as { stepsBack: number[] }).stepsBack);
+    expect(stepsBack.length).toBeGreaterThan(0);
+    expect(stepsBack.every((left) => left < 2)).toBe(true);
   });
 
   test("keeps the tile row still under reduced motion", async ({ page }) => {

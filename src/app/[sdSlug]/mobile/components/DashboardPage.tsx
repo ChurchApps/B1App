@@ -22,7 +22,7 @@ import { useEngagementSort } from "../hooks/useEngagementSort";
 import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
 import { memberGivingYearLimit } from "../helpers/givingYears";
 import { loadDailyVerse, type DailyVerse } from "../helpers/dailyVerses";
-import { useAutoScroll } from "../helpers/useAutoScroll";
+import { AutoScrollStrip } from "@/components/elements/AutoScrollStrip";
 import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget, openExternal } from "../helpers/dashboardLinks";
 import { useMyAttendance, useMyFormSubmissions } from "../helpers/myRecords";
 import { AttendanceTeaser, EventsTeaser, FormsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, useGivingSummary, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
@@ -34,8 +34,7 @@ interface Props {
 const linkPhoto = (l: LinkInterface) => (l as unknown as { photo?: string }).photo;
 
 // Churches that built their app from photo page links (ICOM, SICOM) get those as tiles instead of pills.
-// fixedWidth tiles sit in the sideways-scrolling row instead of the grid.
-const PhotoTile = ({ link, wide, fixedWidth }: { link: LinkInterface; wide: boolean; fixedWidth?: boolean }) => {
+const PhotoTile = ({ link, wide }: { link: LinkInterface; wide: boolean }) => {
   const target = linkTarget(link)!;
   const external = target.external ? { component: "button" as const, type: "button" as const, onClick: () => openExternal(target.href) } : { component: Link, href: target.href };
   return (
@@ -43,8 +42,6 @@ const PhotoTile = ({ link, wide, fixedWidth }: { link: LinkInterface; wide: bool
       {...external}
       sx={{
         gridColumn: wide ? "1 / -1" : undefined,
-        flex: fixedWidth ? { xs: "0 0 150px", md: "0 0 220px" } : undefined,
-        scrollSnapAlign: fixedWidth ? "start" : undefined,
         position: "relative",
         height: wide ? { xs: 150, md: 260 } : { xs: 104, md: 180 },
         borderRadius: "10px",
@@ -79,7 +76,6 @@ export const DashboardPage = ({ config }: Props) => {
   const [firstName, setFirstName] = React.useState("");
   const [dateLine, setDateLine] = React.useState("");
   const [verse, setVerse] = React.useState<DailyVerse | null>(null);
-  const [tileStrip, setTileStrip] = React.useState<HTMLElement | null>(null);
 
   React.useEffect(() => {
     setFirstName(context?.person?.name?.first || context?.user?.firstName || "");
@@ -167,8 +163,6 @@ export const DashboardPage = ({ config }: Props) => {
 
   const hideSignInPrompt = appearance?.mobileHideSignInPrompt === "true";
   const tileLayout = ["scroll", "autoscroll", "list"].includes(appearance?.mobileTileLayout || "") ? appearance!.mobileTileLayout : "grid";
-  // "autoscroll" is the scrolling row that also moves on its own (opt-in in B1Admin > B1 Mobile).
-  const tileAutoScroll = useAutoScroll(tileStrip, { enabled: tileLayout === "autoscroll" });
   const signInPrompt = (appearance?.mobileSignInPromptText || "").trim() || Locale.label("mobile.dashboard.signInPrompt");
 
   const head = signedIn
@@ -200,9 +194,10 @@ export const DashboardPage = ({ config }: Props) => {
           })}
         </RowList>
       ) : tileLayout === "scroll" || tileLayout === "autoscroll" ? (
-        <Box ref={setTileStrip} data-testid="home-tile-scroll" data-autoscroll={tileAutoScroll ? "on" : "off"} sx={{ display: "flex", gap: "8px", overflowX: "auto", scrollSnapType: "x mandatory", pb: "4px", "&::-webkit-scrollbar": { display: "none" }, scrollbarWidth: "none" }}>
-          {tileLinks.map((l) => <PhotoTile key={linkId(l)} link={l} wide={false} fixedWidth />)}
-        </Box>
+        // "autoscroll" is the scrolling row that also moves on its own (opt-in in B1Admin > B1 Mobile).
+        <AutoScrollStrip enabled={tileLayout === "autoscroll"} testId="home-tile-scroll" gap="8px" tileWidth={{ xs: "150px", md: "220px" }}>
+          {tileLinks.map((l) => <PhotoTile key={linkId(l)} link={l} wide={false} />)}
+        </AutoScrollStrip>
       ) : (
         <Box data-testid="home-tile-grid" sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
           {tileLinks.map((l, i) => <PhotoTile key={linkId(l)} link={l} wide={i === 0 && tileLinks.length % 2 === 1} />)}
