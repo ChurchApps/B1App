@@ -16,6 +16,16 @@ export function filterVisibleLinks(
   return links.filter((l: any) => l.visibility !== "team" || tags.includes("team"));
 }
 
+// Tabs inside a folder show only on the folder's screen. A folder with nothing visible inside is left out.
+export function topLevelLinks(visible: LinkInterface[]): LinkInterface[] {
+  return visible.filter((l) => !l.parentId && (l.linkType !== "folder" || folderChildren(visible, l.id).length > 0));
+}
+
+export function folderChildren(visible: LinkInterface[], folderId: string | undefined): LinkInterface[] {
+  if (!folderId) return [];
+  return visible.filter((l) => l.parentId === folderId && l.linkType !== "separator");
+}
+
 export function useChurchLinks(churchId: string | undefined, jwt?: string) {
   return useQuery({
     queryKey: ["links", churchId, jwt ? "auth" : "anon"],
