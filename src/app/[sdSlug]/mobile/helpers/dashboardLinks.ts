@@ -7,7 +7,7 @@ export const linkId = (link: LinkInterface): string => link.id || `${link.linkTy
 
 // "url" links (and any absolute route) leave the app in a new tab.
 export const linkTarget = (link: LinkInterface): { href: string; external: boolean } | null => {
-  const href = linkTypeToRoute(link.linkType, link.linkData, link.text, link.url);
+  const href = linkTypeToRoute(link.linkType, link.linkData, link.text, link.url, link.id);
   if (!href) return null;
   return { href, external: link.linkType === "url" || /^https?:/.test(href) };
 };

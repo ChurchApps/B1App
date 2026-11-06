@@ -37,6 +37,7 @@ const WebsiteUrlPage = dynamic(() => import("./screens/WebsiteUrlPage").then(m =
 const MessageComposePage = dynamic(() => import("./screens/MessageComposePage").then(m => ({ default: m.MessageComposePage })), { loading });
 const MobileLoginScreen = dynamic(() => import("./screens/LoginPage").then(m => ({ default: m.MobileLoginScreen })), { loading });
 const MoreCardsPage = dynamic(() => import("./screens/MoreCardsPage").then(m => ({ default: m.MoreCardsPage })), { loading });
+const FolderPage = dynamic(() => import("./screens/FolderPage").then(m => ({ default: m.FolderPage })), { loading });
 const HymnsPage = dynamic(() => import("./screens/HymnsPage").then(m => ({ default: m.HymnsPage })), { loading });
 
 interface Props {
@@ -97,6 +98,7 @@ export function ScreenRouter({ pageSlug, config }: Props) {
     case "stream": return <StreamPage config={config} />;
     case "websiteUrl":
     case "page": return <WebsiteUrlPage config={config} />;
+    case "folder": return <FolderPage config={config} />;
     case "login": return <MobileLoginScreen config={config} />;
     default:
       console.warn("[mobile] unknown screen slug:", pageSlug);

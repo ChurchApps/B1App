@@ -395,6 +395,9 @@
       "dashboardMemberBody": "We're just getting set up. Check back soon for sermons, groups, and more.",
       "dashboardTitleFallback": "Your church"
     },
+    "folder": {
+      "empty": "Nothing here yet"
+    },
     "giving": {
       "allHistory": "All history",
       "allYears": "All",
