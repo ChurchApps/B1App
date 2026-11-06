@@ -4,13 +4,14 @@ import React, { useContext, useMemo, useState } from "react";
 import Link from "next/link";
 import { Box, Button, Typography } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { GroupInterface } from "@churchapps/helpers";
+import type { GroupInterface, TaskInterface } from "@churchapps/helpers";
 import { ApiHelper, CurrencyHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "./mobileTheme";
 import { ConfirmDeclineSheet } from "./ConfirmDeclineSheet";
 import { EventProcessor } from "../helpers/eventProcessor";
 import { attendanceSubtitle, attendanceTitle, useMyRegistrations, type MyAttendanceRecord, type MyFormSubmission } from "../helpers/myRecords";
+import { MyTaskSheet, TaskRow } from "./screens/CardSheet";
 import { BigNumber, PersonAvatar, PlateSection, Row, RowList, StatusBadge, TextLink, type BadgeTone } from "./kit";
 
 interface UpcomingAssignment {
@@ -251,6 +252,18 @@ export const FormsTeaser = ({ submissions }: { submissions: MyFormSubmission[] }
     </RowList>
   </PlateSection>
 );
+
+// Cards first (already soonest due first), then plain tasks.
+export const TasksTeaser = ({ cards, tasks }: { cards: TaskInterface[]; tasks: TaskInterface[] }) => {
+  const [open, setOpen] = useState<TaskInterface | null>(null);
+  const rows = [...cards, ...tasks].slice(0, 2);
+  return (
+    <PlateSection data-testid="home-tasks-section" title={Locale.label("mobile.dashboard.yourFollowUps")} action={<TextLink href="/mobile/myTasks">{Locale.label("mobile.dashboard.all")}</TextLink>}>
+      <RowList>{rows.map((t) => <TaskRow key={t.id} task={t} onOpen={setOpen} />)}</RowList>
+      <MyTaskSheet task={open} onClose={() => setOpen(null)} />
+    </PlateSection>
+  );
+};
 
 export const GivingTeaser = ({ summary, canGive = true }: { summary?: GivingSummary; canGive?: boolean }) => (
   <PlateSection title={Locale.label("mobile.dashboard.giving")} action={<TextLink href="/mobile/donate?view=history">{Locale.label("mobile.dashboard.history")}</TextLink>}>

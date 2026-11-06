@@ -1,20 +1,21 @@
 "use client";
 
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import Link from "next/link";
 import { Avatar, Box, Button, Skeleton, Typography } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { ApiHelper, ArrayHelper, CurrencyHelper, DateHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
-import type { AssignmentInterface, DonationInterface, PersonInterface, PlanInterface, PositionInterface } from "@churchapps/helpers";
+import type { AssignmentInterface, DonationInterface, PersonInterface, PlanInterface, PositionInterface, TaskInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { expandUpcomingEvents, upcomingKindMeta, type UpcomingKind } from "../HomeTeasers";
 import { memberGivingYearLimit } from "../../helpers/givingYears";
-import { attendanceSubtitle, attendanceTitle, useMyAttendance, useMyFormSubmissions, useMyGroups, useMyRegistrations } from "../../helpers/myRecords";
+import { attendanceSubtitle, attendanceTitle, useMyAttendance, useMyCards, useMyFormSubmissions, useMyGroups, useMyRegistrations, useMyTasks } from "../../helpers/myRecords";
 import { formatRelative, deriveNotificationUrl, getInitials } from "../util";
 import type { EventRow } from "../group/GroupCalendarTab";
+import { MyTaskSheet, TaskRow } from "./CardSheet";
 import { BackVerb, BigNumber, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, StatusBadge, TextLink, useSliceView } from "../kit";
 
 interface Props {
@@ -162,6 +163,9 @@ export const MePage = ({ config }: Props) => {
   });
 
   const { data: groups = [] } = useMyGroups(loggedIn, context?.user?.id);
+  const { data: myCards = [] } = useMyCards(loggedIn);
+  const { data: myTasks = [] } = useMyTasks(personId, loggedIn);
+  const [openTask, setOpenTask] = useState<TaskInterface | null>(null);
   const { data: formSubmissions = [], isLoading: formsLoading } = useMyFormSubmissions(loggedIn);
   const { data: attendance = [], isLoading: attendanceLoading } = useMyAttendance(loggedIn);
 
@@ -298,6 +302,18 @@ export const MePage = ({ config }: Props) => {
             {upcomingList(upcoming.slice(0, TEASER_COUNT))}
           </PlateSection>
 
+          {myCards.length > 0 && (
+            <PlateSection data-testid="me-cards-section" title={Locale.label("mobile.me.myCards")} action={myCards.length > TEASER_COUNT ? <TextLink href="/mobile/myTasks" data-testid="me-cards-all">{Locale.label("mobile.me.allCards")}</TextLink> : undefined}>
+              <RowList>{myCards.slice(0, TEASER_COUNT).map((t) => <TaskRow key={t.id} task={t} onOpen={setOpenTask} />)}</RowList>
+            </PlateSection>
+          )}
+
+          {myTasks.length > 0 && (
+            <PlateSection data-testid="me-tasks-section" title={Locale.label("mobile.me.myTasks")} action={myTasks.length > TEASER_COUNT ? <TextLink href="/mobile/myTasks" data-testid="me-tasks-all">{Locale.label("mobile.me.allTasks")}</TextLink> : undefined}>
+              <RowList>{myTasks.slice(0, TEASER_COUNT).map((t) => <TaskRow key={t.id} task={t} onOpen={setOpenTask} />)}</RowList>
+            </PlateSection>
+          )}
+
           {otherHousehold.length > 0 && (
             <PlateSection title={Locale.label("mobile.screens.tabHousehold")} action={<TextLink href="/mobile/profileEdit">{Locale.label("mobile.screens.tabManage")}</TextLink>}>
               <PillRow>
@@ -393,6 +409,7 @@ export const MePage = ({ config }: Props) => {
           </PlateSection>
         </Plate>
       </RecordLayout>
+      <MyTaskSheet task={openTask} onClose={() => setOpenTask(null)} />
     </Box>
   );
 };
