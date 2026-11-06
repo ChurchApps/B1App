@@ -255,10 +255,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@churchapps/content-providers@npm:^0.15.2":
-  version: 0.15.2
-  resolution: "@churchapps/content-providers@npm:0.15.2"
-  checksum: 10c0/f5fc86a6a08c4c9bb078a78e6a4c10f6bc1db342f94da4842150cd4cc11bb8780f9e752c28197746a27b721c290984967735b88624c2fafb2f9818a073cf5b63
+"@churchapps/content-providers@npm:^0.16.1":
+  version: 0.16.1
+  resolution: "@churchapps/content-providers@npm:0.16.1"
+  checksum: 10c0/6e450406c835744caed3653374ec3adbf77d42b2fd2890674a3ab563ef6a1550608f378370079df1879794650dc5a6597c57536b955be6ca6ec08b30d2543642
   languageName: node
   linkType: hard
 
@@ -4116,7 +4116,7 @@ __metadata:
   resolution: "b1-app@workspace:."
   dependencies:
     "@churchapps/apphelper": "npm:^1.10.11"
-    "@churchapps/content-providers": "npm:^0.15.2"
+    "@churchapps/content-providers": "npm:^0.16.1"
     "@churchapps/helpers": "npm:^2.15.0"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"

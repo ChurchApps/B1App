@@ -17,7 +17,7 @@ import { navLinks } from "./MobileAppBar";
 import { MAX_LINK_TABS } from "./MobileTabBar";
 import { PageHead, Pill, PillRow, Plate, PlateSection, Row, RowList, TextLink, Thumb } from "./kit";
 import { ScreenSkeleton } from "./ScreenSkeleton";
-import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
+import { filterVisibleLinks, topLevelLinks, useChurchLinks } from "../hooks/useConfig";
 import { useEngagementSort } from "../hooks/useEngagementSort";
 import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
 import { memberGivingYearLimit } from "../helpers/givingYears";
@@ -31,10 +31,10 @@ interface Props {
   config: ConfigurationInterface;
 }
 
-const linkPhoto = (l: LinkInterface) => (l as unknown as { photo?: string }).photo;
+export const linkPhoto = (l: LinkInterface) => (l as unknown as { photo?: string }).photo;
 
 // Churches that built their app from photo page links (ICOM, SICOM) get those as tiles instead of pills.
-const PhotoTile = ({ link, wide }: { link: LinkInterface; wide: boolean }) => {
+export const PhotoTile = ({ link, wide }: { link: LinkInterface; wide: boolean }) => {
   const target = linkTarget(link)!;
   const external = target.external ? { component: "button" as const, type: "button" as const, onClick: () => openExternal(target.href) } : { component: Link, href: target.href };
   return (
@@ -91,14 +91,16 @@ export const DashboardPage = ({ config }: Props) => {
 
   const { data: rawLinks, isLoading } = useChurchLinks(churchId, jwt);
 
-  const links = useMemo<LinkInterface[]>(
+  const allLinks = useMemo<LinkInterface[]>(
     () => filterVisibleLinks(rawLinks, context?.userChurch).filter((l) => l.linkType !== "separator"),
     [rawLinks, context?.userChurch]
   );
+  // Tiles and pills show the top level; a tab inside a folder still turns on its Home section.
+  const links = useMemo(() => topLevelLinks(allLinks), [allLinks]);
 
   // The verse is the church's VOTD feature on the dashboard — hidden when the church removed the link.
-  const hasVotdLink = links.some((l) => l.linkType === "votd");
-  const hasSermonsLink = links.some((l) => l.linkType === "sermons");
+  const hasVotdLink = allLinks.some((l) => l.linkType === "votd");
+  const hasSermonsLink = allLinks.some((l) => l.linkType === "sermons");
 
   React.useEffect(() => {
     if (!hasVotdLink) {
@@ -128,7 +130,7 @@ export const DashboardPage = ({ config }: Props) => {
   const latest = hasSermonsLink ? sermons[0] : undefined;
 
   const signedIn = !!(context?.user);
-  const has = (type: string) => signedIn && links.some((l) => l.linkType === type);
+  const has = (type: string) => signedIn && allLinks.some((l) => l.linkType === type);
   // Churches can hide the anonymous sign-in prompt or reword it, and opt in to the Me tab's attendance and forms on Home (B1Admin > B1 Mobile).
   const appearance = config?.appearance as Record<string, string> | undefined;
   const homeAttendance = signedIn && appearance?.mobileHomeAttendance === "true";
