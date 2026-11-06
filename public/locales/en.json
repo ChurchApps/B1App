@@ -189,6 +189,25 @@
       "loading": "Loading Bible…",
       "unavailable": "The in-app reader failed to load. You can still open the Bible in your browser."
     },
+    "card": {
+      "about": "About",
+      "actionFailed": "That didn't work. Try again.",
+      "cards": "Cards",
+      "complete": "Complete",
+      "created": "Created",
+      "due": "Due",
+      "dueOn": "Due {}",
+      "from": "From",
+      "notes": "Notes",
+      "overdue": "Overdue",
+      "snooze": "Snooze",
+      "snoozeDay": "1 day",
+      "snoozeDays": "{} days",
+      "snoozed": "Snoozed",
+      "snoozedUntilLabel": "Snoozed until",
+      "step": "Step",
+      "tasks": "Tasks"
+    },
     "community": {
       "peopleCount": "{} people",
       "searchByName": "Search by name"
@@ -225,6 +244,7 @@
       "viewAllNotifications": "View all notifications"
     },
     "dashboard": {
+      "all": "All",
       "allGroups": "All groups",
       "allPlans": "All plans",
       "allSermons": "All sermons",
@@ -240,6 +260,7 @@
       "signInPrompt": "Sign in to see your groups, giving, and more.",
       "upcomingEvents": "Upcoming events",
       "welcome": "Welcome",
+      "yourFollowUps": "Your follow-ups",
       "yourGroups": "Your groups",
       "youreServing": "You're serving"
     },
@@ -735,8 +756,10 @@
       "titleMfa": "Two-factor sign-in"
     },
     "me": {
+      "allCards": "All cards",
       "allForms": "All forms",
       "allGroups": "All groups",
+      "allTasks": "All tasks",
       "allUpcoming": "All upcoming",
       "attended": "Attended",
       "attendedLast90": "{} times in the last 90 days",
@@ -746,10 +769,13 @@
       "givenThisYear": "Given in {0} · {1} gifts",
       "myAttendance": "My Attendance",
       "myAttendanceLede": "Services and groups you were checked in to over the last 12 months.",
+      "myCards": "My cards",
       "myForms": "My Forms",
       "myFormsLede": "Forms you've submitted. Tap one to see your answers.",
       "myRequests": "My Requests",
+      "myTasks": "My tasks",
       "noAnswers": "No answers to show.",
+      "noAssignments": "Nothing is assigned to you right now.",
       "noAttendance": "No attendance recorded in the last 12 months.",
       "noForms": "You haven't submitted any forms yet.",
       "noGiftsThisYear": "No gifts yet in {}.",
@@ -1006,6 +1032,7 @@
       "myForms": "My Forms",
       "myGroups": "My Groups",
       "myRequests": "My Requests",
+      "myTasks": "My tasks",
       "newMessage": "New Message",
       "notificationPrefs": "Notification Preferences",
       "notifications": "Notifications",

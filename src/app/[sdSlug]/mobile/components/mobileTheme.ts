@@ -129,6 +129,7 @@ export const SCREEN_TITLES: Record<string, string> = new Proxy({} as Record<stri
       myRequests: Locale.label("mobile.screenTitles.myRequests"),
       myForms: Locale.label("mobile.screenTitles.myForms"),
       myAttendance: Locale.label("mobile.screenTitles.myAttendance"),
+      myTasks: Locale.label("mobile.screenTitles.myTasks"),
       requestEvent: Locale.label("mobile.screenTitles.requestEvent"),
       profileEdit: Locale.label("mobile.screenTitles.profileEdit"),
       stream: Locale.label("mobile.screenTitles.stream"),
