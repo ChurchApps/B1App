@@ -1,6 +1,6 @@
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
-import { useQuery } from "@tanstack/react-query";
-import type { AnswerInterface, GroupInterface, QuestionInterface, RegistrationInterface } from "@churchapps/helpers";
+import { useQuery, type QueryClient } from "@tanstack/react-query";
+import type { AnswerInterface, GroupInterface, QuestionInterface, RegistrationInterface, TaskInterface } from "@churchapps/helpers";
 
 export interface MyFormSubmission {
   id?: string;
@@ -61,6 +61,33 @@ export const useMyGroups = (enabled: boolean, userId?: string) => useQuery<Group
   staleTime: 5 * 60 * 1000,
   gcTime: 15 * 60 * 1000
 });
+
+// Open workflow cards assigned to the signed-in member, soonest due first.
+export const useMyCards = (enabled: boolean) => useQuery<TaskInterface[]>({
+  queryKey: ["/tasks/cards/my", "DoingApi"],
+  queryFn: async () => {
+    const data = await ApiHelper.get("/tasks/cards/my", "DoingApi");
+    return Array.isArray(data) ? data : [];
+  },
+  enabled,
+  staleTime: 60 * 1000
+});
+
+// Open plain tasks assigned to the member; ones they only created are left to Me's Requests section.
+export const useMyTasks = (personId: string | undefined, enabled: boolean) => useQuery<TaskInterface[]>({
+  queryKey: ["/tasks", "DoingApi", personId],
+  queryFn: async () => {
+    const data = await ApiHelper.get("/tasks", "DoingApi");
+    return (Array.isArray(data) ? data : []).filter((t: TaskInterface) => t.assignedToType === "person" && t.assignedToId === personId);
+  },
+  enabled: enabled && !!personId,
+  staleTime: 60 * 1000
+});
+
+export const invalidateMyTasks = (queryClient: QueryClient) => Promise.all([
+  queryClient.invalidateQueries({ queryKey: ["/tasks/cards/my", "DoingApi"] }),
+  queryClient.invalidateQueries({ queryKey: ["/tasks", "DoingApi"] })
+]);
 
 // Group check-ins show the group's name; otherwise (or for a group the member has since left) the service.
 export const attendanceTitle = (record: MyAttendanceRecord, groups: GroupInterface[]) => {

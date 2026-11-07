@@ -129,6 +129,7 @@ export const SCREEN_TITLES: Record<string, string> = new Proxy({} as Record<stri
       myRequests: Locale.label("mobile.screenTitles.myRequests"),
       myForms: Locale.label("mobile.screenTitles.myForms"),
       myAttendance: Locale.label("mobile.screenTitles.myAttendance"),
+      myTasks: Locale.label("mobile.screenTitles.myTasks"),
       requestEvent: Locale.label("mobile.screenTitles.requestEvent"),
       profileEdit: Locale.label("mobile.screenTitles.profileEdit"),
       stream: Locale.label("mobile.screenTitles.stream"),
@@ -155,7 +156,8 @@ export const linkTypeToRoute = (
   linkType?: string,
   linkData?: string,
   text?: string,
-  url?: string
+  url?: string,
+  id?: string
 ): string | null => {
   switch (linkType) {
     case "groups": return "/mobile/groups";
@@ -178,6 +180,12 @@ export const linkTypeToRoute = (
       if (text) params.set("title", text);
       const qs = params.toString();
       return qs ? `/mobile/page?${qs}` : "/mobile/page";
+    }
+    case "folder": {
+      if (!id) return null;
+      const params = new URLSearchParams({ id });
+      if (text) params.set("title", text);
+      return `/mobile/folder?${params.toString()}`;
     }
     case "url": {
 
@@ -204,6 +212,7 @@ export const linkTypeToIcon = (linkType?: string, itemIcon?: string): string => 
     case "hymns": return "music_note";
     case "stream": return "live_tv";
     case "url": return "public";
+    case "folder": return "folder";
     default: return "apps";
   }
 };

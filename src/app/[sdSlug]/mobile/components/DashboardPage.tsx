@@ -17,24 +17,24 @@ import { navLinks } from "./MobileAppBar";
 import { MAX_LINK_TABS } from "./MobileTabBar";
 import { PageHead, Pill, PillRow, Plate, PlateSection, Row, RowList, TextLink, Thumb } from "./kit";
 import { ScreenSkeleton } from "./ScreenSkeleton";
-import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
+import { filterVisibleLinks, topLevelLinks, useChurchLinks } from "../hooks/useConfig";
 import { useEngagementSort } from "../hooks/useEngagementSort";
 import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
 import { memberGivingYearLimit } from "../helpers/givingYears";
 import { loadDailyVerse, type DailyVerse } from "../helpers/dailyVerses";
 import { AutoScrollStrip } from "@/components/elements/AutoScrollStrip";
 import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget, openExternal } from "../helpers/dashboardLinks";
-import { useMyAttendance, useMyFormSubmissions } from "../helpers/myRecords";
-import { AttendanceTeaser, EventsTeaser, FormsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, useGivingSummary, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
+import { useMyAttendance, useMyCards, useMyFormSubmissions, useMyTasks } from "../helpers/myRecords";
+import { AttendanceTeaser, EventsTeaser, FormsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, TasksTeaser, useGivingSummary, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
 
 interface Props {
   config: ConfigurationInterface;
 }
 
-const linkPhoto = (l: LinkInterface) => (l as unknown as { photo?: string }).photo;
+export const linkPhoto = (l: LinkInterface) => (l as unknown as { photo?: string }).photo;
 
 // Churches that built their app from photo page links (ICOM, SICOM) get those as tiles instead of pills.
-const PhotoTile = ({ link, wide }: { link: LinkInterface; wide: boolean }) => {
+export const PhotoTile = ({ link, wide }: { link: LinkInterface; wide: boolean }) => {
   const target = linkTarget(link)!;
   const external = target.external ? { component: "button" as const, type: "button" as const, onClick: () => openExternal(target.href) } : { component: Link, href: target.href };
   return (
@@ -91,14 +91,16 @@ export const DashboardPage = ({ config }: Props) => {
 
   const { data: rawLinks, isLoading } = useChurchLinks(churchId, jwt);
 
-  const links = useMemo<LinkInterface[]>(
+  const allLinks = useMemo<LinkInterface[]>(
     () => filterVisibleLinks(rawLinks, context?.userChurch).filter((l) => l.linkType !== "separator"),
     [rawLinks, context?.userChurch]
   );
+  // Tiles and pills show the top level; a tab inside a folder still turns on its Home section.
+  const links = useMemo(() => topLevelLinks(allLinks), [allLinks]);
 
   // The verse is the church's VOTD feature on the dashboard — hidden when the church removed the link.
-  const hasVotdLink = links.some((l) => l.linkType === "votd");
-  const hasSermonsLink = links.some((l) => l.linkType === "sermons");
+  const hasVotdLink = allLinks.some((l) => l.linkType === "votd");
+  const hasSermonsLink = allLinks.some((l) => l.linkType === "sermons");
 
   React.useEffect(() => {
     if (!hasVotdLink) {
@@ -128,7 +130,7 @@ export const DashboardPage = ({ config }: Props) => {
   const latest = hasSermonsLink ? sermons[0] : undefined;
 
   const signedIn = !!(context?.user);
-  const has = (type: string) => signedIn && links.some((l) => l.linkType === type);
+  const has = (type: string) => signedIn && allLinks.some((l) => l.linkType === type);
   // Churches can hide the anonymous sign-in prompt or reword it, and opt in to the Me tab's attendance and forms on Home (B1Admin > B1 Mobile).
   const appearance = config?.appearance as Record<string, string> | undefined;
   const homeAttendance = signedIn && appearance?.mobileHomeAttendance === "true";
@@ -139,6 +141,8 @@ export const DashboardPage = ({ config }: Props) => {
   const { data: attendance = [] } = useMyAttendance(homeAttendance);
   const { data: formSubmissions = [] } = useMyFormSubmissions(homeForms);
   const events = useUpcomingEvents(signedIn);
+  const { data: myCards = [] } = useMyCards(signedIn);
+  const { data: myTasks = [] } = useMyTasks(context?.person?.id || context?.userChurch?.person?.id, signedIn);
   // The teaser shows this year's total, so it steps aside (donation link falls back to a pill) when the church hides this year.
   const showGiving = has("donation") && memberGivingYearLimit(config?.appearance as Record<string, unknown>) >= new Date().getFullYear();
   const givingSummary = useGivingSummary(showGiving);
@@ -253,12 +257,15 @@ export const DashboardPage = ({ config }: Props) => {
   );
 
   const servingSection = showServing && <ServingTeaser {...serving} />;
+  const tasksSection = myCards.length + myTasks.length > 0 && <TasksTeaser cards={myCards} tasks={myTasks} />;
   const groupsSection = showGroups && <GroupsTeaser groups={groups} />;
   const eventsSection = showEvents && <EventsTeaser events={events} />;
   const attendanceSection = homeAttendance && attendance.length > 0 && <AttendanceTeaser attendance={attendance} groups={groups} />;
   const formsSection = homeForms && formSubmissions.length > 0 && <FormsTeaser submissions={formSubmissions} />;
   const givingSection = showGiving && <GivingTeaser summary={givingSummary} canGive={config?.allowDonations !== false} />;
-  const wide = [tileSection, sermonSection, servingSection, groupsSection, eventsSection, attendanceSection, formsSection].some(Boolean);
+  const wide = [
+    tileSection, sermonSection, servingSection, tasksSection, groupsSection, eventsSection, attendanceSection, formsSection
+  ].some(Boolean);
   const narrow = [verseSection, givingSection, moreSection].some(Boolean);
 
   return (
@@ -266,12 +273,12 @@ export const DashboardPage = ({ config }: Props) => {
       {head}
       {desktop && wide && narrow ? (
         <Box sx={{ display: "grid", gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)", gap: "24px", alignItems: "start" }}>
-          <Plate>{banner}{tileSection}{sermonSection}{servingSection}{groupsSection}{eventsSection}{attendanceSection}{formsSection}</Plate>
+          <Plate>{banner}{tileSection}{sermonSection}{servingSection}{tasksSection}{groupsSection}{eventsSection}{attendanceSection}{formsSection}</Plate>
           <Plate>{verseSection}{givingSection}{moreSection}</Plate>
         </Box>
       ) : (
         // :empty hides the sheet when the only candidate (the push banner) renders nothing.
-        <Plate sx={{ "&:empty": { display: "none" } }}>{banner}{tileSection}{sermonSection}{verseSection}{servingSection}{groupsSection}{eventsSection}{attendanceSection}{formsSection}{givingSection}{moreSection}</Plate>
+        <Plate sx={{ "&:empty": { display: "none" } }}>{banner}{tileSection}{sermonSection}{verseSection}{servingSection}{tasksSection}{groupsSection}{eventsSection}{attendanceSection}{formsSection}{givingSection}{moreSection}</Plate>
       )}
     </Box>
   );

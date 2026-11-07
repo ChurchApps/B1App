@@ -11,7 +11,7 @@ import { WebPushEnrollmentSync } from "./WebPushEnrollmentSync";
 import { ChatNotificationBridge } from "./ChatNotificationBridge";
 import { mobileTheme } from "./mobileTheme";
 import { MobileThemeProvider } from "./MobileThemeProvider";
-import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
+import { filterVisibleLinks, topLevelLinks, useChurchLinks } from "../hooks/useConfig";
 
 interface Props {
   config: ConfigurationInterface;
@@ -31,7 +31,7 @@ const MobileShellInner = ({ config, children }: Props) => {
   const jwt = context?.userChurch?.jwt;
   const { data: rawLinks } = useChurchLinks(config?.church?.id, jwt);
   const links = useMemo(
-    () => filterVisibleLinks(rawLinks, jwt ? context?.userChurch : null),
+    () => topLevelLinks(filterVisibleLinks(rawLinks, jwt ? context?.userChurch : null)),
     [rawLinks, jwt, context?.userChurch]
   );
   const rootRoutes = useMemo(() => ["/mobile/dashboard", "/mobile/more", ...navLinks(links, MAX_LINK_TABS).map((t) => t.route)], [links]);
