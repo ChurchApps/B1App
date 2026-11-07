@@ -15,6 +15,8 @@ import type { PersonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
 import { Eyebrow, PersonAvatar, QuietEmpty, Sheet, TextLink } from "../kit";
 import { enterSends, formatMessageTime } from "../util";
+import { useFormattingShortcuts } from "../FormattingPopup";
+import { MarkdownMessage } from "../MarkdownMessage";
 
 export type ChatSubTab = "discussions" | "announcements" | "notes";
 
@@ -80,6 +82,8 @@ export const GroupChatModal = ({
   const [conversations, setConversations] = React.useState<Conversation[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [draft, setDraft] = React.useState("");
+  const composerRef = React.useRef<HTMLTextAreaElement | null>(null);
+  const { onKeyDown: onFormatKeyDown, popup: formattingPopup } = useFormattingShortcuts(composerRef, draft, setDraft);
   const [sending, setSending] = React.useState(false);
   const [people, setPeople] = React.useState<Record<string, PersonInterface>>({});
   const [hasAnnouncements, setHasAnnouncements] = React.useState(false);
@@ -369,7 +373,7 @@ export const GroupChatModal = ({
 
     return (
       <>
-        {textWithoutUrls && <Typography sx={{ fontSize: 15, lineHeight: "21px", whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{textWithoutUrls}</Typography>}
+        {textWithoutUrls && <MarkdownMessage text={textWithoutUrls} sx={{ fontSize: 15, lineHeight: "21px" }} />}
         {imageMatches?.map((url, i) => (
           <Box key={i} component="img" src={url} alt="" sx={{ maxWidth: "100%", borderRadius: "8px", mt: 0.5, display: "block" }} />
         ))}
@@ -569,7 +573,9 @@ export const GroupChatModal = ({
               placeholder={subTab === "notes" ? Locale.label("mobile.group.addNote") : subTab === "announcements" ? Locale.label("mobile.group.postAnnouncement") : Locale.label("mobile.group.sendAMessage")}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
+              inputRef={composerRef}
               onKeyDown={(e) => {
+                onFormatKeyDown(e);
                 if (e.key === "Enter" && !e.shiftKey && enterSends()) {
                   e.preventDefault();
                   handleSend();
@@ -579,6 +585,7 @@ export const GroupChatModal = ({
               maxRows={4}
               slotProps={{ input: { sx: { borderRadius: "8px", minHeight: 44 } }, htmlInput: { enterKeyHint: "enter" } }}
             />
+            {formattingPopup}
             <Button variant="contained" onClick={handleSend} disabled={sending || !draft.trim()} aria-label={Locale.label("mobile.details.send")} sx={{ minWidth: 44, width: 44, height: 44, px: 0, flex: "none" }}>
               <SendIcon sx={{ fontSize: 20 }} />
             </Button>

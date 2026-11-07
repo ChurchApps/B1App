@@ -87,3 +87,59 @@ test.describe("Message composer with a keyboard and mouse", () => {
     await expect(bubbleText(dialog, text)).toHaveCount(1, { timeout: 15000 });
   });
 });
+
+// ChurchAppsSupport#1474: chat text renders **bold**, _italic_ and lists, and the composer has a formatting popup.
+test.describe("Message formatting on a phone", () => {
+  test.use(iPhone);
+
+  test("group chat shows **bold** as bold text without the asterisks", async ({ page }) => {
+    const { dialog, composer } = await openGroupChat(page);
+    const stamp = Date.now();
+    await composer.fill(`**Reminder** for Thursday ${stamp}`);
+    await dialog.getByRole("button", { name: /^Send$/i }).click();
+    await expect(composer).toHaveValue("", { timeout: 15000 });
+    const bubble = bubbleText(dialog, `for Thursday ${stamp}`);
+    await expect(bubble).toHaveCount(1, { timeout: 15000 });
+    await expect(bubble.locator("strong", { hasText: "Reminder" })).toBeVisible();
+    expect(await bubble.innerText()).toBe(`Reminder for Thursday ${stamp}`);
+  });
+
+  test("a direct message with dashes on each line shows a bulleted list", async ({ page }) => {
+    const composer = await openFirstConversation(page);
+    const stamp = Date.now();
+    await composer.click();
+    await composer.pressSequentially(`- milk ${stamp}`);
+    await composer.press("Enter");
+    await composer.pressSequentially(`- eggs ${stamp}`);
+    await page.getByRole("button", { name: /^Send$/i }).click();
+    await expect(composer).toHaveValue("", { timeout: 15000 });
+    const main = page.locator("main");
+    await expect(main.locator("li", { hasText: `eggs ${stamp}` })).toBeVisible({ timeout: 15000 });
+    await expect(main.locator("li", { hasText: `milk ${stamp}` })).toBeVisible();
+  });
+
+  test("highlighting text in the group chat composer shows a popup whose Bold button wraps it", async ({ page }) => {
+    const { composer } = await openGroupChat(page);
+    await composer.fill("Hello world");
+    await composer.evaluate((el: HTMLTextAreaElement) => {
+      el.focus();
+      el.setSelectionRange(6, 11);
+      el.dispatchEvent(new Event("select"));
+    });
+    for (const name of ["Italic", "Bulleted list", "Numbered list"]) await expect(page.getByRole("button", { name, exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Bold", exact: true }).click();
+    await expect(composer).toHaveValue("Hello **world**");
+  });
+});
+
+test.describe("Message formatting with a keyboard", () => {
+  test("Ctrl+B bolds the highlighted word in the group chat composer", async ({ page }) => {
+    const { composer } = await openGroupChat(page);
+    await composer.fill("Hello world");
+    await composer.evaluate((el: HTMLTextAreaElement) => el.setSelectionRange(0, 5));
+    await composer.press("Control+b");
+    await expect(composer).toHaveValue("**Hello** world");
+    await composer.press("Control+i");
+    await expect(composer).toHaveValue("**_Hello_** world");
+  });
+});
