@@ -19,6 +19,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
 import { PersonAvatar, QuietEmpty, TextLink } from "../kit";
+import { enterSends, formatMessageTime } from "../util";
 
 interface Props {
   id: string;
@@ -406,24 +407,27 @@ export const MessageConversation = ({ id, config: _config }: Props) => {
             <MoreVertIcon sx={{ fontSize: 18 }} />
           </IconButton>
         )}
-        <Box
-          sx={{
-            maxWidth: "80%",
-            minWidth: 0,
-            px: "14px",
-            py: "10px",
-            bgcolor: mine ? tc.chip : tc.surface,
-            color: mine ? tc.onChip : tc.text,
-            border: `1px solid ${mine ? "transparent" : tc.border}`,
-            borderRadius: "14px",
-            wordBreak: "break-word",
-            overflowWrap: "anywhere",
-            fontSize: 15,
-            lineHeight: "21px",
-            "& a": { color: "inherit", textDecoration: "underline", wordBreak: "break-all", overflowWrap: "anywhere" }
-          }}
-        >
-          <span dangerouslySetInnerHTML={{ __html: ChatHelper.insertLinks(m.content || "") }} />
+        <Box sx={{ maxWidth: "80%", minWidth: 0, display: "flex", flexDirection: "column", alignItems: mine ? "flex-end" : "flex-start" }}>
+          <Box
+            sx={{
+              minWidth: 0,
+              px: "14px",
+              py: "10px",
+              bgcolor: mine ? tc.chip : tc.surface,
+              color: mine ? tc.onChip : tc.text,
+              border: `1px solid ${mine ? "transparent" : tc.border}`,
+              borderRadius: "14px",
+              wordBreak: "break-word",
+              overflowWrap: "anywhere",
+              whiteSpace: "pre-wrap",
+              fontSize: 15,
+              lineHeight: "21px",
+              "& a": { color: "inherit", textDecoration: "underline", wordBreak: "break-all", overflowWrap: "anywhere" }
+            }}
+          >
+            <span dangerouslySetInnerHTML={{ __html: ChatHelper.insertLinks(m.content || "") }} />
+          </Box>
+          <Typography data-testid="message-time" sx={{ fontSize: 12, color: tc.textSecondary, mt: "2px" }}>{formatMessageTime(m.timeSent)}</Typography>
         </Box>
       </Box>
     );
@@ -508,8 +512,9 @@ export const MessageConversation = ({ id, config: _config }: Props) => {
             placeholder={Locale.label("mobile.details.typeMessage")}
             value={text}
             onChange={(e) => setText(e.target.value)}
+            slotProps={{ htmlInput: { enterKeyHint: "enter" } }}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
+              if (e.key === "Enter" && !e.shiftKey && enterSends()) {
                 e.preventDefault();
                 handleSend();
               }
