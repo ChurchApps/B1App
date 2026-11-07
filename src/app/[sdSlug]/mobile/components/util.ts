@@ -76,6 +76,21 @@ export const formatRelative = (value?: Date | string | number | null): string =>
   return d.toLocaleDateString(DateHelper.locale, { month: "short", day: "numeric", year: "numeric" });
 };
 
+// A mouse means a hardware keyboard in practice; phones and tablets have no Shift+Enter, so there Enter adds a line and the Send button sends.
+export const enterSends = (): boolean => typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+export const formatMessageTime = (value?: Date | string | number | null): string => {
+  const d = toDate(value);
+  if (!d) return "";
+  const now = new Date();
+  if (now.getTime() - d.getTime() < 60000) return Locale.label("mobile.now");
+  const sameDay = (a: Date, b: Date) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  if (sameDay(d, now)) return DateHelper.prettyTime(d);
+  const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  if (sameDay(d, yesterday)) return `${Locale.label("mobile.yesterday")} ${DateHelper.prettyTime(d)}`;
+  return DateHelper.prettyDateTime(d);
+};
+
 export const navigateBack = (
   router: { back: () => void; push: (path: string) => void },
   fallback: string

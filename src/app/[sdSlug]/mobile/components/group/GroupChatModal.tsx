@@ -14,6 +14,7 @@ import { SubscriptionToggle, SUBSCRIPTION_MESSAGE_TYPE } from "@churchapps/apphe
 import type { PersonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
 import { Eyebrow, PersonAvatar, QuietEmpty, Sheet, TextLink } from "../kit";
+import { enterSends, formatMessageTime } from "../util";
 
 export type ChatSubTab = "discussions" | "announcements" | "notes";
 
@@ -359,17 +360,6 @@ export const GroupChatModal = ({
     }
   };
 
-  const formatRelative = (t?: string | Date) => {
-    if (!t) return "";
-    const d = typeof t === "string" ? new Date(t) : t;
-    if (isNaN(d.getTime())) return "";
-    const diff = Math.floor((Date.now() - d.getTime()) / 60000);
-    if (diff < 1) return Locale.label("mobile.now");
-    if (diff < 60) return `${diff}m`;
-    if (diff < 1440) return `${Math.floor(diff / 60)}h`;
-    return `${Math.floor(diff / 1440)}d`;
-  };
-
   const renderMessageContent = (content: string) => {
     const imageRegex = /https?:\/\/\S+\.(jpg|jpeg|png|gif|webp|svg)(\?\S*)?/gi;
     const urlRegex = /https?:\/\/\S+/gi;
@@ -421,7 +411,7 @@ export const GroupChatModal = ({
             <Box sx={{ maxWidth: "78%", minWidth: 0, display: "flex", flexDirection: "column", alignItems: isMine ? "flex-end" : "flex-start" }}>
               {showName && (
                 <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary, mb: "4px" }}>
-                  {[name, formatRelative(m.timeSent)].filter(Boolean).join(" · ")}
+                  {[name, formatMessageTime(m.timeSent)].filter(Boolean).join(" · ")}
                 </Typography>
               )}
               <Box sx={{
@@ -473,7 +463,7 @@ export const GroupChatModal = ({
                     <MoreVertIcon sx={{ fontSize: 18 }} />
                   </IconButton>
                 )}
-                {(isMine || !showName) && <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>{formatRelative(m.timeSent)}</Typography>}
+                {(isMine || !showName) && <Typography data-testid="message-time" sx={{ fontSize: 12, color: tc.textSecondary }}>{formatMessageTime(m.timeSent)}</Typography>}
               </Box>
             </Box>
           </Box>
@@ -497,7 +487,7 @@ export const GroupChatModal = ({
           {latestAnnouncement ? (
             <>
               <Typography sx={{ fontSize: 15, lineHeight: "21px", fontWeight: 500, color: tc.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{latestAnnouncement.content}</Typography>
-              <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary }}>{[nameOf(latestAnnouncement.personId), formatRelative(latestAnnouncement.timeSent)].filter(Boolean).join(" · ")}</Typography>
+              <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary }}>{[nameOf(latestAnnouncement.personId), formatMessageTime(latestAnnouncement.timeSent)].filter(Boolean).join(" · ")}</Typography>
             </>
           ) : <QuietEmpty>{Locale.label("mobile.group.noAnnouncementsYet")}</QuietEmpty>}
         </Box>
@@ -580,14 +570,14 @@ export const GroupChatModal = ({
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
+                if (e.key === "Enter" && !e.shiftKey && enterSends()) {
                   e.preventDefault();
                   handleSend();
                 }
               }}
               multiline
               maxRows={4}
-              slotProps={{ input: { sx: { borderRadius: "8px", minHeight: 44 } } }}
+              slotProps={{ input: { sx: { borderRadius: "8px", minHeight: 44 } }, htmlInput: { enterKeyHint: "enter" } }}
             />
             <Button variant="contained" onClick={handleSend} disabled={sending || !draft.trim()} aria-label={Locale.label("mobile.details.send")} sx={{ minWidth: 44, width: 44, height: 44, px: 0, flex: "none" }}>
               <SendIcon sx={{ fontSize: 20 }} />
