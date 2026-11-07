@@ -419,6 +419,12 @@
     "folder": {
       "empty": "Nothing here yet"
     },
+    "format": {
+      "bold": "Bold",
+      "bullets": "Bulleted list",
+      "italic": "Italic",
+      "numbered": "Numbered list"
+    },
     "giving": {
       "allHistory": "All history",
       "allYears": "All",
