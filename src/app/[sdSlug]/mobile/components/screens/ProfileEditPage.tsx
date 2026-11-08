@@ -29,6 +29,7 @@ import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelp
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PersonInterface, VisibilityPreferenceInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { parseTitleOptions } from "@/helpers/TitleOptions";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
 import { Eyebrow, KeyValues, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, Sheet, StatusBadge, TextLink } from "../kit";
@@ -59,9 +60,6 @@ const scopeDescKeys: Record<VisibilityScope, string> = {
 // PersonHelper only recognizes PNG data URLs; the cropper produces JPEG.
 const photoSrc = (p: PersonInterface) => (p.photo ? (p.photo.startsWith("data:") ? p.photo : PersonHelper.getPhotoUrl(p)) : undefined);
 
-const TITLE_SUGGESTIONS = [
-  "Mr", "Mrs", "Miss", "Ms", "Dr", "Prof", "Rev", "Pastor"
-];
 const HOUSEHOLD_ROLES = ["Head", "Spouse", "Child", "Other"];
 
 const fieldLabelKeys: Record<string, string> = {
@@ -257,6 +255,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   // Blank Directory Approval Group means member edits apply directly, with no staff review.
   // This cached copy only drives labels; handleSave re-reads settings before it picks a path.
   const requiresApproval = !!(publicSettings?.directoryApprovalGroupId || "");
+  const titleOptions = useMemo(() => parseTitleOptions(publicSettings?.titleOptions), [publicSettings]);
   // Don't offer a button whose label promises a path we haven't confirmed yet.
   const settingsSettled = !churchId || settingsFetched;
 
@@ -681,7 +680,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       </Box>
       <Autocomplete
         freeSolo
-        options={TITLE_SUGGESTIONS}
+        options={titleOptions}
         value={readField(person, "name.prefix")}
         onInputChange={(_, val) => { if (val !== readField(person, "name.prefix")) setField("name.prefix", val); }}
         renderInput={(params) => <TextField {...params} fullWidth label={Locale.label("checkin.guestRegister.personTitle")} inputProps={{ ...params.inputProps, maxLength: 10, "data-testid": "profile-title" } as any} />}
@@ -724,7 +723,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       <TextField label={Locale.label("person.lastName")} value={newMember.last} onChange={(e) => setNewMember({ ...newMember, last: e.target.value })} inputProps={{ "data-testid": "family-member-last" }} fullWidth />
       <Autocomplete
         freeSolo
-        options={TITLE_SUGGESTIONS}
+        options={titleOptions}
         value={newMember.prefix}
         onInputChange={(_, val) => setNewMember((m) => ({ ...m, prefix: val }))}
         renderInput={(params) => <TextField {...params} fullWidth label={Locale.label("checkin.guestRegister.personTitle")} inputProps={{ ...params.inputProps, maxLength: 10, "data-testid": "family-member-title" } as any} />}

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Icon, Box, Typography, TextField, IconButton, MenuItem } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
+import { DEFAULT_TITLES, parseTitleOptions } from "@/helpers/TitleOptions";
 import { HeaderSection, HeaderIconContainer, HeaderImage, CheckinCard, colors } from "./CheckinStyles";
 
 interface GuestMember {
@@ -32,10 +33,6 @@ type FieldModes = Record<FieldKey, FieldMode>;
 // Matches the Api default, so the form looks like it always has until the church changes the checklist.
 const DEFAULT_MODES: FieldModes = { title: "off", email: "optional", phone: "optional", householdRole: "optional", address: "off", birthDate: "off", gender: "off", maritalStatus: "off", grade: "off", comments: "off" };
 const GENDERS = ["Unspecified", "Male", "Female"];
-// Same suggestions as the Title field on B1Admin's person edit.
-const TITLES = [
-  "Mr", "Mrs", "Miss", "Ms", "Dr", "Prof", "Rev", "Pastor"
-];
 // The first person heads the household; everyone after them picks one of these.
 const HOUSEHOLD_ROLES = ["Spouse", "Child", "Other"];
 const MARITAL_STATUSES = ["Unknown", "Single", "Married", "Divorced", "Widowed"];
@@ -55,6 +52,7 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
   const [maritalStatus, setMaritalStatus] = useState("");
   const [comments, setComments] = useState("");
   const [modes, setModes] = useState<FieldModes>(DEFAULT_MODES);
+  const [titles, setTitles] = useState<string[]>(DEFAULT_TITLES);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [error, setError] = useState("");
@@ -64,6 +62,10 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
     ApiHelper.getAnonymous("/people/guest-register/options?churchId=" + encodeURIComponent(churchId), "MembershipApi")
       .then((data: Partial<FieldModes>) => { if (data && typeof data === "object") setModes({ ...DEFAULT_MODES, ...data }); })
       .catch(() => { /* keep the default form */ });
+    // The church's own title list (Manage Church > Custom Fields in B1Admin).
+    ApiHelper.getAnonymous("/settings/public/" + encodeURIComponent(churchId), "MembershipApi")
+      .then((settings: any) => setTitles(parseTitleOptions(settings?.titleOptions)))
+      .catch(() => { /* keep the default titles */ });
   }, [churchId]);
 
   const on = (key: FieldKey) => modes[key] !== "off";
@@ -201,7 +203,7 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
                 sx={{ minWidth: 110 }}
               >
                 <MenuItem value="">&nbsp;</MenuItem>
-                {TITLES.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
+                {titles.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
               </TextField>
             )}
             <TextField
