@@ -62,12 +62,15 @@ export const useMyGroups = (enabled: boolean, userId?: string) => useQuery<Group
   gcTime: 15 * 60 * 1000
 });
 
-// Open workflow cards assigned to the signed-in member, soonest due first.
+// The Api returns tasks oldest first and cards soonest due first; members see what just arrived on top.
+const newestFirst = (a: TaskInterface, b: TaskInterface) => (new Date(b.dateCreated || 0).getTime() - new Date(a.dateCreated || 0).getTime()) || ((b.taskNumber || 0) - (a.taskNumber || 0));
+
+// Open workflow cards assigned to the signed-in member, newest first.
 export const useMyCards = (enabled: boolean) => useQuery<TaskInterface[]>({
   queryKey: ["/tasks/cards/my", "DoingApi"],
   queryFn: async () => {
     const data = await ApiHelper.get("/tasks/cards/my", "DoingApi");
-    return Array.isArray(data) ? data : [];
+    return (Array.isArray(data) ? data : []).sort(newestFirst);
   },
   enabled,
   staleTime: 60 * 1000
@@ -78,7 +81,7 @@ export const useMyTasks = (personId: string | undefined, enabled: boolean) => us
   queryKey: ["/tasks", "DoingApi", personId],
   queryFn: async () => {
     const data = await ApiHelper.get("/tasks", "DoingApi");
-    return (Array.isArray(data) ? data : []).filter((t: TaskInterface) => t.assignedToType === "person" && t.assignedToId === personId);
+    return (Array.isArray(data) ? data : []).filter((t: TaskInterface) => t.assignedToType === "person" && t.assignedToId === personId).sort(newestFirst);
   },
   enabled: enabled && !!personId,
   staleTime: 60 * 1000

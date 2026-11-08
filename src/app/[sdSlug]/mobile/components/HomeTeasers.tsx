@@ -253,7 +253,7 @@ export const FormsTeaser = ({ submissions }: { submissions: MyFormSubmission[] }
   </PlateSection>
 );
 
-// Cards first (already soonest due first), then plain tasks.
+// Cards first, then plain tasks; the hooks already sort each newest first.
 export const TasksTeaser = ({ cards, tasks }: { cards: TaskInterface[]; tasks: TaskInterface[] }) => {
   const [open, setOpen] = useState<TaskInterface | null>(null);
   const rows = [...cards, ...tasks].slice(0, 2);

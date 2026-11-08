@@ -294,6 +294,53 @@ test.describe("Mobile dashboard tile layout", () => {
     await expect(row).toHaveAttribute("data-autoscroll", "off");
   });
 
+  // ChurchAppsSupport#1494: the two combined layouts feature the first three photo links and list the rest
+  // beneath, with an All link to the More screen.
+  const FIVE_LINKS = [
+    ...PHOTO_LINKS,
+    { id: "TILE4", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "groups", text: "Find a Group", sort: 4, photo: "/images/group.jpg", visibility: "everyone" },
+    { id: "TILE5", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "donation", text: "Give Online", sort: 5, photo: "/images/group.jpg", visibility: "everyone" }
+  ];
+  const openWithLinks = async (page: Page, links: object[]) => {
+    await page.route(/\/links\/church\/[^/]+\?category=b1Tab/, (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(links) }));
+    await page.goto("/mobile/dashboard");
+    await expect(page.locator("main").getByText("Watch Sermons", { exact: true }).first()).toBeVisible({ timeout: 30000 });
+  };
+  const tileSection = (page: Page) => page.getByTestId("home-tiles-section");
+
+  test("features three photo links as a grid and lists the rest when the church picks Grid and list", async ({ page }) => {
+    await setTileLayout("gridlist");
+    await openWithLinks(page, FIVE_LINKS);
+    const grid = page.getByTestId("home-tile-grid");
+    await expect(grid.getByRole("link")).toHaveCount(3);
+    for (const name of ["Watch Sermons", "Read the Bible", "Join Live"]) await expect(grid.getByRole("link", { name, exact: true })).toBeVisible();
+    const list = page.getByTestId("home-tile-list");
+    await expect(list.locator(".kit-row")).toHaveCount(2);
+    await expect(list.locator(".kit-row", { hasText: "Find a Group" })).toBeVisible();
+    await expect(list.locator(".kit-row", { hasText: "Give Online" })).toBeVisible();
+    const all = tileSection(page).getByRole("link", { name: "All", exact: true });
+    await expect(all).toHaveAttribute("href", /\/mobile\/more/);
+    await all.click();
+    await expect(page).toHaveURL(/\/mobile\/more/, { timeout: 15000 });
+  });
+
+  test("features three photo links in the moving row and lists the rest when the church picks Scrolling (automatic) and list", async ({ page }) => {
+    await setTileLayout("autoscrolllist");
+    await openWithLinks(page, FIVE_LINKS);
+    await expect(page.getByTestId("home-tile-scroll").getByRole("link")).toHaveCount(3);
+    await expect(page.getByTestId("home-tile-scroll-dots").getByRole("button")).toHaveCount(3);
+    await expect(page.getByTestId("home-tile-list").locator(".kit-row")).toHaveCount(2);
+    await expect(tileSection(page).getByRole("link", { name: "All", exact: true })).toHaveAttribute("href", /\/mobile\/more/);
+  });
+
+  test("shows only the featured tiles, with no list or All link, when there are three or fewer", async ({ page }) => {
+    await setTileLayout("gridlist");
+    await openWithLinks(page, PHOTO_LINKS);
+    await expect(page.getByTestId("home-tile-grid").getByRole("link")).toHaveCount(3);
+    await expect(page.getByTestId("home-tile-list")).toHaveCount(0);
+    await expect(tileSection(page).getByRole("link", { name: "All", exact: true })).toHaveCount(0);
+  });
+
   // Issue #1315: a verse-of-the-day link with a photo is a tile like the rest, not only the verse section.
   test("shows a photo verse-of-the-day link as a tile", async ({ page }) => {
     await setTileLayout("grid");

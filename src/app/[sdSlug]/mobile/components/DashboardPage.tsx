@@ -31,6 +31,9 @@ interface Props {
   config: ConfigurationInterface;
 }
 
+// Photo links featured above the list in the "Grid and list" and "Scrolling (automatic) and list" layouts.
+const FEATURED_TILES = 3;
+
 export const linkPhoto = (l: LinkInterface) => (l as unknown as { photo?: string }).photo;
 
 // Churches that built their app from photo page links (ICOM, SICOM) get those as tiles instead of pills.
@@ -166,7 +169,7 @@ export const DashboardPage = ({ config }: Props) => {
   const { sorted: sortedPills, increment: incrementViewCount } = useEngagementSort(pillLinks, LINK_VIEW_COUNTS_KEY, linkId);
 
   const hideSignInPrompt = appearance?.mobileHideSignInPrompt === "true";
-  const tileLayout = ["scroll", "autoscroll", "list"].includes(appearance?.mobileTileLayout || "") ? appearance!.mobileTileLayout : "grid";
+  const tileLayout = ["scroll", "autoscroll", "list", "gridlist", "autoscrolllist"].includes(appearance?.mobileTileLayout || "") ? appearance!.mobileTileLayout : "grid";
   const signInPrompt = (appearance?.mobileSignInPromptText || "").trim() || Locale.label("mobile.dashboard.signInPrompt");
 
   const head = signedIn
@@ -187,26 +190,44 @@ export const DashboardPage = ({ config }: Props) => {
 
   const banner = <NotificationPermissionBanner enabled={!!jwt} />;
 
+  const renderTileList = (items: LinkInterface[]) => (
+    <RowList>
+      {items.map((l) => {
+        const target = linkTarget(l)!;
+        const nav = target.external ? { onClick: () => openExternal(target.href) } : { href: target.href };
+        return <Row key={linkId(l)} {...nav} title={l.text} leading={<Thumb src={linkPhoto(l)} width={56} height={56} />} chevron />;
+      })}
+    </RowList>
+  );
+  const renderTileStrip = (items: LinkInterface[], autoscroll: boolean) => (
+    <AutoScrollStrip enabled={autoscroll} testId="home-tile-scroll" gap="8px" tileWidth={{ xs: "150px", md: "220px" }}>
+      {items.map((l) => <PhotoTile key={linkId(l)} link={l} wide={false} />)}
+    </AutoScrollStrip>
+  );
+  const renderTileGrid = (items: LinkInterface[]) => (
+    <Box data-testid="home-tile-grid" sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+      {items.map((l, i) => <PhotoTile key={linkId(l)} link={l} wide={i === 0 && items.length % 2 === 1} />)}
+    </Box>
+  );
+
+  // The combined layouts feature the first few photo links and list the rest beneath; More lists them all.
+  const combinedTiles = tileLayout === "gridlist" || tileLayout === "autoscrolllist";
+  const featuredTiles = combinedTiles ? tileLinks.slice(0, FEATURED_TILES) : tileLinks;
+  const restTiles = combinedTiles ? tileLinks.slice(FEATURED_TILES) : [];
+
   const tileSection = tileLinks.length > 0 && (
-    <PlateSection title={churchName || undefined}>
-      {tileLayout === "list" ? (
-        <RowList>
-          {tileLinks.map((l) => {
-            const target = linkTarget(l)!;
-            const nav = target.external ? { onClick: () => openExternal(target.href) } : { href: target.href };
-            return <Row key={linkId(l)} {...nav} title={l.text} leading={<Thumb src={linkPhoto(l)} width={56} height={56} />} chevron />;
-          })}
-        </RowList>
-      ) : tileLayout === "scroll" || tileLayout === "autoscroll" ? (
+    <PlateSection
+      data-testid="home-tiles-section"
+      title={churchName || undefined}
+      action={restTiles.length > 0 ? <TextLink href="/mobile/more">{Locale.label("mobile.dashboard.all")}</TextLink> : undefined}
+    >
+      {tileLayout === "list"
+        ? renderTileList(tileLinks)
         // "autoscroll" is the scrolling row that also moves on its own (opt-in in B1Admin > B1 Mobile).
-        <AutoScrollStrip enabled={tileLayout === "autoscroll"} testId="home-tile-scroll" gap="8px" tileWidth={{ xs: "150px", md: "220px" }}>
-          {tileLinks.map((l) => <PhotoTile key={linkId(l)} link={l} wide={false} />)}
-        </AutoScrollStrip>
-      ) : (
-        <Box data-testid="home-tile-grid" sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-          {tileLinks.map((l, i) => <PhotoTile key={linkId(l)} link={l} wide={i === 0 && tileLinks.length % 2 === 1} />)}
-        </Box>
-      )}
+        : tileLayout === "scroll" || tileLayout === "autoscroll" || tileLayout === "autoscrolllist"
+          ? renderTileStrip(featuredTiles, tileLayout !== "scroll")
+          : renderTileGrid(featuredTiles)}
+      {restTiles.length > 0 && <Box data-testid="home-tile-list" sx={{ mt: "8px" }}>{renderTileList(restTiles)}</Box>}
     </PlateSection>
   );
 
