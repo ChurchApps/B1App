@@ -204,4 +204,21 @@ test.describe("QR guest registration", () => {
       await removeTitled();
     }
   });
+
+  // ChurchAppsSupport#1481: the Title list is the church's own (Manage Church > Custom Fields).
+  test("offers the church's own titles when it has set a title list", async ({ page }) => {
+    const original = (await loadSettings()).find((s) => s.keyName === "titleOptions")?.value ?? "[]";
+    await saveSettings({ guestRegistrationFields: JSON.stringify({ title: "optional", email: "optional", phone: "off" }), titleOptions: JSON.stringify(["Deacon", "Elder"]) });
+    try {
+      await page.goto(BASE_URL + "/guest-register");
+      const titles = page.getByRole("combobox", { name: /^Title/ });
+      await expect(titles).toHaveCount(2, { timeout: 20000 });
+      await titles.nth(0).click();
+      await expect(page.getByRole("option", { name: "Deacon", exact: true })).toBeVisible();
+      await expect(page.getByRole("option", { name: "Elder", exact: true })).toBeVisible();
+      await expect(page.getByRole("option", { name: "Mr", exact: true })).toHaveCount(0);
+    } finally {
+      await saveSettings({ titleOptions: original });
+    }
+  });
 });
