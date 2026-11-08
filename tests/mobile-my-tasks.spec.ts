@@ -102,6 +102,29 @@ test.describe.serial("Mobile my cards and tasks", () => {
     await expect(tasksList.getByTestId("task-row-task").filter({ hasText: "Call Donald Clark about ushers" })).toBeVisible();
   });
 
+  // ChurchAppsSupport#1494: the Api returns tasks oldest first and cards soonest due first; the app shows the newest on top.
+  test("follow-ups list the newest task and card first", async ({ page }) => {
+    const base = { status: "Open", assignedToType: "person", assignedToId: DEMO_PERSON, assignedToLabel: "Demo User", associatedWithType: "person", associatedWithId: "PER00000080", associatedWithLabel: "Donald Clark" };
+    const cards = [
+      { ...base, id: "CRDOLD", workflowId: "WFL00000002", stepId: "WFS00000005", taskNumber: 901, title: "Older card for Donald Clark", dateCreated: "2026-01-05T10:00:00Z", dueDate: "2026-01-10T00:00:00Z" },
+      { ...base, id: "CRDNEW", workflowId: "WFL00000002", stepId: "WFS00000005", taskNumber: 902, title: "Newer card for Donald Clark", dateCreated: "2026-03-05T10:00:00Z", dueDate: "2026-12-10T00:00:00Z" }
+    ];
+    const tasks = [
+      { ...base, id: "TSKOLD", taskNumber: 903, title: "Older task about Donald Clark", dateCreated: "2026-01-06T10:00:00Z" },
+      { ...base, id: "TSKNEW", taskNumber: 904, title: "Newer task about Donald Clark", dateCreated: "2026-03-06T10:00:00Z" }
+    ];
+    await page.route("**/doing/tasks/cards/my", (route) => route.fulfill({ json: cards }));
+    await page.route(/\/doing\/tasks$/, (route) => route.fulfill({ json: tasks }));
+    await page.goto("/mobile/myTasks");
+    await expect(mobileSignedInChrome(page)).toBeVisible({ timeout: 30000 });
+    const cardsList = page.getByRole("region", { name: "Cards", exact: true });
+    await expect(cardsList.getByTestId("task-row-card")).toHaveCount(2, { timeout: 20000 });
+    await expect(cardsList.getByTestId("task-row-card").first()).toContainText("Newer card for Donald Clark");
+    const tasksList = page.getByRole("region", { name: "Tasks", exact: true });
+    await expect(tasksList.getByTestId("task-row-task")).toHaveCount(2);
+    await expect(tasksList.getByTestId("task-row-task").first()).toContainText("Newer task about Donald Clark");
+  });
+
   test("sections stay hidden when nothing is assigned", async ({ page }) => {
     await page.route("**/doing/tasks/cards/my", (route) => route.fulfill({ json: [] }));
     await page.route(/\/doing\/tasks$/, (route) => route.fulfill({ json: [] }));
