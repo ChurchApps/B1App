@@ -41,7 +41,22 @@ const loadData = async (sdSlug: string, postSlug: string) => {
 const excerptOf = (post: PostInterface) => post.excerpt || (post.content || "").replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*_`~]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
 
 // The post title is the page's h1, so a "# Heading" in the body becomes an h2.
-const demoteTopHeadings = (content: string) => content.replace(/^#(?=\s)/gm, "##");
+// Lines inside a ``` or ~~~ fence are code, so a "# comment" there is left alone.
+const demoteTopHeadings = (content: string) => {
+  let fence: string | null = null;
+  return content.split("\n").map((line) => {
+    const marker = line.match(/^ {0,3}(`{3,}|~{3,})/)?.[1];
+    if (fence) {
+      if (marker && marker[0] === fence[0] && marker.length >= fence.length && /^ {0,3}[`~]+\s*$/.test(line)) fence = null;
+      return line;
+    }
+    if (marker) {
+      fence = marker;
+      return line;
+    }
+    return line.replace(/^#(?=\s)/, "##");
+  }).join("\n");
+};
 
 const getBaseUrl = (sdSlug: string) => publicOrigin(sdSlug);
 

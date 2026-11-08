@@ -127,7 +127,7 @@ test.describe("SEO", () => {
       const login = await (await api.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
       const church = login.userChurches.find((c: any) => c.church?.id === "CHU00000001");
       headers = { Authorization: `Bearer ${church.apis.find((a: any) => a.keyName === "ContentApi").jwt}`, "Content-Type": "application/json" };
-      const posts = await (await api.post(`${MAIN_API}/content/posts`, { headers, data: [{ title: "Seo Blog Post", slug, excerpt: "Why posts need dates.", content: "# A heading in the body\n\nThe body of the post.", publishDate }] })).json();
+      const posts = await (await api.post(`${MAIN_API}/content/posts`, { headers, data: [{ title: "Seo Blog Post", slug, excerpt: "Why posts need dates.", content: "# A heading in the body\n\nThe body of the post.\n\n```\n# comment\n```", publishDate }] })).json();
       postId = posts[0].id;
     });
 
@@ -148,6 +148,12 @@ test.describe("SEO", () => {
       const html = await (await request.get("/blog/" + slug)).text();
       expect(h1Count(html)).toBe(1);
       expect(h1Text(html)).toBe("Seo Blog Post");
+    });
+
+    test("leaves a # line inside a code block alone", async ({ request }) => {
+      const html = await (await request.get("/blog/" + slug)).text();
+      expect(html).toContain("# comment");
+      expect(html).not.toContain("## comment");
     });
   });
 
