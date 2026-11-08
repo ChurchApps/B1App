@@ -76,7 +76,8 @@ const buildUrlForType = (type: string, id: string | undefined, payload: PushPayl
     case "schedule": return id ? `/mobile/plans/${id}` : null;
     case "groupannouncement": return id ? `/mobile/groups/${id}?openChat=1&chatTab=announcements` : null;
     case "groupnote": return id ? `/mobile/groups/${id}?openChat=1&chatTab=notes` : null;
-    case "event":
+    // Event reminders share the "event" type; only request decisions open My Requests.
+    case "event": return /was (approved|rejected)\b/i.test(payload.body || "") ? "/mobile/myRequests" : null;
     case "eventbooking": return "/mobile/myRequests";
     case "group": return id ? `/mobile/groups/${id}` : null;
     case "assignment": return "/mobile/plans";

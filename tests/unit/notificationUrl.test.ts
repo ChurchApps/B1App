@@ -5,8 +5,18 @@ import { deriveNotificationUrl } from "../../src/app/[sdSlug]/mobile/helpers/not
 // ChurchAppsSupport#1495: request decisions and note alerts did nothing when tapped.
 describe("deriveNotificationUrl", () => {
   it("opens My Requests for event and room request decisions", () => {
-    assert.equal(deriveNotificationUrl({ contentType: "event", contentId: "e1", message: "Your event request \"Family issues\" was rejected." } as any), "/mobile/myRequests");
+    assert.equal(deriveNotificationUrl({ contentType: "event", contentId: "e1", message: "Your event request \"Family issues\" was rejected." }), "/mobile/myRequests");
+    assert.equal(deriveNotificationUrl({ contentType: "event", contentId: "e1", message: "Your event request \"Family issues\" was approved." }), "/mobile/myRequests");
     assert.equal(deriveNotificationUrl({ contentType: "eventBooking", contentId: "b1" }), "/mobile/myRequests");
+  });
+
+  it("leaves a linkless event reminder without a target", () => {
+    assert.equal(deriveNotificationUrl({ contentType: "event", contentId: "e1", message: "Reminder: Sunday Service is coming up" }), undefined);
+  });
+
+  it("keeps a group event reminder's link", () => {
+    const link = "/mobile/groups/g1?activeTab=events";
+    assert.equal(deriveNotificationUrl({ contentType: "event", contentId: "e1", message: "Reminder: Sunday Service is coming up", link }), link);
   });
 
   it("follows the server link before the fallbacks", () => {
