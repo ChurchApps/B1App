@@ -1,9 +1,11 @@
 import { test, expect, request, type APIRequestContext, type Page } from "@playwright/test";
 import { mobileSignedInChrome } from "./helpers/mobile";
+import { getApi, apiCall } from "./helpers/api";
 
 const MAIN_API = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 const DEMO_PERSON_ID = "PER00000082";
+const CONTENT_API = `${MAIN_API}/content`;
 
 async function messagingHeaders(ctx: APIRequestContext) {
   const login = await ctx.post(`${MAIN_API}/membership/users/login`, {
@@ -52,6 +54,28 @@ test.describe("Mobile notifications", () => {
         }
       }
       await ctx.dispose();
+    }
+  });
+
+  // ChurchAppsSupport#1495: tapping "Your event request ... was rejected." did nothing.
+  test("a request decision notification opens My Requests", async ({ page }) => {
+    const api = await getApi("demo", "ContentApi");
+    const title = `Request decision ${Date.now()}`;
+    const start = new Date(Date.now() + 7 * 86400000);
+    const end = new Date(start.getTime() + 3600000);
+    const created = await (await apiCall(api, "post", `${CONTENT_API}/events/request`, { title, start, end, allDay: false })).json();
+    const eventId = created.event.id;
+    try {
+      expect((await apiCall(api, "post", `${CONTENT_API}/events/${eventId}/reject`)).ok()).toBeTruthy();
+
+      await page.goto("/mobile/notifications");
+      const row = page.getByRole("button", { name: new RegExp(`Your event request "${title}" was rejected`) });
+      await expect(row).toBeVisible({ timeout: 30000 });
+      await row.click();
+      await expect(page).toHaveURL(/\/mobile\/myRequests/);
+    } finally {
+      await apiCall(api, "delete", `${CONTENT_API}/events/${eventId}`);
+      await api.request.dispose();
     }
   });
 
