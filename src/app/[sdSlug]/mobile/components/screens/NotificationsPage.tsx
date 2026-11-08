@@ -14,6 +14,7 @@ import { WebPushHelper } from "@/helpers";
 import { mobileTheme } from "../mobileTheme";
 import { formatRelative, deriveNotificationUrl } from "../util";
 import { useNotificationDiagnostics } from "../../hooks/useNotificationDiagnostics";
+import { openExternal } from "../../helpers/dashboardLinks";
 import { BackVerb, FilterPills, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink, useSliceView } from "../kit";
 import { ConversationAvatar, conversationHref, fetchConversations, type Conversation, type NotificationItem } from "../NotificationBellMenu";
 
@@ -87,8 +88,8 @@ export const NotificationsPage = ({ config: _config }: Props) => {
   const handleClick = (n: NotificationItem) => {
     const href = deriveNotificationUrl(n);
     if (!href) return;
-    if (href.startsWith("http")) {
-      window.location.href = href;
+    if (/^https?:/.test(href)) {
+      openExternal(href);
     } else {
       router.push(href);
     }
