@@ -1,0 +1,325 @@
+{
+  "$comment": "Maps source paths to the specs that cover them. Used by tests/setup/affected.mjs (yarn test:affected). A changed file in no area runs every spec, so shared code (layouts, providers, ConfigHelper, the mobile shell's hooks and kit) stays unmapped on purpose. New spec files must be added to an area; yarn test:areas checks that.",
+  "always": ["mobile-shell.spec.ts", "public-navigation.spec.ts"],
+  "ignore": [
+    "**/*.md",
+    ".github/**",
+    ".claude/**",
+    "docs/**",
+    "tests/areas.json",
+    "tests/smoke/**",
+    "tests/setup/smoke.mjs",
+    "tests/setup/affected.mjs",
+    "playwright.smoke.config.ts"
+  ],
+  "areas": {
+    "mobileShell": {
+      "src": [
+        "src/app/[sdSlug]/mobile/[pageSlug]/**",
+        "src/app/[sdSlug]/mobile/components/MobileShell.tsx",
+        "src/app/[sdSlug]/mobile/components/MobileAppBar.tsx",
+        "src/app/[sdSlug]/mobile/components/MobileTabBar.tsx",
+        "src/app/[sdSlug]/mobile/components/mobileTabs.ts",
+        "src/app/[sdSlug]/mobile/components/ScreenRouter.tsx",
+        "src/app/[sdSlug]/mobile/components/DetailRouter.tsx",
+        "src/app/[sdSlug]/mobile/components/PlaceholderPage.tsx",
+        "src/app/[sdSlug]/mobile/components/MobileKeepAlive.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/MoreCardsPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/FolderPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/WebsiteUrlPage.tsx"
+      ],
+      "specs": ["mobile-shell*.spec.ts", "mobile-keepalive.spec.ts"]
+    },
+    "mobileHome": {
+      "src": [
+        "src/app/[sdSlug]/mobile/components/DashboardPage.tsx",
+        "src/app/[sdSlug]/mobile/components/HomeTeasers.tsx",
+        "src/app/[sdSlug]/mobile/components/EmptyDashboardPlaceholder.tsx",
+        "src/app/[sdSlug]/mobile/components/NewsCard.tsx",
+        "src/app/[sdSlug]/mobile/components/SermonCard.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/NewsPage.tsx",
+        "src/app/[sdSlug]/mobile/components/details/PostDetail.tsx",
+        "src/components/elements/AutoScrollStrip.tsx",
+        "src/app/[sdSlug]/mobile/helpers/useAutoScroll.ts"
+      ],
+      "specs": ["mobile-home.spec.ts", "mobile-my-tasks.spec.ts", "mobile-push-no-server-keys.spec.ts"]
+    },
+    "analytics": {
+      "src": ["src/app/[sdSlug]/mobile/MobileGoogleAnalytics.tsx", "src/helpers/mobileAnalytics.ts", "src/components/ChurchAnalytics.tsx", "src/components/GoogleAnalytics.tsx"],
+      "specs": ["mobile-analytics.spec.ts"]
+    },
+    "appBadge": {
+      "src": ["src/helpers/AppBadgeHelper.ts"],
+      "specs": ["mobile-app-badge.spec.ts"]
+    },
+    "install": {
+      "src": [
+        "src/app/[sdSlug]/mobile/install/**",
+        "src/app/[sdSlug]/mobile/components/screens/InstallPage.tsx",
+        "src/helpers/InstallPromptHelper.ts",
+        "src/app/[sdSlug]/mobile/PwaRegister.tsx",
+        "src/app/[sdSlug]/mobile/icon/**",
+        "src/app/[sdSlug]/mobile/screenshot/**",
+        "src/app/[sdSlug]/manifest.webmanifest/**",
+        "src/app/manifest.webmanifest/**",
+        "src/app/manifestHelper.ts"
+      ],
+      "specs": ["mobile-install.spec.ts"]
+    },
+    "auth": {
+      "src": [
+        "src/app/[sdSlug]/(public)/login/**",
+        "src/app/[sdSlug]/(public)/logout/**",
+        "src/app/[sdSlug]/mobile/logout/**",
+        "src/app/[sdSlug]/mobile/components/screens/LoginPage.tsx",
+        "src/app/[sdSlug]/mobile/hooks/hydrateUserSession.ts",
+        "src/components/Login.tsx",
+        "src/components/LoginClient.tsx",
+        "src/components/AuthGuard.tsx"
+      ],
+      "specs": [
+        "auth-flow.spec.ts",
+        "two-factor-login.spec.ts",
+        "mobile-logout.spec.ts",
+        "mobile-session-survives-refresh.spec.ts",
+        "mobile-community-contact-visibility.spec.ts",
+        "hide-public-site.spec.ts"
+      ]
+    },
+    "mobileGroups": {
+      "src": [
+        "src/app/[sdSlug]/mobile/components/screens/GroupsPage.tsx",
+        "src/app/[sdSlug]/mobile/components/details/GroupDetail.tsx",
+        "src/app/[sdSlug]/mobile/components/details/RequestToJoinDialog.tsx",
+        "src/app/[sdSlug]/mobile/components/group/**",
+        "src/components/eventCalendar/**"
+      ],
+      "specs": [
+        "mobile-group*.spec.ts",
+        "mobile-first-day.spec.ts",
+        "mobile-rsvp.spec.ts",
+        "mobile-confidential.spec.ts",
+        "public-groups.spec.ts",
+        "realtime-conversations.spec.ts",
+        "realtime-reactions.spec.ts",
+        "realtime-single-socket.spec.ts"
+      ]
+    },
+    "publicGroups": {
+      "src": [
+        "src/app/[sdSlug]/(public)/groups/**",
+        "src/components/groups/**",
+        "src/components/elements/GroupListElement.tsx",
+        "src/components/elements/GroupsBrowserElement.tsx"
+      ],
+      "specs": ["public-groups*.spec.ts", "mobile-confidential.spec.ts"]
+    },
+    "community": {
+      "src": ["src/app/[sdSlug]/mobile/components/screens/CommunityPage.tsx", "src/app/[sdSlug]/mobile/components/details/CommunityDetail.tsx", "src/helpers/Personhelper.ts"],
+      "specs": ["mobile-community*.spec.ts", "mobile-keepalive.spec.ts"]
+    },
+    "messaging": {
+      "src": [
+        "src/app/[sdSlug]/mobile/components/screens/MessagesPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/MessageComposePage.tsx",
+        "src/app/[sdSlug]/mobile/components/details/MessageConversation.tsx",
+        "src/app/[sdSlug]/mobile/components/MarkdownMessage.tsx",
+        "src/app/[sdSlug]/mobile/components/FormattingPopup.tsx",
+        "src/app/[sdSlug]/mobile/components/formatting.ts",
+        "src/app/[sdSlug]/mobile/components/ChatNotificationBridge.tsx",
+        "src/helpers/ChatHelper.ts",
+        "src/helpers/ChatConfigHelper.ts"
+      ],
+      "specs": [
+        "mobile-messages.spec.ts",
+        "mobile-message-composer.spec.ts",
+        "mobile-delete.spec.ts",
+        "mobile-groups-leader-delete-messages.spec.ts",
+        "realtime-*.spec.ts",
+        "api-messaging-authz.spec.ts"
+      ]
+    },
+    "notifications": {
+      "src": [
+        "src/app/[sdSlug]/mobile/components/screens/NotificationsPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/NotificationPrefsPage.tsx",
+        "src/app/[sdSlug]/mobile/components/NotificationBellMenu.tsx",
+        "src/app/[sdSlug]/mobile/components/NotificationPermissionBanner.tsx",
+        "src/app/[sdSlug]/mobile/components/WebPushEnrollmentSync.tsx",
+        "src/app/[sdSlug]/mobile/hooks/useRealtimeNotifications.ts",
+        "src/helpers/WebPushHelper.ts",
+        "src/helpers/WebPushHelperBase.ts",
+        "src/helpers/NotificationRuntimeHelper.ts",
+        "src/app/[sdSlug]/mobile/helpers/notificationUrl.ts",
+        "src/app/[sdSlug]/mobile/hooks/useNotificationDiagnostics.ts"
+      ],
+      "specs": [
+        "mobile-notification-prefs.spec.ts",
+        "mobile-push-no-server-keys.spec.ts",
+        "mobile-delete.spec.ts",
+        "mobile-misc.spec.ts",
+        "mobile-groups-join.spec.ts",
+        "webpush-api.spec.ts"
+      ]
+    },
+    "me": {
+      "src": [
+        "src/app/[sdSlug]/mobile/components/screens/MePage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/ProfileEditPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/MyAttendancePage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/MyFormsPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/MyRequestsPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/MyTasksPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/CardSheet.tsx",
+        "src/app/[sdSlug]/mobile/helpers/myRecords.ts"
+      ],
+      "specs": ["mobile-me.spec.ts", "mobile-profile*.spec.ts", "mobile-my-tasks.spec.ts", "mobile-request-event.spec.ts", "mobile-misc.spec.ts"]
+    },
+    "requestEvent": {
+      "src": ["src/app/[sdSlug]/mobile/components/screens/RequestEventPage.tsx"],
+      "specs": ["mobile-request-event.spec.ts"]
+    },
+    "donate": {
+      "src": [
+        "src/app/[sdSlug]/mobile/components/screens/DonatePage.tsx",
+        "src/app/[sdSlug]/mobile/donate/**",
+        "src/app/[sdSlug]/(public)/[pageSlug]/components/DonatePage.tsx",
+        "src/components/donate/**",
+        "src/app/[sdSlug]/mobile/helpers/churchCurrency.ts",
+        "src/app/[sdSlug]/mobile/helpers/givingYears.ts"
+      ],
+      "specs": ["mobile-donate*.spec.ts", "mobile-campaigns.spec.ts", "giving-paypal-buttons.spec.ts", "public-built-in.spec.ts"]
+    },
+    "serving": {
+      "src": [
+        "src/app/[sdSlug]/mobile/components/screens/PlansPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/VolunteerPage.tsx",
+        "src/app/[sdSlug]/mobile/components/details/PlanDetail.tsx",
+        "src/app/[sdSlug]/mobile/components/details/VolunteerDetail.tsx",
+        "src/app/[sdSlug]/mobile/components/plans/**",
+        "src/app/[sdSlug]/mobile/components/ConfirmDeclineSheet.tsx",
+        "src/app/[sdSlug]/(public)/volunteer/**",
+        "src/components/serving/**",
+        "src/helpers/PraiseChartsHelper.ts"
+      ],
+      "specs": ["mobile-plans*.spec.ts", "volunteer-signup.spec.ts", "mobile-misc.spec.ts", "mobile-me.spec.ts"]
+    },
+    "registration": {
+      "src": [
+        "src/app/[sdSlug]/mobile/components/screens/EventRegisterPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/RegistrationsPage.tsx",
+        "src/app/[sdSlug]/(public)/register/**",
+        "src/app/[sdSlug]/(public)/guest-register/**",
+        "src/components/registration/**",
+        "src/components/checkin/GuestRegister.tsx"
+      ],
+      "specs": ["mobile-events.spec.ts", "mobile-registration-commerce.spec.ts", "registration*.spec.ts", "guest-registration.spec.ts", "mobile-misc.spec.ts"]
+    },
+    "events": {
+      "src": ["src/app/[sdSlug]/(public)/events/**", "src/components/events/**", "src/components/elements/UpcomingEventsElement.tsx", "src/helpers/EventOccurrences.ts"],
+      "specs": ["public-events.spec.ts", "mobile-groups.spec.ts", "mobile-rsvp.spec.ts"]
+    },
+    "checkin": {
+      "src": ["src/app/[sdSlug]/mobile/components/screens/CheckinPage.tsx", "src/components/checkin/CheckinStyles.tsx", "src/helpers/CheckinHelper.ts"],
+      "specs": ["mobile-checkin.spec.ts"]
+    },
+    "sermons": {
+      "src": [
+        "src/app/[sdSlug]/(public)/sermons/**",
+        "src/app/[sdSlug]/(public)/[pageSlug]/components/SermonsPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/SermonsPage.tsx",
+        "src/app/[sdSlug]/mobile/components/details/SermonDetail.tsx",
+        "src/app/[sdSlug]/mobile/components/details/PlaylistDetail.tsx",
+        "src/app/api/podcast/**",
+        "src/helpers/sermonEmbed.ts",
+        "src/helpers/podcastDownload.ts"
+      ],
+      "specs": ["public-sermons.spec.ts", "mobile-content.spec.ts", "seo.spec.ts"]
+    },
+    "stream": {
+      "src": [
+        "src/app/[sdSlug]/(public)/stream/**",
+        "src/app/[sdSlug]/(public)/[pageSlug]/components/StreamPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/StreamPage.tsx",
+        "src/components/video/**",
+        "src/helpers/StreamChatManager.ts",
+        "src/helpers/StreamingServiceHelper.ts",
+        "src/styles/streaming.css"
+      ],
+      "specs": ["stream-countdown.spec.ts", "realtime-stream-chat.spec.ts", "mobile-content.spec.ts", "public-built-in.spec.ts"]
+    },
+    "bible": {
+      "src": [
+        "src/app/[sdSlug]/(public)/[pageSlug]/components/BiblePage.tsx",
+        "src/app/[sdSlug]/(public)/[pageSlug]/components/VotdPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/BiblePage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/VotdPage.tsx",
+        "src/app/[sdSlug]/mobile/components/screens/LessonsPage.tsx",
+        "src/app/[sdSlug]/mobile/votd-image/**",
+        "src/app/[sdSlug]/mobile/helpers/dailyVerses.ts",
+        "src/app/[sdSlug]/mobile/helpers/shareVerse.ts"
+      ],
+      "specs": ["public-built-in.spec.ts", "mobile-content.spec.ts", "seo.spec.ts"]
+    },
+    "hymns": {
+      "src": [
+        "src/features/hymns/**",
+        "src/app/[sdSlug]/mobile/components/screens/HymnsPage.tsx",
+        "src/app/[sdSlug]/mobile/components/details/HymnDetail.tsx",
+        "src/helpers/ChordProHelper.ts"
+      ],
+      "specs": ["mobile-hymns.spec.ts"]
+    },
+    "blog": {
+      "src": ["src/app/[sdSlug]/(public)/blog/**", "src/components/BlogFooterEmbed.tsx"],
+      "specs": ["public-blog.spec.ts"]
+    },
+    "forms": {
+      "src": ["src/app/[sdSlug]/(public)/[pageSlug]/[id]/**", "src/components/elements/FormElement.tsx"],
+      "specs": ["standalone-form-submit.spec.ts", "public-forms-*.spec.ts", "code-review-core.spec.ts", "mobile-group-forms.spec.ts"]
+    },
+    "publicPages": {
+      "src": [
+        "src/app/[sdSlug]/(public)/page.tsx",
+        "src/app/[sdSlug]/(public)/[pageSlug]/page.tsx",
+        "src/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper.tsx",
+        "src/components/Header.tsx",
+        "src/components/CascadingMenus/**",
+        "src/components/layouts/**",
+        "src/components/RestrictedPage.tsx",
+        "src/components/YoutubeBackground.tsx",
+        "src/components/DropMalformedHash.tsx",
+        "src/hooks/useHashScroll.ts",
+        "src/helpers/RedirectHelper.ts",
+        "src/styles/youtubeBackground.module.css"
+      ],
+      "specs": [
+        "public-home.spec.ts",
+        "public-pages-no-error-shell.spec.ts",
+        "public-fragment-link-scroll.spec.ts",
+        "public-built-in.spec.ts",
+        "code-review-core.spec.ts",
+        "hide-public-site.spec.ts"
+      ]
+    },
+    "hidePublicSite": {
+      "src": ["src/helpers/publicSite.ts", "src/helpers/publicSiteServer.ts"],
+      "specs": ["hide-public-site.spec.ts", "seo.spec.ts"]
+    },
+    "seo": {
+      "src": [
+        "src/components/seo/**",
+        "src/app/[sdSlug]/robots.txt/**",
+        "src/app/[sdSlug]/sitemap.xml/**",
+        "src/helpers/canonicalLink.ts",
+        "src/helpers/noindexHost.ts",
+        "src/helpers/MetaHelper.ts"
+      ],
+      "specs": ["seo.spec.ts", "code-review-core.spec.ts", "hide-public-site.spec.ts"]
+    },
+    "siteCache": {
+      "src": ["src/app/api/revalidate/**"],
+      "specs": ["site-cache.spec.ts", "hide-public-site.spec.ts"]
+    }
+  }
+}

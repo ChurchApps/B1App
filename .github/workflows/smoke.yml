@@ -1,0 +1,46 @@
+on:
+  # Vercel reports each deployment to GitHub. main deploys to the "demo" environment; its
+  # environment_url is a *.vercel.app host, which has no church subdomain, so the suite runs
+  # against the demo church's site. Smoke never runs against production.
+  deployment_status:
+  workflow_dispatch:
+
+name: Smoke
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Demo smoke
+    if: github.event_name == 'workflow_dispatch' || (github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'demo')
+    # Pinned: ubuntu-latest moved to 26.04, which Playwright 1.60 cannot install Chromium deps on.
+    # Can return to ubuntu-latest after upgrading Playwright to >= 1.64.
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Install Chromium
+        run: yarn playwright install --with-deps chromium
+
+      - name: Smoke suite
+        env:
+          SMOKE_BASE_URL: https://grace.demosite.b1.church
+          SMOKE_EMAIL: demo@b1.church
+          SMOKE_PASSWORD: password
+          SMOKE_REQUIRE_AUTH: "1"
+        run: yarn test:smoke
