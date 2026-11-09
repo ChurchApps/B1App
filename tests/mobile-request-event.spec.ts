@@ -56,6 +56,22 @@ test.describe("Mobile event request (CA-1)", () => {
     await expect(page.getByTestId("request-outcome")).toHaveCount(0);
   });
 
+  test("room and resource pickers show each item's description", async ({ page }) => {
+    await page.goto("/mobile/requestEvent");
+    await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+    const roomSelect = page.getByTestId("booking-rooms");
+    await expect(roomSelect).toBeVisible({ timeout: 15000 });
+    await roomSelect.click();
+    const sanctuary = page.getByRole("option", { name: /Sanctuary/i });
+    await expect(sanctuary).toContainText("Seats 300");
+    await expect(sanctuary).toContainText("Main worship space");
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("listbox")).toHaveCount(0);
+
+    await page.getByTestId("booking-resources").click();
+    await expect(page.getByRole("option", { name: /Projector/i })).toContainText("Portable HD projector");
+  });
+
   test("no-approval room is approved immediately", async ({ page }) => {
     await fillRoomRequest(page, /Sanctuary/i);
     await expect(page.getByTestId("request-outcome")).toContainText(/Approved/i);

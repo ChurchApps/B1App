@@ -50,10 +50,13 @@ interface Props {
 
 const toInt = (v: string) => (v.trim() ? parseInt(v, 10) || 0 : 0);
 
+// Joins the non-empty parts of a picker item's second line (seats, description).
+const secondaryLine = (parts: (string | undefined)[]) => parts.filter(Boolean).join(" · ") || undefined;
+
 export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, eventId, onLoaded, onData }: Props) => {
   const tc = mobileTheme.colors;
-  const [rooms, setRooms] = React.useState<{ id?: string; name?: string; capacity?: number }[]>([]);
-  const [resources, setResources] = React.useState<{ id?: string; name?: string }[]>([]);
+  const [rooms, setRooms] = React.useState<{ id?: string; name?: string; capacity?: number; description?: string }[]>([]);
+  const [resources, setResources] = React.useState<{ id?: string; name?: string; description?: string }[]>([]);
   const [conflicts, setConflicts] = React.useState<{ message?: string }[]>([]);
 
   const { roomIds, resourceIds, setupMinutes, teardownMinutes, customWindow, windowStart, windowEnd } = value;
@@ -125,7 +128,10 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           {rooms.map((r) => (
             <MenuItem key={r.id} value={r.id}>
               <Checkbox checked={roomIds.includes(r.id!)} size="small" />
-              <ListItemText primary={r.name} secondary={r.capacity ? `${r.capacity}` : undefined} />
+              <ListItemText
+                primary={r.name}
+                secondary={secondaryLine([r.capacity ? Locale.label("mobile.group.seats").replace("{}", String(r.capacity)) : undefined, r.description])}
+              />
             </MenuItem>
           ))}
         </TextField>
@@ -143,7 +149,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           {resources.map((r) => (
             <MenuItem key={r.id} value={r.id}>
               <Checkbox checked={resourceIds.includes(r.id!)} size="small" />
-              <ListItemText primary={r.name} />
+              <ListItemText primary={r.name} secondary={r.description || undefined} />
             </MenuItem>
           ))}
         </TextField>
