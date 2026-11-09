@@ -35,6 +35,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { memberGivingYearLimit } from "../../helpers/givingYears";
+import { churchCurrency } from "../../helpers/churchCurrency";
 import { BackVerb, BigNumber, FilterPills, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink, useSliceView } from "../kit";
 
 interface Props {
@@ -118,7 +119,9 @@ function DonatePageInner({ config }: Props) {
     queryFn: async () => {
       const gateways: PaymentGateway[] = await ApiHelper.get("/gateways", "GivingApi");
       if (!gateways?.length) {
-        return { paymentMethods: [], customerId: null, person: null, currency: "usd", paymentGateways: [] };
+        // No provider: churches that record gifts by hand still have a church currency setting.
+        const settings: Record<string, string> = (church?.id && await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi").catch((): null => null)) || {};
+        return { paymentMethods: [], customerId: null, person: null, currency: churchCurrency(gateways, settings), paymentGateways: [] };
       }
       const [methodsResult, personResult] = await Promise.all([
         ApiHelper.get("/paymentmethods/personid/" + personId, "GivingApi") as Promise<{ provider?: string; customerId?: string }[]>,
@@ -132,7 +135,7 @@ function DonatePageInner({ config }: Props) {
           if (pm.customerId && !customerId) customerId = pm.customerId;
         }
       }
-      return { paymentMethods: pms, customerId, person: personResult || null, currency: gateways[0].currency || "usd", paymentGateways: gateways };
+      return { paymentMethods: pms, customerId, person: personResult || null, currency: churchCurrency(gateways), paymentGateways: gateways };
     },
     enabled: donationsEnabled && canGiveOnline,
     // Always refetch on mount — never serve stale financial state.
