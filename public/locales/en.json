@@ -246,6 +246,7 @@
     "dashboard": {
       "all": "All",
       "allGroups": "All groups",
+      "allNews": "All news",
       "allPlans": "All plans",
       "allSermons": "All sermons",
       "allUpcomingEvents": "All upcoming events",
@@ -257,6 +258,7 @@
       "history": "History",
       "latestSermon": "Latest sermon",
       "moreFrom": "More from {}",
+      "news": "News",
       "signInPrompt": "Sign in to see your groups, giving, and more.",
       "upcomingEvents": "Upcoming events",
       "welcome": "Welcome",
@@ -815,6 +817,11 @@
       "account": "Account",
       "appearance": "Appearance",
       "signOut": "Sign out"
+    },
+    "news": {
+      "empty": "No news yet.",
+      "notFound": "This post isn't available.",
+      "viewOnWebsite": "View on website"
     },
     "notFound": {
       "backToHome": "Back to home",

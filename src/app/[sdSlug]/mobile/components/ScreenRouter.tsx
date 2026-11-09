@@ -39,6 +39,7 @@ const MessageComposePage = dynamic(() => import("./screens/MessageComposePage").
 const MobileLoginScreen = dynamic(() => import("./screens/LoginPage").then(m => ({ default: m.MobileLoginScreen })), { loading });
 const MoreCardsPage = dynamic(() => import("./screens/MoreCardsPage").then(m => ({ default: m.MoreCardsPage })), { loading });
 const FolderPage = dynamic(() => import("./screens/FolderPage").then(m => ({ default: m.FolderPage })), { loading });
+const NewsPage = dynamic(() => import("./screens/NewsPage").then(m => ({ default: m.NewsPage })), { loading });
 const HymnsPage = dynamic(() => import("./screens/HymnsPage").then(m => ({ default: m.HymnsPage })), { loading });
 
 interface Props {
@@ -69,6 +70,7 @@ export function ScreenRouter({ pageSlug, config }: Props) {
       ? <HymnsPage churchId={config?.church?.id} />
       : <PlaceholderPage title={Locale.label("mobile.notFound.title")} description={Locale.label("mobile.notFound.body")} actionLabel={Locale.label("mobile.notFound.backToHome")} actionHref="/mobile/dashboard" />;
     case "sermons": return <SermonsPage config={config} />;
+    case "news": return <NewsPage config={config} />;
     case "groups":
     case "myGroups": return <GroupsPage config={config} />;
     case "community": return <CommunityPage config={config} />;

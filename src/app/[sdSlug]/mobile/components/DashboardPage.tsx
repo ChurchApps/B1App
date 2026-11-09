@@ -25,11 +25,16 @@ import { loadDailyVerse, type DailyVerse } from "../helpers/dailyVerses";
 import { AutoScrollStrip } from "@/components/elements/AutoScrollStrip";
 import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget, openExternal } from "../helpers/dashboardLinks";
 import { useMyAttendance, useMyCards, useMyFormSubmissions, useMyTasks } from "../helpers/myRecords";
-import { AttendanceTeaser, EventsTeaser, FormsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, TasksTeaser, useGivingSummary, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
+import { AttendanceTeaser, EventsTeaser, FormsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, TasksTeaser, useGivingSummary, useLatestPosts, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
+import { NewsCard, PostSheet } from "./NewsCard";
+import type { PostInterface } from "@/helpers/interfaces";
 
 interface Props {
   config: ConfigurationInterface;
 }
+
+// Latest blog posts in the Home "News" strip.
+const NEWS_POSTS = 5;
 
 // Photo links featured above the list in the "Grid and list" and "Scrolling (automatic) and list" layouts.
 const FEATURED_TILES = 3;
@@ -79,6 +84,7 @@ export const DashboardPage = ({ config }: Props) => {
   const [firstName, setFirstName] = React.useState("");
   const [dateLine, setDateLine] = React.useState("");
   const [verse, setVerse] = React.useState<DailyVerse | null>(null);
+  const [openPost, setOpenPost] = React.useState<PostInterface | null>(null);
 
   React.useEffect(() => {
     setFirstName(context?.person?.name?.first || context?.user?.firstName || "");
@@ -138,6 +144,9 @@ export const DashboardPage = ({ config }: Props) => {
   const appearance = config?.appearance as Record<string, string> | undefined;
   const homeAttendance = signedIn && appearance?.mobileHomeAttendance === "true";
   const homeForms = signedIn && appearance?.mobileHomeForms === "true";
+  // News is the church's blog (optionally one category), opt-in for everyone, signed in or not.
+  const homeNews = appearance?.mobileHomeNews === "true";
+  const { posts: newsPosts } = useLatestPosts(churchId, NEWS_POSTS, (appearance?.mobileHomeNewsCategory || "").trim() || undefined, homeNews);
   const serving = useUpcomingServing(has("plans"));
   // Attendance rows are titled by group, so its groups load even when the church has no Groups link.
   const groups = useMyGroups(has("groups") || homeAttendance);
@@ -231,6 +240,19 @@ export const DashboardPage = ({ config }: Props) => {
     </PlateSection>
   );
 
+  const newsSection = homeNews && newsPosts.length > 0 && (
+    <PlateSection
+      data-testid="home-news-section"
+      title={Locale.label("mobile.dashboard.news")}
+      action={<TextLink href="/mobile/news">{Locale.label("mobile.dashboard.allNews")}</TextLink>}
+    >
+      <AutoScrollStrip enabled={newsPosts.length > 1} testId="home-news-scroll" gap="8px" tileWidth={{ xs: "100%", md: "calc(50% - 4px)" }}>
+        {newsPosts.map((p) => <NewsCard key={p.id} data-testid="home-news-card" post={p} onOpen={setOpenPost} />)}
+      </AutoScrollStrip>
+      <PostSheet post={openPost} onClose={() => setOpenPost(null)} />
+    </PlateSection>
+  );
+
   const sermonSection = latest && (
     <PlateSection
       title={Locale.label("mobile.dashboard.latestSermon")}
@@ -285,7 +307,7 @@ export const DashboardPage = ({ config }: Props) => {
   const formsSection = homeForms && formSubmissions.length > 0 && <FormsTeaser submissions={formSubmissions} />;
   const givingSection = showGiving && <GivingTeaser summary={givingSummary} canGive={config?.allowDonations !== false} />;
   const wide = [
-    tileSection, sermonSection, servingSection, tasksSection, groupsSection, eventsSection, attendanceSection, formsSection
+    newsSection, tileSection, sermonSection, servingSection, tasksSection, groupsSection, eventsSection, attendanceSection, formsSection
   ].some(Boolean);
   const narrow = [verseSection, givingSection, moreSection].some(Boolean);
 
@@ -294,12 +316,12 @@ export const DashboardPage = ({ config }: Props) => {
       {head}
       {desktop && wide && narrow ? (
         <Box sx={{ display: "grid", gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)", gap: "24px", alignItems: "start" }}>
-          <Plate>{banner}{tileSection}{sermonSection}{servingSection}{tasksSection}{groupsSection}{eventsSection}{attendanceSection}{formsSection}</Plate>
+          <Plate>{banner}{newsSection}{tileSection}{sermonSection}{servingSection}{tasksSection}{groupsSection}{eventsSection}{attendanceSection}{formsSection}</Plate>
           <Plate>{verseSection}{givingSection}{moreSection}</Plate>
         </Box>
       ) : (
         // :empty hides the sheet when the only candidate (the push banner) renders nothing.
-        <Plate sx={{ "&:empty": { display: "none" } }}>{banner}{tileSection}{sermonSection}{verseSection}{servingSection}{tasksSection}{groupsSection}{eventsSection}{attendanceSection}{formsSection}{givingSection}{moreSection}</Plate>
+        <Plate sx={{ "&:empty": { display: "none" } }}>{banner}{newsSection}{tileSection}{sermonSection}{verseSection}{servingSection}{tasksSection}{groupsSection}{eventsSection}{attendanceSection}{formsSection}{givingSection}{moreSection}</Plate>
       )}
     </Box>
   );
