@@ -175,6 +175,7 @@ export const linkTypeToRoute = (
     case "hymns": return HYMNS_ENABLED ? "/mobile/hymns" : null;
     case "stream": return "/mobile/stream";
     case "registrations": return "/mobile/registrations";
+    case "requests": return "/mobile/myRequests";
     case "page": {
       const id = url || linkData || "";
       const params = new URLSearchParams();
