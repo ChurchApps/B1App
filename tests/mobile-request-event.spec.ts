@@ -72,6 +72,33 @@ test.describe("Mobile event request (CA-1)", () => {
     await expect(page.getByRole("option", { name: /Projector/i })).toContainText("Portable HD projector");
   });
 
+  // #1510: a long description wraps on a phone instead of running off the edge of the menu.
+  test("a long room description wraps inside the picker on a phone", async ({ page }) => {
+    const jwt = await demoJwt();
+    const ctx = await request.newContext();
+    const auth = { headers: { Authorization: "Bearer " + jwt } };
+    const name = `Zacchaeus Long Room ${Date.now()}`;
+    const description = "Upstairs classroom next to the nursery with folding tables, a whiteboard, a sink, and a door to the playground for kids";
+    const roomId = (await (await ctx.post(`${API_BASE}/content/rooms`, { ...auth, data: [{ name, description }] })).json())[0].id;
+    try {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.goto("/mobile/requestEvent");
+      await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+      await page.getByTestId("booking-rooms").click();
+      const longOption = page.getByRole("option", { name: new RegExp(name) });
+      await expect(longOption).toContainText("door to the playground");
+      const longBox = await longOption.boundingBox();
+      const shortBox = await page.getByRole("option", { name: /Sanctuary/i }).boundingBox();
+      expect(longBox!.x + longBox!.width).toBeLessThanOrEqual(390);
+      expect(longBox!.height).toBeGreaterThan(shortBox!.height + 10);
+      const secondary = longOption.locator(".MuiListItemText-secondary");
+      expect(await secondary.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+    } finally {
+      await ctx.delete(`${API_BASE}/content/rooms/${roomId}`, auth).catch(() => {});
+      await ctx.dispose();
+    }
+  });
+
   test("no-approval room is approved immediately", async ({ page }) => {
     await fillRoomRequest(page, /Sanctuary/i);
     await expect(page.getByTestId("request-outcome")).toContainText(/Approved/i);

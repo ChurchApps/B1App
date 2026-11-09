@@ -126,7 +126,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           data-testid="booking-rooms"
         >
           {rooms.map((r) => (
-            <MenuItem key={r.id} value={r.id}>
+            <MenuItem key={r.id} value={r.id} sx={{ whiteSpace: "normal" }}>
               <Checkbox checked={roomIds.includes(r.id!)} size="small" />
               <ListItemText
                 primary={r.name}
@@ -147,7 +147,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           data-testid="booking-resources"
         >
           {resources.map((r) => (
-            <MenuItem key={r.id} value={r.id}>
+            <MenuItem key={r.id} value={r.id} sx={{ whiteSpace: "normal" }}>
               <Checkbox checked={resourceIds.includes(r.id!)} size="small" />
               <ListItemText primary={r.name} secondary={r.description || undefined} />
             </MenuItem>
