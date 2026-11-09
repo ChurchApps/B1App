@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { GroupInterface, TaskInterface } from "@churchapps/helpers";
 import { ApiHelper, CurrencyHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
+import type { PostInterface } from "@/helpers/interfaces";
 import { mobileTheme } from "./mobileTheme";
 import { ConfirmDeclineSheet } from "./ConfirmDeclineSheet";
 import { EventProcessor } from "../helpers/eventProcessor";
@@ -123,6 +124,22 @@ export const useUpcomingEvents = (enabled: boolean) => {
     });
     return items.sort((a, b) => a.date.getTime() - b.date.getTime());
   }, [enabled, data, registrations]);
+};
+
+// The church's latest published blog posts (optionally one category), read anonymously so signed-out visitors see them too.
+export const useLatestPosts = (churchId: string | undefined, pageSize: number, category: string | undefined, enabled: boolean) => {
+  const { data = [], isLoading } = useQuery<PostInterface[]>({
+    queryKey: ["news-posts", churchId, pageSize, category || ""],
+    queryFn: async () => {
+      const qs = new URLSearchParams({ pageSize: `${pageSize}` });
+      if (category) qs.set("category", category);
+      const data = await ApiHelper.getAnonymous(`/posts/public/${churchId}?${qs.toString()}`, "ContentApi");
+      return Array.isArray(data) ? data.filter((p: PostInterface) => p?.id && p.slug && p.title) : [];
+    },
+    enabled: enabled && !!churchId,
+    staleTime: 5 * 60 * 1000
+  });
+  return { posts: data, isLoading: enabled && isLoading };
 };
 
 export const useGivingSummary = (enabled: boolean) => {
