@@ -270,3 +270,50 @@ test.describe.serial("Mobile home news", () => {
     await expect(page.getByTestId("news-row").filter({ hasText: "Rest for the Weary" })).toHaveCount(0);
   });
 });
+
+// ChurchAppsSupport#1503: a church can put Requests and Registrations on Home from Mobile Navigation.
+test.describe.serial("Mobile home requests and registrations tabs", () => {
+  let ctx: APIRequestContext;
+  let headers: Record<string, string>;
+  let linkIds: string[] = [];
+
+  test.beforeAll(async () => {
+    ctx = await request.newContext();
+    const login = await (await ctx.post(`${API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = login.userChurches.find((c: any) => c.church?.id === DEMO_CHURCH.ID);
+    headers = { Authorization: `Bearer ${uc.jwt}` };
+    const saved = await (await ctx.post(`${API}/content/links`, {
+      headers,
+      data: [
+        { churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "requests", text: "Room Requests", sort: 22, visibility: "visitors" },
+        { churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "registrations", text: "Event Registrations", sort: 23, visibility: "visitors" }
+      ]
+    })).json();
+    linkIds = saved.map((l: any) => l.id);
+  });
+
+  test.afterAll(async () => {
+    for (const id of linkIds) await ctx.delete(`${API}/content/links/${id}`, { headers });
+    await ctx.dispose();
+  });
+
+  test("a Requests tab on Home opens My Requests", async ({ page }) => {
+    await page.goto("/mobile/dashboard");
+    await expect(mobileSignedInChrome(page)).toBeVisible();
+    const requests = page.locator("main").getByRole("link", { name: "Room Requests" }).first();
+    await expect(requests).toBeVisible({ timeout: 20000 });
+    await expect(requests).toHaveAttribute("href", "/mobile/myRequests");
+    await requests.click();
+    await expect(page).toHaveURL(/\/mobile\/myRequests/, { timeout: 15000 });
+    await expect(page.getByRole("link", { name: "Request an Event" })).toBeVisible({ timeout: 15000 });
+  });
+
+  test("a Registrations tab on Home opens Registrations", async ({ page }) => {
+    await page.goto("/mobile/dashboard");
+    await expect(mobileSignedInChrome(page)).toBeVisible();
+    const registrations = page.locator("main").getByRole("link", { name: "Event Registrations" }).first();
+    await expect(registrations).toBeVisible({ timeout: 20000 });
+    await registrations.click();
+    await expect(page).toHaveURL(/\/mobile\/registrations/, { timeout: 15000 });
+  });
+});
