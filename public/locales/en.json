@@ -1491,6 +1491,7 @@
     "removing": "Removing...",
     "signUp": "Sign Up",
     "signedUpChip": "You're signed up",
+    "signedUpNames": "Signed up: {}",
     "signingUp": "Signing up...",
     "signup": {
       "alreadySignedUp": "You are already signed up for this position.",
