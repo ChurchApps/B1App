@@ -41,7 +41,8 @@ export default async function GroupPage({ params }: { params: PageParams }) {
   const { sdSlug, label } = await params;
   const { config } = await loadSharedData(sdSlug);
 
-  const searchLabel = label.replace(/-/g, " ");
+  let searchLabel = label;
+  try { searchLabel = decodeURIComponent(label); } catch { /* keep the raw segment */ }
   const displayLabel = getDisplayLabel(label);
 
 
