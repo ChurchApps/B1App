@@ -16,7 +16,7 @@ interface PositionWithCount extends PositionInterface {
 }
 
 interface SignupPlanData {
-  plan: PlanInterface & { signupDeadline?: string | null };
+  plan: PlanInterface & { signupDeadline?: string | null; showVolunteerNames?: boolean };
   positions: PositionWithCount[];
   times: TimeInterface[];
 }
@@ -35,6 +35,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
   const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
   const [myAssignments, setMyAssignments] = useState<any[]>([]);
   const [assignmentsLoaded, setAssignmentsLoaded] = useState(false);
+  const [volunteerNames, setVolunteerNames] = useState<Record<string, string[]>>({});
 
   const isLoggedIn = !!context?.userChurch?.jwt;
   const personId = context?.person?.id;
@@ -52,6 +53,21 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
     }
   }, [isLoggedIn, assignmentsLoaded, positions]);
 
+  // Names of who's serving, when the plan shares them; the Api only gives them to signed-in members.
+  const loadVolunteerNames = React.useCallback(async () => {
+    if (!isLoggedIn || !plan.showVolunteerNames) return;
+    try {
+      const rows: { positionId: string; names: string[] }[] = await ApiHelper.get(`/plans/signup/${plan.id}/volunteers`, "DoingApi");
+      const map: Record<string, string[]> = {};
+      if (Array.isArray(rows)) rows.forEach((r) => { map[r.positionId] = r.names || []; });
+      setVolunteerNames(map);
+    } catch {
+      // names are optional
+    }
+  }, [isLoggedIn, plan.id, plan.showVolunteerNames]);
+
+  React.useEffect(() => { loadVolunteerNames(); }, [loadVolunteerNames]);
+
   const refreshData = async () => {
     const allPlans = await ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi");
     const updated = (allPlans || []).find((sp: any) => sp.plan.id === plan.id);
@@ -61,6 +77,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
       const data = await ApiHelper.get("/assignments/my", "DoingApi");
       const planPositionIds = positions.map(p => p.id);
       setMyAssignments(data.filter((a: any) => planPositionIds.includes(a.positionId)));
+      await loadVolunteerNames();
     }
   };
 
@@ -144,6 +161,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
               const progress = (position.count || 0) > 0 ? (position.filledCount / (position.count || 0)) * 100 : 0;
               const myAssignment = getMyAssignment(position.id || "");
               const isSignedUp = !!myAssignment;
+              const names = volunteerNames[position.id || ""] || [];
 
               return (
                 <Card key={position.id} sx={{ borderRadius: 2, border: "1px solid", borderColor: isSignedUp ? "success.main" : "divider" }}>
@@ -156,6 +174,11 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
                         </Stack>
                         {position.description && (
                           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>{position.description}</Typography>
+                        )}
+                        {names.length > 0 && (
+                          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }} data-testid={`volunteer-names-${position.id}`}>
+                            {Locale.label("serving.signedUpNames").replace("{}", names.join(", "))}
+                          </Typography>
                         )}
                       </Box>
                       <Box sx={{ textAlign: "right", ml: 2 }}>
