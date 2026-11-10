@@ -63,13 +63,15 @@ export default async function Home({ params }: { params: PageParams }) {
   const { pageData, config } = await loadSharedData(sdSlug, pageSlug);
 
   // A redirect the church saved wins over the built-in virtual pages, but not over a CMS page.
-  if (!pageData?.url) {
+  // A page the visitor can't see comes back as { restricted } with no url; it is still a CMS page.
+  const restricted = !!(pageData as any)?.restricted;
+  if (!pageData?.url && !restricted) {
     const to = await resolveRedirect(config.church.id || "", sdSlug, "/" + pageSlug);
     if (to) permanentRedirect(to);
     if (!VIRTUAL_PAGE_SLUGS.includes(pageSlug)) return notFound();
   }
 
-  if ((pageData as any)?.restricted) {
+  if (restricted) {
     return (
       <>
         <Theme config={config} />

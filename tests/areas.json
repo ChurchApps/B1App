@@ -298,6 +298,7 @@
         "public-pages-no-error-shell.spec.ts",
         "public-fragment-link-scroll.spec.ts",
         "public-built-in.spec.ts",
+        "public-restricted-page.spec.ts",
         "code-review-core.spec.ts",
         "hide-public-site.spec.ts"
       ]

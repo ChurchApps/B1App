@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, CircularProgress, Icon, Typography } from "@mui/material";
 import { usePathname } from "next/navigation";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { StyleHelper } from "@churchapps/apphelper/website";
 import Zone from "@/components/layouts/Zone";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -60,11 +60,11 @@ export function RestrictedPage({ config, pageUrl, siteId = "" }: Props) {
 
   if (state === "gate") {
     const loginHref = "/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname, config.keyName));
-    return message("lock", "This page is for church members", ( <Button variant="contained" href={loginHref} sx={{ mt: 2 }} data-testid="restricted-login-button">Login</Button>
+    return message("lock", Locale.label("pageSlug.membersOnly", "This page is for church members"), ( <Button variant="contained" href={loginHref} sx={{ mt: 2 }} data-testid="restricted-login-button">{Locale.label("login.login", "Login")}</Button>
     ));
   }
 
-  if (state === "denied") return message("block", "You don't have access to this page");
+  if (state === "denied") return message("block", Locale.label("pageSlug.noAccess", "You don't have access to this page"));
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center", my: 10 }}>
