@@ -24,7 +24,8 @@ async function openOccurrence(page: Page): Promise<void> {
   await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
   await page.getByRole("button", { name: /^All events$/i }).click();
   await expect(page).toHaveURL(/view=events/, { timeout: 15000 });
-  const control = page.getByTestId(`rsvp-${EVENT_ID}`);
+  // Past occurrences have no answer buttons, so look for the first day that offers Going.
+  const control = page.getByTestId(`rsvp-${EVENT_ID}-yes`);
   for (let i = 0; i < 3; i++) {
     const cells = page.locator('[data-testid^="day-"]');
     const count = await cells.count();
@@ -63,6 +64,30 @@ test.describe("Mobile group event RSVP", () => {
 
     await page.getByTestId(`rsvp-${EVENT_ID}-maybe`).click();
     await expect(page.getByTestId(`rsvp-${EVENT_ID}-maybe`)).not.toContainText("1", { timeout: 10000 });
+  });
+
+  test("a past occurrence offers no answer buttons, but leaders can still view responses", async ({ page }) => {
+    const jwt = await jwtFor("demo@b1.church");
+    const ctx = await request.newContext();
+    const auth = { headers: { Authorization: "Bearer " + jwt } };
+    const start = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
+    start.setHours(12, 0, 0, 0);
+    const end = new Date(start.getTime() + 60 * 60 * 1000);
+    const created = await (await ctx.post(`${API_BASE}/content/events`, { ...auth, data: [{ groupId: GROUP_ID, title: `Past RSVP ${Date.now()}`, start, end, allDay: false, visibility: "public" }] })).json();
+    const pastId = created[0].id;
+    try {
+      await page.goto(`/mobile/groups/${GROUP_ID}?view=events`);
+      await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+      if (start.getMonth() !== new Date().getMonth()) await page.getByLabel(/Previous month/i).click();
+      const day = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, "0")}-${String(start.getDate()).padStart(2, "0")}`;
+      await page.getByTestId(`day-${day}`).click();
+      // demo@b1.church is a member and can manage the group's events.
+      await expect(page.getByTestId(`rsvp-roster-${pastId}`)).toBeVisible({ timeout: 15000 });
+      await expect(page.getByTestId(`rsvp-${pastId}-yes`)).toHaveCount(0);
+    } finally {
+      await ctx.delete(`${API_BASE}/content/events/${pastId}`, auth).catch(() => {});
+      await ctx.dispose();
+    }
   });
 
   test("cross-user roster groups both responses", async () => {
