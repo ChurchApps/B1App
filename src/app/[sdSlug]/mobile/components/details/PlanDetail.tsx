@@ -343,6 +343,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
   const members: { id?: string; positionId?: string; name: string; position: string; photo?: string }[] = [];
   teamGroups.forEach((g) => g.positions.forEach((position) => {
     ArrayHelper.getAll(assignments, "positionId", position.id).forEach((a: AssignmentInterface) => {
+      // Someone who declined isn't serving, so they don't belong on the team list or in its count.
+      if (a.status === "Declined") return;
       const person = ArrayHelper.getOne(people, "id", a.personId) as PersonInterface | null;
       if (!person) return;
       members.push({
