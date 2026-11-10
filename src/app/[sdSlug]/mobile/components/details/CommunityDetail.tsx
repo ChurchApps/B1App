@@ -92,13 +92,13 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
       </Box>
       {showActions && (
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: "8px", mt: "16px", justifyContent: { md: "center" } }}>
-          {person?.allowDirectMessages !== false && (
+          {!isOwnProfile && person?.allowDirectMessages !== false && (
             <Button variant="contained" onClick={handleMessage} aria-label={Locale.label("mobile.details.sendMessage")}>
               {Locale.label("mobile.details.message")}
             </Button>
           )}
-          {primaryPhone && <Button variant="outlined" href={`tel:${primaryPhone}`}>{Locale.label("mobile.details.call")}</Button>}
-          {phone && <Button variant="outlined" href={`sms:${phone}`} aria-label={Locale.label("mobile.details.sendText")}>{Locale.label("mobile.details.text")}</Button>}
+          {!isOwnProfile && primaryPhone && <Button variant="outlined" href={`tel:${primaryPhone}`}>{Locale.label("mobile.details.call")}</Button>}
+          {!isOwnProfile && phone && <Button variant="outlined" href={`sms:${phone}`} aria-label={Locale.label("mobile.details.sendText")}>{Locale.label("mobile.details.text")}</Button>}
           {isOwnProfile && <Button variant="outlined" onClick={() => router.push("/mobile/profileEdit")}>{Locale.label("mobile.details.editProfile")}</Button>}
         </Box>
       )}
