@@ -77,6 +77,12 @@ test.describe("Mobile profile privacy levels", () => {
   const VISIBILITY_FIELDS = ["Address Visibility", "Phone Visibility", "Email Visibility"];
 
   async function openPrivacyTab(page: import("@playwright/test").Page) {
+    // The persisted query cache is written about a second after a save; drop it so a reload reads the server.
+    if (page.url().startsWith("http")) {
+      await page.evaluate(async () => {
+        for (const db of await indexedDB.databases()) if (db.name) indexedDB.deleteDatabase(db.name);
+      });
+    }
     await page.goto("/mobile/profileEdit");
     const change = page.getByTestId("profile-edit-privacy");
     await change.waitFor({ state: "visible", timeout: 15000 });
