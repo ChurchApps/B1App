@@ -227,6 +227,22 @@ test.describe("Live stream chat — host + authenticated", () => {
   });
 });
 
+test.describe("Live stream chat — signed-in session restored on load", () => {
+  // The default storage state signs in from cookies after /stream has mounted, so the chat starts
+  // out anonymous and has to switch to the account once the session loads.
+  test("a returning signed-in host chats under their own name and gets Host Chat", async ({ page }) => {
+    // Hold the cookie sign-in back until the stream has mounted and joined as a guest.
+    await page.route("**/membership/users/login", async (route) => {
+      await new Promise((r) => setTimeout(r, 5000));
+      await route.continue();
+    });
+    await page.goto(STREAM_URL, { timeout: 60000 });
+    await expect(page.locator(".chatContainer:visible #chatSend")).toBeVisible({ timeout: 30000 });
+    await expect(page.locator(".chatContainer:visible").getByTestId("chat-display-name")).toHaveText("Demo User", { timeout: 30000 });
+    await expect(hostTab(page)).toBeVisible({ timeout: 30000 });
+  });
+});
+
 test.describe("Live stream chat — chat window", () => {
   // The window is computed client-side from the service row, so shift the clock instead of the data.
   // Backwards: the demo services' chat windows are still upcoming, which is the "Chat opens at" state.

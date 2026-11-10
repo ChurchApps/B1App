@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, TextField, IconButton, Paper, Stack, Typography, Tooltip } from "@mui/material";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,6 +12,7 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState("");
   const [user, setUser] = useState(props.user);
+  useEffect(() => { setUser(props.user); }, [props.user]);
   const { firstName, lastName } = user;
   const currentUserName = `${firstName} ${lastName}`;
 
@@ -60,7 +61,7 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
           : (
             <Paper elevation={0} sx={{ padding: "1px 10px" }}>
               <Stack direction="row" alignItems="center" justifyContent="space-between">
-                <Typography fontSize={14} color={"#1976d2"}>{currentUserName}</Typography>
+                <Typography fontSize={14} color={"#1976d2"} data-testid="chat-display-name">{currentUserName}</Typography>
                 <Tooltip title={Locale.label("video.chat.updateName")} arrow placement="left">
                   <IconButton size="small" color="primary" onClick={() => { setEdit(true); setDisplayName(currentUserName); }}>
                     <DriveFileRenameOutlineIcon sx={{ fontSize: 18 }} />

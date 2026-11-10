@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import UserContext from "@/context/UserContext";
 import { Box, Icon } from "@mui/material";
 import { Locale, ConversationStore } from "@churchapps/apphelper";
 import { DateHelper, type ConversationInterface, type MessageInterface } from "@churchapps/helpers";
@@ -107,6 +108,18 @@ export const StreamPage = ({ config }: Props) => {
       setChatState({ ...ChatHelper.current });
     })().catch((error) => console.error("Failed to join stream chat:", error));
   }, [currentService, chatReady, streamConfig]);
+
+  const context = useContext(UserContext);
+  useEffect(() => {
+    if (!context?.user || !StreamChatManager.syncSignedInUser()) return;
+    setChatState({ ...ChatHelper.current });
+    // Rooms joined before the session loaded skipped host chat.
+    if (streamConfig && currentService && joinedServiceIdRef.current === currentService.id && !ChatHelper.current.hostConversation) {
+      StreamChatManager.checkHost(streamConfig, currentService.id || "")
+        .then(() => setChatState({ ...ChatHelper.current }))
+        .catch((error) => console.error("Failed to join host chat:", error));
+    }
+  }, [context?.user, context?.userChurch]);
 
   useEffect(() => {
     setNow(Date.now());
