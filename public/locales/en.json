@@ -15,6 +15,17 @@
   "b1ShareModal": {
     "post": "Post"
   },
+  "blogPage": {
+    "allPosts": "All posts",
+    "blog": "Blog",
+    "byAuthor": "By {}",
+    "category": "Category",
+    "moreIn": "More in {}",
+    "newerPosts": "Newer posts",
+    "noPosts": "No posts yet",
+    "olderPosts": "Older posts",
+    "tag": "Tag"
+  },
   "cascadingMenus": {
     "collapseMenu": "Collapse {} menu",
     "collapseSubmenu": "Collapse {} submenu",
