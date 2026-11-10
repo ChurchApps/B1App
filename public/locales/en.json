@@ -154,14 +154,20 @@
     }
   },
   "groupsPage": {
+    "allCampuses": "All campuses",
+    "allCategories": "All categories",
+    "campus": "Campus",
+    "category": "Category",
     "findAGroup": "Find a Group",
     "groupsHeading": "Groups",
+    "noMatches": "No groups match your filters.",
     "noPastPlans": "No past plans.",
     "noPlans": "No plans available for this group.",
     "noUpcomingPlans": "No upcoming plans.",
     "past": "Past",
     "planType": "Plan Type",
     "plans": "Plans",
+    "searchPlaceholder": "Search groups by name or description",
     "upcoming": "Upcoming"
   },
   "guestRegister": {
@@ -1353,8 +1359,10 @@
     "liveStream": "Live Stream",
     "loginToManageDonations": "Please login to manage donations",
     "manageDonations": "Manage Donations",
+    "membersOnly": "This page is for church members",
     "metaForms": "Forms",
     "nextChapter": "Next Chapter",
+    "noAccess": "You don't have access to this page",
     "openBibleCom": "Open Bible.com",
     "previousChapter": "Previous Chapter",
     "sermons": "Sermons",

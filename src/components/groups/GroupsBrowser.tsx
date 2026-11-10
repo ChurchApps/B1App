@@ -91,7 +91,7 @@ export const GroupsBrowser = (props: Props) => {
             <Grid size={{ xs: 12, md: searchMd }}>
               <TextField
                 fullWidth
-                placeholder="Search groups by name or description"
+                placeholder={Locale.label("groupsPage.searchPlaceholder", "Search groups by name or description")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 size="small"
@@ -102,13 +102,13 @@ export const GroupsBrowser = (props: Props) => {
           {showCategory && (
             <Grid size={{ xs: 12, md: 4 }}>
               <FormControl fullWidth size="small">
-                <InputLabel>Category</InputLabel>
+                <InputLabel>{Locale.label("groupsPage.category", "Category")}</InputLabel>
                 <Select
-                  label="Category"
+                  label={Locale.label("groupsPage.category", "Category")}
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   inputProps={{ "data-testid": "groups-browser-category" }}>
-                  <MenuItem value="">All categories</MenuItem>
+                  <MenuItem value="">{Locale.label("groupsPage.allCategories", "All categories")}</MenuItem>
                   {categories.map((c) => (
                     <MenuItem key={c} value={c}>{c}</MenuItem>
                   ))}
@@ -119,13 +119,13 @@ export const GroupsBrowser = (props: Props) => {
           {showCampus && (
             <Grid size={{ xs: 12, md: 4 }}>
               <FormControl fullWidth size="small">
-                <InputLabel>Campus</InputLabel>
+                <InputLabel>{Locale.label("groupsPage.campus", "Campus")}</InputLabel>
                 <Select
-                  label="Campus"
+                  label={Locale.label("groupsPage.campus", "Campus")}
                   value={campus}
                   onChange={(e) => setCampus(e.target.value)}
                   inputProps={{ "data-testid": "groups-browser-campus" }}>
-                  <MenuItem value="">All campuses</MenuItem>
+                  <MenuItem value="">{Locale.label("groupsPage.allCampuses", "All campuses")}</MenuItem>
                   {campuses.map((c) => (
                     <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
                   ))}
@@ -150,7 +150,7 @@ export const GroupsBrowser = (props: Props) => {
           ) : (
             <Grid size={{ xs: 12 }}>
               <Box data-testid="groups-browser-empty" sx={{ textAlign: "center", py: 4, color: "text.secondary" }}>
-              No groups match your filters.
+                {Locale.label("groupsPage.noMatches", "No groups match your filters.")}
               </Box>
             </Grid>
           )}
