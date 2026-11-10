@@ -367,7 +367,7 @@ test.describe("Public donate page links", () => {
 // Lessons.church (CHU00000099) records gifts but has no payment gateway. A signed-in member still sees
 // their history, year total and Print Statement on Giving, Me and Home; only online giving is hidden.
 test.describe.serial("Mobile donate without online giving", () => {
-  test.use({ storageState: { cookies: [], origins: [] }, baseURL: "http://lessonschurch.localtest.me:3301" });
+  test.use({ storageState: { cookies: [], origins: [] }, baseURL: (process.env.BASE_URL || "http://grace.localtest.me:3301").replace("grace.", "lessonschurch.") });
 
   const MAIN_API = process.env.API_BASE || "http://localhost:8084";
   const CHURCH = "CHU00000099";
