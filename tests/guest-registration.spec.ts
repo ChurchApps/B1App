@@ -171,7 +171,7 @@ test.describe("QR guest registration", () => {
     await expect(photo).toHaveAttribute("src", imageUrl, { timeout: 20000 });
     await expect(photo).toBeVisible();
     await expect(page.getByText("person_add")).toHaveCount(0);
-    await page.screenshot({ path: ".pr-screenshots/after.png" });
+    await page.screenshot({ path: test.info().outputPath("after.png") });
   });
 
   // ChurchAppsSupport#1444: a Title row in the checklist asks each guest for Mr/Mrs/Dr and saves it

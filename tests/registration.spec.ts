@@ -224,7 +224,7 @@ test.describe.serial("Household registration pre-fill (logged-in member)", () =>
     await expect(page.getByTestId(`household-type-${ALEX_PERSON_ID}`)).toContainText("Household Child");
     await page.evaluate(() => window.scrollTo(0, 0));
     await expect(page.getByTestId("household-members")).toBeInViewport();
-    await page.screenshot({ path: ".pr-screenshots/household-registration-after.png", fullPage: true });
+    await page.screenshot({ path: test.info().outputPath("household-registration-after.png"), fullPage: true });
 
     const registerPost = page.waitForResponse((r) => r.url().includes("/registrations/register") && r.request().method() === "POST", { timeout: 20000 });
     await main.getByRole("button", { name: /Complete Registration/i }).click();
