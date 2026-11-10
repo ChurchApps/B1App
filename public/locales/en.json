@@ -198,6 +198,8 @@
   "mobile": {
     "bible": {
       "loading": "Loading Bible…",
+      "openBibleCom": "Open Bible.com",
+      "openBiblia": "Open Biblia.com",
       "unavailable": "The in-app reader failed to load. You can still open the Bible in your browser."
     },
     "card": {
