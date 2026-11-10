@@ -81,6 +81,17 @@ test.describe("Mobile community", () => {
     await expect(main.getByRole("button", { name: /Send message/i })).toBeVisible({ timeout: 15000 });
   });
 
+  test("your own profile offers Edit profile instead of messaging, calling or texting yourself", async ({ page }) => {
+    await page.goto("/mobile/community/PER00000082");
+    const main = page.locator("main");
+    await expect(main.getByRole("button", { name: "Edit profile" })).toBeVisible({ timeout: 30000 });
+    // The demo user has a mobile phone on file, so Call/Text would show on anyone else's profile.
+    await expect(main.getByText("Mobile Phone")).toBeVisible();
+    await expect(main.getByRole("button", { name: /Send message/i })).toHaveCount(0);
+    await expect(main.getByRole("link", { name: "Call" })).toHaveCount(0);
+    await expect(main.getByRole("link", { name: /Send text message/i })).toHaveCount(0);
+  });
+
   test("minor profile hides the Message quick action", async ({ page }) => {
     // Noah Davis (PER00000030, b. 2020) is under the default-18 messaging minimum age.
     await page.goto("/mobile/community/PER00000030");
