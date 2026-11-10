@@ -86,6 +86,14 @@ async function submitDonation(page: Page) {
 }
 
 test.describe.serial("Kingdom Funding member donations (live NMI test gateway)", () => {
+  // The demo seed connects Grace to Stripe; these only run on a stack whose Grace gateway is Kingdom Funding.
+  test.beforeAll(async () => {
+    const api = await getApi("demo");
+    const res = await apiCall(api, "get", (process.env.API_BASE || "http://localhost:8084") + "/giving/gateways");
+    const gateways: { provider?: string }[] = res.ok() ? await res.json() : [];
+    test.skip(!gateways.some((g) => /kingdom/i.test(g.provider || "")), "Grace's giving gateway is not Kingdom Funding");
+  });
+
   test("one-time donation with a new card (Collect.js from new host)", async ({ page }) => {
     const diag = captureDiagnostics(page);
     await deleteAllCardsViaApi();
