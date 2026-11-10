@@ -4,7 +4,6 @@ import React from "react";
 import { Box, Button, CircularProgress, Dialog, IconButton, Menu, MenuItem, Snackbar, TextField, Typography } from "@mui/material";
 import AddReactionOutlinedIcon from "@mui/icons-material/AddReactionOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -364,34 +363,18 @@ export const GroupChatModal = ({
     }
   };
 
+  // Image links show as images under the text; other URLs stay inline and autolink, as in private messages.
   const renderMessageContent = (content: string) => {
     const imageRegex = /https?:\/\/\S+\.(jpg|jpeg|png|gif|webp|svg)(\?\S*)?/gi;
-    const urlRegex = /https?:\/\/\S+/gi;
     const imageMatches = content.match(imageRegex);
-    const urlMatches = content.match(urlRegex);
-    const textWithoutUrls = content.replace(urlRegex, "").trim();
+    const textWithoutImages = content.replace(imageRegex, "").trim();
 
     return (
       <>
-        {textWithoutUrls && <MarkdownMessage text={textWithoutUrls} sx={{ fontSize: 15, lineHeight: "21px" }} />}
+        {textWithoutImages && <MarkdownMessage text={textWithoutImages} sx={{ fontSize: 15, lineHeight: "21px" }} />}
         {imageMatches?.map((url, i) => (
-          <Box key={i} component="img" src={url} alt="" sx={{ maxWidth: "100%", borderRadius: "8px", mt: 0.5, display: "block" }} />
+          <Box key={i} component="img" src={url} alt="" sx={{ maxWidth: "100%", borderRadius: "8px", mt: textWithoutImages || i > 0 ? 0.5 : 0, display: "block" }} />
         ))}
-        {urlMatches
-          ?.filter((url) => !new RegExp(imageRegex.source, "i").test(url))
-          .map((url, i) => (
-            <Box
-              key={i}
-              component="a"
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ display: "inline-flex", alignItems: "center", gap: "6px", mt: 0.5, fontSize: 14, fontWeight: 600, color: "inherit", textDecoration: "underline" }}
-            >
-              <AttachFileIcon sx={{ fontSize: 18 }} />
-              {Locale.label("mobile.group.openFile")}
-            </Box>
-          ))}
       </>
     );
   };

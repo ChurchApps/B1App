@@ -104,6 +104,20 @@ test.describe("Message formatting on a phone", () => {
     expect(await bubble.innerText()).toBe(`Reminder for Thursday ${stamp}`);
   });
 
+  test("a web link in group chat stays in the sentence as a clickable link", async ({ page }) => {
+    const { dialog, composer } = await openGroupChat(page);
+    const stamp = Date.now();
+    const url = `https://example.com/signup-${stamp}`;
+    await composer.fill(`Sign up at ${url} today`);
+    await dialog.getByRole("button", { name: /^Send$/i }).click();
+    await expect(composer).toHaveValue("", { timeout: 15000 });
+    const bubble = dialog.getByTestId("message-text").filter({ hasText: `signup-${stamp}` });
+    await expect(bubble).toHaveCount(1, { timeout: 15000 });
+    expect(await bubble.innerText()).toBe(`Sign up at ${url} today`);
+    await expect(bubble.locator(`a[href="${url}"]`)).toHaveAttribute("target", "_blank");
+    await expect(dialog.getByText("Open file")).toHaveCount(0);
+  });
+
   test("a direct message with dashes on each line shows a bulleted list", async ({ page }) => {
     const composer = await openFirstConversation(page);
     const stamp = Date.now();
