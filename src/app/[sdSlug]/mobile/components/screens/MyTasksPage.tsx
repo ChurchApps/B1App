@@ -6,7 +6,7 @@ import { Locale } from "@churchapps/apphelper";
 import type { TaskInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { BackVerb, PageHead, Plate, PlateSection, QuietEmpty, RowList } from "../kit";
+import { BackVerb, PageHead, Plate, PlateSection, QuietEmpty, RowList, SignInPrompt } from "../kit";
 import { useMyCards, useMyTasks } from "../../helpers/myRecords";
 import { MyTaskSheet, TaskRow } from "./CardSheet";
 
@@ -22,6 +22,8 @@ export const MyTasksPage = (_props: Props) => {
   const { data: tasks = [], isLoading: tasksLoading } = useMyTasks(personId, loggedIn);
   const [open, setOpen] = useState<TaskInterface | null>(null);
   const loading = cardsLoading || tasksLoading;
+
+  if (!loggedIn) return <SignInPrompt title={Locale.label("mobile.me.tasksSignedOutTitle")} lede={Locale.label("mobile.me.tasksSignedOutBody")} />;
 
   return (
     <Box sx={{ pb: "24px" }}>

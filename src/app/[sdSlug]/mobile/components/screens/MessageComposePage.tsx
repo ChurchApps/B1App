@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { Highlight, PageHead, PersonAvatar, Plate, PlateSection, QuietEmpty, Row, RowList, SearchField } from "../kit";
+import { Highlight, PageHead, PersonAvatar, Plate, PlateSection, QuietEmpty, Row, RowList, SearchField, SignInPrompt } from "../kit";
 
 interface Props {
   config: ConfigurationInterface;
@@ -81,6 +81,8 @@ export const MessageComposePage = ({ config: _config }: Props) => {
       title={<Highlight text={p.name?.display || Locale.label("mobile.components.unknown")} term={highlight} />}
     />
   );
+
+  if (!loggedIn) return <SignInPrompt title={Locale.label("mobile.messages.signedOutTitle")} lede={Locale.label("mobile.messages.signedOutBody")} />;
 
   return (
     <Box>

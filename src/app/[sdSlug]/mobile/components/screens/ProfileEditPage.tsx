@@ -32,7 +32,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { parseTitleOptions } from "@/helpers/TitleOptions";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
-import { Eyebrow, KeyValues, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, Sheet, StatusBadge, TextLink } from "../kit";
+import { Eyebrow, KeyValues, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, Sheet, SignInPrompt, StatusBadge, TextLink } from "../kit";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -615,6 +615,8 @@ export const ProfileEditPage = ({ config }: Props) => {
     if (await handleSaveVisibility()) setSheet(null);
   };
 
+  if (!userContext?.user?.firstName) return <SignInPrompt title={Locale.label("mobile.profileEdit.signedOutTitle")} lede={Locale.label("mobile.profileEdit.signedOutBody")} />;
+
   if (loading) {
     return (
       <Box sx={{ py: "48px", display: "flex", justifyContent: "center" }}>
@@ -711,7 +713,7 @@ export const ProfileEditPage = ({ config }: Props) => {
 
   const renderHouseholdSheet = () => (
     <Box sx={fieldStack}>
-      <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("mobile.profileEdit.familyMemberHint")}</Typography>
+      <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label(requiresApproval ? "mobile.profileEdit.familyMemberHint" : "mobile.profileEdit.familyMemberDirectHint")}</Typography>
       <TextField
         label={Locale.label("person.firstName")}
         value={newMember.first}
@@ -752,7 +754,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               />
             ))}
           </RowList>
-          <Typography sx={{ fontSize: 12.5, color: tc.textSecondary, mt: "4px" }}>{Locale.label("mobile.profileEdit.pendingFamilyMembersHint")}</Typography>
+          <Typography sx={{ fontSize: 12.5, color: tc.textSecondary, mt: "4px" }}>{Locale.label(requiresApproval ? "mobile.profileEdit.pendingFamilyMembersHint" : "mobile.profileEdit.pendingFamilyMembersDirectHint")}</Typography>
         </Box>
       )}
     </Box>

@@ -173,7 +173,7 @@
         "src/app/[sdSlug]/mobile/components/screens/CardSheet.tsx",
         "src/app/[sdSlug]/mobile/helpers/myRecords.ts"
       ],
-      "specs": ["mobile-me.spec.ts", "mobile-profile*.spec.ts", "mobile-my-tasks.spec.ts", "mobile-request-event.spec.ts", "mobile-misc.spec.ts"]
+      "specs": ["mobile-me.spec.ts", "mobile-profile*.spec.ts", "mobile-signed-out-screens.spec.ts", "mobile-my-tasks.spec.ts", "mobile-request-event.spec.ts", "mobile-misc.spec.ts"]
     },
     "requestEvent": {
       "src": ["src/app/[sdSlug]/mobile/components/screens/RequestEventPage.tsx"],

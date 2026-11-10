@@ -94,6 +94,8 @@ export function useHydrateSession(): HydrationStatus {
           if (!cancelled) setStatus("anonymous");
           return;
         }
+        // A superseded run must not write the session: its late cookie write would undo a logout that ran meanwhile.
+        if (cancelled) return;
 
         await hydrateUserSession(resp, contextRef.current, { sdSlug, churchId, writeCookies: true });
 

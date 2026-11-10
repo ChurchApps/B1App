@@ -47,4 +47,20 @@ test.describe("Issue 1040 — profile edit with no approval group", () => {
     await expect(reloaded).toBeVisible({ timeout: 30000 });
     await expect(reloaded).toHaveValue(middleName, { timeout: 15000 });
   });
+
+  test("the Add Family Member sheet doesn't promise a staff review", async ({ page }) => {
+    await page.goto("/mobile/profileEdit");
+    await page.getByTestId("profile-edit-household").click({ timeout: 30000 });
+    await expect(page.getByText("New members join your household when you save.")).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText(/reviewed along with your other profile changes/)).toHaveCount(0);
+
+    await page.getByTestId("family-member-first").fill("Pat");
+    await page.getByTestId("family-member-add").click();
+    await expect(page.getByText("Pending Family Members")).toBeVisible();
+    await expect(page.getByText("These will be added to your household when you save.")).toBeVisible();
+    await expect(page.getByText(/submitted with your profile changes for approval/)).toHaveCount(0);
+    // Leave without saving so the household isn't changed.
+    await page.getByRole("button", { name: "Cancel" }).click();
+    await page.getByTestId("confirm-discard-changes").click();
+  });
 });

@@ -150,7 +150,7 @@ export const CommunityPage = ({ config }: Props) => {
     <Box>
       <PageHead
         title={title}
-        lede={people && people.length > 0 ? Locale.label("mobile.community.peopleCount").replace("{}", String(people.length)) : undefined}
+        lede={people && people.length > 0 ? Locale.label(people.length === 1 ? "mobile.community.peopleCountOne" : "mobile.community.peopleCount").replace("{}", String(people.length)) : undefined}
       />
       <Plate>
         <Box sx={{ px: { xs: "16px", md: "24px" }, pt: { xs: "16px", md: "22px" }, pb: "4px" }}>
