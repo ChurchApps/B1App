@@ -167,7 +167,7 @@ test.describe.serial("Mobile donate mixed-currency totals", () => {
     return { headers: { Authorization: `Bearer ${uc.jwt}` } };
   };
 
-  const usd = (value: number) => "$ " + value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const usd = (value: number) => "$" + value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   test.beforeAll(async () => {
     const ctx = await request.newContext();
@@ -221,7 +221,7 @@ test.describe.serial("Mobile donate mixed-currency totals", () => {
     await allYears.click();
     await expect(page.getByTestId("giving-period-total")).toHaveText(expectedAllTime, { timeout: 30000 });
     await expect(page.getByTestId("giving-period-converted-note")).toHaveText(CONVERTED_NOTE);
-    await expect(page.locator("main")).toContainText("€ 100.00");
+    await expect(page.locator("main")).toContainText("€100.00");
   });
 });
 
