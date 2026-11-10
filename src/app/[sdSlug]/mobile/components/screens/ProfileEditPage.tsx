@@ -32,7 +32,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { parseTitleOptions } from "@/helpers/TitleOptions";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
-import { Eyebrow, KeyValues, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, Sheet, StatusBadge, TextLink } from "../kit";
+import { Eyebrow, KeyValues, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, Sheet, SignInPrompt, StatusBadge, TextLink } from "../kit";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -614,6 +614,8 @@ export const ProfileEditPage = ({ config }: Props) => {
   const savePrivacySheet = async () => {
     if (await handleSaveVisibility()) setSheet(null);
   };
+
+  if (!userContext?.user?.firstName) return <SignInPrompt title={Locale.label("mobile.profileEdit.signedOutTitle")} lede={Locale.label("mobile.profileEdit.signedOutBody")} />;
 
   if (loading) {
     return (

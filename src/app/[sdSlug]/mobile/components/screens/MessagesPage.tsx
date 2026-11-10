@@ -13,7 +13,7 @@ import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
 import { formatRelative } from "../util";
 import { LoadErrorAlert } from "../LoadErrorAlert";
-import { PageHead, PersonAvatar, Plate, QuietEmpty, Row, SearchField, StatusBadge } from "../kit";
+import { PageHead, PersonAvatar, Plate, QuietEmpty, Row, SearchField, SignInPrompt, StatusBadge } from "../kit";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -171,6 +171,8 @@ export const MessagesPage = ({ config: _config }: Props) => {
       </IconButton>
     </Box>
   );
+
+  if (!loggedIn) return <SignInPrompt title={Locale.label("mobile.messages.signedOutTitle")} lede={Locale.label("mobile.messages.signedOutBody")} />;
 
   return (
     <Box>
