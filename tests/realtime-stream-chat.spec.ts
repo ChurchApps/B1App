@@ -259,7 +259,7 @@ test.describe("Live stream chat — chat window", () => {
     await expect(page.locator("#sendChatText")).toHaveCount(0);
     await expect(page.locator("#chatReceive")).toBeVisible();
 
-    await page.screenshot({ path: ".pr-screenshots/after.png", fullPage: false });
+    await page.screenshot({ path: test.info().outputPath("after.png"), fullPage: false });
     await context.close();
   });
 });
