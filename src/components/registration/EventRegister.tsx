@@ -88,7 +88,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
           <Typography variant="h6" component="h1">{Locale.label("registration.notOpen")}</Typography>
           <Typography variant="body2" color="text.secondary">
             {event.registrationOpenDate && new Date(event.registrationOpenDate) > new Date()
-              ? Locale.label("registration.opensOn").replace("{}", DateHelper.prettyDate(event.registrationOpenDate))
+              ? Locale.label("registration.opensOn").replace("{}", hydrated ? DateHelper.prettyDate(event.registrationOpenDate) : "")
               : Locale.label("registration.closed")}
           </Typography>
         </CardContent>
