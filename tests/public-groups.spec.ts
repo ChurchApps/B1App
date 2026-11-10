@@ -37,8 +37,8 @@ test.describe("Public groups listing", () => {
     await page.goto("/groups/music");
     const card = page.locator('[data-testid="group-card-adult-choir-link"]');
     await expect(card).toBeVisible({ timeout: 15000 });
-    const box = await card.boundingBox();
-    expect(box!.width).toBeGreaterThan(250);
+    // The list can re-render once the label lookup settles, so poll the width rather than read it once.
+    await expect.poll(async () => (await card.boundingBox())?.width ?? 0, { timeout: 10000 }).toBeGreaterThan(250);
   });
 
   test("unknown label still renders a heading without crashing", async ({ page }) => {
