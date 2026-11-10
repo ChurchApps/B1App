@@ -295,6 +295,40 @@ test.describe("Mobile plan serving summary", () => {
   });
 });
 
+// Someone who declined is not serving, so the team list and its count leave them out.
+test.describe("Mobile plan serving teams", () => {
+  test("a declined volunteer is not listed as serving", async ({ page }) => {
+    const demo = await getApi("demo");
+    const login = await (await demo.request.post(MAIN_API + "/membership/users/login", { data: { email: "demo@b1.church", password: "password" } })).json();
+    const personId = (login.userChurches || []).find((c: any) => c.church?.id === "CHU00000001")?.person?.id;
+    let planId = "";
+    try {
+      const plan = await (await apiCall(demo, "post", doingUrl("/plans"), [{ ministryId: "GRP0000000a", planTypeId: "PLT00000001", name: "Declined Team " + Date.now(), serviceDate: new Date().toISOString().slice(0, 10), notes: "", serviceOrder: true }])).json();
+      planId = plan[0].id;
+      const pos = await (await apiCall(demo, "post", doingUrl("/positions"), [
+        { planId, categoryName: "Greeters", name: "Door Greeter", count: 1, groupId: "GRP0000000b" },
+        { planId, categoryName: "Greeters", name: "Parking Greeter", count: 1, groupId: "GRP0000000b" }
+      ])).json();
+      await apiCall(demo, "post", doingUrl("/assignments"), [
+        { positionId: pos[0].id, personId, status: "Accepted" },
+        { positionId: pos[1].id, personId: "PER00000027", status: "Declined" }
+      ]);
+
+      await page.goto("/mobile/plans/" + planId);
+      await expect(page.getByText(/^1 serving · 1 team$/)).toBeVisible({ timeout: 30000 });
+      await page.getByRole("button", { name: "All teams" }).click();
+      await expect(page).toHaveURL(/view=teams/);
+      const main = page.locator("main");
+      await expect(main.getByRole("heading", { name: "Serving Teams" })).toBeVisible();
+      await expect(main.getByText("Door Greeter", { exact: true })).toHaveCount(1);
+      await expect(main.getByText("Parking Greeter")).toHaveCount(0);
+    } finally {
+      if (planId) await apiCall(demo, "delete", doingUrl("/plans/" + planId));
+      await demo.request.dispose();
+    }
+  });
+});
+
 const MAIN_API = process.env.API_BASE || "http://localhost:8084";
 
 async function setChurchRegion(region: string) {
