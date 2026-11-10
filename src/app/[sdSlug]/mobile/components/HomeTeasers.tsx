@@ -249,7 +249,7 @@ export const AttendanceTeaser = ({ attendance, groups }: { attendance: MyAttenda
   return (
     <PlateSection data-testid="home-attendance-section" title={Locale.label("mobile.me.myAttendance")} action={<TextLink href="/mobile/myAttendance">{Locale.label("mobile.screens.tabHistory")}</TextLink>}>
       <Typography sx={{ fontSize: 15, color: mobileTheme.colors.text }}>
-        {Locale.label("mobile.me.attendedLast90").replace("{}", String(attendedLast90))}
+        {Locale.label(attendedLast90 === 1 ? "mobile.me.attendedLast90One" : "mobile.me.attendedLast90").replace("{}", String(attendedLast90))}
       </Typography>
       <RowList>
         {attendance.slice(0, 2).map((r, idx) => (

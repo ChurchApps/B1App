@@ -46,6 +46,8 @@ test.describe("Mobile Me page", () => {
     await expect(main.getByTestId("me-shortcut-messages")).toBeVisible();
     await expect(main.getByTestId("me-shortcut-donate")).toBeVisible();
     await expect(main.getByTestId("me-shortcut-registrations")).toBeVisible();
+    // One registration reads "1 registration", not "1 registrations".
+    await expect(main.getByText(/^(1 registration|(0|[2-9]|\d{2,}) registrations)$/)).toBeVisible();
     await main.getByTestId("me-shortcut-profileEdit").click();
     await expect(page).toHaveURL(/\/mobile\/profileEdit/, { timeout: 15000 });
   });

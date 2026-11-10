@@ -341,7 +341,7 @@ export const MePage = ({ config }: Props) => {
               {givingThisYear.count === 0
                 ? <QuietEmpty>{Locale.label("mobile.me.noGiftsThisYear").replace("{}", String(givingThisYear.year))}</QuietEmpty>
                 : (
-                  <BigNumber caption={Locale.label("mobile.me.givenThisYear").replace("{0}", String(givingThisYear.year)).replace("{1}", String(givingThisYear.count))}>
+                  <BigNumber caption={Locale.label(givingThisYear.count === 1 ? "mobile.me.givenThisYearOne" : "mobile.me.givenThisYear").replace("{0}", String(givingThisYear.year)).replace("{1}", String(givingThisYear.count))}>
                     {givingThisYear.total !== null ? CurrencyHelper.formatCurrencyWithLocale(givingThisYear.total, givingThisYear.currency) : givingThisYear.count}
                   </BigNumber>
                 )}
@@ -370,7 +370,7 @@ export const MePage = ({ config }: Props) => {
                 : (
                   <>
                     <Typography sx={{ fontSize: 15, color: tc.text }}>
-                      {Locale.label("mobile.me.attendedLast90").replace("{}", String(attendedLast90))}
+                      {Locale.label(attendedLast90 === 1 ? "mobile.me.attendedLast90One" : "mobile.me.attendedLast90").replace("{}", String(attendedLast90))}
                     </Typography>
                     <RowList>
                       {attendance.slice(0, TEASER_COUNT).map((r, idx) => (
@@ -383,7 +383,7 @@ export const MePage = ({ config }: Props) => {
 
           <PlateSection title={Locale.label("mobile.me.requestsAndRegistrations")}>
             <Typography sx={{ fontSize: 15, color: tc.text }}>
-              {Locale.label("mobile.me.registrationCount").replace("{}", String(activeRegistrations))}
+              {Locale.label(activeRegistrations === 1 ? "mobile.me.registrationCountOne" : "mobile.me.registrationCount").replace("{}", String(activeRegistrations))}
             </Typography>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: "8px 20px", mt: "8px" }}>
               <TextLink href="/mobile/registrations" data-testid="me-shortcut-registrations">{Locale.label("mobile.screenTitles.registrations")}</TextLink>
