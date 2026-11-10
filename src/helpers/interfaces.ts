@@ -6,7 +6,7 @@ export interface ElementInterface {
   churchId?: string;
   sectionId?: string;
   blockId?: string;
-  parentId?: string;
+  parentId?: string | null;
   size?: number;
   answersJSON?: string;
   answers?: Record<string, string | number | boolean>;
@@ -146,7 +146,7 @@ export interface ArrangementKeyInterface {
 export interface PlanItemInterface {
   id?: string,
   planId?: string,
-  parentId?: string,
+  parentId?: string | null,
   sort?: number,
   itemType?: string,
   relatedId?: string,
