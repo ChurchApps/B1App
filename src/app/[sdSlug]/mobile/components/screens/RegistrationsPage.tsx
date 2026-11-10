@@ -68,7 +68,7 @@ const RegistrationsPageInner = ({ config: _config }: Props) => {
   const renderItem = (reg: RegistrationInterface) => {
     const isCancelled = reg.status === "cancelled";
     const eventStart = (reg as any).event?.start;
-    const eventTitle = (reg as any).event?.title || "Event";
+    const eventTitle = (reg as any).event?.title || Locale.label("mobile.group.event");
     const total = num((reg as any).totalAmount);
     const paid = num((reg as any).amountPaid);
     const balance = balanceOf(reg);

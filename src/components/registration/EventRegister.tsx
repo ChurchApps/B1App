@@ -24,6 +24,9 @@ export function EventRegister({ churchId, eventId, event }: Props) {
   const context = useContext(UserContext);
   const isLoggedIn = !!context?.person;
   const [activeCount, setActiveCount] = useState(0);
+  // The server renders in its own time zone; show the event time once the page is running in the visitor's.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => { setHydrated(true); }, []);
 
   const reg = useEventRegistration({
     churchId,
@@ -57,7 +60,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
   }
 
   const getDisplayTime = () => {
-    if (!event.start) return "";
+    if (!event.start || !hydrated) return "";
     if (event.allDay) {
       const start = DateHelper.prettyDate(event.start);
       const end = DateHelper.prettyDate(event.end as Date);
@@ -85,7 +88,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
           <Typography variant="h6" component="h1">{Locale.label("registration.notOpen")}</Typography>
           <Typography variant="body2" color="text.secondary">
             {event.registrationOpenDate && new Date(event.registrationOpenDate) > new Date()
-              ? Locale.label("registration.opensOn").replace("{}", DateHelper.prettyDate(event.registrationOpenDate))
+              ? Locale.label("registration.opensOn").replace("{}", hydrated ? DateHelper.prettyDate(event.registrationOpenDate) : "")
               : Locale.label("registration.closed")}
           </Typography>
         </CardContent>
