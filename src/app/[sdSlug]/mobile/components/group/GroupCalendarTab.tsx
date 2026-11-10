@@ -372,6 +372,8 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
     ].filter(Boolean).join(" · ");
     const occ = e.start ? new Date(e.start) : null;
     const showRsvp = canRsvp(e) && !!occ && !isNaN(occ.getTime());
+    // Answering is for what's still ahead; leaders can still look back at who came.
+    const ended = new Date(e.end || e.start || "").getTime() < Date.now();
     return (
       <Box key={`${e.id || "ev"}-${i}`} sx={{ py: "12px", "& + &": { borderTop: `1px solid ${tc.border}` } }}>
         <Box sx={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
@@ -394,9 +396,9 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
         {e.registrationEnabled && e.id && (
           <Box sx={{ mt: "8px" }}><RegisterAction eventId={e.id} /></Box>
         )}
-        {showRsvp && (isMember || canManage) && (
+        {showRsvp && ((isMember && !ended) || canManage) && (
           <Box sx={{ mt: "10px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "8px" }} data-testid={`rsvp-${e.id}`}>
-            {isMember && <RsvpButtons e={e} rsvp={rsvp} />}
+            {isMember && !ended && <RsvpButtons e={e} rsvp={rsvp} />}
             {canManage && (
               <TextLink onClick={() => setRosterFor({ eventId: e.id!, occurrenceStart: occ!.toISOString(), title: e.title || Locale.label("mobile.group.event") })} data-testid={`rsvp-roster-${e.id}`}>
                 {Locale.label("mobile.group.rsvpViewResponses")}

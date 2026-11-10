@@ -19,9 +19,17 @@ export const GroupList = (props: Props) => {
 
   useEffect(() => {
     EnvironmentHelper.init();
-    ApiHelper.getAnonymous("/groups/public/" + props.churchId + "/label?label=" + encodeURIComponent(props.label), "MembershipApi").then((data: GroupInterface[]) => {
-      setGroups(Array.isArray(data) ? data : []);
-    }).catch(() => setGroups([]));
+    const load = async (label: string) => {
+      const data = await ApiHelper.getAnonymous("/groups/public/" + props.churchId + "/label?label=" + encodeURIComponent(label), "MembershipApi");
+      return Array.isArray(data) ? data as GroupInterface[] : [];
+    };
+    // Labels are matched exactly, and churches write them both ways ("small-group" and "small group"),
+    // so try the URL's label as-is and fall back to it with hyphens read as spaces.
+    const spaced = props.label.replace(/-/g, " ");
+    load(props.label)
+      .then(async (found) => (found.length === 0 && spaced !== props.label ? load(spaced) : found))
+      .then(setGroups)
+      .catch(() => setGroups([]));
   }, [props.churchId, props.label]);
 
 
@@ -31,7 +39,7 @@ export const GroupList = (props: Props) => {
       <Grid container spacing={3}>
         {
           groups?.length > 0
-            ? (groups.map((group) => (<Grid key={group.id} size={{ xs: 4 }}><GroupCard group={group} /></Grid>)))
+            ? (groups.map((group) => (<Grid key={group.id} size={{ xs: 12, sm: 6, md: 4 }}><GroupCard group={group} /></Grid>)))
             : (<p>{Locale.label("groups.noGroups")}</p>)
         }
       </Grid>

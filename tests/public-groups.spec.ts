@@ -24,6 +24,23 @@ test.describe("Public groups listing", () => {
     await expect(page.locator("h1").filter({ hasText: /Small Group/i })).toBeVisible();
   });
 
+  test("a hyphenated label lists its groups", async ({ page }) => {
+    // Seeded small groups carry the label "small-group" with the hyphen.
+    await page.goto("/groups/small-group");
+    const main = page.locator("#mainContent");
+    await expect(main.locator('[data-testid="group-card-mens-bible-study-link"]')).toBeVisible({ timeout: 15000 });
+    await expect(main).not.toContainText(/No groups found/i);
+  });
+
+  test("on a phone the label page shows one full-width card per row", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/groups/music");
+    const card = page.locator('[data-testid="group-card-adult-choir-link"]');
+    await expect(card).toBeVisible({ timeout: 15000 });
+    // The list can re-render once the label lookup settles, so poll the width rather than read it once.
+    await expect.poll(async () => (await card.boundingBox())?.width ?? 0, { timeout: 10000 }).toBeGreaterThan(250);
+  });
+
   test("unknown label still renders a heading without crashing", async ({ page }) => {
     await page.goto("/groups/nonexistent-label");
     await expect(page.locator("h1").filter({ hasText: /Nonexistent Label Groups/i })).toBeVisible();
