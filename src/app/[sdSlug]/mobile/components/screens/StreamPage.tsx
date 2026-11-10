@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import UserContext from "@/context/UserContext";
 import { Box, Icon } from "@mui/material";
 import { Locale, ConversationStore } from "@churchapps/apphelper";
 import { DateHelper, type ConversationInterface, type MessageInterface } from "@churchapps/helpers";
@@ -108,6 +109,18 @@ export const StreamPage = ({ config }: Props) => {
     })().catch((error) => console.error("Failed to join stream chat:", error));
   }, [currentService, chatReady, streamConfig]);
 
+  const context = useContext(UserContext);
+  useEffect(() => {
+    if (!context?.user || !StreamChatManager.syncSignedInUser()) return;
+    setChatState({ ...ChatHelper.current });
+    // Rooms joined before the session loaded skipped host chat.
+    if (streamConfig && currentService && joinedServiceIdRef.current === currentService.id && !ChatHelper.current.hostConversation) {
+      StreamChatManager.checkHost(streamConfig, currentService.id || "")
+        .then(() => setChatState({ ...ChatHelper.current }))
+        .catch((error) => console.error("Failed to join host chat:", error));
+    }
+  }, [context?.user, context?.userChurch]);
+
   useEffect(() => {
     setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 30 * 1000);
@@ -138,7 +151,9 @@ export const StreamPage = ({ config }: Props) => {
         color: "#fff",
         "& #videoContainer": { position: "absolute", inset: 0 },
         "& #videoContainer iframe, & #noVideoContent": { position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 },
-        "& #noVideoContent h3, & #noVideoContent p": { color: "#fff", m: 0 }
+        "& #noVideoContent h3, & #noVideoContent p": { color: "#fff", m: 0 },
+        // "The current service has ended." is the only child; keep it off the rounded edge.
+        "& #noVideoContent > h3:only-child": { p: "16px 18px", fontSize: 18, lineHeight: "24px" }
       }}>
         {showPlayer
           ? <VideoContainer overlayContent={false} currentService={currentService} embedded={true} />

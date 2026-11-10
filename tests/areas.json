@@ -272,7 +272,7 @@
     },
     "blog": {
       "src": ["src/app/[sdSlug]/(public)/blog/**", "src/components/BlogFooterEmbed.tsx"],
-      "specs": ["public-blog.spec.ts"]
+      "specs": ["public-blog.spec.ts", "public-blog-browse.spec.ts"]
     },
     "forms": {
       "src": ["src/app/[sdSlug]/(public)/[pageSlug]/[id]/**", "src/components/elements/FormElement.tsx"],
