@@ -151,7 +151,9 @@ export const StreamPage = ({ config }: Props) => {
         color: "#fff",
         "& #videoContainer": { position: "absolute", inset: 0 },
         "& #videoContainer iframe, & #noVideoContent": { position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 },
-        "& #noVideoContent h3, & #noVideoContent p": { color: "#fff", m: 0 }
+        "& #noVideoContent h3, & #noVideoContent p": { color: "#fff", m: 0 },
+        // "The current service has ended." is the only child; keep it off the rounded edge.
+        "& #noVideoContent > h3:only-child": { p: "16px 18px", fontSize: 18, lineHeight: "24px" }
       }}>
         {showPlayer
           ? <VideoContainer overlayContent={false} currentService={currentService} embedded={true} />
