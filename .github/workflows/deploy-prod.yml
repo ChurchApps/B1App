@@ -5,30 +5,50 @@ on:
 
 name: Deploy Prod
 
+# Publishes main to the production branch, which Vercel deploys. Step 1 is the
+# malware scan of the main tree; the merge only happens when it passes.
+
 permissions:
-  contents: read
-  pull-requests: write
+  contents: write
 
 jobs:
   deploy:
-    name: Open production pull request
+    name: Merge main to production
     runs-on: ubuntu-latest
 
     steps:
-      - name: Open a pull request from main to production
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Checkout malware scanner
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          repository: ChurchApps/.github
+          ref: main
+          path: .polinrider
+          persist-credentials: false
+
+      # Step 1: the PolinRider malware scan. The scanner runs from outside the
+      # tree and is removed from it before scanning. A finding fails this step
+      # and nothing below it runs.
+      - name: Malware scan
+        run: |
+          cp .polinrider/scripts/polinrider_scan.py "$RUNNER_TEMP/polinrider_scan.py"
+          rm -rf .polinrider
+          python3 "$RUNNER_TEMP/polinrider_scan.py" --self-test
+          python3 "$RUNNER_TEMP/polinrider_scan.py" .
+
+      - name: Merge main to production
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ahead=$(gh api "repos/${GITHUB_REPOSITORY}/compare/production...main" --jq '.ahead_by')
+          ahead=$(gh api "repos/${GITHUB_REPOSITORY}/compare/production...${GITHUB_SHA}" --jq '.ahead_by')
           if [ "$ahead" = "0" ]; then
-            echo "production already contains main"
+            echo "production already contains ${GITHUB_SHA}"
             exit 0
           fi
-          existing=$(gh pr list --repo "$GITHUB_REPOSITORY" --base production --head main --state open --json number --jq '.[0].number // empty')
-          if [ -n "$existing" ]; then
-            echo "pull request #$existing is already open"
-            exit 0
-          fi
-          gh pr create --repo "$GITHUB_REPOSITORY" --base production --head main \
-            --title "Deploy main to production" \
-            --body "Opened by the deploy workflow. Merging publishes main to production."
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/merges" \
+            -f base=production -f head="${GITHUB_SHA}" \
+            -f commit_message="Merge main into production"
