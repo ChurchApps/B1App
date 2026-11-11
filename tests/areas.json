@@ -10,7 +10,8 @@
     "tests/smoke/**",
     "tests/setup/smoke.mjs",
     "tests/setup/affected.mjs",
-    "playwright.smoke.config.ts"
+    "playwright.smoke.config.ts",
+    ".pr-screenshots/**"
   ],
   "areas": {
     "mobileShell": {
