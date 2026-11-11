@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { IconButton, Paper, Popper } from "@mui/material";
+import { IconButton, Paper } from "@mui/material";
 import FormatBoldIcon from "@mui/icons-material/FormatBold";
 import FormatItalicIcon from "@mui/icons-material/FormatItalic";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
@@ -38,7 +38,8 @@ interface Props {
 }
 
 // Mirrors Packages/apphelper/src/components/notes/FormattingPopup.tsx.
-// Bold / Italic / Bullets / Numbered popup shown over highlighted text in a plain text box.
+// Bold / Italic / Bullets / Numbered row shown under a plain text box while it has focus. A row under the box,
+// not a popup over the selection, so a phone's Copy / Select All callout never covers it.
 export function FormattingPopup({ textareaRef, value, onChange }: Props) {
   const [open, setOpen] = useState(false);
   const format = useApplyFormat(textareaRef, value, onChange);
@@ -46,39 +47,37 @@ export function FormattingPopup({ textareaRef, value, onChange }: Props) {
   useEffect(() => {
     const el = textareaRef.current;
     if (!el) return;
-    const update = () => setOpen(document.activeElement === el && (el.selectionStart ?? 0) !== (el.selectionEnd ?? 0));
-    const close = () => setOpen(false);
-    const events = ["select", "keyup", "mouseup", "focus"];
-    events.forEach((e) => el.addEventListener(e, update));
-    el.addEventListener("blur", close);
+    const show = () => setOpen(true);
+    const hide = () => setOpen(false);
+    setOpen(document.activeElement === el);
+    el.addEventListener("focus", show);
+    el.addEventListener("blur", hide);
     return () => {
-      events.forEach((e) => el.removeEventListener(e, update));
-      el.removeEventListener("blur", close);
+      el.removeEventListener("focus", show);
+      el.removeEventListener("blur", hide);
     };
   }, [textareaRef]);
 
-  const anchor = textareaRef.current;
+  if (!open) return null;
   return (
-    <Popper open={open && !!anchor} anchorEl={anchor} placement="top-start" sx={{ zIndex: (theme) => theme.zIndex.tooltip }}>
-      <Paper elevation={4} sx={{ display: "flex", p: 0.25, mb: 0.5 }} data-testid="formatting-popup">
-        {BUTTONS.map((b) => (
-          <IconButton
-            key={b.kind}
-            size="small"
-            aria-label={Locale.label(b.key, b.fallback)}
-            title={Locale.label(b.key, b.fallback)}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => format(b.kind)}
-          >
-            <b.Icon fontSize="small" />
-          </IconButton>
-        ))}
-      </Paper>
-    </Popper>
+    <Paper variant="outlined" sx={{ display: "flex", p: 0.25, mt: 0.5, width: "fit-content" }} data-testid="formatting-popup">
+      {BUTTONS.map((b) => (
+        <IconButton
+          key={b.kind}
+          size="small"
+          aria-label={Locale.label(b.key, b.fallback)}
+          title={Locale.label(b.key, b.fallback)}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => format(b.kind)}
+        >
+          <b.Icon fontSize="small" />
+        </IconButton>
+      ))}
+    </Paper>
   );
 }
 
-// Ctrl/Cmd+B and Ctrl/Cmd+I for a plain text box, plus the highlight popup.
+// Ctrl/Cmd+B and Ctrl/Cmd+I for a plain text box, plus the format row.
 export function useFormattingShortcuts(textareaRef: TextareaRef, value: string, onChange: (value: string) => void) {
   const format = useApplyFormat(textareaRef, value, onChange);
 

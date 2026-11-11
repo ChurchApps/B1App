@@ -38,6 +38,7 @@ const NEWS_POSTS = 5;
 
 // Photo links featured above the list in the "Grid and list" and "Scrolling (automatic) and list" layouts.
 const FEATURED_TILES = 3;
+const LISTED_TILES = 3;
 
 export const linkPhoto = (l: LinkInterface) => (l as unknown as { photo?: string }).photo;
 
@@ -219,16 +220,20 @@ export const DashboardPage = ({ config }: Props) => {
     </Box>
   );
 
-  // The combined layouts feature the first few photo links and list the rest beneath; More lists them all.
+  // The combined layouts list at most three photo links beneath the tiles; All opens More, which lists them all.
+  // Grid and list features the first three and lists the next three. Scrolling (automatic) and list moves every
+  // photo link (so the row moves on wide screens too) and lists the first three beneath it.
   const combinedTiles = tileLayout === "gridlist" || tileLayout === "autoscrolllist";
-  const featuredTiles = combinedTiles ? tileLinks.slice(0, FEATURED_TILES) : tileLinks;
-  const restTiles = combinedTiles ? tileLinks.slice(FEATURED_TILES) : [];
+  const featuredTiles = tileLayout === "gridlist" ? tileLinks.slice(0, FEATURED_TILES) : tileLinks;
+  const listedTiles = tileLayout === "gridlist"
+    ? tileLinks.slice(FEATURED_TILES, FEATURED_TILES + LISTED_TILES)
+    : tileLayout === "autoscrolllist" ? tileLinks.slice(0, LISTED_TILES) : [];
 
   const tileSection = tileLinks.length > 0 && (
     <PlateSection
       data-testid="home-tiles-section"
       title={churchName || undefined}
-      action={restTiles.length > 0 ? <TextLink href="/mobile/more">{Locale.label("mobile.dashboard.all")}</TextLink> : undefined}
+      action={combinedTiles && tileLinks.length > FEATURED_TILES ? <TextLink href="/mobile/more">{Locale.label("mobile.dashboard.all")}</TextLink> : undefined}
     >
       {tileLayout === "list"
         ? renderTileList(tileLinks)
@@ -236,7 +241,7 @@ export const DashboardPage = ({ config }: Props) => {
         : tileLayout === "scroll" || tileLayout === "autoscroll" || tileLayout === "autoscrolllist"
           ? renderTileStrip(featuredTiles, tileLayout !== "scroll")
           : renderTileGrid(featuredTiles)}
-      {restTiles.length > 0 && <Box data-testid="home-tile-list" sx={{ mt: "8px" }}>{renderTileList(restTiles)}</Box>}
+      {listedTiles.length > 0 && <Box data-testid="home-tile-list" sx={{ mt: "8px" }}>{renderTileList(listedTiles)}</Box>}
     </PlateSection>
   );
 
