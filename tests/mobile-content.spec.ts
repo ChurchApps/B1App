@@ -40,6 +40,17 @@ test.describe("Mobile content screens", () => {
     await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
+  test("bible screen shows the reader or the Bible.com fallback without crashing the reader", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
+    await page.goto("/mobile/bible");
+    // No YouVersion app key (local/CI) shows the fallback links; with one, the reader's toolbar.
+    const fallback = page.getByRole("link", { name: "Open Bible.com" });
+    const reader = page.locator("[data-yv-sdk]").first();
+    await expect(fallback.or(reader)).toBeVisible({ timeout: 30000 });
+    expect(errors.filter((e) => /YouVersion/i.test(e))).toEqual([]);
+  });
+
   test("stream screen renders", async ({ page }) => {
     await page.goto("/mobile/stream");
     await expect(mobileLogoutButton(page)).toBeVisible();

@@ -5,6 +5,9 @@ on:
 
 name: Deploy Prod
 
+# Publishes main to the production branch, which Vercel deploys. Step 1 is the
+# malware scan of the main tree; the merge only happens when it passes.
+
 permissions:
   contents: write
 
@@ -16,11 +19,36 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Checkout malware scanner
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          repository: ChurchApps/.github
+          ref: main
+          path: .polinrider
+          persist-credentials: false
+
+      # Step 1: the PolinRider malware scan. The scanner runs from outside the
+      # tree and is removed from it before scanning. A finding fails this step
+      # and nothing below it runs.
+      - name: Malware scan
+        run: |
+          cp .polinrider/scripts/polinrider_scan.py "$RUNNER_TEMP/polinrider_scan.py"
+          rm -rf .polinrider
+          python3 "$RUNNER_TEMP/polinrider_scan.py" --self-test
+          python3 "$RUNNER_TEMP/polinrider_scan.py" .
 
       - name: Merge main to production
-        uses: devmasx/merge-branch@854d3ac71ed1e9deb668e0074781b81fdd6e771f # v1.4.0
-        with:
-          type: now
-          from_branch: main
-          target_branch: production
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ahead=$(gh api "repos/${GITHUB_REPOSITORY}/compare/production...${GITHUB_SHA}" --jq '.ahead_by')
+          if [ "$ahead" = "0" ]; then
+            echo "production already contains ${GITHUB_SHA}"
+            exit 0
+          fi
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/merges" \
+            -f base=production -f head="${GITHUB_SHA}" \
+            -f commit_message="Merge main into production"

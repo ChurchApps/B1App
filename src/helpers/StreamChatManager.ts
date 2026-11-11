@@ -66,6 +66,18 @@ export class StreamChatManager {
     return ChatHelper.current.user;
   }
 
+  // The signed-in session can load after the stream mounted as an anonymous viewer; switch the chat name over to the account.
+  static syncSignedInUser(): boolean {
+    if (!(ApiHelper.isAuthenticated && UserHelper.user)) return false;
+    const nameOf = (u: ChatUserInterface) => `${u.firstName}${u.lastName ? " " + u.lastName : ""}`;
+    const before = nameOf(ChatHelper.current.user);
+    const user = StreamChatManager.initUser();
+    if (SocketHelper.socketId && nameOf(user) !== before) {
+      ApiHelper.postAnonymous("/connections/setName", { socketId: SocketHelper.socketId, name: nameOf(user) }, "MessagingApi");
+    }
+    return true;
+  }
+
   static initUser(): ChatUserInterface {
     const user = ChatHelper.getUser();
     if (ApiHelper.isAuthenticated && UserHelper.user) {

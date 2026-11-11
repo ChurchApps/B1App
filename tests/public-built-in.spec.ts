@@ -67,8 +67,12 @@ test.describe("Public built-in routes", () => {
   test("/bible renders YouVersion bible reader", async ({ page }) => {
     await page.goto("/bible");
     await expect(page).toHaveURL(/\/bible/);
-    await expect(page.getByTestId("bible-previous-chapter-button")).toBeVisible({ timeout: 20000 });
-    await expect(page.getByTestId("bible-next-chapter-button")).toBeVisible();
+    // Without a YouVersion app key (local stacks) the page offers Bible.com instead of the reader.
+    const prev = page.getByTestId("bible-previous-chapter-button");
+    const fallback = page.getByRole("link", { name: "Open Bible.com" });
+    await expect(prev.or(fallback)).toBeVisible({ timeout: 20000 });
+    if (await prev.isVisible()) await expect(page.getByTestId("bible-next-chapter-button")).toBeVisible();
+    else await expect(fallback).toHaveAttribute("href", "https://www.bible.com");
   });
 
   test("/votd renders verse-of-the-day page", async ({ page }) => {

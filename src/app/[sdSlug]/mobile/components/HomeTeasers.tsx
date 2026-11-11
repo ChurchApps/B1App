@@ -4,13 +4,15 @@ import React, { useContext, useMemo, useState } from "react";
 import Link from "next/link";
 import { Box, Button, Typography } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { GroupInterface } from "@churchapps/helpers";
+import type { GroupInterface, TaskInterface } from "@churchapps/helpers";
 import { ApiHelper, CurrencyHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
+import type { PostInterface } from "@/helpers/interfaces";
 import { mobileTheme } from "./mobileTheme";
 import { ConfirmDeclineSheet } from "./ConfirmDeclineSheet";
 import { EventProcessor } from "../helpers/eventProcessor";
 import { attendanceSubtitle, attendanceTitle, useMyRegistrations, type MyAttendanceRecord, type MyFormSubmission } from "../helpers/myRecords";
+import { MyTaskSheet, TaskRow } from "./screens/CardSheet";
 import { BigNumber, PersonAvatar, PlateSection, Row, RowList, StatusBadge, TextLink, type BadgeTone } from "./kit";
 
 interface UpcomingAssignment {
@@ -124,6 +126,22 @@ export const useUpcomingEvents = (enabled: boolean) => {
   }, [enabled, data, registrations]);
 };
 
+// The church's latest published blog posts (optionally one category), read anonymously so signed-out visitors see them too.
+export const useLatestPosts = (churchId: string | undefined, pageSize: number, category: string | undefined, enabled: boolean) => {
+  const { data = [], isLoading } = useQuery<PostInterface[]>({
+    queryKey: ["news-posts", churchId, pageSize, category || ""],
+    queryFn: async () => {
+      const qs = new URLSearchParams({ pageSize: `${pageSize}` });
+      if (category) qs.set("category", category);
+      const data = await ApiHelper.getAnonymous(`/posts/public/${churchId}?${qs.toString()}`, "ContentApi");
+      return Array.isArray(data) ? data.filter((p: PostInterface) => p?.id && p.slug && p.title) : [];
+    },
+    enabled: enabled && !!churchId,
+    staleTime: 5 * 60 * 1000
+  });
+  return { posts: data, isLoading: enabled && isLoading };
+};
+
 export const useGivingSummary = (enabled: boolean) => {
   const personId = useContext(UserContext)?.person?.id;
   const year = new Date().getFullYear();
@@ -231,7 +249,7 @@ export const AttendanceTeaser = ({ attendance, groups }: { attendance: MyAttenda
   return (
     <PlateSection data-testid="home-attendance-section" title={Locale.label("mobile.me.myAttendance")} action={<TextLink href="/mobile/myAttendance">{Locale.label("mobile.screens.tabHistory")}</TextLink>}>
       <Typography sx={{ fontSize: 15, color: mobileTheme.colors.text }}>
-        {Locale.label("mobile.me.attendedLast90").replace("{}", String(attendedLast90))}
+        {Locale.label(attendedLast90 === 1 ? "mobile.me.attendedLast90One" : "mobile.me.attendedLast90").replace("{}", String(attendedLast90))}
       </Typography>
       <RowList>
         {attendance.slice(0, 2).map((r, idx) => (
@@ -251,6 +269,18 @@ export const FormsTeaser = ({ submissions }: { submissions: MyFormSubmission[] }
     </RowList>
   </PlateSection>
 );
+
+// Cards first, then plain tasks; the hooks already sort each newest first.
+export const TasksTeaser = ({ cards, tasks }: { cards: TaskInterface[]; tasks: TaskInterface[] }) => {
+  const [open, setOpen] = useState<TaskInterface | null>(null);
+  const rows = [...cards, ...tasks].slice(0, 2);
+  return (
+    <PlateSection data-testid="home-tasks-section" title={Locale.label("mobile.dashboard.yourFollowUps")} action={<TextLink href="/mobile/myTasks">{Locale.label("mobile.dashboard.all")}</TextLink>}>
+      <RowList>{rows.map((t) => <TaskRow key={t.id} task={t} onOpen={setOpen} />)}</RowList>
+      <MyTaskSheet task={open} onClose={() => setOpen(null)} />
+    </PlateSection>
+  );
+};
 
 export const GivingTeaser = ({ summary, canGive = true }: { summary?: GivingSummary; canGive?: boolean }) => (
   <PlateSection title={Locale.label("mobile.dashboard.giving")} action={<TextLink href="/mobile/donate?view=history">{Locale.label("mobile.dashboard.history")}</TextLink>}>

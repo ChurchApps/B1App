@@ -184,3 +184,136 @@ test.describe.serial("Mobile home attendance and forms", () => {
     await expect(page).toHaveURL(/\/mobile\/myForms/, { timeout: 15000 });
   });
 });
+
+// ChurchAppsSupport#1470: churches can show their latest blog posts as a sliding News strip on Home (B1Admin > Member portal).
+test.describe.serial("Mobile home news", () => {
+  test.use({ reducedMotion: "reduce" });
+  const RUN = Date.now().toString(36);
+  const PICNIC = { title: "Church Picnic Sign-ups", slug: `church-picnic-${RUN}`, category: "Announcements", excerpt: "Sign up by Friday.", content: "Join us after the second service. **Bring a side dish** to share.", photo: "/images/about-bg.jpg" };
+  const BAPTISM = { title: "Baptism Sunday", slug: `baptism-sunday-${RUN}`, category: "Announcements", excerpt: "Celebrate with us.", content: "Talk to Pastor Donald Clark to be baptized.", photo: "/images/connect-bg.png" };
+  const DEVOTION = { title: "Rest for the Weary", slug: `rest-for-the-weary-${RUN}`, category: "Devotionals", excerpt: "A short devotion.", content: "Come to me, all who labor.", photo: "" };
+  let ctx: APIRequestContext;
+  let headers: Record<string, string>;
+  let postIds: string[] = [];
+
+  const setHomeNews = async (on: boolean, category = "") => {
+    const all = (await (await ctx.get(`${API}/membership/settings`, { headers })).json()) as any[];
+    const row = (keyName: string, value: string) => ({ ...(all.find((s) => s.keyName === keyName) || { churchId: DEMO_CHURCH.ID, keyName }), public: 1, value });
+    const res = await ctx.post(`${API}/membership/settings`, { headers, data: [row("mobileHomeNews", `${on}`), row("mobileHomeNewsCategory", category)] });
+    expect(res.ok()).toBeTruthy();
+    await ctx.post(`${BASE_URL}/api/revalidate/${DEMO_CHURCH.SUBDOMAIN}`);
+  };
+
+  test.beforeAll(async () => {
+    ctx = await request.newContext();
+    const login = await (await ctx.post(`${API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = login.userChurches.find((c: any) => c.church?.id === DEMO_CHURCH.ID);
+    headers = { Authorization: `Bearer ${uc.jwt}` };
+    // Newest first: the devotion is the latest post, so the category filter has something to drop.
+    const posts = [DEVOTION, BAPTISM, PICNIC].map(({ photo, ...p }, i) => ({ ...p, photoUrl: photo ? `${BASE_URL}${photo}` : "", publishDate: new Date(Date.now() - (i + 1) * 3600000).toISOString() }));
+    const saved = await (await ctx.post(`${API}/content/posts`, { headers, data: posts })).json();
+    postIds = saved.map((p: any) => p.id);
+  });
+
+  test.afterAll(async () => {
+    await setHomeNews(false);
+    for (const id of postIds) await ctx.delete(`${API}/content/posts/${id}`, { headers });
+    await ctx.dispose();
+  });
+
+  test("stays off Home until the church turns it on", async ({ page }) => {
+    await setHomeNews(false);
+    await page.goto("/mobile/dashboard");
+    await expect(mobileSignedInChrome(page)).toBeVisible();
+    await expect(page.getByRole("region", { name: "Upcoming events" })).toBeVisible({ timeout: 20000 });
+    await expect(page.getByTestId("home-news-section")).toHaveCount(0);
+  });
+
+  test("shows the latest posts as News cards that open the full post", async ({ page }) => {
+    await setHomeNews(true);
+    await page.goto("/mobile/dashboard");
+
+    const news = page.getByRole("region", { name: "News" });
+    await expect(news).toBeVisible({ timeout: 20000 });
+    await expect(news.getByRole("button", { name: /Rest for the Weary/ })).toBeVisible();
+    await expect(news.getByRole("button", { name: /Baptism Sunday/ })).toBeAttached();
+    await expect(news.getByRole("button", { name: /Church Picnic Sign-ups/ })).toBeAttached();
+
+    await news.getByRole("button", { name: /Rest for the Weary/ }).click();
+    const sheet = page.getByRole("dialog", { name: "Rest for the Weary" });
+    await expect(sheet).toBeVisible();
+    await expect(sheet.getByText("Come to me, all who labor.")).toBeVisible();
+    await expect(sheet.getByRole("link", { name: "View on website" })).toHaveAttribute("href", `/blog/${DEVOTION.slug}`);
+    await sheet.getByRole("button", { name: "Close" }).click();
+    await expect(sheet).toBeHidden();
+
+    await news.getByRole("link", { name: "All news" }).click();
+    await expect(page).toHaveURL(/\/mobile\/news$/, { timeout: 15000 });
+    const rows = page.getByTestId("news-row");
+    await expect(rows.filter({ hasText: "Church Picnic Sign-ups" })).toBeVisible({ timeout: 20000 });
+    await rows.filter({ hasText: "Church Picnic Sign-ups" }).click();
+    await expect(page).toHaveURL(new RegExp(`/mobile/news/${PICNIC.slug}$`), { timeout: 15000 });
+    await expect(page.getByRole("heading", { name: "Church Picnic Sign-ups" })).toBeVisible({ timeout: 20000 });
+    await expect(page.getByText("Bring a side dish")).toBeVisible();
+  });
+
+  test("shows only the chosen blog category", async ({ page }) => {
+    await setHomeNews(true, "Announcements");
+    await page.goto("/mobile/dashboard");
+
+    const news = page.getByRole("region", { name: "News" });
+    await expect(news.getByRole("button", { name: /Baptism Sunday/ })).toBeVisible({ timeout: 20000 });
+    await expect(news.getByRole("button", { name: /Rest for the Weary/ })).toHaveCount(0);
+
+    await page.goto("/mobile/news");
+    await expect(page.getByTestId("news-row").filter({ hasText: "Church Picnic Sign-ups" })).toBeVisible({ timeout: 20000 });
+    await expect(page.getByTestId("news-row").filter({ hasText: "Rest for the Weary" })).toHaveCount(0);
+  });
+});
+
+// ChurchAppsSupport#1503: a church can put Requests and Registrations on Home from Mobile Navigation.
+test.describe.serial("Mobile home requests and registrations tabs", () => {
+  let ctx: APIRequestContext;
+  let headers: Record<string, string>;
+  let linkIds: string[] = [];
+
+  test.beforeAll(async () => {
+    ctx = await request.newContext();
+    const login = await (await ctx.post(`${API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = login.userChurches.find((c: any) => c.church?.id === DEMO_CHURCH.ID);
+    headers = { Authorization: `Bearer ${uc.jwt}` };
+    const saved = await (await ctx.post(`${API}/content/links`, {
+      headers,
+      data: [
+        { churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "requests", text: "Room Requests", sort: 22, visibility: "visitors" },
+        { churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "registrations", text: "Event Registrations", sort: 23, visibility: "visitors" }
+      ]
+    })).json();
+    linkIds = saved.map((l: any) => l.id);
+  });
+
+  test.afterAll(async () => {
+    for (const id of linkIds) await ctx.delete(`${API}/content/links/${id}`, { headers });
+    await ctx.dispose();
+  });
+
+  test("a Requests tab on Home opens My Requests", async ({ page }) => {
+    await page.goto("/mobile/dashboard");
+    await expect(mobileSignedInChrome(page)).toBeVisible();
+    const requests = page.locator("main").getByRole("link", { name: "Room Requests" }).first();
+    await expect(requests).toBeVisible({ timeout: 20000 });
+    await expect(requests).toHaveAttribute("href", "/mobile/myRequests");
+    await requests.click();
+    await expect(page).toHaveURL(/\/mobile\/myRequests/, { timeout: 15000 });
+    await expect(page.getByRole("link", { name: "Request an Event" })).toBeVisible({ timeout: 15000 });
+  });
+
+  test("a Registrations tab on Home opens Registrations", async ({ page }) => {
+    await page.goto("/mobile/dashboard");
+    await expect(mobileSignedInChrome(page)).toBeVisible();
+    const registrations = page.locator("main").getByRole("link", { name: "Event Registrations" }).first();
+    await expect(registrations).toBeVisible({ timeout: 20000 });
+    await registrations.click();
+    await expect(page).toHaveURL(/\/mobile\/registrations/, { timeout: 15000 });
+  });
+});

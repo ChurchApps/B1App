@@ -14,11 +14,13 @@ import { Emojis } from "@/components/video/chat";
 import { ApiHelper, Locale, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type MessageInterface, type PersonInterface } from "@churchapps/helpers";
-import { ChatHelper } from "@/helpers/ChatHelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
 import { PersonAvatar, QuietEmpty, TextLink } from "../kit";
+import { enterSends, formatMessageTime } from "../util";
+import { useFormattingShortcuts } from "../FormattingPopup";
+import { MarkdownMessage } from "../MarkdownMessage";
 
 interface Props {
   id: string;
@@ -57,6 +59,7 @@ export const MessageConversation = ({ id, config: _config }: Props) => {
 
   const listRef = React.useRef<HTMLDivElement | null>(null);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
+  const { onKeyDown: onFormatKeyDown, popup: formattingPopup } = useFormattingShortcuts(inputRef, text, setText);
 
   const myPersonId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
   const myDisplayName = userContext?.person?.name?.display || UserHelper.currentUserChurch?.person?.name?.display || "";
@@ -386,6 +389,21 @@ export const MessageConversation = ({ id, config: _config }: Props) => {
 
   const name = person?.name?.display || Locale.label("mobile.details.conversation");
 
+  // Image links show as images under the text; other URLs stay inline and autolink.
+  const renderMessageContent = (content: string) => {
+    const imageRegex = /https?:\/\/\S+\.(jpg|jpeg|png|gif|webp|svg)(\?\S*)?/gi;
+    const imageMatches = content.match(imageRegex);
+    const textWithoutImages = content.replace(imageRegex, "").trim();
+    return (
+      <>
+        {textWithoutImages && <MarkdownMessage text={textWithoutImages} />}
+        {imageMatches?.map((url, i) => (
+          <Box key={i} component="img" src={url} alt="" sx={{ maxWidth: "100%", borderRadius: "8px", mt: textWithoutImages || i > 0 ? 0.5 : 0, display: "block" }} />
+        ))}
+      </>
+    );
+  };
+
   const renderBubble = (m: MessageInterface, index: number) => {
     const mine = m.personId === myPersonId;
     const isPersisted = !!m.id && !m.id.startsWith("temp-");
@@ -406,24 +424,26 @@ export const MessageConversation = ({ id, config: _config }: Props) => {
             <MoreVertIcon sx={{ fontSize: 18 }} />
           </IconButton>
         )}
-        <Box
-          sx={{
-            maxWidth: "80%",
-            minWidth: 0,
-            px: "14px",
-            py: "10px",
-            bgcolor: mine ? tc.chip : tc.surface,
-            color: mine ? tc.onChip : tc.text,
-            border: `1px solid ${mine ? "transparent" : tc.border}`,
-            borderRadius: "14px",
-            wordBreak: "break-word",
-            overflowWrap: "anywhere",
-            fontSize: 15,
-            lineHeight: "21px",
-            "& a": { color: "inherit", textDecoration: "underline", wordBreak: "break-all", overflowWrap: "anywhere" }
-          }}
-        >
-          <span dangerouslySetInnerHTML={{ __html: ChatHelper.insertLinks(m.content || "") }} />
+        <Box sx={{ maxWidth: "80%", minWidth: 0, display: "flex", flexDirection: "column", alignItems: mine ? "flex-end" : "flex-start" }}>
+          <Box
+            sx={{
+              minWidth: 0,
+              px: "14px",
+              py: "10px",
+              bgcolor: mine ? tc.chip : tc.surface,
+              color: mine ? tc.onChip : tc.text,
+              border: `1px solid ${mine ? "transparent" : tc.border}`,
+              borderRadius: "14px",
+              wordBreak: "break-word",
+              overflowWrap: "anywhere",
+              fontSize: 15,
+              lineHeight: "21px",
+              "& a": { color: "inherit", textDecoration: "underline", wordBreak: "break-all", overflowWrap: "anywhere" }
+            }}
+          >
+            {renderMessageContent(m.content || "")}
+          </Box>
+          <Typography data-testid="message-time" sx={{ fontSize: 12, color: tc.textSecondary, mt: "2px" }}>{formatMessageTime(m.timeSent)}</Typography>
         </Box>
       </Box>
     );
@@ -508,8 +528,10 @@ export const MessageConversation = ({ id, config: _config }: Props) => {
             placeholder={Locale.label("mobile.details.typeMessage")}
             value={text}
             onChange={(e) => setText(e.target.value)}
+            slotProps={{ htmlInput: { enterKeyHint: "enter" } }}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
+              onFormatKeyDown(e);
+              if (e.key === "Enter" && !e.shiftKey && enterSends()) {
                 e.preventDefault();
                 handleSend();
               }
@@ -521,6 +543,7 @@ export const MessageConversation = ({ id, config: _config }: Props) => {
               "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.control }
             }}
           />
+          {formattingPopup}
           <IconButton
             aria-label={Locale.label("mobile.details.send")}
             onClick={handleSend}

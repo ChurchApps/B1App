@@ -23,7 +23,7 @@ const tc = mobileTheme.colors;
 // keep priority; page links only fill slots left over (conference churches are all pages).
 export const navLinks = (links: LinkInterface[], max: number) => links
   .filter((l) => l.linkType !== "separator" && l.linkType !== "url" && l.linkType !== "votd")
-  .map((l) => ({ link: l, route: linkTypeToRoute(l.linkType, l.linkData, l.text, l.url) }))
+  .map((l) => ({ link: l, route: linkTypeToRoute(l.linkType, l.linkData, l.text, l.url, l.id) }))
   .filter((t): t is { link: LinkInterface; route: string } => !!t.route && !t.route.startsWith("http"))
   .sort((a, b) => Number(a.link.linkType === "page") - Number(b.link.linkType === "page"))
   .slice(0, max);

@@ -81,7 +81,7 @@ export function VolunteerBrowse({ signupPlans, defaultTitle }: Props) {
                 </Stack>
                 {remaining > 0 && (
                   <Box sx={{ mt: 2, textAlign: "right" }}>
-                    <Link href={`volunteer/${plan.id}`} passHref>
+                    <Link href={`/volunteer/${plan.id}`} passHref>
                       <Button variant="contained" size="small" sx={{ textTransform: "none", borderRadius: 2 }}>
                         {Locale.label("serving.viewAndSignUp")}
                       </Button>

@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Box, Dialog, DialogActions, DialogContent, IconButton, InputBase, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, IconButton, InputBase, Stack, Typography, useMediaQuery } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -25,6 +25,18 @@ export const PageHead = ({ title, lede, children, sx }: { title: React.ReactNode
     {children && <Stack direction="row" useFlexGap sx={{ flexWrap: "wrap", gap: "8px", mt: "16px", alignItems: "center" }}>{children}</Stack>}
   </Box>
 );
+
+// Signed-out stand-in for screens that only make sense with an account; sign-in returns here.
+export const SignInPrompt = ({ title, lede }: { title: string; lede: string }) => {
+  const pathname = usePathname();
+  return (
+    <PageHead title={title} lede={lede}>
+      <Button variant="contained" href={pathname ? `/mobile/login?returnUrl=${encodeURIComponent(pathname)}` : "/mobile/login"}>
+        {Locale.label("mobile.components.signIn")}
+      </Button>
+    </PageHead>
+  );
+};
 
 export const Plate = ({ children, sx, className, ...rest }: { children: React.ReactNode; sx?: SxProps<Theme> } & Omit<React.HTMLAttributes<HTMLDivElement>, "color">) => (
   <Box

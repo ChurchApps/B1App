@@ -15,7 +15,7 @@ import { mobileTheme, linkTypeToIcon } from "../mobileTheme";
 import { getInitials } from "../util";
 import { useMobileThemeMode, type MobileThemeMode } from "../MobileThemeProvider";
 import { PageHead, Plate, PlateSection, Row, RowList, TextLink, ViewToggle } from "../kit";
-import { filterVisibleLinks, useChurchLinks } from "../../hooks/useConfig";
+import { filterVisibleLinks, topLevelLinks, useChurchLinks } from "../../hooks/useConfig";
 import { useEngagementSort } from "../../hooks/useEngagementSort";
 import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget } from "../../helpers/dashboardLinks";
 
@@ -55,7 +55,7 @@ export const MoreCardsPage = ({ config }: Props) => {
   }, [canAccessAdmin, context?.userChurch?.jwt, context?.userChurch?.church?.id]);
 
   const { data: rawLinks } = useChurchLinks(config?.church?.id, jwt);
-  const visible = useMemo(() => filterVisibleLinks(rawLinks, context?.userChurch), [rawLinks, context?.userChurch]);
+  const visible = useMemo(() => topLevelLinks(filterVisibleLinks(rawLinks, context?.userChurch)), [rawLinks, context?.userChurch]);
   const { increment: incrementViewCount } = useEngagementSort(visible, LINK_VIEW_COUNTS_KEY, linkId);
 
   // Admin separators become section breaks.

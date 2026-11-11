@@ -97,6 +97,31 @@ test.describe("Volunteer signup deadline", () => {
   });
 });
 
+// The demo plan shares volunteer names; Coffee Host is filled by Emily Davis in the seed.
+test.describe("Volunteer signup on the website", () => {
+  test.beforeAll(async () => { api = await getApi("demo"); });
+  test.afterAll(async () => { await api?.request.dispose(); });
+
+  test("a signed-in member sees who signed up, signs up, then removes the signup", async ({ page }) => {
+    await page.goto("/volunteer/PLA00000001", { timeout: 60000 });
+    const card = (name: string) => page.locator(".MuiCard-root").filter({ has: page.getByText(name, { exact: true }) });
+    await expect(card("Coffee Host")).toContainText("Signed up: Emily Davis", { timeout: 30000 });
+
+    const usher = card("Usher");
+    await usher.getByRole("button", { name: /^Sign Up$/i }).click();
+    await expect(page.getByText("You're signed up! Thank you for volunteering.")).toBeVisible({ timeout: 15000 });
+    await expect(usher.getByText("You're signed up")).toBeVisible();
+    await expect(usher).toContainText("Signed up: Demo User");
+
+    await usher.getByRole("button", { name: /^Remove$/i }).click();
+    const dialog = page.getByRole("dialog", { name: "Remove yourself?" });
+    await dialog.getByRole("button", { name: /^Remove$/i }).click();
+    await expect(page.getByText("You have been removed from this position.")).toBeVisible({ timeout: 15000 });
+    await expect(usher.getByRole("button", { name: /^Sign Up$/i })).toBeEnabled();
+    await expect(usher).not.toContainText("Demo User");
+  });
+});
+
 // ChurchAppsSupport#1335: the public volunteer pages showed each plan's service date one
 // day early for visitors west of the Api's time zone. serviceDate is a date-only column
 // that reaches the browser as midnight in the Api's zone; a visitor in Los Angeles read

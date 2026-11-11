@@ -25,6 +25,7 @@ const KEEP_ALIVE_TABS = new Set([
   "votd",
   "bible",
   "registrations",
+  "myRequests",
   "volunteer",
   "messages"
 ]);

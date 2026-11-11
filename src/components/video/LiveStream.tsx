@@ -2,7 +2,8 @@
 import { ChatStateInterface, EnvironmentHelper, StreamConfigInterface, StreamingServiceExtendedInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { StreamingServiceHelper } from "@/helpers/StreamingServiceHelper";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
+import UserContext from "@/context/UserContext";
 import { InteractionContainer } from "./InteractionContainer";
 import { VideoContainer } from "./VideoContainer";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
@@ -76,6 +77,19 @@ export const LiveStream: React.FC<Props> = (props) => {
   }, []);
 
   React.useEffect(() => { checkJoinRooms(); }, [currentService, chatReady, config]);
+
+  const context = useContext(UserContext);
+  useEffect(() => {
+    if (!props.includeInteraction || !context?.user) return;
+    if (!StreamChatManager.syncSignedInUser()) return;
+    setChatState({ ...ChatHelper.current });
+    // Rooms joined before the session loaded skipped host chat.
+    if (config && currentService && joinedServiceIdRef.current === currentService.id && !ChatHelper.current.hostConversation) {
+      StreamChatManager.checkHost(config, currentService.id || "")
+        .then(() => setChatState({ ...ChatHelper.current }))
+        .catch((error) => console.error("Failed to join host chat:", error));
+    }
+  }, [context?.user, context?.userChurch]);
 
   let result = (<div id="liveContainer">
     {(props.includeHeader) && <StreamingHeader user={(chatState?.user ?? {}) as UserInterface} config={config || undefined} appearance={props.appearance} isHost={UserHelper.checkAccess(Permissions.contentApi.chat.host)} />}

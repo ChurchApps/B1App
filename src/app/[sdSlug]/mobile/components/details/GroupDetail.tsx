@@ -128,7 +128,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     ["activeTab", "openChat", "chatTab"].forEach((k) => params.delete(k));
     let next = "";
     if (openChat === "1" || openChat === "true") {
-      setChatInitialTab(searchParams.get("chatTab") === "announcements" ? "announcements" : "discussions");
+      const chatTab = searchParams.get("chatTab");
+      setChatInitialTab(chatTab === "announcements" || chatTab === "notes" ? chatTab : "discussions");
       next = "messages";
     } else if (activeTab && (SLICES as string[]).includes(activeTab)) {
       next = activeTab;

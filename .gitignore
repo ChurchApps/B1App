@@ -7,6 +7,7 @@
 playwright-report
 test-results
 tests/.auth-state.json
+tests/smoke/.auth-state.json
 .serena
 CODE_REVIEW.md
 

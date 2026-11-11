@@ -167,7 +167,7 @@ test.describe.serial("Mobile donate mixed-currency totals", () => {
     return { headers: { Authorization: `Bearer ${uc.jwt}` } };
   };
 
-  const usd = (value: number) => "$ " + value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const usd = (value: number) => "$" + value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   test.beforeAll(async () => {
     const ctx = await request.newContext();
@@ -221,7 +221,7 @@ test.describe.serial("Mobile donate mixed-currency totals", () => {
     await allYears.click();
     await expect(page.getByTestId("giving-period-total")).toHaveText(expectedAllTime, { timeout: 30000 });
     await expect(page.getByTestId("giving-period-converted-note")).toHaveText(CONVERTED_NOTE);
-    await expect(page.locator("main")).toContainText("€ 100.00");
+    await expect(page.locator("main")).toContainText("€100.00");
   });
 });
 
@@ -367,7 +367,7 @@ test.describe("Public donate page links", () => {
 // Lessons.church (CHU00000099) records gifts but has no payment gateway. A signed-in member still sees
 // their history, year total and Print Statement on Giving, Me and Home; only online giving is hidden.
 test.describe.serial("Mobile donate without online giving", () => {
-  test.use({ storageState: { cookies: [], origins: [] }, baseURL: "http://lessonschurch.localtest.me:3301" });
+  test.use({ storageState: { cookies: [], origins: [] }, baseURL: (process.env.BASE_URL || "http://grace.localtest.me:3301").replace("grace.", "lessonschurch.") });
 
   const MAIN_API = process.env.API_BASE || "http://localhost:8084";
   const CHURCH = "CHU00000099";

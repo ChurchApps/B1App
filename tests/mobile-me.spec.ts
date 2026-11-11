@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
-import { apiCall, getApi, membershipUrl } from "./helpers/api";
+import { apiCall, doingUrl, getApi, membershipUrl } from "./helpers/api";
 
 test.describe("Mobile Me page", () => {
   test("renders upcoming items and event rows navigate to the group", async ({ page }) => {
@@ -18,11 +18,12 @@ test.describe("Mobile Me page", () => {
   });
 
   test("shows the event photo as a thumbnail on upcoming event rows", async ({ page }) => {
-    // Give the first timeline event a photo, the way B1Admin's calendar stores one.
+    // Give the timeline events a photo, the way B1Admin's calendar stores one. All of them: the
+    // first one in the feed isn't necessarily among the upcoming rows the page shows.
     await page.route("**/events/timeline", async (route) => {
       const response = await route.fetch();
       const events = await response.json();
-      if (Array.isArray(events) && events.length > 0) events[0].photoUrl = "/images/group.jpg";
+      if (Array.isArray(events)) events.forEach((e: { photoUrl?: string }) => { e.photoUrl = "/images/group.jpg"; });
       await route.fulfill({ response, json: events });
     });
     await page.goto("/mobile/me?view=upcoming");
@@ -45,6 +46,8 @@ test.describe("Mobile Me page", () => {
     await expect(main.getByTestId("me-shortcut-messages")).toBeVisible();
     await expect(main.getByTestId("me-shortcut-donate")).toBeVisible();
     await expect(main.getByTestId("me-shortcut-registrations")).toBeVisible();
+    // One registration reads "1 registration", not "1 registrations".
+    await expect(main.getByText(/^(1 registration|(0|[2-9]|\d{2,}) registrations)$/)).toBeVisible();
     await main.getByTestId("me-shortcut-profileEdit").click();
     await expect(page).toHaveURL(/\/mobile\/profileEdit/, { timeout: 15000 });
   });
@@ -145,11 +148,19 @@ test.describe("Mobile Me page serving times", () => {
   test.use({ timezoneId: "America/Chicago" });
 
   test("serving rows show the team's service time, not midnight", async ({ page }) => {
+    // demo.sql seeds the plan's service time at 10:00; what instant that is depends on the Api's
+    // time zone, so read it back and expect it rendered in the browser's zone.
+    const api = await getApi("demo");
+    const times = await (await apiCall(api, "get", doingUrl("/times/plans?planIds=PLA00000001"))).json();
+    await api.request.dispose();
+    const start = new Date(times.find((t: { startTime?: string }) => t.startTime).startTime);
+    const expected = start.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Chicago" });
+    expect(expected).not.toBe("12:00 AM");
+
     await page.goto("/mobile/me?view=upcoming");
     await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
     const servingRow = page.getByTestId("me-item-serving").filter({ hasText: "Sound Tech" });
     await expect(servingRow).toBeVisible({ timeout: 15000 });
-    // demo.sql seeds the plan's service time at 10:00 on the service date.
-    await expect(servingRow).toContainText("10:00 AM");
+    await expect(servingRow).toContainText(expected);
   });
 });

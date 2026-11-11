@@ -83,10 +83,10 @@ const FallbackCard = () => (
     <QuietEmpty sx={{ mb: "16px" }}>{Locale.label("mobile.bible.unavailable")}</QuietEmpty>
     <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
       <Button variant="contained" href="https://www.bible.com" target="_blank" rel="noopener noreferrer">
-        Open Bible.com
+        {Locale.label("mobile.bible.openBibleCom")}
       </Button>
       <Button variant="outlined" href="https://biblia.com" target="_blank" rel="noopener noreferrer">
-        Open Biblia.com
+        {Locale.label("mobile.bible.openBiblia")}
       </Button>
     </Box>
   </PlateSection>
@@ -141,9 +141,10 @@ export const BiblePage = () => {
       <Plate sx={{ overflow: "hidden", display: "flex", flexDirection: "column", minHeight: { xs: "calc(100dvh - 220px)", md: "calc(100dvh - 200px)" } }}>
         {!isClient && <PlateSection><QuietEmpty>{Locale.label("mobile.bible.loading")}</QuietEmpty></PlateSection>}
 
-        {isClient && !yv && <FallbackCard />}
+        {/* Without an app key the reader throws, so go straight to the fallback. */}
+        {isClient && (!yv || !apiKey) && <FallbackCard />}
 
-        {isClient && yv && (
+        {isClient && yv && apiKey && (
           <BibleErrorBoundary fallback={<FallbackCard />}>
             <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
               <yv.YouVersionProvider appKey={apiKey} theme={mode}>

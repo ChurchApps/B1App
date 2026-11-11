@@ -19,7 +19,10 @@ const loadSharedData = (sdSlug: string) => {
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug } = await params;
   const props = await loadSharedData(sdSlug);
-  return MetaHelper.getMetaData(Locale.label("guestRegister.metaTitle") + " - " + props.config.church.name, Locale.label("guestRegister.metaDescription"), undefined, props.config.appearance);
+  const metadata = MetaHelper.getMetaData(Locale.label("guestRegister.metaTitle") + " - " + props.config.church.name, Locale.label("guestRegister.metaDescription"), undefined, props.config.appearance);
+  // Every church has this URL; until guest sign-up is on, it only says that it is off.
+  if (!props.enabled) metadata.robots = { index: false, follow: true };
+  return metadata;
 }
 
 const loadData = async (sdSlug: string) => {

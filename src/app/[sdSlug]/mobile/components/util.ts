@@ -76,6 +76,21 @@ export const formatRelative = (value?: Date | string | number | null): string =>
   return d.toLocaleDateString(DateHelper.locale, { month: "short", day: "numeric", year: "numeric" });
 };
 
+// A mouse means a hardware keyboard in practice; phones and tablets have no Shift+Enter, so there Enter adds a line and the Send button sends.
+export const enterSends = (): boolean => typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+export const formatMessageTime = (value?: Date | string | number | null): string => {
+  const d = toDate(value);
+  if (!d) return "";
+  const now = new Date();
+  if (now.getTime() - d.getTime() < 60000) return Locale.label("mobile.now");
+  const sameDay = (a: Date, b: Date) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  if (sameDay(d, now)) return DateHelper.prettyTime(d);
+  const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  if (sameDay(d, yesterday)) return `${Locale.label("mobile.yesterday")} ${DateHelper.prettyTime(d)}`;
+  return DateHelper.prettyDateTime(d);
+};
+
 export const navigateBack = (
   router: { back: () => void; push: (path: string) => void },
   fallback: string
@@ -91,24 +106,7 @@ export const shadePrimary = (cssColor: string, percent: number): string => {
   return `color-mix(in srgb, ${cssColor} ${100 - Math.abs(percent)}%, ${mixer})`;
 };
 
-export const deriveNotificationUrl = (n: { contentType?: string; contentId?: string; link?: string; triggeredByPersonId?: string }): string | undefined => {
-  if (n.link?.startsWith("/mobile/")) return n.link; // server-provided deep link (e.g. event reminders); non-mobile links are staff paths
-  const type = String(n.contentType || "").toLowerCase();
-  // contentId is the privateMessage id, but the conversation route keys on the other person.
-  if (type === "privatemessage" || type === "message") {
-    return n.triggeredByPersonId ? `/mobile/messages/${n.triggeredByPersonId}` : "/mobile/messages";
-  }
-  if (!n.contentId) return undefined;
-  const id = n.contentId;
-  switch (type) {
-    case "plan":
-    case "schedule": return `/mobile/plans/${id}`;
-    case "groupannouncement": return `/mobile/groups/${id}?openChat=1&chatTab=announcements`;
-    case "group": return `/mobile/groups/${id}`;
-    case "assignment": return `/mobile/plans/${id}`;
-    default: return undefined;
-  }
-};
+export { deriveNotificationUrl } from "../helpers/notificationUrl";
 
 export const getNotificationIcon = (contentType?: string): string => {
   switch (String(contentType || "").toLowerCase()) {

@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 import { getApi, apiCall, membershipUrl, type ApiHandle } from "./helpers/api";
+import { DEMO_CHURCH } from "./helpers/fixtures";
 
 test.describe("Mobile profile edit", () => {
   // The old Profile/Household/Account/Privacy tabs are sections of one plate; each edits in a sheet.
@@ -76,6 +77,12 @@ test.describe("Mobile profile privacy levels", () => {
   const VISIBILITY_FIELDS = ["Address Visibility", "Phone Visibility", "Email Visibility"];
 
   async function openPrivacyTab(page: import("@playwright/test").Page) {
+    // The persisted query cache is written about a second after a save; drop it so a reload reads the server.
+    if (page.url().startsWith("http")) {
+      await page.evaluate(async () => {
+        for (const db of await indexedDB.databases()) if (db.name) indexedDB.deleteDatabase(db.name);
+      });
+    }
     await page.goto("/mobile/profileEdit");
     const change = page.getByTestId("profile-edit-privacy");
     await change.waitFor({ state: "visible", timeout: 15000 });
@@ -193,5 +200,38 @@ test.describe.serial("Mobile profile title and family member details", () => {
     expect(full.name).toMatchObject({ first: FAMILY_FIRST, last: "Userson", prefix: "Mr" });
     expect(full.householdRole).toBe("Child");
     expect(full.contactInfo.mobilePhone).toContain("555");
+  });
+});
+
+// ChurchAppsSupport#1481: the Title suggestions come from the church's own title list.
+test.describe.serial("Mobile profile church title list", () => {
+  let api: ApiHandle;
+  let original: any = null;
+
+  test.beforeAll(async () => {
+    api = await getApi("demo", "MembershipApi");
+    const all = (await (await apiCall(api, "get", membershipUrl("/settings"))).json()) as any[];
+    const existing = all.find((s) => s.keyName === "titleOptions");
+    original = existing ? { ...existing } : null;
+    const res = await apiCall(api, "post", membershipUrl("/settings"), [{ ...(existing || { churchId: DEMO_CHURCH.ID, keyName: "titleOptions", public: 1 }), value: JSON.stringify(["Deacon", "Elder"]) }]);
+    expect(res.ok()).toBeTruthy();
+  });
+
+  test.afterAll(async () => {
+    const all = (await (await apiCall(api, "get", membershipUrl("/settings"))).json()) as any[];
+    const current = all.find((s) => s.keyName === "titleOptions");
+    if (current) await apiCall(api, "post", membershipUrl("/settings"), [{ ...current, value: original?.value ?? "[]" }]);
+    await api.request.dispose();
+  });
+
+  test("Photo & name sheet suggests the church's titles", async ({ page }) => {
+    await page.goto("/mobile/profileEdit");
+    await page.getByTestId("profile-edit-name").click({ timeout: 30000 });
+    const title = page.getByTestId("profile-title");
+    await expect(title).toBeVisible({ timeout: 15000 });
+    await title.click();
+    await expect(page.getByRole("option", { name: "Deacon", exact: true })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("option", { name: "Elder", exact: true })).toBeVisible();
+    await expect(page.getByRole("option", { name: "Pastor", exact: true })).toHaveCount(0);
   });
 });

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Box, Chip, Container, Divider, Stack, Typography } from "@mui/material";
 import { Metadata } from "next";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper";
 import { Theme } from "@/components/Theme";
 import { ChurchJsonLd } from "@/components/seo/ChurchJsonLd";
@@ -39,11 +39,11 @@ const buildQuery = (params: { page?: number; category?: string; tag?: string }) 
 
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug } = await params;
-  EnvironmentHelper.init();
+  await EnvironmentHelper.initServerSide();
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
   const base = getBaseUrl(sdSlug);
   const contentApi = ApiHelper.getConfig("ContentApi")?.url;
-  const metadata = MetaHelper.getMetaData("Blog | " + config.church.name, "", undefined, config.appearance);
+  const metadata = MetaHelper.getMetaData(Locale.label("blogPage.blog") + " | " + config.church.name, "", undefined, config.appearance);
   if (contentApi) {
     const rssUrl = contentApi + "/posts/rss/" + config.church.id + "?siteUrl=" + encodeURIComponent(base);
     metadata.alternates = { types: { "application/rss+xml": rssUrl } };
@@ -87,15 +87,15 @@ export default async function BlogListPage({ params, searchParams }: { params: P
             <Box component="header" sx={{ textAlign: "center" }}>
               {activeFilter && (
                 <Typography component="span" sx={{ textTransform: "uppercase", letterSpacing: "0.14em", fontSize: "0.75rem", fontWeight: 700, color: "primary.main" }}>
-                  {category ? "Category" : "Tag"}
+                  {category ? Locale.label("blogPage.category") : Locale.label("blogPage.tag")}
                 </Typography>
               )}
               <Typography variant="h3" component="h1" sx={{ mt: activeFilter ? 1.5 : 0, fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.01em", fontSize: { xs: "2rem", md: "2.75rem" } }}>
-                {activeFilter || "Blog"}
+                {activeFilter || Locale.label("blogPage.blog")}
               </Typography>
               {activeFilter && (
                 <Typography sx={{ mt: 1.5, fontSize: "0.95rem" }}>
-                  <Link href="/blog">&larr; All posts</Link>
+                  <Link href="/blog">&larr; {Locale.label("blogPage.allPosts")}</Link>
                 </Typography>
               )}
               <Box sx={{ width: 40, height: 3, borderRadius: 2, backgroundColor: "primary.main", mx: "auto", mt: 3 }} />
@@ -112,7 +112,7 @@ export default async function BlogListPage({ params, searchParams }: { params: P
             )}
 
             {posts.length === 0 ? (
-              <Typography variant="body1" color="text.secondary" sx={{ py: 8, textAlign: "center" }}>No posts yet</Typography>
+              <Typography variant="body1" color="text.secondary" sx={{ py: 8, textAlign: "center" }}>{Locale.label("blogPage.noPosts")}</Typography>
             ) : (
               <Stack divider={<Divider />} spacing={4} sx={{ mt: 5 }}>
                 {posts.map((post) => (
@@ -135,7 +135,7 @@ export default async function BlogListPage({ params, searchParams }: { params: P
                       </Typography>
                       {(post.authorName || post.publishDate) && (
                         <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.5 }}>
-                          {[post.authorName ? "By " + post.authorName : "", formatDate(post.publishDate, region)].filter(Boolean).join(" · ")}
+                          {[post.authorName ? Locale.label("blogPage.byAuthor").replace("{}", post.authorName) : "", formatDate(post.publishDate, region)].filter(Boolean).join(" · ")}
                         </Typography>
                       )}
                       {excerptOf(post) && <Typography variant="body2" color="text.secondary" sx={{ mt: 1, lineHeight: 1.6 }}>{excerptOf(post)}</Typography>}
@@ -147,10 +147,10 @@ export default async function BlogListPage({ params, searchParams }: { params: P
 
             <Box sx={{ mt: 6, display: "flex", justifyContent: "space-between", fontSize: "0.9rem" }}>
               {page > 1
-                ? <Link href={buildQuery({ page: page - 1, category, tag })}>&larr; Newer posts</Link>
+                ? <Link href={buildQuery({ page: page - 1, category, tag })}>&larr; {Locale.label("blogPage.newerPosts")}</Link>
                 : <span />}
               {posts.length === PAGE_SIZE
-                ? <Link href={buildQuery({ page: page + 1, category, tag })}>Older posts &rarr;</Link>
+                ? <Link href={buildQuery({ page: page + 1, category, tag })}>{Locale.label("blogPage.olderPosts")} &rarr;</Link>
                 : <span />}
             </Box>
           </div>

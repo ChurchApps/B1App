@@ -61,6 +61,7 @@ export default function PrintPage({ params }: { params: Params }) {
     const churchId = context?.userChurch?.church?.id;
     const settings: Record<string, string> = (churchId && await ApiHelper.get("/settings/public/" + churchId, "MembershipApi").catch((): null => null)) || {};
     setChurchSettings(settings);
+    if (settings.currency) setCurrency(settings.currency.toLowerCase());
     preloadLogo(settings.logoLight || "");
     if (currYear > memberGivingYearLimit(settings)) {
       setBlocked(true);

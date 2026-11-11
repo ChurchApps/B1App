@@ -61,7 +61,8 @@ test.describe("Mobile notification preferences", () => {
     await main.getByTestId("notification-prefs-quiet-change").click();
     const tz = page.getByRole("dialog").getByRole("combobox", { name: "Time zone" });
     await expect(tz).toBeVisible();
-    await expect(tz).toHaveText(/\//);
+    // Prefilled with an IANA zone: the saved one, else the device's (UTC on a UTC machine).
+    await expect(tz).toHaveText(/^(UTC|[A-Za-z_]+\/[A-Za-z0-9_/+-]+)$/);
     await page.getByRole("dialog").getByRole("button", { name: "Cancel" }).click();
     await expect(main.getByRole("combobox", { name: "Push notifications per day" })).toHaveText("No limit");
   });
@@ -132,6 +133,14 @@ test.describe("Mobile notification preferences", () => {
       const annEmail2 = reloaded.getByRole("checkbox", { name: "Church Announcements Email" });
       await expect(annEmail2).not.toBeChecked();
       await expect(reloaded.getByLabel("Email frequency")).toContainText("Daily digest");
+
+      // Put the defaults back so a rerun without a database reset starts from the same state.
+      await annEmail2.check();
+      await reloaded.getByLabel("Email frequency").click();
+      await page.getByRole("option", { name: "Per notification" }).click();
+      const restored = page.waitForResponse((r) => r.url().includes("/notificationpreferences") && r.request().method() === "POST", { timeout: 15000 });
+      await reloaded.getByRole("button", { name: "Save Preferences" }).click();
+      expect((await restored).ok()).toBeTruthy();
     });
   });
 });

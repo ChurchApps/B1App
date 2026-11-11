@@ -15,6 +15,17 @@
   "b1ShareModal": {
     "post": "Post"
   },
+  "blogPage": {
+    "allPosts": "All posts",
+    "blog": "Blog",
+    "byAuthor": "By {}",
+    "category": "Category",
+    "moreIn": "More in {}",
+    "newerPosts": "Newer posts",
+    "noPosts": "No posts yet",
+    "olderPosts": "Older posts",
+    "tag": "Tag"
+  },
   "cascadingMenus": {
     "collapseMenu": "Collapse {} menu",
     "collapseSubmenu": "Collapse {} submenu",
@@ -143,14 +154,20 @@
     }
   },
   "groupsPage": {
+    "allCampuses": "All campuses",
+    "allCategories": "All categories",
+    "campus": "Campus",
+    "category": "Category",
     "findAGroup": "Find a Group",
     "groupsHeading": "Groups",
+    "noMatches": "No groups match your filters.",
     "noPastPlans": "No past plans.",
     "noPlans": "No plans available for this group.",
     "noUpcomingPlans": "No upcoming plans.",
     "past": "Past",
     "planType": "Plan Type",
     "plans": "Plans",
+    "searchPlaceholder": "Search groups by name or description",
     "upcoming": "Upcoming"
   },
   "guestRegister": {
@@ -187,10 +204,32 @@
   "mobile": {
     "bible": {
       "loading": "Loading Bible…",
+      "openBibleCom": "Open Bible.com",
+      "openBiblia": "Open Biblia.com",
       "unavailable": "The in-app reader failed to load. You can still open the Bible in your browser."
+    },
+    "card": {
+      "about": "About",
+      "actionFailed": "That didn't work. Try again.",
+      "cards": "Cards",
+      "complete": "Complete",
+      "created": "Created",
+      "due": "Due",
+      "dueOn": "Due {}",
+      "from": "From",
+      "notes": "Notes",
+      "overdue": "Overdue",
+      "snooze": "Snooze",
+      "snoozeDay": "1 day",
+      "snoozeDays": "{} days",
+      "snoozed": "Snoozed",
+      "snoozedUntilLabel": "Snoozed until",
+      "step": "Step",
+      "tasks": "Tasks"
     },
     "community": {
       "peopleCount": "{} people",
+      "peopleCountOne": "1 person",
       "searchByName": "Search by name"
     },
     "components": {
@@ -225,7 +264,9 @@
       "viewAllNotifications": "View all notifications"
     },
     "dashboard": {
+      "all": "All",
       "allGroups": "All groups",
+      "allNews": "All news",
       "allPlans": "All plans",
       "allSermons": "All sermons",
       "allUpcomingEvents": "All upcoming events",
@@ -237,9 +278,11 @@
       "history": "History",
       "latestSermon": "Latest sermon",
       "moreFrom": "More from {}",
+      "news": "News",
       "signInPrompt": "Sign in to see your groups, giving, and more.",
       "upcomingEvents": "Upcoming events",
       "welcome": "Welcome",
+      "yourFollowUps": "Your follow-ups",
       "yourGroups": "Your groups",
       "youreServing": "You're serving"
     },
@@ -394,6 +437,15 @@
       "dashboardAdminCta": "Open admin",
       "dashboardMemberBody": "We're just getting set up. Check back soon for sermons, groups, and more.",
       "dashboardTitleFallback": "Your church"
+    },
+    "folder": {
+      "empty": "Nothing here yet"
+    },
+    "format": {
+      "bold": "Bold",
+      "bullets": "Bulleted list",
+      "italic": "Italic",
+      "numbered": "Numbered list"
     },
     "giving": {
       "allHistory": "All history",
@@ -586,6 +638,7 @@
       "search": "Search",
       "searchForPerson": "Search for a person",
       "searchYourGroups": "Search your groups",
+      "seats": "Seats {}",
       "selectAll": "All",
       "selectNone": "None",
       "sendAMessage": "Send a message…",
@@ -620,6 +673,8 @@
       "newNotifications": "{} new notifications",
       "noUnread": "No unread notifications.",
       "seeAll": "See all",
+      "signedOutBody": "Your notifications and messages are tied to your account.",
+      "signedOutTitle": "Sign in to see your inbox",
       "thisWeek": "This week",
       "title": "Inbox",
       "today": "Today",
@@ -732,21 +787,28 @@
       "titleMfa": "Two-factor sign-in"
     },
     "me": {
+      "allCards": "All cards",
       "allForms": "All forms",
       "allGroups": "All groups",
+      "allTasks": "All tasks",
       "allUpcoming": "All upcoming",
       "attended": "Attended",
       "attendedLast90": "{} times in the last 90 days",
+      "attendedLast90One": "1 time in the last 90 days",
       "backToMe": "Back to Me",
       "event": "Event",
       "form": "Form",
       "givenThisYear": "Given in {0} · {1} gifts",
+      "givenThisYearOne": "Given in {0} · 1 gift",
       "myAttendance": "My Attendance",
       "myAttendanceLede": "Services and groups you were checked in to over the last 12 months.",
+      "myCards": "My cards",
       "myForms": "My Forms",
       "myFormsLede": "Forms you've submitted. Tap one to see your answers.",
       "myRequests": "My Requests",
+      "myTasks": "My tasks",
       "noAnswers": "No answers to show.",
+      "noAssignments": "Nothing is assigned to you right now.",
       "noAttendance": "No attendance recorded in the last 12 months.",
       "noForms": "You haven't submitted any forms yet.",
       "noGiftsThisYear": "No gifts yet in {}.",
@@ -755,12 +817,15 @@
       "openInbox": "Open inbox",
       "registration": "Registration",
       "registrationCount": "{} registrations",
+      "registrationCountOne": "1 registration",
       "requestEvent": "Request an Event",
       "requestsAndRegistrations": "Requests & registrations",
       "serving": "Serving",
       "settings": "Settings",
       "signInBody": "Sign in to view your serving assignments, registrations, and group events.",
       "signInTitle": "Sign in to see your week",
+      "tasksSignedOutBody": "Tasks and cards are assigned to your account.",
+      "tasksSignedOutTitle": "Sign in to see your tasks",
       "title": "Me",
       "upcoming": "Upcoming"
     },
@@ -773,6 +838,8 @@
       "noMatches": "No matches found.",
       "recent": "Recent",
       "searchConversations": "Search conversations",
+      "signedOutBody": "Your private conversations are tied to your account.",
+      "signedOutTitle": "Sign in to see your messages",
       "unreadCount": "{} unread"
     },
     "mobileApp": "Mobile",
@@ -780,6 +847,11 @@
       "account": "Account",
       "appearance": "Appearance",
       "signOut": "Sign out"
+    },
+    "news": {
+      "empty": "No news yet.",
+      "notFound": "This post isn't available.",
+      "viewOnWebsite": "View on website"
     },
     "notFound": {
       "backToHome": "Back to home",
@@ -899,6 +971,7 @@
       "emailVisibility": "Email Visibility",
       "enterNewEmail": "Enter a new email address.",
       "everyoneDesc": "Visible to anyone who can view the directory.",
+      "familyMemberDirectHint": "New members join your household when you save.",
       "familyMemberHint": "New members will be reviewed along with your other profile changes.",
       "groupsDesc": "Visible only to members of groups you belong to.",
       "hiddenFromDirectory": "Hidden from the directory",
@@ -916,6 +989,7 @@
       "passwordsDoNotMatch": "Passwords do not match.",
       "pendingAfterSaving": "Staff will review these changes after you save.",
       "pendingFamilyMembers": "Pending Family Members",
+      "pendingFamilyMembersDirectHint": "These will be added to your household when you save.",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "phoneVisibility": "Phone Visibility",
       "photo": "Photo",
@@ -927,6 +1001,8 @@
       "selectImageFile": "Please select an image file.",
       "shownInDirectory": "Shown in the directory",
       "signIn": "Sign-in",
+      "signedOutBody": "Your profile is tied to your account.",
+      "signedOutTitle": "Sign in to edit your profile",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
       "submitForApproval": "Submit for Approval",
@@ -1003,6 +1079,7 @@
       "myForms": "My Forms",
       "myGroups": "My Groups",
       "myRequests": "My Requests",
+      "myTasks": "My tasks",
       "newMessage": "New Message",
       "notificationPrefs": "Notification Preferences",
       "notifications": "Notifications",
@@ -1296,8 +1373,10 @@
     "liveStream": "Live Stream",
     "loginToManageDonations": "Please login to manage donations",
     "manageDonations": "Manage Donations",
+    "membersOnly": "This page is for church members",
     "metaForms": "Forms",
     "nextChapter": "Next Chapter",
+    "noAccess": "You don't have access to this page",
     "openBibleCom": "Open Bible.com",
     "previousChapter": "Previous Chapter",
     "sermons": "Sermons",
@@ -1426,6 +1505,7 @@
     "removing": "Removing...",
     "signUp": "Sign Up",
     "signedUpChip": "You're signed up",
+    "signedUpNames": "Signed up: {}",
     "signingUp": "Signing up...",
     "signup": {
       "alreadySignedUp": "You are already signed up for this position.",

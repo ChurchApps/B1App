@@ -224,7 +224,7 @@ test.describe.serial("Household registration pre-fill (logged-in member)", () =>
     await expect(page.getByTestId(`household-type-${ALEX_PERSON_ID}`)).toContainText("Household Child");
     await page.evaluate(() => window.scrollTo(0, 0));
     await expect(page.getByTestId("household-members")).toBeInViewport();
-    await page.screenshot({ path: ".pr-screenshots/household-registration-after.png", fullPage: true });
+    await page.screenshot({ path: test.info().outputPath("household-registration-after.png"), fullPage: true });
 
     const registerPost = page.waitForResponse((r) => r.url().includes("/registrations/register") && r.request().method() === "POST", { timeout: 20000 });
     await main.getByRole("button", { name: /Complete Registration/i }).click();
@@ -303,5 +303,19 @@ test.describe.serial("Signed-in registration on an event without attendee types"
 
     const members = (body.members || []).map((m: any) => ({ personId: m.personId, name: `${m.firstName} ${m.lastName}` }));
     expect(members).toEqual([{ personId: DEMO_PERSON_ID, name: "Demo User" }, { personId: ALEX_PERSON_ID, name: "Alex User" }]);
+  });
+});
+
+// The server renders in UTC; a visitor in another time zone must not hit a hydration error on the event time.
+test.describe("Registration page in the visitor's time zone", () => {
+  test.use({ timezoneId: "America/Chicago", storageState: { cookies: [], origins: [] } });
+
+  test("shows the event time in local time without a hydration error", async ({ page }) => {
+    await page.goto("/register/EVT00000015");
+    // VBS starts 2027-03-10 09:00 UTC, which is 3:00 AM in Chicago.
+    await expect(page.locator("h1", { hasText: "Vacation Bible School" }).locator("xpath=following-sibling::*[1]")).toContainText("3:00 AM", { timeout: 15000 });
+    await page.waitForTimeout(1500);
+    const overlay = await page.evaluate(() => document.querySelector("nextjs-portal")?.shadowRoot?.textContent || "");
+    expect(overlay).not.toMatch(/Hydration failed/);
   });
 });

@@ -10,6 +10,7 @@ import UserContext from "@/context/UserContext";
 import { mobileTheme } from "./mobileTheme";
 import { getInitials, formatRelative, deriveNotificationUrl } from "./util";
 import { useRealtimeNotifications } from "../hooks/useRealtimeNotifications";
+import { openExternal } from "../helpers/dashboardLinks";
 import { PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink } from "./kit";
 
 interface Props {
@@ -37,7 +38,7 @@ export interface NotificationItem {
   message?: string;
   timeSent?: string | Date;
   isNew?: boolean;
-  linkUrl?: string;
+  link?: string;
   contentType?: string;
   contentId?: string;
   triggeredByPersonId?: string;
@@ -149,7 +150,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
   const handleNotificationClick = (n: NotificationItem) => {
     const href = deriveNotificationUrl(n);
     if (!href) return;
-    go(href);
+    if (/^https?:/.test(href)) { onClose(); openExternal(href); } else go(href);
   };
 
   const skeletons = [0, 1].map((k) => <Skeleton key={k} variant="text" height={40} />);

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Box, Chip, Container, Typography } from "@mui/material";
 import { Metadata } from "next";
+import { Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper";
 import { Theme } from "@/components/Theme";
@@ -39,6 +40,24 @@ const loadData = async (sdSlug: string, postSlug: string) => {
 };
 
 const excerptOf = (post: PostInterface) => post.excerpt || (post.content || "").replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*_`~]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
+
+// The post title is the page's h1, so a "# Heading" in the body becomes an h2.
+// Lines inside a ``` or ~~~ fence are code, so a "# comment" there is left alone.
+const demoteTopHeadings = (content: string) => {
+  let fence: string | null = null;
+  return content.split("\n").map((line) => {
+    const marker = line.match(/^ {0,3}(`{3,}|~{3,})/)?.[1];
+    if (fence) {
+      if (marker && marker[0] === fence[0] && marker.length >= fence.length && /^ {0,3}[`~]+\s*$/.test(line)) fence = null;
+      return line;
+    }
+    if (marker) {
+      fence = marker;
+      return line;
+    }
+    return line.replace(/^#(?=\s)/, "##");
+  }).join("\n");
+};
 
 const getBaseUrl = (sdSlug: string) => publicOrigin(sdSlug);
 
@@ -81,7 +100,7 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
             <Box component="header" sx={{ textAlign: "center", maxWidth: 720, mx: "auto" }}>
               <Link href={post.category ? "/blog?category=" + encodeURIComponent(post.category) : "/blog"} style={{ textDecoration: "none" }}>
                 <Typography component="span" sx={{ textTransform: "uppercase", letterSpacing: "0.14em", fontSize: "0.75rem", fontWeight: 700, color: "primary.main" }}>
-                  {post.category || "Blog"}
+                  {post.category || Locale.label("blogPage.blog")}
                 </Typography>
               </Link>
               <Typography variant="h3" component="h1" sx={{ mt: 1.5, fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.01em", textWrap: "balance", fontSize: { xs: "2rem", md: "2.75rem" } }}>
@@ -89,7 +108,7 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
               </Typography>
               {(post.authorName || post.publishDate) && (
                 <Typography sx={{ mt: 2, color: "text.secondary", fontSize: "0.95rem" }}>
-                  {[post.authorName ? "By " + post.authorName : "", formatDate(post.publishDate, region)].filter(Boolean).join(" · ")}
+                  {[post.authorName ? Locale.label("blogPage.byAuthor").replace("{}", post.authorName) : "", formatDate(post.publishDate, region)].filter(Boolean).join(" · ")}
                 </Typography>
               )}
               <Box sx={{ width: 40, height: 3, borderRadius: 2, backgroundColor: "primary.main", mx: "auto", mt: 3 }} />
@@ -114,7 +133,7 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
                 "& li": { mb: 0.75 },
                 "& hr": { border: 0, borderTop: "1px solid", borderColor: "divider", my: 4 }
               }}>
-                <MarkdownPreviewLight value={post.content} />
+                <MarkdownPreviewLight value={demoteTopHeadings(post.content)} />
               </Box>
             )}
 
@@ -137,7 +156,7 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
             {related.length > 0 && (
               <Box component="aside" sx={{ mt: 8, pt: 5, borderTop: "1px solid", borderColor: "divider" }}>
                 <Typography component="h2" sx={{ textAlign: "center", textTransform: "uppercase", letterSpacing: "0.14em", fontSize: "0.75rem", fontWeight: 700, color: "text.secondary" }}>
-                      More in {post.category}
+                  {Locale.label("blogPage.moreIn").replace("{}", post.category || "")}
                 </Typography>
                 <Box sx={{ mt: 3, display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", sm: "repeat(" + Math.min(related.length, 3) + ", 1fr)" } }}>
                   {related.map((r) => (
