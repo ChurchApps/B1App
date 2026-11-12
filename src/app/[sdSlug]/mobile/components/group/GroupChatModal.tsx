@@ -550,26 +550,30 @@ export const GroupChatModal = ({
         )}
         {canPost ? (
           <Box sx={{ ...column, py: "8px", display: "flex", alignItems: "flex-end", gap: "8px" }}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder={subTab === "notes" ? Locale.label("mobile.group.addNote") : subTab === "announcements" ? Locale.label("mobile.group.postAnnouncement") : Locale.label("mobile.group.sendAMessage")}
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              inputRef={composerRef}
-              onKeyDown={(e) => {
-                onFormatKeyDown(e);
-                if (e.key === "Enter" && !e.shiftKey && enterSends()) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
-              multiline
-              maxRows={4}
-              slotProps={{ input: { sx: { borderRadius: "8px", minHeight: 44 } }, htmlInput: { enterKeyHint: "enter" } }}
-            />
-            {formattingPopup}
-            <Button variant="contained" onClick={handleSend} disabled={sending || !draft.trim()} aria-label={Locale.label("mobile.details.send")} sx={{ minWidth: 44, width: 44, height: 44, px: 0, flex: "none" }}>
+            {/* The format row sits under the box, not beside it. */}
+            <Box sx={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+              <TextField
+                fullWidth
+                size="small"
+                placeholder={subTab === "notes" ? Locale.label("mobile.group.addNote") : subTab === "announcements" ? Locale.label("mobile.group.postAnnouncement") : Locale.label("mobile.group.sendAMessage")}
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                inputRef={composerRef}
+                onKeyDown={(e) => {
+                  onFormatKeyDown(e);
+                  if (e.key === "Enter" && !e.shiftKey && enterSends()) {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                multiline
+                maxRows={4}
+                slotProps={{ input: { sx: { borderRadius: "8px", minHeight: 44 } }, htmlInput: { enterKeyHint: "enter" } }}
+              />
+              {formattingPopup}
+            </Box>
+            {/* Keep focus in the box so the format row under it does not vanish and move Send mid-tap. */}
+            <Button variant="contained" onMouseDown={(e) => e.preventDefault()} onClick={handleSend} disabled={sending || !draft.trim()} aria-label={Locale.label("mobile.details.send")} sx={{ minWidth: 44, width: 44, height: 44, px: 0, flex: "none" }}>
               <SendIcon sx={{ fontSize: 20 }} />
             </Button>
           </Box>

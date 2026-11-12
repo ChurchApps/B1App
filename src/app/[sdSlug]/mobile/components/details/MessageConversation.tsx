@@ -516,36 +516,40 @@ export const MessageConversation = ({ id, config: _config }: Props) => {
         <Box sx={{ flexShrink: 0, width: "100%", minWidth: 0, bgcolor: tc.surface, borderTop: `1px solid ${tc.border}`, pl: "6px", pr: "8px", py: "8px", display: "flex", alignItems: "flex-end", gap: "6px" }}>
           <IconButton
             aria-label={Locale.label("mobile.details.openEmojiPicker")}
+            onMouseDown={(e) => e.preventDefault()}
             onClick={(e) => setEmojiAnchor(e.currentTarget)}
             sx={{ flexShrink: 0, color: tc.textSecondary, width: 44, height: 44 }}
           >
             <EmojiEmotionsOutlinedIcon sx={{ fontSize: 22 }} />
           </IconButton>
-          <TextField
-            inputRef={inputRef}
-            multiline
-            maxRows={4}
-            placeholder={Locale.label("mobile.details.typeMessage")}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            slotProps={{ htmlInput: { enterKeyHint: "enter" } }}
-            onKeyDown={(e) => {
-              onFormatKeyDown(e);
-              if (e.key === "Enter" && !e.shiftKey && enterSends()) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            sx={{
-              flex: 1,
-              minWidth: 0,
-              "& .MuiOutlinedInput-root": { borderRadius: "6px", bgcolor: tc.surface, fontSize: 16, minHeight: 44, px: "12px", py: "10px" },
-              "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.control }
-            }}
-          />
-          {formattingPopup}
+          {/* The format row sits under the box, not beside it. */}
+          <Box sx={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+            <TextField
+              inputRef={inputRef}
+              multiline
+              maxRows={4}
+              placeholder={Locale.label("mobile.details.typeMessage")}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              slotProps={{ htmlInput: { enterKeyHint: "enter" } }}
+              onKeyDown={(e) => {
+                onFormatKeyDown(e);
+                if (e.key === "Enter" && !e.shiftKey && enterSends()) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": { borderRadius: "6px", bgcolor: tc.surface, fontSize: 16, minHeight: 44, px: "12px", py: "10px" },
+                "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.control }
+              }}
+            />
+            {formattingPopup}
+          </Box>
           <IconButton
             aria-label={Locale.label("mobile.details.send")}
+            // Keep focus in the box so the format row under it does not vanish and move Send mid-tap.
+            onMouseDown={(e) => e.preventDefault()}
             onClick={handleSend}
             disabled={sending || !text.trim()}
             sx={{

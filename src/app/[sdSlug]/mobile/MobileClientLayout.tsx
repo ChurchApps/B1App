@@ -24,6 +24,20 @@ const mobileMuiTheme = createTheme({
   components: { MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 999, fontWeight: 600, boxShadow: "none" } } } }
 });
 
+// Any key from public/locales; it only resolves once B1App's own locale file has loaded.
+const LOCALE_PROBE_KEY = "mobile.screenTitles.signIn";
+
+// Locale.init swallows fetch errors and initializes i18n with whatever arrived, so a dropped
+// request leaves every label as its key. Retry a couple of times before giving up.
+const loadLocale = async (isCancelled: () => boolean) => {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 2000 * attempt));
+    if (isCancelled()) return;
+    await EnvironmentHelper.initLocale();
+    if (Locale.label(LOCALE_PROBE_KEY) !== LOCALE_PROBE_KEY) return;
+  }
+};
+
 function MobileHydrationGate({ children }: { children: React.ReactNode }) {
   const status = useHydrateSession();
   const showSpinner = status === "idle" || status === "hydrating";
@@ -61,6 +75,7 @@ const mobileShellFallback = (
 export function MobileClientLayout({ children, churchGaId }: { children: React.ReactNode; churchGaId?: string }) {
   const [mounted, setMounted] = React.useState(false);
   const [localeReady, setLocaleReady] = React.useState(false);
+  const [localeVersion, setLocaleVersion] = React.useState(0);
 
   useEffect(() => {
     setMounted(true);
@@ -69,10 +84,20 @@ export function MobileClientLayout({ children, churchGaId }: { children: React.R
   useEffect(() => {
     if (!mounted) return;
     EnvironmentHelper.init();
-    const localeTimeout = new Promise((resolve) => setTimeout(resolve, 8000));
-    Promise.race([EnvironmentHelper.initLocale(), localeTimeout])
+    // Stop waiting after 8s so a slow connection doesn't leave a spinner up forever. Screens read
+    // labels at render time and nothing re-renders them when i18n finishes, so a load that lands
+    // after the timeout remounts the screen; otherwise it keeps showing raw keys (mobile.login.signInTo).
+    let timedOut = false;
+    let cancelled = false;
+    const localeTimeout = setTimeout(() => { timedOut = true; setLocaleReady(true); }, 8000);
+    loadLocale(() => cancelled)
       .catch((e) => console.error("Locale init failed", e))
-      .finally(() => setLocaleReady(true));
+      .finally(() => {
+        clearTimeout(localeTimeout);
+        if (cancelled) return;
+        if (timedOut) setLocaleVersion((v) => v + 1);
+        setLocaleReady(true);
+      });
     ErrorHelper.init(
       (): ErrorAppDataInterface => ({
         churchId: UserHelper.currentUserChurch?.church?.id || "",
@@ -82,6 +107,7 @@ export function MobileClientLayout({ children, churchGaId }: { children: React.R
       }),
       () => {}
     );
+    return () => { cancelled = true; clearTimeout(localeTimeout); };
   }, [mounted]);
 
   useHashScroll(localeReady);
@@ -99,7 +125,7 @@ export function MobileClientLayout({ children, churchGaId }: { children: React.R
           <MobileQueryProvider>
             <MobileGoogleAnalytics churchGaId={churchGaId} />
             <MobileHydrationGate>
-              {localeReady ? children : (
+              {localeReady ? <React.Fragment key={localeVersion}>{children}</React.Fragment> : (
                 <Box role="status" aria-live="polite" sx={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", bgcolor: "#FFFFFF" }}>
                   <CircularProgress size={40} />
                 </Box>

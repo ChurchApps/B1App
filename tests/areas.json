@@ -9,8 +9,8 @@
     "tests/areas.json",
     "tests/smoke/**",
     "tests/setup/smoke.mjs",
-    "tests/setup/affected.mjs",
-    "playwright.smoke.config.ts"
+    "playwright.smoke.config.ts",
+    ".pr-screenshots/**"
   ],
   "areas": {
     "mobileShell": {
@@ -321,6 +321,10 @@
     "siteCache": {
       "src": ["src/app/api/revalidate/**"],
       "specs": ["site-cache.spec.ts", "hide-public-site.spec.ts"]
+    },
+    "affectedSelector": {
+      "src": ["tests/setup/affected.mjs"],
+      "specs": ["affected-ignores-images.spec.ts"]
     }
   }
 }
