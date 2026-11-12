@@ -6,14 +6,16 @@ on:
 name: Deploy Prod
 
 # Publishes main to the production branch, which Vercel deploys. Step 1 is the
-# malware scan of the main tree; the merge only happens when it passes.
+# malware scan of the main tree; step 2 opens and merges the production pull
+# request, and only runs when the scan passes.
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   deploy:
-    name: Merge main to production
+    name: Scan main, then publish it to production
     runs-on: ubuntu-latest
 
     steps:
@@ -40,7 +42,11 @@ jobs:
           python3 "$RUNNER_TEMP/polinrider_scan.py" --self-test
           python3 "$RUNNER_TEMP/polinrider_scan.py" .
 
-      - name: Merge main to production
+      # Step 2: publish through a pull request, which the production branch rule
+      # requires. The rule no longer asks for a reviewer, so the same run opens
+      # the pull request (or reuses the open one) and merges it. Only the sha
+      # that passed the scan is merged: if main has moved since, the run stops.
+      - name: Open and merge the production pull request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -49,6 +55,17 @@ jobs:
             echo "production already contains ${GITHUB_SHA}"
             exit 0
           fi
-          gh api -X POST "repos/${GITHUB_REPOSITORY}/merges" \
-            -f base=production -f head="${GITHUB_SHA}" \
-            -f commit_message="Merge main into production"
+          head=$(gh api "repos/${GITHUB_REPOSITORY}/branches/main" --jq '.commit.sha')
+          if [ "$head" != "${GITHUB_SHA}" ]; then
+            echo "main is now $head, but this run scanned ${GITHUB_SHA}; run Deploy Prod again"
+            exit 1
+          fi
+          pr=$(gh pr list --repo "$GITHUB_REPOSITORY" --base production --head main --state open --json number --jq '.[0].number // empty')
+          if [ -z "$pr" ]; then
+            url=$(gh pr create --repo "$GITHUB_REPOSITORY" --base production --head main \
+              --title "Deploy main to production" \
+              --body "Opened by Deploy Prod after the malware scan of ${GITHUB_SHA} passed. Merging publishes main to production.")
+            pr="${url##*/}"
+          fi
+          echo "merging pull request #$pr"
+          gh pr merge "$pr" --repo "$GITHUB_REPOSITORY" --merge
