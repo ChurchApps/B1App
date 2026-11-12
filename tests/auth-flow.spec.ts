@@ -176,3 +176,26 @@ test.describe("Mobile session on the church website", () => {
     await expect(page.getByTestId("user-menu-chip")).toHaveCount(0);
   });
 });
+
+// iPhone Safari pads text inputs by font size; the six code boxes used to grow past the card.
+test.describe("Mobile login verification code", () => {
+  test.use({ storageState: { cookies: [], origins: [] }, viewport: { width: 390, height: 844 } });
+
+  test("the six code boxes fit inside the card on a phone", async ({ page }) => {
+    await page.route("**/users/forgot", route => route.fulfill({ json: { emailed: true } }));
+    await page.goto("/mobile/login");
+    await page.addStyleTag({ content: "input { padding: 0 0.5em; }" });
+    await page.getByText("Forgot password?").click();
+    await page.locator('input[type="email"]').first().fill("demo@b1.church");
+    await page.getByRole("button", { name: "Send code" }).click();
+    const boxes = page.locator('input[inputmode="numeric"]');
+    await expect(boxes).toHaveCount(6, { timeout: 20000 });
+    const form = await boxes.first().evaluate(el => el.closest("form")!.getBoundingClientRect().toJSON());
+    for (const box of await boxes.all()) {
+      const b = (await box.boundingBox())!;
+      expect(b.width).toBe(44);
+      expect(b.x).toBeGreaterThanOrEqual(form.left);
+      expect(b.x + b.width).toBeLessThanOrEqual(form.right);
+    }
+  });
+});
