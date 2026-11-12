@@ -261,15 +261,6 @@
       ],
       "specs": ["public-built-in.spec.ts", "mobile-content.spec.ts", "seo.spec.ts"]
     },
-    "hymns": {
-      "src": [
-        "src/features/hymns/**",
-        "src/app/[sdSlug]/mobile/components/screens/HymnsPage.tsx",
-        "src/app/[sdSlug]/mobile/components/details/HymnDetail.tsx",
-        "src/helpers/ChordProHelper.ts"
-      ],
-      "specs": ["mobile-hymns.spec.ts"]
-    },
     "blog": {
       "src": ["src/app/[sdSlug]/(public)/blog/**", "src/components/BlogFooterEmbed.tsx"],
       "specs": ["public-blog.spec.ts", "public-blog-browse.spec.ts"]
