@@ -524,8 +524,15 @@ export const MobileLoginScreen = ({ config }: Props) => {
             onPaste={handleCodePaste}
             onFocus={e => (e.currentTarget as HTMLInputElement).select()}
             sx={{
+              boxSizing: "border-box",
+              flex: "0 0 44px",
               width: "44px",
+              minWidth: 0,
               height: "52px",
+              padding: 0,
+              margin: 0,
+              appearance: "none",
+              WebkitAppearance: "none",
               fontSize: "24px",
               fontFamily: "monospace",
               fontWeight: 600,
