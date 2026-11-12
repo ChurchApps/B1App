@@ -324,13 +324,38 @@ test.describe("Mobile dashboard tile layout", () => {
     await expect(page).toHaveURL(/\/mobile\/more/, { timeout: 15000 });
   });
 
-  test("features three photo links in the moving row and lists the rest when the church picks Scrolling (automatic) and list", async ({ page }) => {
+  // ChurchAppsSupport#1545: the moving row carries every photo link (so it moves on wide screens too) and the
+  // first three are listed beneath it.
+  test("moves every photo link and lists the first three beneath when the church picks Scrolling (automatic) and list", async ({ page }) => {
     await setTileLayout("autoscrolllist");
     await openWithLinks(page, FIVE_LINKS);
-    await expect(page.getByTestId("home-tile-scroll").getByRole("link")).toHaveCount(3);
-    await expect(page.getByTestId("home-tile-scroll-dots").getByRole("button")).toHaveCount(3);
-    await expect(page.getByTestId("home-tile-list").locator(".kit-row")).toHaveCount(2);
+    await expect(page.getByTestId("home-tile-scroll").getByRole("link")).toHaveCount(5);
+    await expect(page.getByTestId("home-tile-scroll-dots").getByRole("button")).toHaveCount(5);
+    const rows = page.getByTestId("home-tile-list").locator(".kit-row");
+    await expect(rows).toHaveCount(3);
+    await expect(rows.nth(0)).toContainText("Watch Sermons");
+    await expect(rows.nth(1)).toContainText("Read the Bible");
+    await expect(rows.nth(2)).toContainText("Join Live");
     await expect(tileSection(page).getByRole("link", { name: "All", exact: true })).toHaveAttribute("href", /\/mobile\/more/);
+  });
+
+  // ChurchAppsSupport#1545: the list under the grid stops at three rows; All opens the rest.
+  test("lists at most three photo links under the grid in Grid and list", async ({ page }) => {
+    const SEVEN_LINKS = [
+      ...FIVE_LINKS,
+      { id: "TILE6", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "groups", text: "Serve Team", sort: 6, photo: "/images/group.jpg", visibility: "everyone" },
+      { id: "TILE7", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "donation", text: "Summer Camp", sort: 7, photo: "/images/group.jpg", visibility: "everyone" }
+    ];
+    await setTileLayout("gridlist");
+    await openWithLinks(page, SEVEN_LINKS);
+    await expect(page.getByTestId("home-tile-grid").getByRole("link")).toHaveCount(3);
+    const list = page.getByTestId("home-tile-list");
+    await expect(list.locator(".kit-row")).toHaveCount(3);
+    for (const name of ["Find a Group", "Give Online", "Serve Team"]) await expect(list.locator(".kit-row", { hasText: name })).toBeVisible();
+    await expect(list.locator(".kit-row", { hasText: "Summer Camp" })).toHaveCount(0);
+    const all = tileSection(page).getByRole("link", { name: "All", exact: true });
+    await all.click();
+    await expect(page).toHaveURL(/\/mobile\/more/, { timeout: 15000 });
   });
 
   test("shows only the featured tiles, with no list or All link, when there are three or fewer", async ({ page }) => {

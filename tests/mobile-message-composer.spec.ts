@@ -132,17 +132,27 @@ test.describe("Message formatting on a phone", () => {
     await expect(main.locator("li", { hasText: `milk ${stamp}` })).toBeVisible();
   });
 
-  test("highlighting text in the group chat composer shows a popup whose Bold button wraps it", async ({ page }) => {
+  // ChurchAppsSupport#1545: the format buttons sit in a row under the box while it has focus, so the phone's
+  // Copy / Select All callout above a selection never covers them, and no selection is needed first.
+  test("focusing the group chat composer shows a formatting row whose Bold button wraps the selection", async ({ page }) => {
     const { composer } = await openGroupChat(page);
+    // The dev server's corner badge sits over the row's first button on a phone; it does not exist in production.
+    await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" });
     await composer.fill("Hello world");
     await composer.evaluate((el: HTMLTextAreaElement) => {
       el.focus();
-      el.setSelectionRange(6, 11);
-      el.dispatchEvent(new Event("select"));
+      el.setSelectionRange(11, 11);
     });
-    for (const name of ["Italic", "Bulleted list", "Numbered list"]) await expect(page.getByRole("button", { name, exact: true })).toBeVisible();
-    await page.getByRole("button", { name: "Bold", exact: true }).click();
-    await expect(composer).toHaveValue("Hello **world**");
+    const row = page.getByTestId("formatting-popup");
+    for (const name of ["Bold", "Italic", "Bulleted list", "Numbered list"]) await expect(row.getByRole("button", { name, exact: true })).toBeVisible();
+    const composerBox = await composer.boundingBox();
+    const rowBox = await row.boundingBox();
+    expect(rowBox!.y).toBeGreaterThanOrEqual(composerBox!.y + composerBox!.height - 1);
+    await row.getByRole("button", { name: "Bulleted list", exact: true }).click();
+    await expect(composer).toHaveValue("- Hello world");
+    await composer.evaluate((el: HTMLTextAreaElement) => el.setSelectionRange(8, 13));
+    await row.getByRole("button", { name: "Bold", exact: true }).click();
+    await expect(composer).toHaveValue("- Hello **world**");
   });
 });
 
