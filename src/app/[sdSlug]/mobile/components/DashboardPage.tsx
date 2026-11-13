@@ -13,6 +13,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "./mobileTheme";
 import { cssUrl, formatDate, formatDuration } from "./util";
 import { NotificationPermissionBanner } from "./NotificationPermissionBanner";
+import { MobileAnnouncementBar } from "./MobileAnnouncementBar";
 import { navLinks } from "./MobileAppBar";
 import { MAX_LINK_TABS } from "./MobileTabBar";
 import { PageHead, Pill, PillRow, Plate, PlateSection, Row, RowList, TextLink, Thumb } from "./kit";
@@ -194,9 +195,11 @@ export const DashboardPage = ({ config }: Props) => {
       </PageHead>
     );
 
-  if (isLoading && links.length === 0) return <ScreenSkeleton />;
+  const announcementBar = <MobileAnnouncementBar raw={config?.announcementBanner} navLinks={allLinks} />;
+
+  if (isLoading && links.length === 0) return <>{announcementBar}<ScreenSkeleton /></>;
   // Signed-out visitors still get the sign-in prompt while Home has nothing else to show.
-  if (links.length === 0) return <EmptyDashboardPlaceholder config={config} head={signedIn || hideSignInPrompt ? undefined : head} />;
+  if (links.length === 0) return <>{announcementBar}<EmptyDashboardPlaceholder config={config} head={signedIn || hideSignInPrompt ? undefined : head} /></>;
 
   const banner = <NotificationPermissionBanner enabled={!!jwt} />;
 
@@ -318,6 +321,7 @@ export const DashboardPage = ({ config }: Props) => {
 
   return (
     <Box>
+      {announcementBar}
       {head}
       {desktop && wide && narrow ? (
         <Box sx={{ display: "grid", gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)", gap: "24px", alignItems: "start" }}>
