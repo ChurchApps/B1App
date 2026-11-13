@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 import { Locale } from "@churchapps/apphelper";
 import { ScreenSkeleton } from "./ScreenSkeleton";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { HYMNS_ENABLED } from "@/features/hymns/enabled";
 import { PlaceholderPage } from "./PlaceholderPage";
 
 const loading = () => <ScreenSkeleton />;
@@ -40,7 +39,6 @@ const MobileLoginScreen = dynamic(() => import("./screens/LoginPage").then(m => 
 const MoreCardsPage = dynamic(() => import("./screens/MoreCardsPage").then(m => ({ default: m.MoreCardsPage })), { loading });
 const FolderPage = dynamic(() => import("./screens/FolderPage").then(m => ({ default: m.FolderPage })), { loading });
 const NewsPage = dynamic(() => import("./screens/NewsPage").then(m => ({ default: m.NewsPage })), { loading });
-const HymnsPage = dynamic(() => import("./screens/HymnsPage").then(m => ({ default: m.HymnsPage })), { loading });
 
 interface Props {
   pageSlug: string;
@@ -66,9 +64,6 @@ export function ScreenRouter({ pageSlug, config }: Props) {
   switch (effectiveSlug) {
     case "dashboard": return <DashboardPage config={config} />;
     case "more": return <MoreCardsPage config={config} />;
-    case "hymns": return HYMNS_ENABLED
-      ? <HymnsPage churchId={config?.church?.id} />
-      : <PlaceholderPage title={Locale.label("mobile.notFound.title")} description={Locale.label("mobile.notFound.body")} actionLabel={Locale.label("mobile.notFound.backToHome")} actionHref="/mobile/dashboard" />;
     case "sermons": return <SermonsPage config={config} />;
     case "news": return <NewsPage config={config} />;
     case "groups":
