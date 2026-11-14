@@ -60,13 +60,32 @@ const DEV_CONNECT_SRC = ["http://localhost:*", "http://127.0.0.1:*", "http://*.l
 export interface CspOptions {
   nonce?: string;
   dev?: boolean;
+  /** Origins of the app's own API stack; the http:/ws: ones (a local Api) join connect-src, https:/wss: are already covered. */
+  apiOrigins?: string[];
 }
 
+// The browser-facing API URLs (NEXT_PUBLIC_API_BASE, the Lessons API, the messaging socket) as origins, keeping
+// only the ones the production connect-src does not already admit: a production build pointed at a local
+// http://localhost:8084 stack, as the Playwright suite runs it, must name that origin or every API call is refused.
+export const insecureApiOrigins = (urls: Array<string | undefined>): string[] => {
+  const origins = new Set<string>();
+  for (const raw of urls) {
+    if (!raw) continue;
+    try {
+      const url = new URL(raw);
+      if (url.protocol === "http:" || url.protocol === "ws:") origins.add(url.origin);
+    } catch {
+      // not a URL; nothing to allow
+    }
+  }
+  return [...origins];
+};
+
 export const buildContentSecurityPolicy = (options: CspOptions = {}): string => {
-  const { nonce, dev = false } = options;
+  const { nonce, dev = false, apiOrigins = [] } = options;
 
   const scriptSrc = ["'self'", ...(nonce ? [`'nonce-${nonce}'`, "'strict-dynamic'"] : []), ...SCRIPT_SRC_HOSTS, ...(dev ? DEV_SCRIPT_SRC : [])];
-  const connectSrc = ["'self'", ...CONNECT_SRC_HOSTS, ...(dev ? DEV_CONNECT_SRC : [])];
+  const connectSrc = ["'self'", ...CONNECT_SRC_HOSTS, ...(dev ? DEV_CONNECT_SRC : []), ...apiOrigins.filter((o) => !CONNECT_SRC_HOSTS.some((h) => o.startsWith(h)))];
 
   return [
     "default-src 'self'",
