@@ -61,6 +61,9 @@ test.describe.serial("Mobile my cards and tasks", () => {
     await expect(taskSheet.getByText("Michael Davis", { exact: true })).toBeVisible({ timeout: 15000 });
     await expect(taskSheet.getByText("Donald Clark", { exact: true })).toBeVisible();
     await expect(taskSheet.getByRole("button", { name: "Complete" })).toHaveCount(0);
+    // ChurchAppsSupport#1574: the assignee can call or email the person the task is about.
+    await expect(taskSheet.getByTestId("task-contact-phone")).toHaveAttribute("href", /^tel:\(217\) 555-25/, { timeout: 15000 });
+    await expect(taskSheet.getByTestId("task-contact-email")).toHaveAttribute("href", "mailto:donald.clark@email.com");
   });
 
   test("a card opens a sheet that snoozes and completes it", async ({ page }) => {
@@ -73,6 +76,8 @@ test.describe.serial("Mobile my cards and tasks", () => {
     await expect(sheet.getByRole("heading", { name: "Donald Clark" })).toBeVisible({ timeout: 15000 });
     await expect(sheet.getByText("Attended")).toBeVisible({ timeout: 15000 });
     await expect(sheet.getByRole("link", { name: "Donald Clark" })).toHaveAttribute("href", "/mobile/community/PER00000080");
+    await expect(sheet.getByTestId("task-contact-phone")).toHaveAttribute("href", /^tel:\(217\) 555-25/, { timeout: 15000 });
+    await expect(sheet.getByTestId("task-contact-email")).toHaveAttribute("href", "mailto:donald.clark@email.com");
     await expect(sheet.getByText("Notes", { exact: true })).toBeVisible();
 
     await sheet.getByRole("button", { name: "3 days" }).click();
