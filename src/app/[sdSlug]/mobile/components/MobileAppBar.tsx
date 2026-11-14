@@ -19,6 +19,9 @@ import { useRealtimeNotifications } from "../hooks/useRealtimeNotifications";
 
 const tc = mobileTheme.colors;
 
+// Links the desktop header (md+) shows; the phone tab bar shows MAX_LINK_TABS.
+export const MAX_HEADER_LINKS = 5;
+
 // Internal church links that get a slot in the phone tab bar / desktop header nav. Built-in screens
 // keep priority; page links only fill slots left over (conference churches are all pages).
 export const navLinks = (links: LinkInterface[], max: number) => links
@@ -187,7 +190,7 @@ export const MobileTopHeader = ({ churchName, links, onAvatarClick }: { churchNa
   const slug = mobileSlugFromPath(pathname) || "dashboard";
   const items = [
     { key: "home", href: "/mobile/dashboard", label: Locale.label("mobile.components.home"), active: slug === "dashboard" },
-    ...navLinks(links, 5).map(({ link, route }) => ({ key: link.id || route, href: route, label: link.text || "", active: isRouteActive(route, slug, searchParams) })),
+    ...navLinks(links, MAX_HEADER_LINKS).map(({ link, route }) => ({ key: link.id || route, href: route, label: link.text || "", active: isRouteActive(route, slug, searchParams) })),
     { key: "more", href: "/mobile/more", label: Locale.label("mobile.components.more"), active: slug === "more" }
   ];
 
