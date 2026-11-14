@@ -80,7 +80,7 @@ export const DashboardPage = ({ config }: Props) => {
   const churchId = config?.church?.id;
   const churchName = config?.church?.name || "";
   const jwt = context?.userChurch?.jwt;
-  const desktop = useMediaQuery((t: Theme) => t.breakpoints.up("md"), { noSsr: true });
+  const desktop = useMediaQuery((t: Theme) => t.breakpoints.up("md"));
 
   const [greetingWord, setGreetingWord] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
