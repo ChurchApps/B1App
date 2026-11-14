@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { getApi, apiCall, membershipUrl, messagingUrl, type ApiHandle } from "./helpers/api";
-import { DEMO_CHURCH } from "./helpers/fixtures";
+import { DEMO_CHURCH, TEST_PHOTO } from "./helpers/fixtures";
 
 const BASE_URL = process.env.BASE_URL || "http://grace.localtest.me:3301";
 const LAST_NAME = "Zebedeevisitor";
@@ -68,7 +68,7 @@ test.describe("QR guest registration", () => {
     await lastNames.nth(0).fill(LAST_NAME);
     await firstNames.nth(1).fill("Zebedee");
     await lastNames.nth(1).fill(LAST_NAME);
-    await page.getByLabel(/^Email/).fill("zacchaeus.visitor@example.com");
+    await page.getByLabel(/^Email/).nth(0).fill("zacchaeus.visitor@example.com");
 
     await page.getByRole("button", { name: "Register" }).click();
     await expect(page.getByText("Please fill in every required field.")).toBeVisible();
@@ -220,5 +220,47 @@ test.describe("QR guest registration", () => {
     } finally {
       await saveSettings({ titleOptions: original });
     }
+  });
+
+  // ChurchAppsSupport#1554: every person can leave an email, and a church that turns the photo on gets one per person.
+  test("asks every person for an email and, when the church turns it on, a photo", async ({ page }) => {
+    await removeCreated();
+    await saveSettings({ guestRegistrationFields: JSON.stringify({ email: "optional", phone: "off", photo: "optional" }) });
+    await page.goto(BASE_URL + "/guest-register");
+    await expect(page.getByRole("heading", { name: "Guest Registration" })).toBeVisible({ timeout: 20000 });
+    await expect(page.getByLabel(/^Email/)).toHaveCount(2, { timeout: 15000 });
+    const addPhoto = page.getByRole("button", { name: "Add Photo" });
+    await expect(addPhoto).toHaveCount(2);
+
+    await page.getByLabel(/^First Name/).nth(0).fill("Zipporah");
+    await page.getByLabel(/^Last Name/).nth(0).fill(LAST_NAME);
+    await page.getByLabel(/^Email/).nth(0).fill("zipporah.visitor@example.com");
+    await page.getByLabel(/^First Name/).nth(1).fill("Zophar");
+    await page.getByLabel(/^Last Name/).nth(1).fill(LAST_NAME);
+    await page.getByLabel(/^Email/).nth(1).fill("zophar.visitor@example.com");
+
+    await addPhoto.nth(0).click();
+    await page.locator("#fileUpload").setInputFiles(TEST_PHOTO);
+    await expect(page.locator(".cropper-crop-box")).toBeVisible({ timeout: 15000 });
+    // The cropper hands over its image a moment after it settles; Update waits for it.
+    await expect(async () => {
+      await page.getByRole("button", { name: "Update" }).click();
+      await expect(page.getByTestId("guest-photo-0")).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 15000 });
+    await expect(page.getByTestId("guest-photo-1")).toHaveCount(0);
+    await page.screenshot({ path: test.info().outputPath("after.png"), fullPage: true });
+
+    await page.getByRole("button", { name: "Register" }).click();
+    await expect(page.getByText("Registration Complete")).toBeVisible({ timeout: 15000 });
+
+    const people = await findCreated();
+    const head = people.find((p) => p.name?.first === "Zipporah");
+    const spouse = people.find((p) => p.name?.first === "Zophar");
+    const full = await (await apiCall(api, "get", membershipUrl("/people/" + head.id))).json();
+    expect(full.contactInfo.email).toBe("zipporah.visitor@example.com");
+    expect(full.photo).toContain("/membership/people/" + head.id + ".png?dt=");
+    const spouseFull = await (await apiCall(api, "get", membershipUrl("/people/" + spouse.id))).json();
+    expect(spouseFull.contactInfo.email).toBe("zophar.visitor@example.com");
+    expect(spouseFull.photoUpdated).toBeFalsy();
   });
 });

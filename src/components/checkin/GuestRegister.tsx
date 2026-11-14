@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Button, Icon, Box, Typography, TextField, IconButton, MenuItem } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { Avatar, Button, Icon, Box, Typography, TextField, IconButton, MenuItem } from "@mui/material";
+import { ApiHelper, ImageEditor } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
 import { DEFAULT_TITLES, parseTitleOptions } from "@/helpers/TitleOptions";
 import { HeaderSection, HeaderIconContainer, HeaderImage, CheckinCard, colors } from "./CheckinStyles";
@@ -16,6 +16,7 @@ interface GuestMember {
   birthDate?: string;
   gender?: string;
   grade?: string;
+  photo?: string;
 }
 
 interface GuestAddress {
@@ -27,11 +28,11 @@ interface GuestAddress {
 }
 
 type FieldMode = "off" | "optional" | "required";
-type FieldKey = "title" | "email" | "phone" | "householdRole" | "address" | "birthDate" | "gender" | "maritalStatus" | "grade" | "comments";
+type FieldKey = "title" | "email" | "phone" | "householdRole" | "address" | "birthDate" | "gender" | "maritalStatus" | "grade" | "comments" | "photo";
 type FieldModes = Record<FieldKey, FieldMode>;
 
 // Matches the Api default, so the form looks like it always has until the church changes the checklist.
-const DEFAULT_MODES: FieldModes = { title: "off", email: "optional", phone: "optional", householdRole: "optional", address: "off", birthDate: "off", gender: "off", maritalStatus: "off", grade: "off", comments: "off" };
+const DEFAULT_MODES: FieldModes = { title: "off", email: "optional", phone: "optional", householdRole: "optional", address: "off", birthDate: "off", gender: "off", maritalStatus: "off", grade: "off", comments: "off", photo: "off" };
 const GENDERS = ["Unspecified", "Male", "Female"];
 // The first person heads the household; everyone after them picks one of these.
 const HOUSEHOLD_ROLES = ["Spouse", "Child", "Other"];
@@ -39,7 +40,7 @@ const MARITAL_STATUSES = ["Unknown", "Single", "Married", "Divorced", "Widowed"]
 const GRADES = [
   "PreK", "K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "Graduated"
 ];
-const emptyMember = (lastName = ""): GuestMember => ({ title: "", firstName: "", lastName, email: "", phone: "", householdRole: "", birthDate: "", gender: "", grade: "" });
+const emptyMember = (lastName = ""): GuestMember => ({ title: "", firstName: "", lastName, email: "", phone: "", householdRole: "", birthDate: "", gender: "", grade: "", photo: "" });
 
 interface Props {
   churchId: string;
@@ -56,6 +57,8 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [error, setError] = useState("");
+  // The member whose photo is open in the cropper.
+  const [photoIndex, setPhotoIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (!churchId) return;
@@ -102,6 +105,7 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
       || (required("address") && (!address.address1.trim() || !address.city.trim() || !address.state.trim() || !address.zip.trim()))
       || (required("maritalStatus") && !maritalStatus)
       || (required("comments") && !comments.trim())
+      || (required("photo") && !primary.photo)
       || members.some((m, i) => (required("title") && !m.title) || (i > 0 && required("householdRole") && !m.householdRole) || (required("birthDate") && !m.birthDate) || (required("gender") && !m.gender) || (required("grade") && !m.grade));
     if (missingRequired) {
       setError(Locale.label("checkin.guestRegister.validate.fieldsRequired"));
@@ -117,12 +121,13 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
           title: (on("title") && m.title) || undefined,
           firstName: m.firstName.trim(),
           lastName: m.lastName.trim(),
-          email: (i === 0 && on("email") && m.email?.trim()) || undefined,
+          email: (on("email") && m.email?.trim()) || undefined,
           phone: (on("phone") && m.phone?.trim()) || undefined,
           householdRole: (i > 0 && on("householdRole") && m.householdRole) || undefined,
           birthDate: (on("birthDate") && m.birthDate) || undefined,
           gender: (on("gender") && m.gender) || undefined,
-          grade: (on("grade") && m.grade) || undefined
+          grade: (on("grade") && m.grade) || undefined,
+          photo: (on("photo") && m.photo) || undefined
         })),
         address: on("address") ? {
           address1: address.address1.trim(),
@@ -223,7 +228,7 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
               fullWidth
             />
           </Box>
-          {((index === 0 && on("email")) || on("phone") || (index > 0 && on("householdRole"))) && (
+          {(on("email") || on("phone") || (index > 0 && on("householdRole"))) && (
             <Box sx={{ display: "flex", gap: 2, marginBottom: 1 }}>
               {index > 0 && on("householdRole") && (
                 <TextField
@@ -238,14 +243,14 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
                   {HOUSEHOLD_ROLES.map(r => <MenuItem key={r} value={r}>{Locale.label("checkin.guestRegister.householdRoles." + r)}</MenuItem>)}
                 </TextField>
               )}
-              {index === 0 && on("email") && (
+              {on("email") && (
                 <TextField
                   label={Locale.label("person.email")}
                   type="email"
                   value={member.email}
                   onChange={(e) => updateMember(index, "email", e.target.value)}
                   size="small"
-                  required={required("email")}
+                  required={index === 0 && required("email")}
                   fullWidth
                 />
               )}
@@ -301,6 +306,33 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
                 >
                   {GRADES.map(g => <MenuItem key={g} value={g}>{g}</MenuItem>)}
                 </TextField>
+              )}
+            </Box>
+          )}
+          {on("photo") && (
+            <Box sx={{ marginBottom: 1 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                {member.photo && <Avatar src={member.photo} variant="rounded" alt="" sx={{ width: 64, height: 48 }} data-testid={"guest-photo-" + index} />}
+                {photoIndex !== index && (
+                  <Button variant="outlined" size="small" startIcon={<Icon>photo_camera</Icon>} onClick={() => setPhotoIndex(index)} sx={{ borderRadius: 2, color: colors.primary, borderColor: colors.primary }}>
+                    {Locale.label(member.photo ? "checkin.guestRegister.changePhoto" : "checkin.guestRegister.addPhoto")}
+                  </Button>
+                )}
+                {member.photo && photoIndex !== index && (
+                  <Button size="small" onClick={() => updateMember(index, "photo", "")} sx={{ color: colors.textSecondary }}>
+                    {Locale.label("checkin.guestRegister.removePhoto")}
+                  </Button>
+                )}
+              </Box>
+              {photoIndex === index && (
+                <ImageEditor
+                  title={Locale.label("checkin.guestRegister.photo")}
+                  photoUrl={member.photo || ""}
+                  aspectRatio={4 / 3}
+                  hideDelete
+                  onUpdate={(dataUrl) => { if (dataUrl) { updateMember(index, "photo", dataUrl); setPhotoIndex(null); } }}
+                  onCancel={() => setPhotoIndex(null)}
+                />
               )}
             </Box>
           )}
