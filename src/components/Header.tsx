@@ -261,7 +261,7 @@ export function Header(props: Props) {
 
   return (
     <div>
-      <AppBar id="navbar" position={(props.editMode) ? "relative" : "fixed"} className={appBarClass} style={(props.editMode) ? { marginBottom: 0 } : {}}>
+      <AppBar id="navbar" position={(props.editMode) ? "relative" : "fixed"} className={appBarClass} style={(props.editMode) ? { marginBottom: 0 } : { top: "var(--announcement-bar-height, 0px)" }}>
         <Container style={{ height: 71 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Link href="/" data-testid="header-logo-link" aria-label={Locale.label("header.goHomepage")}>

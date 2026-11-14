@@ -123,8 +123,8 @@
       "specs": ["standalone-form-submit.spec.ts", "public-forms-*.spec.ts", "code-review-core.spec.ts", "mobile-group-forms.spec.ts"]
     },
     "publicPages": {
-      "src": ["src/app/[sdSlug]/(public)/page.tsx", "src/app/[sdSlug]/(public)/[pageSlug]/page.tsx", "src/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper.tsx", "src/components/Header.tsx", "src/components/CascadingMenus/**", "src/components/layouts/**", "src/components/RestrictedPage.tsx", "src/components/YoutubeBackground.tsx", "src/components/DropMalformedHash.tsx", "src/hooks/useHashScroll.ts", "src/helpers/RedirectHelper.ts", "src/styles/youtubeBackground.module.css"],
-      "specs": ["public-home.spec.ts", "public-pages-no-error-shell.spec.ts", "public-fragment-link-scroll.spec.ts", "public-built-in.spec.ts", "public-restricted-page.spec.ts", "code-review-core.spec.ts", "hide-public-site.spec.ts"]
+      "src": ["src/app/[sdSlug]/(public)/page.tsx", "src/app/[sdSlug]/(public)/[pageSlug]/page.tsx", "src/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper.tsx", "src/components/Header.tsx", "src/components/SiteWidgets.tsx", "src/components/CascadingMenus/**", "src/components/layouts/**", "src/components/RestrictedPage.tsx", "src/components/YoutubeBackground.tsx", "src/components/DropMalformedHash.tsx", "src/hooks/useHashScroll.ts", "src/helpers/RedirectHelper.ts", "src/styles/youtubeBackground.module.css"],
+      "specs": ["public-home.spec.ts", "public-pages-no-error-shell.spec.ts", "public-fragment-link-scroll.spec.ts", "public-built-in.spec.ts", "public-restricted-page.spec.ts", "code-review-core.spec.ts", "hide-public-site.spec.ts", "site-announcement-bar.spec.ts"]
     },
     "hidePublicSite": {
       "src": ["src/helpers/publicSite.ts", "src/helpers/publicSiteServer.ts"],
