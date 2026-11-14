@@ -42,3 +42,6 @@ export const SEED_NAV_LINKS = {
 } as const;
 
 export type SeedPersonName = (typeof SEED_PEOPLE)[keyof typeof SEED_PEOPLE];
+
+// A 64x48 solid PNG for photo upload specs.
+export const TEST_PHOTO = { name: "photo.png", mimeType: "image/png", buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAEAAAAAwCAIAAAAuKetIAAAAZElEQVR4nO3PUQkAIBTAwBfHOMY2liH8OITBAtzm7PV1wwUNaEEDWtCAFjSgBQ1oQQNa0IAWNKAFDWhBA1rQgBY0oAUNaEEDWtCAFjSgBQ1oQQNa0IAWNKAFDWhBA1rQgBY8dgGMoQDivq/y5gAAAABJRU5ErkJggg==", "base64") };

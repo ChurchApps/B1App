@@ -1,7 +1,7 @@
 {
   "$comment": "Maps source paths to the specs that cover them. Used by tests/setup/affected.mjs (yarn test:affected). A changed file in no area runs every spec, so shared code (layouts, providers, ConfigHelper, the mobile shell's hooks and kit) stays unmapped on purpose. New spec files must be added to an area; yarn test:areas checks that. The source locale file selects areas by changed top-level namespace (locales.namespaces holds the aliases; a namespace named like an area maps to it); other translations are ignored.",
   "always": ["mobile-shell.spec.ts", "public-navigation.spec.ts"],
-  "ignore": ["**/*.md", ".github/**", ".claude/**", "docs/**", "tests/areas.json", "tests/smoke/**", "tests/setup/smoke.mjs", "playwright.smoke.config.ts", ".pr-screenshots/**", "public/locales/*.json"],
+  "ignore": ["**/*.md", ".github/**", ".claude/**", "docs/**", "next-env.d.ts", "public/sw.js", "public/swe-worker-*.js", "tests/areas.json", "tests/smoke/**", "tests/setup/smoke.mjs", "playwright.smoke.config.ts", ".pr-screenshots/**", "public/locales/*.json"],
   "locales": {
     "source": "public/locales/en.json",
     "namespaces": {

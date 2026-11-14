@@ -179,6 +179,10 @@ const nextConfig = {
   // Self-host image (see Dockerfile): standalone server, images served as-is from the same origin.
   output: process.env.NEXT_OUTPUT_STANDALONE ? "standalone" : undefined,
 
+  // Playwright builds with PW_NO_ISR=1 so the production server it tests against never serves a cached page
+  // or fetch (tests/setup/no-isr-cache.cjs); production deploys leave this unset and keep the default cache.
+  ...(process.env.PW_NO_ISR ? { cacheHandler: path.resolve(__dirname, "tests/setup/no-isr-cache.cjs"), cacheMaxMemorySize: 0 } : {}),
+
   // Image optimization
   images: {
     unoptimized: process.env.NEXT_PUBLIC_STAGE === "selfhost",

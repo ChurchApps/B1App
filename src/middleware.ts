@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { buildContentSecurityPolicy, generateNonce } from "@/helpers/contentSecurityPolicy";
+import { buildContentSecurityPolicy, generateNonce, insecureApiOrigins } from "@/helpers/contentSecurityPolicy";
 import { canonicalLink, ownsSubdomain } from "@/helpers/canonicalLink";
 import { isNoindexHost } from "@/helpers/noindexHost";
 import { isAllowedWhenPublicSiteHidden, isPublicSiteHidden } from "@/helpers/publicSite";
@@ -104,7 +104,11 @@ export async function middleware(req: NextRequest) {
   // Next reads the nonce off the request-side CSP header and stamps it onto the
   // scripts it renders, which is what lets script-src drop 'unsafe-inline'.
   const nonce = generateNonce();
-  const csp = buildContentSecurityPolicy({ nonce, dev: process.env.NODE_ENV !== "production" });
+  const csp = buildContentSecurityPolicy({
+    nonce,
+    dev: process.env.NODE_ENV !== "production",
+    apiOrigins: insecureApiOrigins([process.env.NEXT_PUBLIC_API_BASE, process.env.NEXT_PUBLIC_LESSONS_API, process.env.NEXT_PUBLIC_MESSAGING_API_SOCKET])
+  });
   headers.set("Content-Security-Policy", csp);
 
   let site: string | null = null;

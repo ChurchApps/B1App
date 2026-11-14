@@ -39,10 +39,12 @@
     },
     "guestRegister": {
       "addFamilyMember": "Add Family Member",
+      "addPhoto": "Add Photo",
       "address": "Home Address",
       "address1": "Street Address",
       "address2": "Address Line 2",
       "birthDate": "Birth Date",
+      "changePhoto": "Change Photo",
       "city": "City",
       "comments": "Comments",
       "complete": {
@@ -74,9 +76,11 @@
       },
       "personTitle": "Title",
       "phone": "Phone",
+      "photo": "Photo",
       "primaryContact": "Primary Contact",
       "registering": "Registering...",
       "registrationFailed": "Registration failed. Please try again.",
+      "removePhoto": "Remove Photo",
       "state": "State",
       "subtitle": "Register your family as guests",
       "title": "Guest Registration",
@@ -951,6 +955,7 @@
     },
     "profileEdit": {
       "addFamilyMember": "Add Family Member",
+      "addPhoto": "Add Photo",
       "address1": "Address Line 1",
       "address2": "Address Line 2",
       "addressVisibility": "Address Visibility",

@@ -96,8 +96,8 @@ const emptyPerson: PersonInterface = {
 } as PersonInterface;
 
 // Sent as JSON in the familyMember requested change; staff approval reads the same shape.
-interface PendingFamilyMember { first: string; last: string; prefix: string; mobilePhone: string; householdRole: string }
-const blankFamilyMember = (last = ""): PendingFamilyMember => ({ first: "", last, prefix: "", mobilePhone: "", householdRole: "Other" });
+interface PendingFamilyMember { first: string; last: string; prefix: string; mobilePhone: string; email: string; photo: string; householdRole: string }
+const blankFamilyMember = (last = ""): PendingFamilyMember => ({ first: "", last, prefix: "", mobilePhone: "", email: "", photo: "", householdRole: "Other" });
 
 interface HouseholdMember extends PersonInterface {
   householdRole?: string;
@@ -166,7 +166,8 @@ const resizePhotoToDataUrl = async (file: File): Promise<string> => new Promise(
         sy = Math.round((img.height - sh) / 2);
       }
       ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
-      resolve(canvas.toDataURL("image/jpeg", 0.8));
+      // PNG, because a direct save only stores PNG photos.
+      resolve(canvas.toDataURL("image/png"));
     };
     img.src = src;
   };
@@ -196,6 +197,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     severity: "success"
   });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const familyPhotoInputRef = useRef<HTMLInputElement | null>(null);
   const [savingPrivacy, setSavingPrivacy] = useState(false);
 
   const accountUser = UserHelper.user;
@@ -325,6 +327,23 @@ export const ProfileEditPage = ({ config }: Props) => {
     }
   };
 
+  const handleFamilyPhotoSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setPhotoError(Locale.label("mobile.profileEdit.selectImageFile"));
+      return;
+    }
+    try {
+      setPhotoError(null);
+      const photo = await resizePhotoToDataUrl(file);
+      setNewMember((m) => ({ ...m, photo }));
+    } catch (err: any) {
+      setPhotoError(err?.message || Locale.label("mobile.screens.couldNotProcessImage"));
+    }
+  };
+
   const profileChanges = useMemo(() => {
     if (!person) return [];
     const changes: { field: string; label: string; value: string }[] = [];
@@ -442,7 +461,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   const handleAddFamilyMember = () => {
     const first = newMember.first.trim();
     if (!first) return;
-    const member = { ...newMember, first, last: newMember.last.trim() || person?.name?.last || "", prefix: newMember.prefix.trim(), mobilePhone: newMember.mobilePhone.trim() };
+    const member = { ...newMember, first, last: newMember.last.trim() || person?.name?.last || "", prefix: newMember.prefix.trim(), mobilePhone: newMember.mobilePhone.trim(), email: newMember.email.trim() };
     setPendingFamilyMembers((prev) => [...prev, member]);
     setNewMember(blankFamilyMember(person?.name?.last || ""));
   };
@@ -730,6 +749,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         onInputChange={(_, val) => setNewMember((m) => ({ ...m, prefix: val }))}
         renderInput={(params) => <TextField {...params} fullWidth label={Locale.label("checkin.guestRegister.personTitle")} inputProps={{ ...params.inputProps, maxLength: 10, "data-testid": "family-member-title" } as any} />}
       />
+      <TextField label={Locale.label("person.email")} type="email" value={newMember.email} onChange={(e) => setNewMember({ ...newMember, email: e.target.value })} inputProps={{ inputMode: "email", "data-testid": "family-member-email" }} fullWidth />
       <TextField label={Locale.label("mobile.details.mobilePhone")} type="tel" value={newMember.mobilePhone} onChange={(e) => setNewMember({ ...newMember, mobilePhone: e.target.value })} inputProps={{ inputMode: "tel", "data-testid": "family-member-phone" }} fullWidth />
       <FormControl fullWidth>
         <InputLabel id="family-member-role">{Locale.label("checkin.guestRegister.householdRole")}</InputLabel>
@@ -737,6 +757,14 @@ export const ProfileEditPage = ({ config }: Props) => {
           {HOUSEHOLD_ROLES.map((r) => <MenuItem key={r} value={r}>{Locale.label("checkin.guestRegister.householdRoles." + r)}</MenuItem>)}
         </Select>
       </FormControl>
+      <Box sx={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        {newMember.photo && <Avatar src={newMember.photo} sx={{ width: 48, height: 48 }} data-testid="family-member-photo-preview" />}
+        <Button variant="outlined" onClick={() => familyPhotoInputRef.current?.click()} startIcon={<PhotoCameraOutlinedIcon />} data-testid="family-member-photo">
+          {Locale.label(newMember.photo ? "mobile.profileEdit.changePhoto" : "mobile.profileEdit.addPhoto")}
+        </Button>
+        <input ref={familyPhotoInputRef} type="file" accept="image/*" hidden onChange={handleFamilyPhotoSelected} data-testid="family-member-photo-input" />
+      </Box>
+      {errorText(photoError)}
       <Button variant="outlined" onClick={handleAddFamilyMember} disabled={!newMember.first.trim()} data-testid="family-member-add">
         {Locale.label("mobile.group.add")}
       </Button>
@@ -748,7 +776,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               <Row
                 key={`${m.first}-${idx}`}
                 title={[m.prefix, m.first, m.last].filter(Boolean).join(" ")}
-                subtitle={Locale.label("checkin.guestRegister.householdRoles." + m.householdRole)}
+                subtitle={[Locale.label("checkin.guestRegister.householdRoles." + m.householdRole), m.email].filter(Boolean).join(" · ")}
                 trailing={<TextLink danger onClick={() => handleRemoveFamilyMember(idx)}>{Locale.label("mobile.screens.remove")}</TextLink>}
                 sx={{ minHeight: 44 }}
               />

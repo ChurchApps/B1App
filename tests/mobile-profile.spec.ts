@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 import { getApi, apiCall, membershipUrl, type ApiHandle } from "./helpers/api";
-import { DEMO_CHURCH } from "./helpers/fixtures";
+import { DEMO_CHURCH, TEST_PHOTO } from "./helpers/fixtures";
 
 test.describe("Mobile profile edit", () => {
   // The old Profile/Household/Account/Privacy tabs are sections of one plate; each edits in a sheet.
@@ -200,6 +200,37 @@ test.describe.serial("Mobile profile title and family member details", () => {
     expect(full.name).toMatchObject({ first: FAMILY_FIRST, last: "Userson", prefix: "Mr" });
     expect(full.householdRole).toBe("Child");
     expect(full.contactInfo.mobilePhone).toContain("555");
+  });
+
+  // ChurchAppsSupport#1554: a family member can be added with an email and a photo.
+  test("Add Family Member saves an email and a photo", async ({ page }) => {
+    const first = "Zimriphoto";
+    const findPhoto = async () => ((await (await apiCall(api, "get", membershipUrl("/people/search?term=" + first))).json()) as any[]) || [];
+    for (const p of await findPhoto()) await apiCall(api, "delete", membershipUrl("/people/" + p.id));
+    try {
+      await page.goto("/mobile/profileEdit");
+      await page.getByTestId("profile-edit-household").click({ timeout: 30000 });
+      const sheet = page.getByRole("dialog");
+      await sheet.getByTestId("family-member-first").fill(first);
+      await sheet.getByTestId("family-member-email").fill("zimri.photo@example.com");
+      await sheet.getByTestId("family-member-photo-input").setInputFiles(TEST_PHOTO);
+      await expect(sheet.getByTestId("family-member-photo-preview")).toBeVisible({ timeout: 15000 });
+      await sheet.getByTestId("family-member-add").click();
+      await expect(sheet).toContainText("zimri.photo@example.com");
+
+      const created = page.waitForResponse((r) => r.request().method() === "POST" && r.url().includes("/people/familyMember"), { timeout: 30000 });
+      await sheet.getByRole("button", { name: "Save Changes" }).click();
+      expect((await created).ok()).toBeTruthy();
+      await expect(page.getByText("Your changes have been saved.")).toBeVisible({ timeout: 15000 });
+
+      const [member] = await findPhoto();
+      expect(member).toBeTruthy();
+      const full = await (await apiCall(api, "get", membershipUrl("/people/" + member.id))).json();
+      expect(full.contactInfo.email).toBe("zimri.photo@example.com");
+      expect(full.photo).toContain("/membership/people/" + member.id + ".png?dt=");
+    } finally {
+      for (const p of await findPhoto()) await apiCall(api, "delete", membershipUrl("/people/" + p.id));
+    }
   });
 });
 
