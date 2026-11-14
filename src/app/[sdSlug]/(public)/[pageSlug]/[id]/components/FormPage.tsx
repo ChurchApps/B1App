@@ -17,6 +17,14 @@ interface Props extends WrapperPageProps {
 
 type StandaloneFormInterface = FormInterface & { description?: string; displayMode?: "standard" | "conversational"; thankYouMessage?: string; photoUrl?: string };
 
+const isRestrictedResponse = (e: unknown) => {
+  try {
+    return !!JSON.parse((e as Error).message).restricted;
+  } catch {
+    return false;
+  }
+};
+
 export function FormPage(props: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
@@ -45,8 +53,14 @@ export function FormPage(props: Props) {
       if (data.restricted) setAddFormId(props.formId);
       else setUnRestrictedFormId(props.formId);
       setForm(data);
-    } catch {
-      setLoadFailed(true);
+    } catch (e) {
+      // The Api answers an anonymous request for a restricted form with 401 {"restricted":true}: that is the
+      // sign-in prompt below, not a load failure. (The server-rendered page already shows the prompt; without this
+      // the client load replaced it with "form not found" as soon as the page hydrated.)
+      if (isRestrictedResponse(e)) {
+        setRestrictedForm(true);
+        setAddFormId(props.formId);
+      } else setLoadFailed(true);
     } finally {
       setIsLoading(false);
     }

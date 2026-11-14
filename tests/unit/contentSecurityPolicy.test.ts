@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { buildContentSecurityPolicy, generateNonce, STYLE_SRC_HOSTS } from "../../src/helpers/contentSecurityPolicy.ts";
+import { buildContentSecurityPolicy, generateNonce, insecureApiOrigins, STYLE_SRC_HOSTS } from "../../src/helpers/contentSecurityPolicy.ts";
 import { ALLOWED_STYLE_IMPORT_HOSTS } from "../../src/helpers/customContentSecurity.ts";
 
 const directive = (csp: string, name: string): string => {
@@ -65,6 +65,16 @@ describe("buildContentSecurityPolicy", () => {
     assert.ok(connectSrc.includes("https:"));
     assert.ok(connectSrc.includes("wss:"));
     assert.equal(connectSrc.includes("http:"), false);
+  });
+
+  it("admits the app's own http/ws API origins on connect-src in production, and nothing else", () => {
+    const origins = insecureApiOrigins(["http://localhost:8084", "https://api.staging.lessons.church", "ws://localhost:8087", "http://localhost:8084/content", undefined, "not a url"]);
+    assert.deepEqual(origins, ["http://localhost:8084", "ws://localhost:8087"]);
+    const connectSrc = directive(buildContentSecurityPolicy({ nonce: "n", apiOrigins: origins }), "connect-src");
+    assert.ok(connectSrc.includes("http://localhost:8084"));
+    assert.ok(connectSrc.includes("ws://localhost:8087"));
+    assert.equal(connectSrc.includes("http://localhost:*"), false);
+    assert.equal(directive(buildContentSecurityPolicy({ nonce: "n", apiOrigins: insecureApiOrigins(["https://api.churchapps.org", "wss://socket.churchapps.org"]) }), "connect-src"), "connect-src 'self' https: wss:");
   });
 
   it("keeps style-src inline (React style attributes) and matches the CSS @import allowlist", () => {

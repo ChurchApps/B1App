@@ -28,6 +28,9 @@ const formatDate = (value: string | undefined, region?: string) => {
 
 const excerptOf = (post: PostInterface) => post.excerpt || (post.content || "").replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*_`~]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
 
+// The category, tag and pager links only change the search params. With Next's default prefetch the production
+// router reuses the prefetched entry for the same page and shows the unfiltered list under the new URL until a
+// reload (dev never prefetches, so it only shows on a production build); prefetch={false} makes each click fetch.
 const buildQuery = (params: { page?: number; category?: string; tag?: string }) => {
   const qs = new URLSearchParams();
   if (params.page && params.page > 1) qs.set("page", String(params.page));
@@ -95,7 +98,7 @@ export default async function BlogListPage({ params, searchParams }: { params: P
               </Typography>
               {activeFilter && (
                 <Typography sx={{ mt: 1.5, fontSize: "0.95rem" }}>
-                  <Link href="/blog">&larr; {Locale.label("blogPage.allPosts")}</Link>
+                  <Link href="/blog" prefetch={false}>&larr; {Locale.label("blogPage.allPosts")}</Link>
                 </Typography>
               )}
               <Box sx={{ width: 40, height: 3, borderRadius: 2, backgroundColor: "primary.main", mx: "auto", mt: 3 }} />
@@ -104,7 +107,7 @@ export default async function BlogListPage({ params, searchParams }: { params: P
             {categories.length > 0 && (
               <Box sx={{ mt: 4, display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 1 }}>
                 {categories.map((c) => (
-                  <Link key={c} href={c === category ? "/blog" : buildQuery({ category: c })} style={{ textDecoration: "none" }}>
+                  <Link key={c} href={c === category ? "/blog" : buildQuery({ category: c })} prefetch={false} style={{ textDecoration: "none" }}>
                     <Chip size="small" label={c} clickable color={c === category ? "primary" : "default"} />
                   </Link>
                 ))}
@@ -124,7 +127,7 @@ export default async function BlogListPage({ params, searchParams }: { params: P
                     )}
                     <Box sx={{ minWidth: 0 }}>
                       {post.category && (
-                        <Link href={buildQuery({ category: post.category })} style={{ textDecoration: "none" }}>
+                        <Link href={buildQuery({ category: post.category })} prefetch={false} style={{ textDecoration: "none" }}>
                           <Typography component="span" sx={{ textTransform: "uppercase", letterSpacing: "0.14em", fontSize: "0.7rem", fontWeight: 700, color: "primary.main" }}>
                             {post.category}
                           </Typography>
@@ -147,10 +150,10 @@ export default async function BlogListPage({ params, searchParams }: { params: P
 
             <Box sx={{ mt: 6, display: "flex", justifyContent: "space-between", fontSize: "0.9rem" }}>
               {page > 1
-                ? <Link href={buildQuery({ page: page - 1, category, tag })}>&larr; {Locale.label("blogPage.newerPosts")}</Link>
+                ? <Link href={buildQuery({ page: page - 1, category, tag })} prefetch={false}>&larr; {Locale.label("blogPage.newerPosts")}</Link>
                 : <span />}
               {posts.length === PAGE_SIZE
-                ? <Link href={buildQuery({ page: page + 1, category, tag })}>{Locale.label("blogPage.olderPosts")} &rarr;</Link>
+                ? <Link href={buildQuery({ page: page + 1, category, tag })} prefetch={false}>{Locale.label("blogPage.olderPosts")} &rarr;</Link>
                 : <span />}
             </Box>
           </div>
