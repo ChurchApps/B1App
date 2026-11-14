@@ -56,6 +56,21 @@ const AboutPerson = ({ task }: { task: TaskInterface }) => {
   return <>{label}</>;
 };
 
+// Call and Email rows for the person a task is about. The Api only returns them to people who can view the task.
+const useContactItems = (task: TaskInterface) => {
+  const isPerson = task.associatedWithType?.toLowerCase() === "person" && !!task.associatedWithId;
+  const { data: contact } = useQuery<{ mobilePhone?: string; email?: string }>({
+    queryKey: ["/tasks/" + task.id + "/contact", "DoingApi"],
+    queryFn: async () => (await ApiHelper.get("/tasks/" + task.id + "/contact", "DoingApi")) || {},
+    enabled: isPerson && !!task.id,
+    retry: false
+  });
+  return [
+    { label: Locale.label("mobile.details.call"), value: isPerson && contact?.mobilePhone ? <Box component="a" href={"tel:" + contact.mobilePhone} data-testid="task-contact-phone" sx={{ color: tc.primary, fontWeight: 500 }}>{contact.mobilePhone}</Box> : undefined },
+    { label: Locale.label("mobile.details.email"), value: isPerson && contact?.email ? <Box component="a" href={"mailto:" + contact.email} data-testid="task-contact-email" sx={{ color: tc.primary, fontWeight: 500 }}>{contact.email}</Box> : undefined }
+  ];
+};
+
 const NotesBlock = ({ task, onCreated }: { task: TaskInterface; onCreated?: (conversationId: string) => void }) => {
   const context = useContext(UserContext);
   // Only a card's assignee may attach its notes thread; a plain task shows the notes it already has.
@@ -92,6 +107,7 @@ const CardSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void
   const step = board.data?.steps?.find((s) => s.id === card.stepId);
   const outcomes = (board.data?.routes || []).filter((r) => r.stepId === card.stepId && r.trigger === "onComplete");
   const routesReady = !canViewBoard || board.isFetched;
+  const contactItems = useContactItems(card);
 
   const run = async (path: string, body: Record<string, unknown>, close: boolean) => {
     setBusy(true);
@@ -114,7 +130,8 @@ const CardSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void
         { label: Locale.label("mobile.card.step"), value: step?.name },
         { label: Locale.label("mobile.card.due"), value: card.dueDate ? DateHelper.prettyDate(new Date(card.dueDate)) : undefined },
         { label: Locale.label("mobile.card.snoozedUntilLabel"), value: isSnoozed(card) ? <span data-testid="card-snoozed-until">{DateHelper.prettyDate(new Date(card.snoozedUntil as Date))}</span> : undefined },
-        { label: Locale.label("mobile.card.about"), value: card.associatedWithLabel || card.associatedWithId ? <AboutPerson task={card} /> : undefined }
+        { label: Locale.label("mobile.card.about"), value: card.associatedWithLabel || card.associatedWithId ? <AboutPerson task={card} /> : undefined },
+        ...contactItems
       ]} />
 
       <Box sx={{ mt: "16px", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
@@ -139,16 +156,20 @@ const CardSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void
 };
 
 // Plain tasks are read-only here; closing one still happens in B1 Admin.
-const TaskSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void }) => (
-  <Sheet open onClose={onClose} title={task.title}>
-    <KeyValues items={[
-      { label: Locale.label("mobile.card.from"), value: task.createdByLabel },
-      { label: Locale.label("mobile.card.about"), value: task.associatedWithLabel || task.associatedWithId ? <AboutPerson task={task} /> : undefined },
-      { label: Locale.label("mobile.card.created"), value: task.dateCreated ? DateHelper.prettyDate(new Date(task.dateCreated)) : undefined }
-    ]} />
-    <NotesBlock task={task} />
-  </Sheet>
-);
+const TaskSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void }) => {
+  const contactItems = useContactItems(task);
+  return (
+    <Sheet open onClose={onClose} title={task.title}>
+      <KeyValues items={[
+        { label: Locale.label("mobile.card.from"), value: task.createdByLabel },
+        { label: Locale.label("mobile.card.about"), value: task.associatedWithLabel || task.associatedWithId ? <AboutPerson task={task} /> : undefined },
+        ...contactItems,
+        { label: Locale.label("mobile.card.created"), value: task.dateCreated ? DateHelper.prettyDate(new Date(task.dateCreated)) : undefined }
+      ]} />
+      <NotesBlock task={task} />
+    </Sheet>
+  );
+};
 
 export const MyTaskSheet = ({ task, onClose }: { task: TaskInterface | null; onClose: () => void }) => {
   if (!task) return null;
