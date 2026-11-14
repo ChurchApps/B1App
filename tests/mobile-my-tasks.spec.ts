@@ -130,6 +130,26 @@ test.describe.serial("Mobile my cards and tasks", () => {
     await expect(tasksList.getByTestId("task-row-task").first()).toContainText("Newer task about Donald Clark");
   });
 
+  // ChurchAppsSupport#1577: a task and a card show when they were created, date and time.
+  test("task and card sheets show the full creation date and time", async ({ page }) => {
+    const base = { status: "Open", assignedToType: "person", assignedToId: DEMO_PERSON, assignedToLabel: "Demo User", associatedWithType: "person", associatedWithId: "PER00000080", associatedWithLabel: "Donald Clark", createdByLabel: "Michael Davis" };
+    await page.route("**/doing/tasks/cards/my", (route) => route.fulfill({ json: [{ ...base, id: "CRDTIME", workflowId: "WFL00000002", stepId: "WFS00000005", taskNumber: 905, title: "Timed card for Donald Clark", dateCreated: "2026-11-14T19:37:00Z" }] }));
+    await page.route(/\/doing\/tasks$/, (route) => route.fulfill({ json: [{ ...base, id: "TSKTIME", taskNumber: 906, title: "Timed task about Donald Clark", dateCreated: "2026-11-14T19:37:00Z" }] }));
+    const dateTime = /Nov 1[45], 2026,? \d{1,2}:37\s?[AP]M/;
+
+    await page.goto("/mobile/me");
+    await expect(mobileSignedInChrome(page)).toBeVisible({ timeout: 30000 });
+    await page.locator("main").getByTestId("task-row-task").filter({ hasText: "Timed task about Donald Clark" }).click({ timeout: 20000 });
+    await expect(page.getByRole("dialog").getByText(dateTime)).toBeVisible({ timeout: 15000 });
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).toHaveCount(0, { timeout: 15000 });
+
+    await page.locator("main").getByTestId("task-row-card").filter({ hasText: "Donald Clark" }).first().click();
+    const sheet = page.getByRole("dialog");
+    await expect(sheet.getByText("Created", { exact: true })).toBeVisible({ timeout: 15000 });
+    await expect(sheet.getByText(dateTime)).toBeVisible();
+  });
+
   test("sections stay hidden when nothing is assigned", async ({ page }) => {
     await page.route("**/doing/tasks/cards/my", (route) => route.fulfill({ json: [] }));
     await page.route(/\/doing\/tasks$/, (route) => route.fulfill({ json: [] }));

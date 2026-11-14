@@ -131,7 +131,8 @@ const CardSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void
         { label: Locale.label("mobile.card.due"), value: card.dueDate ? DateHelper.prettyDate(new Date(card.dueDate)) : undefined },
         { label: Locale.label("mobile.card.snoozedUntilLabel"), value: isSnoozed(card) ? <span data-testid="card-snoozed-until">{DateHelper.prettyDate(new Date(card.snoozedUntil as Date))}</span> : undefined },
         { label: Locale.label("mobile.card.about"), value: card.associatedWithLabel || card.associatedWithId ? <AboutPerson task={card} /> : undefined },
-        ...contactItems
+        ...contactItems,
+        { label: Locale.label("mobile.card.created"), value: card.dateCreated ? DateHelper.prettyDateTime(new Date(card.dateCreated)) : undefined }
       ]} />
 
       <Box sx={{ mt: "16px", display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
@@ -164,7 +165,7 @@ const TaskSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void
         { label: Locale.label("mobile.card.from"), value: task.createdByLabel },
         { label: Locale.label("mobile.card.about"), value: task.associatedWithLabel || task.associatedWithId ? <AboutPerson task={task} /> : undefined },
         ...contactItems,
-        { label: Locale.label("mobile.card.created"), value: task.dateCreated ? DateHelper.prettyDate(new Date(task.dateCreated)) : undefined }
+        { label: Locale.label("mobile.card.created"), value: task.dateCreated ? DateHelper.prettyDateTime(new Date(task.dateCreated)) : undefined }
       ]} />
       <NotesBlock task={task} />
     </Sheet>
