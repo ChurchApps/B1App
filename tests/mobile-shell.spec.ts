@@ -324,19 +324,38 @@ test.describe("Mobile dashboard tile layout", () => {
     await expect(page).toHaveURL(/\/mobile\/more/, { timeout: 15000 });
   });
 
-  // ChurchAppsSupport#1545: the moving row carries every photo link (so it moves on wide screens too) and the
-  // first three are listed beneath it.
-  test("moves every photo link and lists the first three beneath when the church picks Scrolling (automatic) and list", async ({ page }) => {
+  // ChurchAppsSupport#1545: the moving row carries every photo link (so it moves on wide screens too).
+  // ChurchAppsSupport#1573: the list beneath skips links already in the tab bar, here the first three.
+  test("moves every photo link and lists the ones not in the tab bar beneath when the church picks Scrolling (automatic) and list", async ({ page }) => {
     await setTileLayout("autoscrolllist");
     await openWithLinks(page, FIVE_LINKS);
     await expect(page.getByTestId("home-tile-scroll").getByRole("link")).toHaveCount(5);
     await expect(page.getByTestId("home-tile-scroll-dots").getByRole("button")).toHaveCount(5);
-    const rows = page.getByTestId("home-tile-list").locator(".kit-row");
-    await expect(rows).toHaveCount(3);
-    await expect(rows.nth(0)).toContainText("Watch Sermons");
-    await expect(rows.nth(1)).toContainText("Read the Bible");
-    await expect(rows.nth(2)).toContainText("Join Live");
+    const list = page.getByTestId("home-tile-list");
+    const rows = list.locator(".kit-row");
+    await expect(rows).toHaveCount(2);
+    await expect(rows.nth(0)).toContainText("Find a Group");
+    await expect(rows.nth(1)).toContainText("Give Online");
+    for (const name of ["Watch Sermons", "Read the Bible", "Join Live"]) await expect(list.locator(".kit-row", { hasText: name })).toHaveCount(0);
     await expect(tileSection(page).getByRole("link", { name: "All", exact: true })).toHaveAttribute("href", /\/mobile\/more/);
+  });
+
+  // ChurchAppsSupport#1573: on wide screens the header carries five links, so the list beneath the row starts at the sixth.
+  test.describe("on a wide screen", () => {
+    test.use({ viewport: { width: 1280, height: 800 } });
+
+    test("lists only the photo links not in the header beneath the moving row in Scrolling (automatic) and list", async ({ page }) => {
+      const SIX_LINKS = [
+        ...FIVE_LINKS,
+        { id: "TILE6", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "checkin", text: "Check In", sort: 6, photo: "/images/group.jpg", visibility: "everyone" }
+      ];
+      await setTileLayout("autoscrolllist");
+      await openWithLinks(page, SIX_LINKS);
+      await expect(page.getByTestId("home-tile-scroll").getByRole("link")).toHaveCount(6);
+      const rows = page.getByTestId("home-tile-list").locator(".kit-row");
+      await expect(rows).toHaveCount(1);
+      await expect(rows.first()).toContainText("Check In");
+    });
   });
 
   // ChurchAppsSupport#1545: the list under the grid stops at three rows; All opens the rest.

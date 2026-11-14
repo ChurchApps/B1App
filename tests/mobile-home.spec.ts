@@ -273,6 +273,8 @@ test.describe.serial("Mobile home news", () => {
 
 // ChurchAppsSupport#1503: a church can put Requests and Registrations on Home from Mobile Navigation.
 test.describe.serial("Mobile home requests and registrations tabs", () => {
+  // Phone width: the tab bar holds three links, so these two stay Home pills (on md+ the header's five would take Room Requests).
+  test.use({ viewport: { width: 390, height: 844 } });
   let ctx: APIRequestContext;
   let headers: Record<string, string>;
   let linkIds: string[] = [];
