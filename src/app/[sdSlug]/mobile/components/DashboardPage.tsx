@@ -14,7 +14,7 @@ import { mobileTheme } from "./mobileTheme";
 import { cssUrl, formatDate, formatDuration } from "./util";
 import { NotificationPermissionBanner } from "./NotificationPermissionBanner";
 import { MobileAnnouncementBar } from "./MobileAnnouncementBar";
-import { navLinks } from "./MobileAppBar";
+import { MAX_HEADER_LINKS, navLinks } from "./MobileAppBar";
 import { MAX_LINK_TABS } from "./MobileTabBar";
 import { PageHead, Pill, PillRow, Plate, PlateSection, Row, RowList, TextLink, Thumb } from "./kit";
 import { ScreenSkeleton } from "./ScreenSkeleton";
@@ -167,16 +167,16 @@ export const DashboardPage = ({ config }: Props) => {
   // Tiles skip the tab-bar dedupe so a photo-link church still gets its whole menu on Home.
   const tileLinks = useMemo(() => links.filter((l) => linkPhoto(l) && linkTarget(l)), [links]);
 
-  // Links already in the tab bar, shown as tiles, or shown as their own section don't repeat as pills.
-  const pillLinks = useMemo(() => {
-    const tabRoutes = new Set(navLinks(links, MAX_LINK_TABS).map((t) => t.route));
-    return links.filter((l) => {
-      if (l.linkType === "votd" || linkPhoto(l) || (latest && l.linkType === "sermons")) return false;
-      if ((showServing && l.linkType === "plans") || (showGroups && l.linkType === "groups") || (showGiving && l.linkType === "donation")) return false;
-      const target = linkTarget(l);
-      return !!target && !tabRoutes.has(target.href);
-    });
-  }, [links, latest, showServing, showGroups, showGiving]);
+  // Routes in the menu on screen: the phone tab bar, or the desktop header on md+.
+  const menuRoutes = useMemo(() => new Set(navLinks(links, desktop ? MAX_HEADER_LINKS : MAX_LINK_TABS).map((t) => t.route)), [links, desktop]);
+
+  // Links already in the menu, shown as tiles, or shown as their own section don't repeat as pills.
+  const pillLinks = useMemo(() => links.filter((l) => {
+    if (l.linkType === "votd" || linkPhoto(l) || (latest && l.linkType === "sermons")) return false;
+    if ((showServing && l.linkType === "plans") || (showGroups && l.linkType === "groups") || (showGiving && l.linkType === "donation")) return false;
+    const target = linkTarget(l);
+    return !!target && !menuRoutes.has(target.href);
+  }), [links, latest, showServing, showGroups, showGiving, menuRoutes]);
   const { sorted: sortedPills, increment: incrementViewCount } = useEngagementSort(pillLinks, LINK_VIEW_COUNTS_KEY, linkId);
 
   const hideSignInPrompt = appearance?.mobileHideSignInPrompt === "true";
@@ -225,12 +225,13 @@ export const DashboardPage = ({ config }: Props) => {
 
   // The combined layouts list at most three photo links beneath the tiles; All opens More, which lists them all.
   // Grid and list features the first three and lists the next three. Scrolling (automatic) and list moves every
-  // photo link (so the row moves on wide screens too) and lists the first three beneath it.
+  // photo link (so the row moves on wide screens too) and lists beneath it the first three photo links not already
+  // in the menu (three on phones, five where the header shows).
   const combinedTiles = tileLayout === "gridlist" || tileLayout === "autoscrolllist";
   const featuredTiles = tileLayout === "gridlist" ? tileLinks.slice(0, FEATURED_TILES) : tileLinks;
   const listedTiles = tileLayout === "gridlist"
     ? tileLinks.slice(FEATURED_TILES, FEATURED_TILES + LISTED_TILES)
-    : tileLayout === "autoscrolllist" ? tileLinks.slice(0, LISTED_TILES) : [];
+    : tileLayout === "autoscrolllist" ? tileLinks.filter((l) => !menuRoutes.has(linkTarget(l)!.href)).slice(0, LISTED_TILES) : [];
 
   const tileSection = tileLinks.length > 0 && (
     <PlateSection

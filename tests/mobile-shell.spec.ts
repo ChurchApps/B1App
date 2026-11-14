@@ -324,19 +324,71 @@ test.describe("Mobile dashboard tile layout", () => {
     await expect(page).toHaveURL(/\/mobile\/more/, { timeout: 15000 });
   });
 
-  // ChurchAppsSupport#1545: the moving row carries every photo link (so it moves on wide screens too) and the
-  // first three are listed beneath it.
-  test("moves every photo link and lists the first three beneath when the church picks Scrolling (automatic) and list", async ({ page }) => {
+  // ChurchAppsSupport#1545: the moving row carries every photo link (so it moves on wide screens too).
+  // ChurchAppsSupport#1573: the list beneath skips links already in the tab bar, here the first three.
+  test("moves every photo link and lists the ones not in the tab bar beneath when the church picks Scrolling (automatic) and list", async ({ page }) => {
     await setTileLayout("autoscrolllist");
     await openWithLinks(page, FIVE_LINKS);
     await expect(page.getByTestId("home-tile-scroll").getByRole("link")).toHaveCount(5);
     await expect(page.getByTestId("home-tile-scroll-dots").getByRole("button")).toHaveCount(5);
-    const rows = page.getByTestId("home-tile-list").locator(".kit-row");
-    await expect(rows).toHaveCount(3);
-    await expect(rows.nth(0)).toContainText("Watch Sermons");
-    await expect(rows.nth(1)).toContainText("Read the Bible");
-    await expect(rows.nth(2)).toContainText("Join Live");
+    const list = page.getByTestId("home-tile-list");
+    const rows = list.locator(".kit-row");
+    await expect(rows).toHaveCount(2);
+    await expect(rows.nth(0)).toContainText("Find a Group");
+    await expect(rows.nth(1)).toContainText("Give Online");
+    for (const name of ["Watch Sermons", "Read the Bible", "Join Live"]) await expect(list.locator(".kit-row", { hasText: name })).toHaveCount(0);
     await expect(tileSection(page).getByRole("link", { name: "All", exact: true })).toHaveAttribute("href", /\/mobile\/more/);
+  });
+
+  // ChurchAppsSupport#1573: on wide screens the header carries five links, so the list beneath the row starts at the sixth.
+  test.describe("on a wide screen", () => {
+    test.use({ viewport: { width: 1280, height: 800 } });
+
+    test("lists only the photo links not in the header beneath the moving row in Scrolling (automatic) and list", async ({ page }) => {
+      const SIX_LINKS = [
+        ...FIVE_LINKS,
+        { id: "TILE6", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "checkin", text: "Check In", sort: 6, photo: "/images/group.jpg", visibility: "everyone" }
+      ];
+      await setTileLayout("autoscrolllist");
+      await openWithLinks(page, SIX_LINKS);
+      await expect(page.getByTestId("home-tile-scroll").getByRole("link")).toHaveCount(6);
+      const rows = page.getByTestId("home-tile-list").locator(".kit-row");
+      await expect(rows).toHaveCount(1);
+      await expect(rows.first()).toContainText("Check In");
+    });
+  });
+
+  // ChurchAppsSupport#1573: "More from" pills skip the links already in the menu on screen,
+  // the five header links on md+ and the three tab-bar links on a phone.
+  const SIX_PILL_LINKS = [
+    { id: "PILL1", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "directory", text: "Member Directory", sort: 1, visibility: "everyone" },
+    { id: "PILL2", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "checkin", text: "Check In", sort: 2, visibility: "everyone" },
+    { id: "PILL3", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "lessons", text: "Lessons", sort: 3, visibility: "everyone" },
+    { id: "PILL4", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "bible", text: "Bible", sort: 4, visibility: "everyone" },
+    { id: "PILL5", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "stream", text: "Live", sort: 5, visibility: "everyone" },
+    { id: "PILL6", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "registrations", text: "Event Registrations", sort: 6, visibility: "everyone" }
+  ];
+  const openPills = async (page: Page) => {
+    await page.route(/\/links\/church\/[^/]+\?category=b1Tab/, (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(SIX_PILL_LINKS) }));
+    await page.goto("/mobile/dashboard");
+    const pills = page.getByRole("region", { name: new RegExp(`More from ${DEMO_CHURCH.NAME}`, "i") });
+    await expect(pills.getByRole("link", { name: "Event Registrations", exact: true })).toBeVisible({ timeout: 30000 });
+    return pills;
+  };
+
+  test.describe("pills on a wide screen", () => {
+    test.use({ viewport: { width: 1280, height: 800 } });
+
+    test("skips all five header links in the More from pills", async ({ page }) => {
+      const pills = await openPills(page);
+      for (const name of ["Member Directory", "Check In", "Lessons", "Bible", "Live"]) await expect(pills.getByRole("link", { name, exact: true })).toHaveCount(0);
+    });
+  });
+
+  test("skips only the three tab-bar links in the More from pills on a phone", async ({ page }) => {
+    const pills = await openPills(page);
+    await expect(pills.getByRole("link", { name: "Member Directory", exact: true })).toHaveCount(0);
+    await expect(pills.getByRole("link", { name: "Bible", exact: true })).toBeVisible();
   });
 
   // ChurchAppsSupport#1545: the list under the grid stops at three rows; All opens the rest.
