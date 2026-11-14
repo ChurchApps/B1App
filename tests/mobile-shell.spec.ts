@@ -358,6 +358,39 @@ test.describe("Mobile dashboard tile layout", () => {
     });
   });
 
+  // ChurchAppsSupport#1573: "More from" pills skip the links already in the menu on screen,
+  // the five header links on md+ and the three tab-bar links on a phone.
+  const SIX_PILL_LINKS = [
+    { id: "PILL1", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "directory", text: "Member Directory", sort: 1, visibility: "everyone" },
+    { id: "PILL2", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "checkin", text: "Check In", sort: 2, visibility: "everyone" },
+    { id: "PILL3", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "lessons", text: "Lessons", sort: 3, visibility: "everyone" },
+    { id: "PILL4", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "bible", text: "Bible", sort: 4, visibility: "everyone" },
+    { id: "PILL5", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "stream", text: "Live", sort: 5, visibility: "everyone" },
+    { id: "PILL6", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "registrations", text: "Event Registrations", sort: 6, visibility: "everyone" }
+  ];
+  const openPills = async (page: Page) => {
+    await page.route(/\/links\/church\/[^/]+\?category=b1Tab/, (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(SIX_PILL_LINKS) }));
+    await page.goto("/mobile/dashboard");
+    const pills = page.getByRole("region", { name: new RegExp(`More from ${DEMO_CHURCH.NAME}`, "i") });
+    await expect(pills.getByRole("link", { name: "Event Registrations", exact: true })).toBeVisible({ timeout: 30000 });
+    return pills;
+  };
+
+  test.describe("pills on a wide screen", () => {
+    test.use({ viewport: { width: 1280, height: 800 } });
+
+    test("skips all five header links in the More from pills", async ({ page }) => {
+      const pills = await openPills(page);
+      for (const name of ["Member Directory", "Check In", "Lessons", "Bible", "Live"]) await expect(pills.getByRole("link", { name, exact: true })).toHaveCount(0);
+    });
+  });
+
+  test("skips only the three tab-bar links in the More from pills on a phone", async ({ page }) => {
+    const pills = await openPills(page);
+    await expect(pills.getByRole("link", { name: "Member Directory", exact: true })).toHaveCount(0);
+    await expect(pills.getByRole("link", { name: "Bible", exact: true })).toBeVisible();
+  });
+
   // ChurchAppsSupport#1545: the list under the grid stops at three rows; All opens the rest.
   test("lists at most three photo links under the grid in Grid and list", async ({ page }) => {
     const SEVEN_LINKS = [
