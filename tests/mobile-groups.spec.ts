@@ -305,6 +305,24 @@ test.describe.serial("Mobile group event reminders", () => {
     expect(body.channels).toEqual(["push", "email", "sms"]);
   });
 
+  // ChurchAppsSupport#1584: Send now beside Save Reminders sends the saved reminder right away.
+  test("a leader can send the saved event reminder now", async ({ page }) => {
+    await openEvents(page, GROUP_ID);
+    const editEvent = page.getByRole("button", { name: /^Edit event$/i });
+    const card = page.locator("main div").filter({ hasText: title }).filter({ has: editEvent }).last();
+    await expect(card).toBeVisible({ timeout: 15000 });
+    await card.getByRole("button", { name: /^Edit event$/i }).click();
+
+    const dialog = page.getByRole("dialog");
+    const sendNow = dialog.getByTestId("group-reminder-send-now-button");
+    await expect(sendNow).toBeEnabled({ timeout: 15000 });
+    const sent = page.waitForResponse((r) => r.url().includes(`/reminders/event/${eventId}/sendNow`) && r.ok(), { timeout: 15000 });
+    await sendNow.click();
+    const count = (await (await sent).json()).sent;
+    expect(count).toBeGreaterThan(0);
+    await expect(dialog.getByTestId("group-reminder-sent-now")).toHaveText(`Sent to ${count} people`);
+  });
+
   test("leader cannot save a javascript: link as a group resource", async ({ page }) => {
     await page.goto(`/mobile/groups/${GROUP_ID}`);
     await page.getByRole("button", { name: /^All resources$/i }).click();

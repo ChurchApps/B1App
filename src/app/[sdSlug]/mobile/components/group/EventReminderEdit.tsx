@@ -44,6 +44,9 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
   const [saved, setSaved] = React.useState(false);
   const [saveFailed, setSaveFailed] = React.useState(false);
   const [textingEnabled, setTextingEnabled] = React.useState(false);
+  const [sending, setSending] = React.useState(false);
+  const [sentCount, setSentCount] = React.useState<number | null>(null);
+  const [sendFailed, setSendFailed] = React.useState(false);
 
   React.useEffect(() => {
     ApiHelper.get("/texting/status", "MessagingApi").then((d: { enabled?: boolean }) => setTextingEnabled(!!d?.enabled)).catch(() => setTextingEnabled(false));
@@ -92,10 +95,24 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
     }
   };
 
+  const handleSendNow = async () => {
+    setSentCount(null);
+    setSendFailed(false);
+    setSending(true);
+    try {
+      const result: { sent?: number } = await ApiHelper.post("/reminders/event/" + eventId + "/sendNow", {}, "MessagingApi");
+      setSentCount(Number(result?.sent) || 0);
+    } catch {
+      setSendFailed(true);
+    } finally {
+      setSending(false);
+    }
+  };
+
   return (
     <Box sx={{ borderTop: `1px solid ${tc.border}`, pt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
       <FormControlLabel
-        control={<Switch checked={enabled} onChange={(e) => { setEnabled(e.target.checked); setSaved(false); }} />}
+        control={<Switch checked={enabled} onChange={(e) => { setEnabled(e.target.checked); setSaved(false); setSentCount(null); }} />}
         label={<Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.group.reminders.enable")}</Typography>}
       />
 
@@ -197,6 +214,17 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
         </Button>
         {saved && <Typography sx={{ fontSize: 13, color: tc.success }}>{Locale.label("mobile.group.reminders.saved")}</Typography>}
         {saveFailed && <Typography sx={{ fontSize: 13, color: tc.error }}>{Locale.label("mobile.group.reminders.saveFailed")}</Typography>}
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={handleSendNow}
+          disabled={sending || saving || !defId || !enabled}
+          data-testid="group-reminder-send-now-button"
+        >
+          {sending ? Locale.label("mobile.group.saving") : Locale.label("mobile.group.reminders.sendNow")}
+        </Button>
+        {sentCount !== null && <Typography sx={{ fontSize: 13, color: tc.success }} data-testid="group-reminder-sent-now">{Locale.label("mobile.group.reminders.sentNow").replace("{count}", String(sentCount))}</Typography>}
+        {sendFailed && <Typography sx={{ fontSize: 13, color: tc.error }}>{Locale.label("mobile.group.reminders.sendFailed")}</Typography>}
       </Box>
     </Box>
   );
