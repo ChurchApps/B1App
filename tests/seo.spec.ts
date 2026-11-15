@@ -97,6 +97,49 @@ test.describe("SEO", () => {
     expect(response.status()).toBe(404);
   });
 
+  // The page's own heading is the h1; a Find a Group element placed on it is a section.
+  test("a website page with a Find a Group element has one h1", async ({ request }) => {
+    const html = await (await request.get("/ministries")).text();
+    expect(html).toContain("Find a Group");
+    expect(h1Count(html)).toBe(1);
+    expect(h1Text(html)).toBe("Ministries");
+  });
+
+  test.describe("a members-only website page", () => {
+    const url = "/seo-members-" + Date.now();
+    let api: APIRequestContext;
+    let headers: Record<string, string>;
+    let pageId: string;
+
+    test.beforeAll(async () => {
+      api = await playwrightRequest.newContext();
+      const login = await (await api.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+      const church = login.userChurches.find((c: any) => c.church?.id === "CHU00000001");
+      headers = { Authorization: `Bearer ${church.apis.find((a: any) => a.keyName === "ContentApi").jwt}`, "Content-Type": "application/json" };
+      const pages = await (await api.post(`${MAIN_API}/content/pages`, { headers, data: [{ url, title: "Prayer Team Roster", layout: "headerFooter", visibility: "members" }] })).json();
+      pageId = pages[0].id;
+    });
+
+    test.afterAll(async () => {
+      if (pageId) await api.delete(`${MAIN_API}/content/pages/${pageId}`, { headers });
+      await api.dispose();
+    });
+
+    // Visitors get the sign-in gate with a 200, which is the same thin page on every members-only URL.
+    test("is noindex and not titled with the church name twice", async ({ request }) => {
+      const response = await request.get(url);
+      expect(response.status()).toBe(200);
+      const html = await response.text();
+      expect(metaContent(html, "robots")).toBe("noindex, follow");
+      expect(titleOf(html)).toBe("Grace Community Church");
+    });
+
+    test("is not in the sitemap", async ({ request }) => {
+      const xml = await (await request.get("/sitemap.xml", { headers: { "Cache-Control": "no-cache" } })).text();
+      expect(xml).not.toContain(url + "</loc>");
+    });
+  });
+
   test("an unknown volunteer plan is a real 404", async ({ request }) => {
     const response = await request.get("/volunteer/missing-" + Date.now());
     expect(response.status()).toBe(404);
