@@ -28,6 +28,8 @@ async function fillRoomRequest(page: Page, roomName: RegExp): Promise<void> {
 }
 
 test.describe("Mobile event request (CA-1)", () => {
+  // afterEach deletes every pending "Test Request", so a parallel worker would remove another test's request.
+  test.describe.configure({ mode: "serial" });
   test.afterEach(async () => {
     // Clean up pending requests created during test.
     const jwt = await demoJwt();
@@ -102,5 +104,44 @@ test.describe("Mobile event request (CA-1)", () => {
   test("no-approval room is approved immediately", async ({ page }) => {
     await fillRoomRequest(page, /Sanctuary/i);
     await expect(page.getByTestId("request-outcome")).toContainText(/Approved/i);
+  });
+});
+
+// #1585: My Requests shows the member's description and the reason from the rejection notification.
+test.describe("Mobile My Requests rejection reason", () => {
+  test("shows the description and the rejection reason from the decision notification", async ({ page }) => {
+    const start = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    await page.route("**/events/requests/mine", (route) => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify([
+        { id: "EVTREJ1585A", title: "Donald Clark Retirement Party", start, approvalStatus: "rejected", description: "Cake and coffee in the fellowship hall after second service", bookings: [] },
+        { id: "EVTREJ1585B", title: "Youth Movie Night", start, approvalStatus: "approved", bookings: [{ id: "EBKREJ1585", roomId: "ROOMX", status: "rejected" }, { id: "EBKREJ1585C", resourceId: "RESX", status: "rejected" }] }
+      ])
+    }));
+    // The reason is read by person; /notifications/my marks everything read, so the page must not call it.
+    const markAllReadCalls: string[] = [];
+    page.on("request", (req) => { if (req.url().includes("/notifications/my")) markAllReadCalls.push(req.url()); });
+    await page.route("**/notifications/**/person/**", (route) => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify([
+        { id: "NOT1585A", contentType: "event", contentId: "EVTREJ1585A", message: "Your event request \"Donald Clark Retirement Party\" was rejected: The hall is booked for a wedding that day" },
+        { id: "NOT1585B", contentType: "eventBooking", contentId: "EBKREJ1585", message: "Your request for Youth Room for \"Youth Movie Night\" was rejected." },
+        { id: "NOT1585C", contentType: "eventBooking", contentId: "EBKREJ1585C", message: "Your request for Projector for \"Youth Movie Night\" was rejected: Already lent out that weekend" }
+      ])
+    }));
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/mobile/myRequests");
+    await expect(page.getByTestId("request-card-EVTREJ1585A")).toBeVisible({ timeout: 30000 });
+    await expect(page.getByTestId("request-description-EVTREJ1585A")).toHaveText("Cake and coffee in the fellowship hall after second service");
+    await expect(page.getByTestId("request-reason-EVTREJ1585A")).toHaveText("Rejected: The hall is booked for a wedding that day");
+    await expect(page.getByTestId("request-card-EVTREJ1585B")).toBeVisible();
+    await expect(page.locator('[data-testid^="request-reason-"]')).toHaveCount(1);
+    await expect(page.getByTestId("request-booking-reason-EBKREJ1585C")).toContainText("rejected: Already lent out that weekend");
+    await expect(page.locator('[data-testid^="request-booking-reason-"]')).toHaveCount(1);
+    await expect(page.getByTestId("request-booking-reason-EBKREJ1585")).toHaveCount(0);
+    expect(markAllReadCalls).toEqual([]);
   });
 });
