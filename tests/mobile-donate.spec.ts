@@ -459,3 +459,24 @@ test.describe.serial("Mobile donate without online giving", () => {
     await expect(main.getByRole("link", { name: "Give", exact: true })).toHaveCount(0);
   });
 });
+
+// ChurchAppsSupport#1560: a gift's memo prints on the member's own statement; the internal note never does.
+// The demo seed gives the demo user's gift from 30 days ago the memo "Youth trip" and the note "Demo donation".
+test.describe("Mobile donate printed statement memo", () => {
+  const year = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).getFullYear();
+
+  test("statement prints a Memo column with the gift's memo and not its note", async ({ page }) => {
+    // The print page auto-prints then routes back; keep it on screen to assert.
+    await page.addInitScript(() => {
+      window.print = () => {};
+      window.close = () => {};
+      window.history.back = () => {};
+      window.history.go = () => {};
+    });
+    await page.goto(`/mobile/donate/print?year=${year}`);
+    const details = page.locator("table").filter({ has: page.locator("th", { hasText: "Method" }) });
+    await expect(details).toContainText("Youth trip", { timeout: 20000 });
+    await expect(details.locator("th")).toHaveText(["Date", "Method", "Fund", "Memo", "Amount"]);
+    await expect(details).not.toContainText("Demo donation");
+  });
+});
