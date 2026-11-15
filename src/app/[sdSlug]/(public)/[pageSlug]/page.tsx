@@ -44,9 +44,12 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
       case "stream": title = Locale.label("pageSlug.liveStream"); break;
     }
   }
-  const pageTitle = title || props.config.church.name;
-  const description = props.pageData?.metaDescription || pageTitle;
-  return MetaHelper.getMetaData(pageTitle + " - " + props.config.church.name, description, undefined, props.config.appearance);
+  const churchName = props.config.church.name;
+  const description = props.pageData?.metaDescription || title || churchName;
+  const metadata = MetaHelper.getMetaData(title ? title + " - " + churchName : churchName, description, undefined, props.config.appearance);
+  // A members-only page shows visitors the same sign-in gate on every such URL, so keep it out of search results.
+  if ((props.pageData as any)?.restricted) metadata.robots = { index: false, follow: true };
+  return metadata;
 }
 
 const loadData = async (sdSlug:string, pageSlug:string) => {

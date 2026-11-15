@@ -18,6 +18,7 @@ export const GroupsBrowserElement = ({ element, churchId }: Props) => {
         showSearch={a.showSearch !== false && a.showSearch !== "false"}
         showCategory={a.showCategory !== false && a.showCategory !== "false"}
         layout={a.layout === "autoscroll" ? "autoscroll" : "grid"}
+        headingComponent="h2"
       />
     </div>
   );
