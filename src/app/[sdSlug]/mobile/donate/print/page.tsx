@@ -133,6 +133,9 @@ export default function PrintPage({ params }: { params: Params }) {
     return result;
   };
 
+  // The Memo column only appears when a gift that year has one, so other statements keep their layout.
+  const showMemo = fundDonations.some((fd) => !!(ArrayHelper.getOne(donations, "id", fd.donationId) as any)?.memo);
+
   const tableDonations = () => {
     const result: React.ReactElement[] = [];
     fundDonations.forEach((fd) => {
@@ -142,7 +145,8 @@ export default function PrintPage({ params }: { params: Params }) {
         result.push(<tr key={fd.id || fd.donationId} style={{ height: "28px" }}>
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "20%", paddingLeft: "5px" }}>{DateHelper.prettyDate(DateHelper.toDate(donation.donationDate))}</td>
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>{donation?.method}</td>
-          <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "45%", paddingLeft: "5px" }}>{fund?.name}</td>
+          <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: showMemo ? "20%" : "45%", paddingLeft: "5px" }}>{fund?.name}</td>
+          {showMemo && <td data-testid="statement-memo" style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "25%", paddingLeft: "5px" }}>{(donation as any).memo}</td>}
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderLeft: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrencyWithLocale(fd.amount || 0, donation?.currency || currency)}</td>
         </tr>);
       }
@@ -289,7 +293,8 @@ export default function PrintPage({ params }: { params: Params }) {
                 <tr>
                   <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>Date</th>
                   <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>Method</th>
-                  <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "50%", paddingLeft: "5px" }}>Fund</th>
+                  <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: showMemo ? "25%" : "50%", paddingLeft: "5px" }}>Fund</th>
+                  {showMemo && <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "25%", paddingLeft: "5px" }}>Memo</th>}
                   <th style={{ borderBottom: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>Amount</th>
                 </tr>
               </thead>
@@ -298,7 +303,7 @@ export default function PrintPage({ params }: { params: Params }) {
                 <tr style={{ height: "28px" }}>
                   <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}></td>
                   <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}></td>
-                  <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "50%", paddingRight: "5px", fontWeight: "bold" }}>Total Contributions:</td>
+                  <td colSpan={showMemo ? 2 : 1} style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "50%", paddingRight: "5px", fontWeight: "bold" }}>Total Contributions:</td>
                   <td style={{ borderTop: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px", fontWeight: "bold" }}>{getTotalContributions()}</td>
                 </tr>
               </tbody>
