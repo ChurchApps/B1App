@@ -1,14 +1,16 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useContext } from "react";
 import Link from "next/link";
 import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Skeleton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { LoadErrorAlert } from "../LoadErrorAlert";
+import type { NotificationItem } from "../NotificationBellMenu";
 import { BackVerb, PageHead, Plate, PlateSection, QuietEmpty, Row, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
 
 interface Props {
@@ -19,6 +21,7 @@ interface Booking { id?: string; roomId?: string; resourceId?: string; status?: 
 interface RequestRow {
   id?: string;
   title?: string;
+  description?: string;
   start?: string | Date;
   allDay?: boolean;
   approvalStatus?: string;
@@ -38,8 +41,16 @@ const statusLabel = (status?: string) => {
   }
 };
 
+// #1585: the reason an admin gives when rejecting arrives in the member's decision notification
+// ("... was rejected: <reason>"); nothing is stored on the request, so read it from there.
+export const rejectionReason = (message?: string) => {
+  const m = /was rejected:\s*([\s\S]+)$/.exec(message || "");
+  return m ? m[1].trim() : undefined;
+};
+
 const MyRequestsPageInner = (_props: Props) => {
   const queryClient = useQueryClient();
+  const context = useContext(UserContext);
   const [view] = useSliceView();
   const [cancelId, setCancelId] = React.useState<string | null>(null);
   const [cancelError, setCancelError] = React.useState("");
@@ -72,6 +83,26 @@ const MyRequestsPageInner = (_props: Props) => {
     staleTime: 5 * 60 * 1000
   });
 
+  // Read by person, not /notifications/my: that route marks every notification read, which stops
+  // push and email escalation for unrelated ones. Own key so it never shares the bell's cache.
+  const churchId = context?.userChurch?.church?.id;
+  const personId = context?.person?.id;
+  const { data: notifications = [] } = useQuery<NotificationItem[]>({
+    queryKey: ["request-decision-messages", personId],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/notifications/${churchId}/person/${personId}`, "MessagingApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!churchId && !!personId,
+    staleTime: 60 * 1000
+  });
+
+  // Notifications come newest first, so the first match is the latest decision.
+  const reasonFor = (contentType: string, contentId?: string) => {
+    if (!contentId) return undefined;
+    return rejectionReason(notifications.find((n) => n.contentType === contentType && n.contentId === contentId)?.message);
+  };
+
   const refetch = () => queryClient.invalidateQueries({ queryKey: ["event-requests-mine"] });
 
   const handleCancel = async () => {
@@ -92,27 +123,48 @@ const MyRequestsPageInner = (_props: Props) => {
     return "";
   };
 
-  const renderItem = (req: RequestRow) => (
-    <Box key={req.id} className="req-item" sx={{ py: "6px" }} data-testid={`request-card-${req.id}`}>
-      <Row
-        title={req.title || Locale.label("mobile.group.event")}
-        subtitle={req.start ? DateHelper.prettyDateTime(new Date(req.start)) : undefined}
-        trailing={<span data-testid={`request-status-${req.id}`}><StatusBadge tone={statusTone(req.approvalStatus)} dot={req.approvalStatus === "approved"}>{statusLabel(req.approvalStatus)}</StatusBadge></span>}
-      />
-      {((req.bookings || []).length > 0 || req.approvalStatus === "pending") && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "6px", pb: "10px" }}>
-          {(req.bookings || []).length > 0 && (
-            <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
-              {(req.bookings || []).map((b) => `${bookingName(b)} ${statusLabel(b.status).toLowerCase()}`).join(" · ")}
-            </Typography>
-          )}
-          {req.approvalStatus === "pending" && (
-            <Box><TextLink danger onClick={() => setCancelId(req.id || null)} data-testid={`request-cancel-${req.id}`}>{Locale.label("mobile.requests.cancelRequest")}</TextLink></Box>
-          )}
-        </Box>
-      )}
-    </Box>
-  );
+  const renderItem = (req: RequestRow) => {
+    const bookings = req.bookings || [];
+    const description = req.description?.trim();
+    const reason = req.approvalStatus === "rejected" ? reasonFor("event", req.id) : undefined;
+    const bookingReasons = bookings
+      .filter((b) => b.status === "rejected")
+      .map((b) => ({ id: b.id, name: bookingName(b), reason: reasonFor("eventBooking", b.id) }))
+      .filter((b) => !!b.reason);
+    const hasDetails = bookings.length > 0 || req.approvalStatus === "pending" || !!description || !!reason;
+    return (
+      <Box key={req.id} className="req-item" sx={{ py: "6px" }} data-testid={`request-card-${req.id}`}>
+        <Row
+          title={req.title || Locale.label("mobile.group.event")}
+          subtitle={req.start ? DateHelper.prettyDateTime(new Date(req.start)) : undefined}
+          trailing={<span data-testid={`request-status-${req.id}`}><StatusBadge tone={statusTone(req.approvalStatus)} dot={req.approvalStatus === "approved"}>{statusLabel(req.approvalStatus)}</StatusBadge></span>}
+        />
+        {hasDetails && (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: "6px", pb: "10px" }}>
+            {description && (
+              <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, whiteSpace: "pre-line" }} data-testid={`request-description-${req.id}`}>{description}</Typography>
+            )}
+            {reason && (
+              <Typography sx={{ fontSize: 13.5, color: tc.error }} data-testid={`request-reason-${req.id}`}>{`${statusLabel("rejected")}: ${reason}`}</Typography>
+            )}
+            {bookings.length > 0 && (
+              <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
+                {bookings.map((b) => `${bookingName(b)} ${statusLabel(b.status).toLowerCase()}`).join(" · ")}
+              </Typography>
+            )}
+            {bookingReasons.map((b) => (
+              <Typography key={b.id} sx={{ fontSize: 13.5, color: tc.error }} data-testid={`request-booking-reason-${b.id}`}>
+                {`${b.name} ${statusLabel("rejected").toLowerCase()}: ${b.reason}`}
+              </Typography>
+            ))}
+            {req.approvalStatus === "pending" && (
+              <Box><TextLink danger onClick={() => setCancelId(req.id || null)} data-testid={`request-cancel-${req.id}`}>{Locale.label("mobile.requests.cancelRequest")}</TextLink></Box>
+            )}
+          </Box>
+        )}
+      </Box>
+    );
+  };
 
   const list = (items: RequestRow[]) => (
     <Box sx={{ "& > .req-item + .req-item": { borderTop: `1px solid ${tc.border}` } }}>{items.map(renderItem)}</Box>
