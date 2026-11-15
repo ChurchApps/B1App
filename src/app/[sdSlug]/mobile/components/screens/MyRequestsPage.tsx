@@ -51,7 +51,6 @@ export const rejectionReason = (message?: string) => {
 const MyRequestsPageInner = (_props: Props) => {
   const queryClient = useQueryClient();
   const context = useContext(UserContext);
-  const loggedIn = !!context?.user?.firstName;
   const [view] = useSliceView();
   const [cancelId, setCancelId] = React.useState<string | null>(null);
   const [cancelError, setCancelError] = React.useState("");
@@ -84,14 +83,17 @@ const MyRequestsPageInner = (_props: Props) => {
     staleTime: 5 * 60 * 1000
   });
 
-  // Same key as the Me tab, so the cache is shared and no extra call is made.
+  // Read by person, not /notifications/my: that route marks every notification read, which stops
+  // push and email escalation for unrelated ones. Own key so it never shares the bell's cache.
+  const churchId = context?.userChurch?.church?.id;
+  const personId = context?.person?.id;
   const { data: notifications = [] } = useQuery<NotificationItem[]>({
-    queryKey: ["notifications", context?.user?.id],
+    queryKey: ["request-decision-messages", personId],
     queryFn: async () => {
-      const data = await ApiHelper.get("/notifications/my", "MessagingApi");
+      const data = await ApiHelper.get(`/notifications/${churchId}/person/${personId}`, "MessagingApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: loggedIn,
+    enabled: !!churchId && !!personId,
     staleTime: 60 * 1000
   });
 

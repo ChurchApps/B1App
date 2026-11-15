@@ -119,7 +119,10 @@ test.describe("Mobile My Requests rejection reason", () => {
         { id: "EVTREJ1585B", title: "Youth Movie Night", start, approvalStatus: "approved", bookings: [{ id: "EBKREJ1585", roomId: "ROOMX", status: "rejected" }, { id: "EBKREJ1585C", resourceId: "RESX", status: "rejected" }] }
       ])
     }));
-    await page.route("**/notifications/my", (route) => route.fulfill({
+    // The reason is read by person; /notifications/my marks everything read, so the page must not call it.
+    const markAllReadCalls: string[] = [];
+    page.on("request", (req) => { if (req.url().includes("/notifications/my")) markAllReadCalls.push(req.url()); });
+    await page.route("**/notifications/**/person/**", (route) => route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify([
@@ -138,5 +141,7 @@ test.describe("Mobile My Requests rejection reason", () => {
     await expect(page.locator('[data-testid^="request-reason-"]')).toHaveCount(1);
     await expect(page.getByTestId("request-booking-reason-EBKREJ1585C")).toContainText("rejected: Already lent out that weekend");
     await expect(page.locator('[data-testid^="request-booking-reason-"]')).toHaveCount(1);
+    await expect(page.getByTestId("request-booking-reason-EBKREJ1585")).toHaveCount(0);
+    expect(markAllReadCalls).toEqual([]);
   });
 });
