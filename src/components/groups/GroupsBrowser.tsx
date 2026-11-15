@@ -18,6 +18,8 @@ interface Props {
   showCategory?: boolean;
   // "autoscroll" shows the matching groups in one row that steps along by itself.
   layout?: "grid" | "autoscroll";
+  // The /groups page owns its h1; as an element on a website page the heading is a section under the page's own h1.
+  headingComponent?: "h1" | "h2";
 }
 
 export const GroupsBrowser = (props: Props) => {
@@ -69,7 +71,7 @@ export const GroupsBrowser = (props: Props) => {
   // The heading renders before the groups load so the page has its h1 in the server HTML.
   // Locale isn't loaded during server rendering or hydration, so use the server's label until it is.
   const heading = (
-    <Typography variant="h4" component="h1" sx={{ mb: 2, fontWeight: 600 }}>
+    <Typography variant="h4" component={props.headingComponent || "h1"} sx={{ mb: 2, fontWeight: 600 }}>
       {props.title || (!Locale.isInitialized() && props.defaultTitle) || Locale.label("groupsPage.findAGroup")}
     </Typography>
   );
