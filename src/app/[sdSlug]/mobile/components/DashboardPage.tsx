@@ -18,7 +18,7 @@ import { MAX_HEADER_LINKS, navLinks } from "./MobileAppBar";
 import { MAX_LINK_TABS } from "./MobileTabBar";
 import { PageHead, Pill, PillRow, Plate, PlateSection, Row, RowList, TextLink, Thumb } from "./kit";
 import { ScreenSkeleton } from "./ScreenSkeleton";
-import { filterVisibleLinks, topLevelLinks, useChurchLinks } from "../hooks/useConfig";
+import { filterVisibleLinks, folderChildren, topLevelLinks, useChurchLinks } from "../hooks/useConfig";
 import { useEngagementSort } from "../hooks/useEngagementSort";
 import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
 import { memberGivingYearLimit } from "../helpers/givingYears";
@@ -172,12 +172,23 @@ export const DashboardPage = ({ config }: Props) => {
 
   // Links already in the menu, shown as tiles, or shown as their own section don't repeat as pills.
   const pillLinks = useMemo(() => links.filter((l) => {
-    if (l.linkType === "votd" || linkPhoto(l) || (latest && l.linkType === "sermons")) return false;
+    if (l.linkType === "votd" || l.linkType === "folder" || linkPhoto(l) || (latest && l.linkType === "sermons")) return false;
     if ((showServing && l.linkType === "plans") || (showGroups && l.linkType === "groups") || (showGiving && l.linkType === "donation")) return false;
     const target = linkTarget(l);
     return !!target && !menuRoutes.has(target.href);
   }), [links, latest, showServing, showGroups, showGiving, menuRoutes]);
   const { sorted: sortedPills, increment: incrementViewCount } = useEngagementSort(pillLinks, LINK_VIEW_COUNTS_KEY, linkId);
+  // A folder below the menu lists its tabs as pills under its name (in admin order); one in the menu keeps them on its own screen.
+  const footerFolders = useMemo(() => links
+    .filter((l) => l.linkType === "folder" && linkTarget(l) && !menuRoutes.has(linkTarget(l)!.href))
+    .map((folder) => ({
+      folder,
+      children: folderChildren(allLinks, folder.id).filter((c) => {
+        const target = linkTarget(c);
+        return !!target && !menuRoutes.has(target.href);
+      })
+    }))
+    .filter((g) => g.children.length > 0), [links, allLinks, menuRoutes]);
 
   const hideSignInPrompt = appearance?.mobileHideSignInPrompt === "true";
   const tileLayout = ["scroll", "autoscroll", "list", "gridlist", "autoscrolllist"].includes(appearance?.mobileTileLayout || "") ? appearance!.mobileTileLayout : "grid";
@@ -294,17 +305,23 @@ export const DashboardPage = ({ config }: Props) => {
     </PlateSection>
   );
 
-  const moreSection = sortedPills.length > 0 && (
+  const renderPill = (l: LinkInterface) => {
+    const target = linkTarget(l)!;
+    const count = () => incrementViewCount(linkId(l));
+    return target.external
+      ? <Pill key={linkId(l)} onClick={() => { count(); openExternal(target.href); }}>{l.text}</Pill>
+      : <Pill key={linkId(l)} href={target.href} onClick={count}>{l.text}</Pill>;
+  };
+
+  const moreSection = sortedPills.length + footerFolders.length > 0 && (
     <PlateSection title={churchName ? Locale.label("mobile.dashboard.moreFrom").replace("{}", churchName) : Locale.label("mobile.components.more")}>
-      <PillRow>
-        {sortedPills.map((l) => {
-          const target = linkTarget(l)!;
-          const count = () => incrementViewCount(linkId(l));
-          return target.external
-            ? <Pill key={linkId(l)} onClick={() => { count(); openExternal(target.href); }}>{l.text}</Pill>
-            : <Pill key={linkId(l)} href={target.href} onClick={count}>{l.text}</Pill>;
-        })}
-      </PillRow>
+      {sortedPills.length > 0 && <PillRow>{sortedPills.map(renderPill)}</PillRow>}
+      {footerFolders.map((g, i) => (
+        <Box key={linkId(g.folder)} data-testid="home-folder-pills">
+          <Typography sx={{ mt: i === 0 && sortedPills.length === 0 ? 0 : "14px", mb: "8px", fontSize: 13, fontWeight: 600, color: tc.textSecondary }}>{g.folder.text}</Typography>
+          <PillRow>{g.children.map(renderPill)}</PillRow>
+        </Box>
+      ))}
     </PlateSection>
   );
 

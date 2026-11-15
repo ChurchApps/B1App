@@ -476,6 +476,25 @@ test.describe("Mobile tab folders", () => {
     await expect(tabBar).toBeVisible({ timeout: 30000 });
     await expect(tabBar).not.toContainText("Folder Sermons");
     await expect(tabBar).not.toContainText("Folder Bible");
+    // A folder in the tab bar keeps its tabs off Home.
+    await expect(page.getByRole("link", { name: "Folder Sermons" })).toHaveCount(0);
+  });
+
+  // ChurchAppsSupport#1583: a folder below the tab bar lists its tabs under its name in "More from".
+  test("a folder below the tab bar shows its tabs as captioned chips in More from", async ({ page }) => {
+    const tabBarLinks = [
+      { id: "BAR1", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "directory", text: "Member Directory", sort: 0.1, visibility: "everyone" },
+      { id: "BAR2", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "checkin", text: "Check In", sort: 0.2, visibility: "everyone" },
+      { id: "BAR3", churchId: DEMO_CHURCH.ID, category: "b1Tab", linkType: "lessons", text: "Lessons", sort: 0.3, visibility: "everyone" }
+    ];
+    await mockLinks(page, [...tabBarLinks, ...FOLDER_LINKS]);
+    await page.goto("/mobile/dashboard");
+    const more = page.getByRole("region", { name: new RegExp(`More from ${DEMO_CHURCH.NAME}`, "i") });
+    await expect(more.getByRole("link", { name: "Folder Sermons" })).toHaveAttribute("href", /\/mobile\/sermons/, { timeout: 30000 });
+    await expect(more.getByRole("link", { name: "Folder Bible" })).toBeVisible();
+    await expect(more.getByRole("link", { name: "Portal" })).toHaveCount(0);
+    await expect(more.getByTestId("home-folder-pills")).toContainText("Portal");
+    await expect(more.getByText("Folder Staff Stream")).toHaveCount(0);
   });
 
   test("a folder whose tabs all have photos shows them as tiles", async ({ page }) => {
