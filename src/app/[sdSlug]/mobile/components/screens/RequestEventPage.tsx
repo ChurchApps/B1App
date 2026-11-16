@@ -48,8 +48,11 @@ interface Outcome {
 
 const tc = mobileTheme.colors;
 
-export const RequestEventPage = ({ config: _config }: Props) => {
+export const RequestEventPage = ({ config }: Props) => {
   const router = useRouter();
+  // The church can replace the default lede with its own booking instructions (B1Admin > B1 Mobile).
+  const appearance = config?.appearance as Record<string, string | undefined> | undefined;
+  const customLede = (appearance?.mobileRequestEventText || "").trim();
 
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -155,7 +158,7 @@ export const RequestEventPage = ({ config: _config }: Props) => {
 
   return (
     <Box>
-      <PageHead title={Locale.label("mobile.requests.title")} lede={Locale.label("mobile.requests.formLede")} />
+      <PageHead title={Locale.label("mobile.requests.title")} lede={customLede ? <Box component="span" sx={{ whiteSpace: "pre-line" }}>{customLede}</Box> : Locale.label("mobile.requests.formLede")} />
       <Plate>
         <PlateSection sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <TextField
