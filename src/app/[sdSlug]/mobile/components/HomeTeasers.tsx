@@ -126,6 +126,40 @@ export const useUpcomingEvents = (enabled: boolean) => {
   }, [enabled, data, registrations]);
 };
 
+// The church's registration-enabled events, read anonymously so signed-out visitors can find one to register for.
+export const usePublicRegisterableEvents = (churchId: string | undefined, enabled: boolean) => {
+  const { data } = useQuery<any[]>({
+    queryKey: ["events-public-registerable", churchId],
+    queryFn: async () => {
+      const data = await ApiHelper.getAnonymous(`/events/public/registerable/${churchId}`, "ContentApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: enabled && !!churchId,
+    staleTime: 5 * 60 * 1000
+  });
+  return useMemo<HomeUpcomingEvent[]>(() => {
+    if (!enabled) return [];
+    const now = new Date();
+    const items: HomeUpcomingEvent[] = [];
+    (data || []).forEach((event) => {
+      if (!event?.id) return;
+      let date: Date;
+      if (event.recurrenceRule) {
+        const next = expandUpcomingEvents([event], now)[0];
+        if (!next) return;
+        date = next.date;
+      } else {
+        // Not expandUpcomingEvents: its three-month window would hide an event further out.
+        date = new Date(event.start);
+        const endTime = new Date(event.end || event.start || "").getTime();
+        if (isNaN(date.getTime()) || endTime < now.getTime()) return;
+      }
+      items.push({ kind: "event", key: `pub-${event.id}`, eventId: event.id, date, title: event.title || Locale.label("mobile.me.event"), href: `/mobile/register/${event.id}`, photoUrl: event.photoUrl || undefined });
+    });
+    return items.sort((a, b) => a.date.getTime() - b.date.getTime());
+  }, [enabled, data]);
+};
+
 // The church's latest published blog posts (optionally one category), read anonymously so signed-out visitors see them too.
 export const useLatestPosts = (churchId: string | undefined, pageSize: number, category: string | undefined, enabled: boolean) => {
   const { data = [], isLoading } = useQuery<PostInterface[]>({
@@ -224,18 +258,21 @@ export const GroupsTeaser = ({ groups }: { groups: GroupInterface[] }) => (
   </PlateSection>
 );
 
-export const EventsTeaser = ({ events }: { events: HomeUpcomingEvent[] }) => (
-  <PlateSection id="dashboard-events" title={Locale.label("mobile.dashboard.upcomingEvents")} action={<TextLink href="/mobile/me?view=upcoming">{Locale.label("mobile.dashboard.allUpcomingEvents")}</TextLink>}>
+// registerLinks: signed-out rows end in a Register link instead of opening the member's timeline entry.
+export const EventsTeaser = ({ events, action, registerLinks = false }: { events: HomeUpcomingEvent[]; action?: React.ReactNode; registerLinks?: boolean }) => (
+  <PlateSection id="dashboard-events" title={Locale.label("mobile.dashboard.upcomingEvents")} action={action === undefined && !registerLinks ? <TextLink href="/mobile/me?view=upcoming">{Locale.label("mobile.dashboard.allUpcomingEvents")}</TextLink> : action}>
     <RowList>
       {events.slice(0, 3).map((e) => (
         <Row
           key={e.key}
-          href={e.href}
+          href={registerLinks ? undefined : e.href}
           data-testid="dashboard-event-row"
           leading={e.photoUrl ? <Box component="img" src={e.photoUrl} alt="" loading="lazy" data-testid="dashboard-event-photo" sx={{ width: 64, height: 36, objectFit: "cover", borderRadius: "6px", flexShrink: 0, display: "block" }} /> : undefined}
           title={e.title}
           subtitle={DateHelper.prettyDateTime(e.date)}
-          trailing={<StatusBadge tone={upcomingKindMeta[e.kind].tone} data-testid="dashboard-event-badge">{Locale.label(upcomingKindMeta[e.kind].label)}</StatusBadge>}
+          trailing={registerLinks
+            ? <TextLink href={e.href}>{Locale.label("mobile.group.register")}</TextLink>
+            : <StatusBadge tone={upcomingKindMeta[e.kind].tone} data-testid="dashboard-event-badge">{Locale.label(upcomingKindMeta[e.kind].label)}</StatusBadge>}
         />
       ))}
     </RowList>
