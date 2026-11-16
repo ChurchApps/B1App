@@ -26,7 +26,7 @@ import { loadDailyVerse, type DailyVerse } from "../helpers/dailyVerses";
 import { AutoScrollStrip } from "@/components/elements/AutoScrollStrip";
 import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget, openExternal } from "../helpers/dashboardLinks";
 import { useMyAttendance, useMyCards, useMyFormSubmissions, useMyTasks } from "../helpers/myRecords";
-import { AttendanceTeaser, EventsTeaser, FormsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, TasksTeaser, useGivingSummary, useLatestPosts, useMyGroups, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
+import { AttendanceTeaser, EventsTeaser, FormsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, TasksTeaser, useGivingSummary, useLatestPosts, useMyGroups, usePublicRegisterableEvents, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
 import { NewsCard, PostSheet } from "./NewsCard";
 import type { PostInterface } from "@/helpers/interfaces";
 
@@ -154,7 +154,10 @@ export const DashboardPage = ({ config }: Props) => {
   const groups = useMyGroups(has("groups") || homeAttendance);
   const { data: attendance = [] } = useMyAttendance(homeAttendance);
   const { data: formSubmissions = [] } = useMyFormSubmissions(homeForms);
-  const events = useUpcomingEvents(signedIn);
+  const memberEvents = useUpcomingEvents(signedIn);
+  // Signed-out visitors see the church's registration-enabled events, each with a Register link.
+  const publicEvents = usePublicRegisterableEvents(churchId, !signedIn);
+  const events = signedIn ? memberEvents : publicEvents;
   const { data: myCards = [] } = useMyCards(signedIn);
   const { data: myTasks = [] } = useMyTasks(context?.person?.id || context?.userChurch?.person?.id, signedIn);
   // The teaser shows this year's total, so it steps aside (donation link falls back to a pill) when the church hides this year.
@@ -162,7 +165,7 @@ export const DashboardPage = ({ config }: Props) => {
   const givingSummary = useGivingSummary(showGiving);
   const showServing = serving.upcoming.length > 0;
   const showGroups = has("groups") && groups.length > 0;
-  const showEvents = signedIn && events.length > 0;
+  const showEvents = events.length > 0;
 
   // Tiles skip the tab-bar dedupe so a photo-link church still gets its whole menu on Home.
   const tileLinks = useMemo(() => links.filter((l) => linkPhoto(l) && linkTarget(l)), [links]);
@@ -328,7 +331,9 @@ export const DashboardPage = ({ config }: Props) => {
   const servingSection = showServing && <ServingTeaser {...serving} />;
   const tasksSection = myCards.length + myTasks.length > 0 && <TasksTeaser cards={myCards} tasks={myTasks} />;
   const groupsSection = showGroups && <GroupsTeaser groups={groups} />;
-  const eventsSection = showEvents && <EventsTeaser events={events} />;
+  const eventsSection = showEvents && (signedIn
+    ? <EventsTeaser events={events} />
+    : <EventsTeaser events={events} registerLinks action={events.length > 3 ? <TextLink href="/mobile/groups">{Locale.label("mobile.dashboard.allUpcomingEvents")}</TextLink> : undefined} />);
   const attendanceSection = homeAttendance && attendance.length > 0 && <AttendanceTeaser attendance={attendance} groups={groups} />;
   const formsSection = homeForms && formSubmissions.length > 0 && <FormsTeaser submissions={formSubmissions} />;
   const givingSection = showGiving && <GivingTeaser summary={givingSummary} canGive={config?.allowDonations !== false} />;

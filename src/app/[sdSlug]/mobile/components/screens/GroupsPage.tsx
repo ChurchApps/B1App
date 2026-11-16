@@ -28,6 +28,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
   const queryClient = useQueryClient();
   const context = useContext(UserContext);
   const loggedIn = !!context?.user?.firstName;
+  const churchId = _config?.church?.id;
   const desktop = useMediaQuery("(min-width:900px)");
   const [search, setSearch] = React.useState("");
 
@@ -67,12 +68,15 @@ export const GroupsPage = ({ config: _config }: Props) => {
   };
 
   const { data: registerableEvents = [] } = useQuery<EventInterface[]>({
-    queryKey: ["events-registerable", context?.user?.id],
+    queryKey: ["events-registerable", loggedIn, context?.user?.id, churchId],
     queryFn: async () => {
-      const data = await ApiHelper.get("/events/registerable", "ContentApi");
+      // Signed-out visitors get the church's public list, so they can still find an event to register for.
+      const data = loggedIn
+        ? await ApiHelper.get("/events/registerable", "ContentApi")
+        : await ApiHelper.getAnonymous(`/events/public/registerable/${churchId}`, "ContentApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: loggedIn,
+    enabled: loggedIn || !!churchId,
     staleTime: 5 * 60 * 1000,
     gcTime: 15 * 60 * 1000
   });
