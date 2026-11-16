@@ -145,3 +145,44 @@ test.describe("Mobile My Requests rejection reason", () => {
     expect(markAllReadCalls).toEqual([]);
   });
 });
+
+// #1588: the church can replace the page's lede with its own booking instructions (B1Admin > B1 Mobile).
+const BASE_URL = process.env.BASE_URL || "http://grace.localtest.me:3301";
+const DEFAULT_LEDE = "Staff will approve each room and item.";
+
+async function setRequestEventText(text: string) {
+  const jwt = await demoJwt();
+  const ctx = await request.newContext();
+  const headers = { Authorization: "Bearer " + jwt };
+  const all = await (await ctx.get(`${API_BASE}/membership/settings`, { headers })).json();
+  const row = { ...((all as any[]).find(s => s.keyName === "mobileRequestEventText") || { churchId: CHURCH_ID, keyName: "mobileRequestEventText" }), public: 1, value: text };
+  const res = await ctx.post(`${API_BASE}/membership/settings`, { headers, data: [row] });
+  if (!res.ok()) throw new Error(`settings save failed: ${res.status()}`);
+  await ctx.post(`${BASE_URL}/api/revalidate/grace`);
+  await ctx.dispose();
+}
+
+test.describe("Mobile event request instructions", () => {
+  // These change a church-wide setting the request page reads.
+  test.describe.configure({ mode: "serial" });
+  test.use({ viewport: { width: 390, height: 844 } });
+  test.afterAll(async () => { await setRequestEventText(""); });
+
+  test("shows the default line when the church has written nothing", async ({ page }) => {
+    await setRequestEventText("");
+    await page.goto("/mobile/requestEvent");
+    await expect(page.getByTestId("request-title")).toBeVisible({ timeout: 30000 });
+    await expect(page.getByText(DEFAULT_LEDE, { exact: true })).toBeVisible();
+  });
+
+  test("shows the church's own instructions, line breaks kept, in place of the default line", async ({ page }) => {
+    await setRequestEventText("Requests need two weeks' notice.\nDonald Clark confirms every booking.");
+    await page.goto("/mobile/requestEvent");
+    await expect(page.getByTestId("request-title")).toBeVisible({ timeout: 30000 });
+    const lede = page.getByText("Requests need two weeks' notice.", { exact: false });
+    await expect(lede).toBeVisible();
+    await expect(lede).toHaveText("Requests need two weeks' notice.\nDonald Clark confirms every booking.");
+    await expect(lede).toHaveCSS("white-space", "pre-line");
+    await expect(page.getByText(DEFAULT_LEDE, { exact: true })).toHaveCount(0);
+  });
+});
