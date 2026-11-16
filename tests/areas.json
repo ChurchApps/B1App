@@ -36,7 +36,7 @@
     },
     "mobileHome": {
       "src": ["src/app/[sdSlug]/mobile/components/DashboardPage.tsx", "src/app/[sdSlug]/mobile/components/HomeTeasers.tsx", "src/app/[sdSlug]/mobile/components/EmptyDashboardPlaceholder.tsx", "src/app/[sdSlug]/mobile/components/NewsCard.tsx", "src/app/[sdSlug]/mobile/components/SermonCard.tsx", "src/app/[sdSlug]/mobile/components/screens/NewsPage.tsx", "src/app/[sdSlug]/mobile/components/details/PostDetail.tsx", "src/components/elements/AutoScrollStrip.tsx", "src/app/[sdSlug]/mobile/helpers/useAutoScroll.ts"],
-      "specs": ["mobile-home.spec.ts", "mobile-my-tasks.spec.ts", "mobile-push-no-server-keys.spec.ts"]
+      "specs": ["mobile-home.spec.ts", "mobile-my-tasks.spec.ts", "mobile-push-no-server-keys.spec.ts", "mobile-anonymous-events.spec.ts"]
     },
     "analytics": {
       "src": ["src/app/[sdSlug]/mobile/MobileGoogleAnalytics.tsx", "src/helpers/mobileAnalytics.ts", "src/components/ChurchAnalytics.tsx", "src/components/GoogleAnalytics.tsx"],
@@ -56,7 +56,7 @@
     },
     "mobileGroups": {
       "src": ["src/app/[sdSlug]/mobile/components/screens/GroupsPage.tsx", "src/app/[sdSlug]/mobile/components/details/GroupDetail.tsx", "src/app/[sdSlug]/mobile/components/details/RequestToJoinDialog.tsx", "src/app/[sdSlug]/mobile/components/group/**", "src/components/eventCalendar/**"],
-      "specs": ["mobile-group*.spec.ts", "mobile-first-day.spec.ts", "mobile-rsvp.spec.ts", "mobile-confidential.spec.ts", "public-groups.spec.ts", "realtime-conversations.spec.ts", "realtime-reactions.spec.ts", "realtime-single-socket.spec.ts"]
+      "specs": ["mobile-group*.spec.ts", "mobile-first-day.spec.ts", "mobile-rsvp.spec.ts", "mobile-confidential.spec.ts", "public-groups.spec.ts", "realtime-conversations.spec.ts", "realtime-reactions.spec.ts", "realtime-single-socket.spec.ts", "mobile-anonymous-events.spec.ts"]
     },
     "publicGroups": {
       "src": ["src/app/[sdSlug]/(public)/groups/**", "src/components/groups/**", "src/components/elements/GroupListElement.tsx", "src/components/elements/GroupsBrowserElement.tsx"],
