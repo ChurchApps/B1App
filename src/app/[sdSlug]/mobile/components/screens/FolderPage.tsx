@@ -25,7 +25,7 @@ const leadIconSx = { fontSize: 22, color: tc.textSecondary, flex: "none" };
 const trailIconSx = { fontSize: 18, color: tc.textSecondary, flex: "none" };
 const newTab = { target: "_blank", rel: "noopener noreferrer" };
 
-// A Folder tab's screen: the tabs inside it, as photo tiles when every one has a photo, otherwise as More-style rows.
+// A Folder tab's screen: each tab inside it with a photo as a full-width banner, then the tabs without one as More-style rows.
 export const FolderPage = ({ config }: Props) => {
   const context = useContext(UserContext);
   const params = useSearchParams();
@@ -41,7 +41,8 @@ export const FolderPage = ({ config }: Props) => {
 
   if (isLoading && !rawLinks) return <ScreenSkeleton />;
 
-  const allPhotos = children.length > 0 && children.every((l) => linkPhoto(l));
+  const withPhoto = children.filter((l) => linkPhoto(l));
+  const withoutPhoto = children.filter((l) => !linkPhoto(l));
 
   const linkRow = (l: LinkInterface) => {
     const target = linkTarget(l)!;
@@ -66,12 +67,19 @@ export const FolderPage = ({ config }: Props) => {
         <PlateSection>
           {children.length === 0 ? (
             <QuietEmpty>{Locale.label("mobile.folder.empty")}</QuietEmpty>
-          ) : allPhotos ? (
-            <Box data-testid="folder-tile-grid" sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-              {children.map((l, i) => <PhotoTile key={linkId(l)} link={l} wide={i === 0 && children.length % 2 === 1} />)}
-            </Box>
           ) : (
-            <RowList>{children.map(linkRow)}</RowList>
+            <>
+              {withPhoto.length > 0 && (
+                <Box data-testid="folder-tile-grid" sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {withPhoto.map((l) => <PhotoTile key={linkId(l)} link={l} wide />)}
+                </Box>
+              )}
+              {withoutPhoto.length > 0 && (
+                <Box sx={{ mt: withPhoto.length > 0 ? 1 : 0 }}>
+                  <RowList>{withoutPhoto.map(linkRow)}</RowList>
+                </Box>
+              )}
+            </>
           )}
         </PlateSection>
       </Plate>
