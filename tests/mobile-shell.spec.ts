@@ -506,6 +506,28 @@ test.describe("Mobile tab folders", () => {
     await expect(grid.getByRole("link", { name: "Folder Bible" })).toBeVisible();
   });
 
+  // ChurchAppsSupport#1612: each tab with a photo is a full-width banner; tabs without one are rows beneath.
+  test("a folder shows photo tabs as full-width banners above the tabs without a photo", async ({ page }) => {
+    const photo = "/images/group.jpg";
+    await mockLinks(page, FOLDER_LINKS.map((l) => (l.id === "FOLDC1" ? { ...l, photo } : l)));
+    await page.goto("/mobile/folder?id=FOLD1&title=Portal");
+    const main = page.locator("main");
+    const grid = page.getByTestId("folder-tile-grid");
+    const banner = grid.getByRole("link", { name: "Folder Sermons" });
+    await expect(banner).toBeVisible({ timeout: 30000 });
+    await expect(grid.getByRole("link")).toHaveCount(1);
+    await expect(banner).toHaveCSS("background-image", /\/images\/group\.jpg/);
+    const [bannerBox, gridBox] = [await banner.boundingBox(), await grid.boundingBox()];
+    expect(bannerBox!.width).toBeCloseTo(gridBox!.width, 0);
+    expect(bannerBox!.height).toBeGreaterThanOrEqual(150);
+
+    const row = main.getByRole("link", { name: "Folder Bible" });
+    await expect(row).toHaveAttribute("href", /\/mobile\/bible/);
+    await expect(grid.getByRole("link", { name: "Folder Bible" })).toHaveCount(0);
+    expect((await row.boundingBox())!.y).toBeGreaterThan(bannerBox!.y + bannerBox!.height);
+    await expect(main.getByText("Folder Staff Stream")).toHaveCount(0);
+  });
+
   test("an unknown folder shows an empty state", async ({ page }) => {
     await mockLinks(page, FOLDER_LINKS);
     await page.goto("/mobile/folder?id=NOPE&title=Gone");
