@@ -63,6 +63,13 @@ test.describe("Mobile content screens", () => {
     await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
+  // lessons.church's /login refuses framing; the tab hands the session over through the frameable /b1/login.
+  test("lessons screen frames the lessons.church B1 handoff, not its login page", async ({ page }) => {
+    await page.route(/lessons\.church\//, (route) => route.fulfill({ contentType: "text/html", body: "<h1>Lessons</h1>" }));
+    await page.goto("/mobile/lessons");
+    await expect(page.locator('iframe[title="Lessons"]')).toHaveAttribute("src", /lessons\.church\/b1\/login\?returnUrl=\/b1\/person&churchId=CHU00000001#jwt=/, { timeout: 30000 });
+  });
+
   test("votd screen renders", async ({ page }) => {
     await page.goto("/mobile/votd");
     await expect(mobileLogoutButton(page)).toBeVisible();

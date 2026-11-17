@@ -64,7 +64,7 @@ export const LessonsPage = () => {
 
   const iframeSrc =
     jwt && churchId
-      ? `${EnvironmentHelper.Common.LessonsRoot}/login?returnUrl=/b1/person&churchId=${churchId}#jwt=${encodeURIComponent(jwt)}`
+      ? `${EnvironmentHelper.Common.LessonsRoot}/b1/login?returnUrl=/b1/person&churchId=${churchId}#jwt=${encodeURIComponent(jwt)}`
       : null;
 
   const reauthenticate = async () => {
