@@ -55,12 +55,15 @@ const secondaryLine = (parts: (string | undefined)[]) => parts.filter(Boolean).j
 
 export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, eventId, onLoaded, onData }: Props) => {
   const tc = mobileTheme.colors;
-  const [rooms, setRooms] = React.useState<{ id?: string; name?: string; capacity?: number; description?: string }[]>([]);
-  const [resources, setResources] = React.useState<{ id?: string; name?: string; description?: string }[]>([]);
+  const [rooms, setRooms] = React.useState<{ id?: string; name?: string; capacity?: number; description?: string; active?: boolean }[]>([]);
+  const [resources, setResources] = React.useState<{ id?: string; name?: string; description?: string; active?: boolean }[]>([]);
   const [conflicts, setConflicts] = React.useState<{ message?: string }[]>([]);
 
   const { roomIds, resourceIds, setupMinutes, teardownMinutes, customWindow, windowStart, windowEnd } = value;
   const hasBookings = roomIds.length > 0 || resourceIds.length > 0;
+  // Inactive rooms and resources leave the pickers, but stay listed while this event still books them.
+  const pickableRooms = rooms.filter((r) => r.active !== false || roomIds.includes(r.id!));
+  const pickableResources = resources.filter((r) => r.active !== false || resourceIds.includes(r.id!));
 
   const patch = (p: Partial<BookingSelection>) => onChange({ ...value, ...p });
 
@@ -75,7 +78,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
       const resList = Array.isArray(res) ? res : [];
       setRooms(roomList);
       setResources(resList);
-      onLoaded?.(roomList.length > 0 || resList.length > 0);
+      onLoaded?.(roomList.some((x: any) => x.active !== false) || resList.some((x: any) => x.active !== false));
       onData?.(roomList, resList);
     });
     return () => { active = false; };
@@ -111,11 +114,11 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
     patch({ customWindow: on, windowStart: on ? (windowStart || start) : windowStart, windowEnd: on ? (windowEnd || end) : windowEnd });
   };
 
-  if (rooms.length === 0 && resources.length === 0) return null;
+  if (pickableRooms.length === 0 && pickableResources.length === 0) return null;
 
   return (
     <>
-      {rooms.length > 0 && (
+      {pickableRooms.length > 0 && (
         <TextField
           select
           size="small"
@@ -125,7 +128,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           SelectProps={{ multiple: true, renderValue: (selected: any) => rooms.filter((r) => selected.includes(r.id)).map((r) => r.name).join(", ") }}
           data-testid="booking-rooms"
         >
-          {rooms.map((r) => (
+          {pickableRooms.map((r) => (
             <MenuItem key={r.id} value={r.id} sx={{ whiteSpace: "normal" }}>
               <Checkbox checked={roomIds.includes(r.id!)} size="small" />
               <ListItemText
@@ -136,7 +139,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           ))}
         </TextField>
       )}
-      {resources.length > 0 && (
+      {pickableResources.length > 0 && (
         <TextField
           select
           size="small"
@@ -146,7 +149,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           SelectProps={{ multiple: true, renderValue: (selected: any) => resources.filter((r) => selected.includes(r.id)).map((r) => r.name).join(", ") }}
           data-testid="booking-resources"
         >
-          {resources.map((r) => (
+          {pickableResources.map((r) => (
             <MenuItem key={r.id} value={r.id} sx={{ whiteSpace: "normal" }}>
               <Checkbox checked={resourceIds.includes(r.id!)} size="small" />
               <ListItemText primary={r.name} secondary={r.description || undefined} />
