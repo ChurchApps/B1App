@@ -183,6 +183,45 @@ test.describe("Mobile group registered event", () => {
   });
 });
 
+// ChurchAppsSupport#1621: a group event offers its public page link so members can invite people outside the church.
+test.describe("Mobile group event share", () => {
+  test("Share copies the event's public page link when the phone has no share sheet", async ({ page }) => {
+    const ctx = await request.newContext();
+    const login = await (await ctx.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = login.userChurches.find((c: any) => c.church?.id === CHURCH_ID);
+    const headers = { Authorization: `Bearer ${uc.jwt}` };
+    const title = "Group Share Event " + Date.now();
+    const start = new Date(Date.now() + 20 * 60 * 1000);
+    const end = new Date(start.getTime() + 60 * 60 * 1000);
+    const created = await ctx.post(`${MAIN_API}/content/events`, {
+      headers,
+      data: [{ churchId: CHURCH_ID, groupId: "GRP00000030", title, description: "", start: start.toISOString(), end: end.toISOString(), allDay: false, visibility: "private", registrationEnabled: true, capacity: 100 }]
+    });
+    const eventId = (await created.json())[0]?.id;
+    try {
+      expect(eventId, "created event id").toBeTruthy();
+      await page.addInitScript(() => {
+        Object.defineProperty(navigator, "share", { value: undefined, configurable: true });
+        Object.defineProperty(navigator, "clipboard", { value: { writeText: async (t: string) => { (window as any).__copied = t; } }, configurable: true });
+      });
+      await page.goto("/mobile/groups/GRP00000030?activeTab=events");
+      await expect(page.locator("main").getByText(title)).toBeVisible({ timeout: 20000 });
+      const share = page.getByTestId(`group-event-share-${eventId}`).first();
+      await expect(share).toBeVisible();
+      await share.scrollIntoViewIfNeeded();
+      await page.screenshot({ path: ".pr-screenshots/after.png", animations: "disabled" });
+      await share.click();
+      await expect(page.getByText("Link copied to clipboard")).toBeVisible();
+      const copied = await page.evaluate(() => (window as any).__copied as string);
+      expect(copied).toContain(title);
+      expect(copied).toMatch(new RegExp(`/events/${eventId}$`));
+    } finally {
+      if (eventId) await ctx.delete(`${MAIN_API}/content/events/${eventId}`, { headers });
+      await ctx.dispose();
+    }
+  });
+});
+
 test.describe("Mobile group event registration (leader)", () => {
   test.describe.configure({ mode: "serial" });
   const GROUP_ID = "GRP00000023";
