@@ -2,12 +2,13 @@
 
 import React, { useContext } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, Button, CircularProgress, IconButton, Skeleton, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, Skeleton, Snackbar, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import ShareIcon from "@mui/icons-material/Share";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
@@ -173,6 +174,55 @@ type RsvpState = ReturnType<typeof useGroupRsvps>;
 
 const canRsvp = (e: EventRow) => !!e.groupId && !e.rsvpDisabled && !!e.id;
 
+// The public event page serves public events, and private ones taking registrations.
+const isShareable = (e: EventRow) => !!e.id && (e.visibility === "public" || !!e.registrationEnabled);
+
+// The event's public page, through the phone's share sheet or the clipboard.
+const ShareEventAction = ({ e }: { e: EventRow }) => {
+  const [snackbar, setSnackbar] = React.useState<string | null>(null);
+
+  const handleShare = async () => {
+    const url = `${window.location.origin}/events/${e.id}`;
+    const title = e.title || Locale.label("mobile.group.event");
+    const text = `${Locale.label("mobile.group.checkOutEvent").replace("{}", title)} ${url}`;
+    try {
+      if (typeof navigator.share === "function") {
+        await navigator.share({ title, text, url });
+        return;
+      }
+    } catch (err) {
+      if ((err as Error)?.name === "AbortError") return;
+    }
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        setSnackbar(Locale.label("mobile.details.linkCopied"));
+        return;
+      }
+    } catch { /* fall through to the error message */ }
+    setSnackbar(Locale.label("mobile.details.unableToShare"));
+  };
+
+  return (
+    <>
+      <TextLink onClick={handleShare} data-testid={`group-event-share-${e.id}`}><ShareIcon sx={{ fontSize: 18 }} />{Locale.label("mobile.group.share")}</TextLink>
+      <Snackbar open={!!snackbar} autoHideDuration={3000} onClose={() => setSnackbar(null)} message={snackbar || ""} anchorOrigin={{ vertical: "bottom", horizontal: "center" }} />
+    </>
+  );
+};
+
+const EventLinks = ({ e }: { e: EventRow }) => {
+  const register = !!(e.registrationEnabled && e.id);
+  const share = isShareable(e);
+  if (!register && !share) return null;
+  return (
+    <Box sx={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
+      {register && <RegisterAction eventId={e.id!} />}
+      {share && <ShareEventAction e={e} />}
+    </Box>
+  );
+};
+
 const MyRsvpBadge = ({ entry }: { entry?: RsvpBatchEntry }) => {
   const opt = rsvpOptions().find((o) => o.value === entry?.mine);
   return opt ? <StatusBadge tone={opt.tone} dot={opt.value === "yes"}>{opt.label}</StatusBadge> : null;
@@ -248,7 +298,7 @@ export const GroupNextEvent = ({ groupId, isMember }: { groupId: string; isMembe
     <Box data-testid="group-next-event">
       <Typography sx={{ fontSize: 17, lineHeight: "24px", fontWeight: 600, color: tc.text }}>{next.title || Locale.label("mobile.group.event")}</Typography>
       <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary }}>{meta}</Typography>
-      {(next.registrationEnabled && next.id) && <Box sx={{ mt: "10px" }}><RegisterAction eventId={next.id} /></Box>}
+      {(next.registrationEnabled || isShareable(next)) && next.id && <Box sx={{ mt: "10px" }}><EventLinks e={next} /></Box>}
       {isMember && canRsvp(next) && <Box sx={{ mt: "12px" }}><RsvpButtons e={next} rsvp={rsvp} /></Box>}
     </Box>
   );
@@ -393,8 +443,8 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
             <MarkdownPreviewLight value={e.description} />
           </Box>
         )}
-        {e.registrationEnabled && e.id && (
-          <Box sx={{ mt: "8px" }}><RegisterAction eventId={e.id} /></Box>
+        {(e.registrationEnabled || isShareable(e)) && e.id && (
+          <Box sx={{ mt: "8px" }}><EventLinks e={e} /></Box>
         )}
         {showRsvp && ((isMember && !ended) || canManage) && (
           <Box sx={{ mt: "10px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "8px" }} data-testid={`rsvp-${e.id}`}>
