@@ -101,6 +101,35 @@ test.describe("Mobile event request (CA-1)", () => {
     }
   });
 
+  // #1593: a room or resource switched to Inactive in B1 Admin is left out of the request pickers.
+  test("inactive rooms and resources are hidden from the pickers", async ({ page }) => {
+    const jwt = await demoJwt();
+    const ctx = await request.newContext();
+    const auth = { headers: { Authorization: "Bearer " + jwt } };
+    const stamp = Date.now();
+    const roomName = `Zacchaeus Retired Room ${stamp}`;
+    const resourceName = `Zacchaeus Retired Van ${stamp}`;
+    const roomId = (await (await ctx.post(`${API_BASE}/content/rooms`, { ...auth, data: [{ name: roomName, active: false }] })).json())[0].id;
+    const resourceId = (await (await ctx.post(`${API_BASE}/content/resources`, { ...auth, data: [{ name: resourceName, active: false }] })).json())[0].id;
+    try {
+      await page.goto("/mobile/requestEvent");
+      await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+      await page.getByTestId("booking-rooms").click();
+      await expect(page.getByRole("option", { name: /Sanctuary/i })).toBeVisible();
+      await expect(page.getByRole("option", { name: new RegExp(roomName) })).toHaveCount(0);
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("listbox")).toHaveCount(0);
+
+      await page.getByTestId("booking-resources").click();
+      await expect(page.getByRole("option", { name: /Projector/i })).toBeVisible();
+      await expect(page.getByRole("option", { name: new RegExp(resourceName) })).toHaveCount(0);
+    } finally {
+      await ctx.delete(`${API_BASE}/content/rooms/${roomId}`, auth).catch(() => {});
+      await ctx.delete(`${API_BASE}/content/resources/${resourceId}`, auth).catch(() => {});
+      await ctx.dispose();
+    }
+  });
+
   test("no-approval room is approved immediately", async ({ page }) => {
     await fillRoomRequest(page, /Sanctuary/i);
     await expect(page.getByTestId("request-outcome")).toContainText(/Approved/i);
