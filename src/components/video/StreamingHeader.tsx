@@ -1,6 +1,7 @@
 import { UserHelper, Locale } from "@churchapps/apphelper";
 import type { AppearanceInterface } from "@churchapps/apphelper";
 import { EnvironmentHelper, StreamConfigInterface } from "@/helpers";
+import { adminLoginUrl } from "@/helpers/adminUrl";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
 import { Icon } from "@mui/material";
@@ -50,7 +51,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
       const jwt = UserHelper.currentUserChurch?.jwt;
       const churchId = UserHelper.currentUserChurch?.church?.id;
       return (
-        <li className="nav-item"><a href={`https://admin.b1.church/login?churchId=${churchId}&returnUrl=/#jwt=${encodeURIComponent(jwt || "")}`} className="nav-link" data-testid="stream-admin-link">{Locale.label("video.adminDashboard")}</a></li>
+        <li className="nav-item"><a href={adminLoginUrl(EnvironmentHelper.Common.B1AdminRoot, churchId || "", jwt || "")} className="nav-link" data-testid="stream-admin-link">{Locale.label("video.adminDashboard")}</a></li>
       );
     }
   };
