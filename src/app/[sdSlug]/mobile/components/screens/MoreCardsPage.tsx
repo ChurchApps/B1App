@@ -9,6 +9,7 @@ import { type LinkInterface, Permissions } from "@churchapps/helpers";
 import { Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { EnvironmentHelper } from "@/helpers";
+import { adminLoginUrl } from "@/helpers/adminUrl";
 import { WebPushHelperBase } from "@/helpers/WebPushHelperBase";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, linkTypeToIcon } from "../mobileTheme";
@@ -47,11 +48,7 @@ export const MoreCardsPage = ({ config }: Props) => {
 
   const adminUrl = useMemo(() => {
     if (!canAccessAdmin || !context?.userChurch?.jwt || !context?.userChurch?.church?.id) return "";
-    const url = new URL("/login", EnvironmentHelper.Common.B1AdminRoot);
-    url.searchParams.set("churchId", context.userChurch.church.id);
-    url.searchParams.set("returnUrl", "/");
-    url.hash = "jwt=" + encodeURIComponent(context.userChurch.jwt);
-    return url.toString();
+    return adminLoginUrl(EnvironmentHelper.Common.B1AdminRoot, context.userChurch.church.id, context.userChurch.jwt, "/");
   }, [canAccessAdmin, context?.userChurch?.jwt, context?.userChurch?.church?.id]);
 
   const { data: rawLinks } = useChurchLinks(config?.church?.id, jwt);
