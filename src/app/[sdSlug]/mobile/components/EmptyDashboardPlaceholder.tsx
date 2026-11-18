@@ -6,6 +6,7 @@ import { Locale, UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { EnvironmentHelper } from "@/helpers";
+import { adminLoginUrl } from "@/helpers/adminUrl";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { PageHead, Plate, PlateSection, QuietEmpty } from "./kit";
 
@@ -22,11 +23,7 @@ export const EmptyDashboardPlaceholder = ({ config, head }: Props) => {
 
   const adminUrl = useMemo(() => {
     if (!canAccessAdmin || !context?.userChurch?.jwt || !context?.userChurch?.church?.id) return "";
-    const url = new URL("/login", EnvironmentHelper.Common.B1AdminRoot);
-    url.searchParams.set("churchId", context.userChurch.church.id);
-    url.searchParams.set("returnUrl", "/mobile/navigation");
-    url.hash = "jwt=" + encodeURIComponent(context.userChurch.jwt);
-    return url.toString();
+    return adminLoginUrl(EnvironmentHelper.Common.B1AdminRoot, context.userChurch.church.id, context.userChurch.jwt, "/mobile/navigation");
   }, [canAccessAdmin, context?.userChurch?.jwt, context?.userChurch?.church?.id]);
 
   return (
