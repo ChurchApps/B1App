@@ -8,6 +8,7 @@ const DEMO_PERSON = "PER00000082";
 test.describe.serial("Mobile my cards and tasks", () => {
   let ctx: APIRequestContext;
   let headers: Record<string, string>;
+  let messagingHeaders: Record<string, string>;
   let cardId = "";
   let taskId = "";
 
@@ -17,6 +18,7 @@ test.describe.serial("Mobile my cards and tasks", () => {
     const uc = login.userChurches.find((c: any) => c.church?.id === "CHU00000001");
     const doing = uc.apis.find((a: any) => a.keyName === "DoingApi");
     headers = { Authorization: `Bearer ${doing.jwt}` };
+    messagingHeaders = { Authorization: `Bearer ${uc.apis.find((a: any) => a.keyName === "MessagingApi").jwt}` };
 
     // A card about Donald Clark on the Membership Class "Attended" step (no outcomes), assigned to the demo user.
     const card = await (await ctx.post(`${API}/doing/tasks/addToWorkflow`, {
@@ -163,5 +165,24 @@ test.describe.serial("Mobile my cards and tasks", () => {
     await page.goto("/mobile/dashboard");
     await expect(mobileSignedInChrome(page)).toBeVisible({ timeout: 30000 });
     await expect(page.locator("main").getByTestId("home-tasks-section")).toHaveCount(0);
+  });
+
+  // ChurchAppsSupport#1635: tapping a "New Assignment" notification did nothing.
+  test("a task assignment notification opens the task", async ({ page }) => {
+    const marker = `New Assignment: Call Donald Clark about ushers ${Date.now()}`;
+    expect((await ctx.post(`${API}/messaging/notifications/create`, { headers: messagingHeaders, data: { peopleIds: [DEMO_PERSON], contentType: "task", contentId: taskId, message: marker } })).ok()).toBeTruthy();
+    try {
+      await page.goto("/mobile/notifications");
+      const row = page.locator("main").getByText(marker).first();
+      await expect(row).toBeVisible({ timeout: 30000 });
+      await row.click();
+      await expect(page).toHaveURL(/\/mobile\/myTasks\?task=/, { timeout: 30000 });
+      await expect(page.getByRole("dialog").getByText("Michael Davis", { exact: true })).toBeVisible({ timeout: 20000 });
+    } finally {
+      const mine: any[] = await (await ctx.get(`${API}/messaging/notifications/my`, { headers: messagingHeaders })).json().catch(() => []);
+      for (const n of Array.isArray(mine) ? mine : []) {
+        if (n.message === marker) await ctx.delete(`${API}/messaging/notifications/CHU00000001/${n.id}`, { headers: messagingHeaders }).catch(() => {});
+      }
+    }
   });
 });

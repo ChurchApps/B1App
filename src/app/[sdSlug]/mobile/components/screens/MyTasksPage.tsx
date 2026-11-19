@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Skeleton } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
 import type { TaskInterface } from "@churchapps/helpers";
@@ -22,6 +23,20 @@ export const MyTasksPage = (_props: Props) => {
   const { data: tasks = [], isLoading: tasksLoading } = useMyTasks(personId, loggedIn);
   const [open, setOpen] = useState<TaskInterface | null>(null);
   const loading = cardsLoading || tasksLoading;
+  const router = useRouter();
+  const deepLinkId = useSearchParams()?.get("task");
+
+  // A task notification lands here with ?task=<id>; open that task once the lists load (#1635).
+  useEffect(() => {
+    if (!deepLinkId || loading) return;
+    const match = [...cards, ...tasks].find((t) => t.id === deepLinkId);
+    if (match) setOpen(match);
+  }, [deepLinkId, loading, cards, tasks]);
+
+  const closeSheet = () => {
+    setOpen(null);
+    if (deepLinkId) router.replace("/mobile/myTasks");
+  };
 
   if (!loggedIn) return <SignInPrompt title={Locale.label("mobile.me.tasksSignedOutTitle")} lede={Locale.label("mobile.me.tasksSignedOutBody")} />;
 
@@ -43,7 +58,7 @@ export const MyTasksPage = (_props: Props) => {
           </PlateSection>
         )}
       </Plate>
-      <MyTaskSheet task={open} onClose={() => setOpen(null)} />
+      <MyTaskSheet task={open} onClose={closeSheet} />
     </Box>
   );
 };

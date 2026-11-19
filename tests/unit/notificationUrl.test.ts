@@ -35,4 +35,14 @@ describe("deriveNotificationUrl", () => {
   it("ignores links that are neither app paths nor http(s)", () => {
     assert.equal(deriveNotificationUrl({ contentType: "eventNote", contentId: "e1", link: "javascript:alert(1)" }), undefined);
   });
+
+  // ChurchAppsSupport#1635: task assignment and task note alerts did nothing when tapped.
+  it("opens My tasks on the task for task and card notifications", () => {
+    assert.equal(deriveNotificationUrl({ contentType: "task", contentId: "t1", message: "New Assignment: Call Donald Clark" }), "/mobile/myTasks?task=t1");
+    assert.equal(deriveNotificationUrl({ contentType: "workflowCard", contentId: "c1" }), "/mobile/myTasks?task=c1");
+  });
+
+  it("keeps a card note in the app instead of following its B1 Admin link", () => {
+    assert.equal(deriveNotificationUrl({ contentType: "workflowCard", contentId: "c1", link: "https://admin.b1.church/serving/tasks/c1" }), "/mobile/myTasks?task=c1");
+  });
 });

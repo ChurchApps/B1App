@@ -1,9 +1,11 @@
 export const isRequestDecision = (message?: string): boolean => /was (approved|rejected)\b/i.test(message || "");
 
 export const deriveNotificationUrl = (n: { contentType?: string; contentId?: string; link?: string; message?: string; triggeredByPersonId?: string }): string | undefined => {
+  // Task and card notes carry a B1 Admin link; members open the task in My tasks instead (#1635).
+  const type = String(n.contentType || "").toLowerCase();
+  if (type === "task" || type === "workflowcard") return n.contentId ? `/mobile/myTasks?task=${encodeURIComponent(n.contentId)}` : "/mobile/myTasks";
   if (n.link?.startsWith("/mobile/")) return n.link; // server-provided deep link (e.g. event reminders); other relative links are staff paths
   if (n.link && /^https?:\/\//i.test(n.link)) return n.link; // B1 Admin pages for notes the app has no screen for (#1495)
-  const type = String(n.contentType || "").toLowerCase();
   // contentId is the privateMessage id, but the conversation route keys on the other person.
   if (type === "privatemessage" || type === "message") {
     return n.triggeredByPersonId ? `/mobile/messages/${n.triggeredByPersonId}` : "/mobile/messages";

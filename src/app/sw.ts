@@ -81,6 +81,8 @@ const buildUrlForType = (type: string, id: string | undefined, payload: PushPayl
     case "eventbooking": return "/mobile/myRequests";
     case "group": return id ? `/mobile/groups/${id}` : null;
     case "assignment": return "/mobile/plans";
+    case "task":
+    case "workflowcard": return id ? `/mobile/myTasks?task=${encodeURIComponent(id)}` : "/mobile/myTasks";
     case "privatemessage": {
       // Route's [id] is the other person's personId; conversationId is honored as a query param.
       const personId = payload.personId || id;
@@ -93,6 +95,10 @@ const buildUrlForType = (type: string, id: string | undefined, payload: PushPayl
 };
 
 const deriveClickUrl = (payload: PushPayload): string => {
+  // Card notes link to B1 Admin; keep members in the app on the task (#1635).
+  const inner = String(payload.innerType || "").toLowerCase();
+  if (inner === "task" || inner === "workflowcard") return buildUrlForType(inner, payload.innerId, payload) || "/mobile/myTasks";
+
   const directUrl = payload.url || payload.link;
   if (typeof directUrl === "string" && directUrl.trim()) return directUrl;
 
