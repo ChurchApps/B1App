@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 import { SEED_PLAYLISTS } from "./helpers/fixtures";
+import { getApi, apiCall } from "./helpers/api";
 
 test.describe("Mobile content screens", () => {
   test("sermons screen loads with logged-in chrome", async ({ page }) => {
@@ -199,5 +200,30 @@ test.describe("Mobile content screens", () => {
     await expect(page.getByRole("button", { name: /Watch Sermon/i })).toBeVisible();
     await expect(page.getByRole("button", { name: /^Share$/ })).toBeVisible();
     await expect(page.getByRole("region", { name: "In this series" }).getByRole("link", { name: "All in series" })).toHaveAttribute("href", /\/mobile\/playlist\/PLY00000001/);
+  });
+
+  test("an audio-only sermon plays and downloads its podcast audio", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const api = await getApi("demo", "ContentApi");
+    const contentUrl = (path: string) => `${process.env.API_BASE || "http://localhost:8084"}/content${path}`;
+    const unique = `Audio sermon ${Date.now()}`;
+    const audioUrl = `https://example.com/${Date.now()}.mp3`;
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const saved = await apiCall(api, "post", contentUrl("/sermons"), [{ churchId: api.churchId, title: unique, audioUrl, publishDate: yesterday, playlistId: SEED_PLAYLISTS.SUNDAY_SERMONS.id }]);
+    expect(saved.ok()).toBeTruthy();
+    const sermonId = (await saved.json())[0].id as string;
+    try {
+      await page.goto(`/mobile/sermons/${sermonId}`);
+      await expect(page.getByRole("heading", { level: 1, name: unique })).toBeVisible({ timeout: 15000 });
+      await expect(page.getByRole("button", { name: /Watch Sermon/i })).toHaveCount(0);
+      const download = page.getByRole("link", { name: "Download audio" });
+      await expect(download).toHaveAttribute("href", new RegExp(`^/api/podcast/download\\?url=.*sermons%2Frss%2FCHU00000001&guid=${sermonId}$`));
+      await expect(download).toHaveAttribute("download", "");
+      await page.getByRole("button", { name: "Listen" }).click();
+      await expect(page.getByTestId("sermon-audio")).toHaveAttribute("src", audioUrl);
+      await expect(page.getByRole("button", { name: "Listen" })).toHaveCount(0);
+    } finally {
+      await apiCall(api, "delete", contentUrl(`/sermons/${sermonId}`));
+    }
   });
 });
