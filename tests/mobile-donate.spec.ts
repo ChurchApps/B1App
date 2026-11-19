@@ -146,6 +146,35 @@ test.describe.serial("Mobile donate member giving settings", () => {
     await expect(page.getByRole("heading", { name: `${year} Annual Giving Statement` })).toBeVisible({ timeout: 30000 });
     await expect(page.getByTestId("print-church-logo")).toHaveCount(0);
   });
+
+  // Issue #1639: the member's statement prints their donor number in the donor block when one is set, and nothing when not.
+  const saveDonorNumber = async (donorNumber: string | null) => {
+    const ctx = await request.newContext();
+    const login = await (await ctx.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = (login.userChurches || []).find((c: any) => c.church?.id === "CHU00000001");
+    const headers = { Authorization: `Bearer ${uc.jwt}` };
+    const person = await (await ctx.get(`${MAIN_API}/membership/people/${uc.person.id}`, { headers })).json();
+    const res = await ctx.post(`${MAIN_API}/membership/people`, { headers, data: [{ ...person, donorNumber }] });
+    if (!res.ok()) throw new Error(`person save failed: ${res.status()}`);
+    await ctx.dispose();
+    return person.donorNumber as string | undefined;
+  };
+
+  test("printed statement shows the member's donor number only when one is set", async ({ page }) => {
+    const original = await saveDonorNumber("D-1639");
+    try {
+      await page.addInitScript(() => { window.print = () => {}; window.close = () => {}; window.history.back = () => {}; });
+      await page.goto(`/mobile/donate/print?year=${year}`);
+      await expect(page.getByTestId("statement-donor-number")).toHaveText("Donor Number: D-1639", { timeout: 30000 });
+
+      await saveDonorNumber(null);
+      await page.reload();
+      await expect(page.getByRole("heading", { name: `${year} Annual Giving Statement` })).toBeVisible({ timeout: 30000 });
+      await expect(page.getByText("Donor Number")).toHaveCount(0);
+    } finally {
+      await saveDonorNumber(original || null);
+    }
+  });
 });
 
 // Mixed-currency giving: each gift keeps its own currency in the history list, but the Year-to-Date and

@@ -250,6 +250,7 @@ export default function PrintPage({ params }: { params: Params }) {
               <p>{context?.person?.contactInfo?.address2}</p>
               <p>{context?.person?.contactInfo?.mobilePhone}</p>
               <p>{context?.person?.contactInfo?.email}</p>
+              {context?.person?.donorNumber && <p data-testid="statement-donor-number">{Locale.label("mobile.giving.donorNumber")} {context.person.donorNumber}</p>}
             </div>
             <div style={{ flex: "1 1 280px", minWidth: 0 }}>
               <h1>{context?.userChurch?.church?.name}</h1>
