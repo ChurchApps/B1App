@@ -10,6 +10,7 @@ import type { SermonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "./mobileTheme";
 import { Row, Thumb, hideBrokenImage } from "./kit";
 import { formatDate, formatDuration } from "./util";
+import { sermonAudioUrl, sermonHasVideo } from "./sermonAudio";
 
 const tc = mobileTheme.colors;
 
@@ -36,7 +37,11 @@ export const sermonHref = (sermon: SermonInterface, params?: Record<string, stri
 };
 
 export const sermonMeta = (sermon: SermonInterface) =>
-  [formatDate(sermon.publishDate, "short"), formatDuration(sermon.duration)].filter(Boolean).join(" · ");
+  [
+    formatDate(sermon.publishDate, "short"),
+    formatDuration(sermon.duration),
+    sermonAudioUrl(sermon) && !sermonHasVideo(sermon) ? Locale.label("mobile.sermons.audio") : ""
+  ].filter(Boolean).join(" · ");
 
 export const SermonRow = ({ sermon, href, leading, trailing }: { sermon: SermonInterface; href: string; leading?: React.ReactNode; trailing?: React.ReactNode }) => (
   <Row

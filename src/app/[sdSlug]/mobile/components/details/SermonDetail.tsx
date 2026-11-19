@@ -4,65 +4,29 @@ import React, { useMemo, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Box, Button, Skeleton, Snackbar, Typography } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import HeadphonesIcon from "@mui/icons-material/Headphones";
 import ShareIcon from "@mui/icons-material/Share";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
 import { PageHead, Plate, PlateSection, QuietEmpty, RowList, TextLink } from "../kit";
 import { MediaFrame, SermonRow, sermonHref, sermonMeta, useChurchSermons } from "../SermonCard";
+import { buildEmbedUrl, buildExternalUrl, sermonAudioUrl, sermonDownloadHref } from "../sermonAudio";
 
 interface Props {
   id: string;
   config: ConfigurationInterface;
 }
 
-const safeHttpUrl = (url?: string) => (url && /^https?:\/\//i.test(url) ? url : null);
-
-const buildEmbedUrl = (sermon: SermonInterface | null): string | null => {
-  if (!sermon) return null;
-  const videoType = (sermon as any).videoType as string | undefined;
-  const videoData = (sermon as any).videoData as string | undefined;
-  const videoUrl = (sermon as any).videoUrl as string | undefined;
-
-  if (videoType && videoData) {
-    switch (videoType) {
-      case "youtube": return `https://www.youtube.com/embed/${videoData}?autoplay=1&rel=0&modestbranding=1`;
-      case "youtube_channel": return `https://www.youtube.com/embed/live_stream?channel=${videoData}&autoplay=1`;
-      case "vimeo": return `https://player.vimeo.com/video/${videoData}?autoplay=1`;
-      case "facebook": return `https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvideo.php%3Fv%3D${videoData}&show_text=0&autoplay=1&allowFullScreen=1`;
-      default: return safeHttpUrl(videoData);
-    }
-  }
-
-  return safeHttpUrl(videoUrl);
-};
-
-const buildExternalUrl = (sermon: SermonInterface | null): string | null => {
-  if (!sermon) return null;
-  const videoType = (sermon as any).videoType as string | undefined;
-  const videoData = (sermon as any).videoData as string | undefined;
-  const videoUrl = (sermon as any).videoUrl as string | undefined;
-
-  if (videoType && videoData) {
-    switch (videoType) {
-      case "youtube": return `https://www.youtube.com/watch?v=${videoData}`;
-      case "youtube_channel": return `https://www.youtube.com/channel/${videoData}/live`;
-      case "vimeo": return `https://vimeo.com/${videoData}`;
-      case "facebook": return `https://www.facebook.com/video.php?v=${videoData}`;
-      default: return safeHttpUrl(videoData);
-    }
-  }
-
-  return safeHttpUrl(videoUrl);
-};
-
 export const SermonDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const churchId = config?.church?.id;
 
   const [showVideo, setShowVideo] = useState(false);
+  const [showAudio, setShowAudio] = useState(false);
   const [snackbar, setSnackbar] = useState<string | null>(null);
 
   const { data: sermon = null, isLoading: loading, isError } = useQuery<SermonInterface | null>({
@@ -120,6 +84,7 @@ export const SermonDetail = ({ id, config }: Props) => {
 
   const embedUrl = useMemo(() => buildEmbedUrl(sermon), [sermon]);
   const externalUrl = useMemo(() => buildExternalUrl(sermon), [sermon]);
+  const audioUrl = useMemo(() => sermonAudioUrl(sermon), [sermon]);
 
   const handleShare = useCallback(async () => {
     if (!sermon) return;
@@ -181,6 +146,10 @@ export const SermonDetail = ({ id, config }: Props) => {
   const description = sermon.description;
   const canPlay = !!embedUrl;
   const showPlayer = showVideo && canPlay;
+  const canListen = !!audioUrl;
+  const showListener = showAudio && canListen;
+  const watch = () => { setShowAudio(false); setShowVideo(true); };
+  const listen = () => { setShowVideo(false); setShowAudio(true); };
   const sermonTitle = sermon.title || Locale.label("mobile.components.untitledSermon");
   const seriesHref = playlistId ? `/mobile/playlist/${playlistId}${playlistTitle ? `?title=${encodeURIComponent(playlistTitle)}` : ""}` : "";
 
@@ -205,11 +174,16 @@ export const SermonDetail = ({ id, config }: Props) => {
                 kicker={playlistTitle || undefined}
                 title={sermonTitle}
                 play={canPlay}
-                onClick={canPlay ? () => setShowVideo(true) : undefined}
+                onClick={canPlay ? watch : undefined}
                 ariaLabel={canPlay ? Locale.label("mobile.components.playSermon") : undefined}
               />
             )}
         </Box>
+        {showListener && (
+          <Box sx={{ maxWidth: 880, pt: "12px" }}>
+            <audio controls autoPlay preload="none" src={audioUrl!} style={{ width: "100%", display: "block" }} data-testid="sermon-audio" />
+          </Box>
+        )}
       </Box>
 
       <PageHead
@@ -222,8 +196,13 @@ export const SermonDetail = ({ id, config }: Props) => {
         )}
       >
         {canPlay && !showPlayer && (
-          <Button variant="contained" onClick={() => setShowVideo(true)} startIcon={<PlayArrowIcon />}>
+          <Button variant="contained" onClick={watch} startIcon={<PlayArrowIcon />}>
             {Locale.label("mobile.details.watchSermon")}
+          </Button>
+        )}
+        {canListen && !showListener && (
+          <Button variant={canPlay ? "outlined" : "contained"} onClick={listen} startIcon={<HeadphonesIcon />}>
+            {Locale.label("mobile.details.listenSermon")}
           </Button>
         )}
         <Button variant="outlined" onClick={handleShare} startIcon={<ShareIcon />}>
@@ -232,6 +211,11 @@ export const SermonDetail = ({ id, config }: Props) => {
         <TextLink onClick={handleOpenExternal} disabled={!externalUrl}>
           {Locale.label("mobile.details.openLink")}
         </TextLink>
+        {canListen && churchId && (
+          <TextLink href={sermonDownloadHref(EnvironmentHelper.Common.ContentApi, churchId, sermon.id!)} download>
+            {Locale.label("mobile.details.downloadAudio")}
+          </TextLink>
+        )}
       </PageHead>
 
       {(description || playlistId) && (
