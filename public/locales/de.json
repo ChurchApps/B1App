@@ -41,32 +41,41 @@
             "title": "Gästeregistrierung",
             "validate": {
                 "namesRequired": "Vor- und Nachname sind für jedes Mitglied erforderlich.",
-                "fieldsRequired": ""
+                "fieldsRequired": "Bitte füllen Sie alle Pflichtfelder aus."
             },
-            "address": "",
-            "address1": "",
-            "address2": "",
-            "birthDate": "",
-            "city": "",
-            "comments": "",
-            "gender": "",
+            "address": "Adresse",
+            "address1": "Adresszeile 1",
+            "address2": "Adresszeile 2",
+            "birthDate": "Geburtsdatum",
+            "city": "Stadt",
+            "comments": "Kommentare",
+            "gender": "Geschlecht",
             "genders": {
-                "": ""
+                "Female": "Frau",
+                "Male": "Mann",
+                "Unspecified": "Unbestimmt"
             },
-            "grade": "",
-            "householdRole": "",
+            "grade": "Klassenstufe",
+            "householdRole": "Rolle im Haushalt",
             "householdRoles": {
-                "": ""
+                "Child": "Kind",
+                "Head": "Leiter",
+                "Other": "Andere",
+                "Spouse": "Ehepartner"
             },
-            "maritalStatus": "",
+            "maritalStatus": "Familienstand",
             "maritalStatuses": {
-                "": ""
+                "Divorced": "Geschieden",
+                "Married": "Verheiratet",
+                "Single": "Ledig",
+                "Unknown": "Unbekannt",
+                "Widowed": "Verwitwet"
             },
-            "personTitle": "",
-            "photo": "",
-            "removePhoto": "",
-            "state": "",
-            "zip": ""
+            "personTitle": "Anrede",
+            "photo": "Foto",
+            "removePhoto": "Foto entfernen",
+            "state": "Bundesland",
+            "zip": "Postleitzahl"
         }
     },
     "common": {
@@ -136,7 +145,7 @@
         }
     },
     "groupsPage": {
-        "findAGroup": "Finde eine Gruppe",
+        "findAGroup": "Gruppe finden",
         "groupsHeading": "Gruppen",
         "noPastPlans": "Keine vergangenen Pläne.",
         "noPlans": "Keine Pläne für diese Gruppe verfügbar.",
@@ -145,12 +154,12 @@
         "planType": "Plantyp",
         "plans": "Pläne",
         "upcoming": "Bevorstehend",
-        "allCampuses": "All campuses",
-        "allCategories": "All categories",
+        "allCampuses": "Alle Standorte",
+        "allCategories": "Alle Kategorien",
         "campus": "Campus",
-        "category": "Category",
-        "noMatches": "No groups match your filters.",
-        "searchPlaceholder": "Search groups by name or description"
+        "category": "Kategorie",
+        "noMatches": "Keine Gruppen entsprechen den ausgewählten Filtern.",
+        "searchPlaceholder": "Gruppen nach Name oder Beschreibung durchsuchen"
     },
     "guestRegister": {
         "metaDescription": "Gästeregistrierung",
@@ -187,8 +196,8 @@
         "bible": {
             "loading": "Bibel wird geladen…",
             "unavailable": "Der integrierte Reader konnte nicht geladen werden. Sie können die Bibel weiterhin in Ihrem Browser öffnen.",
-            "openBibleCom": "",
-            "openBiblia": ""
+            "openBibleCom": "Bible.com öffnen",
+            "openBiblia": "Biblia öffnen"
         },
         "community": {
             "peopleCount": "{} Personen",
@@ -241,12 +250,12 @@
             "welcome": "Willkommen",
             "yourGroups": "Ihre Gruppen",
             "youreServing": "Ihre Dienste",
-            "all": "",
-            "allNews": "",
-            "allUpcomingEvents": "",
-            "news": "",
-            "upcomingEvents": "",
-            "yourFollowUps": ""
+            "all": "Alle anzeigen",
+            "allNews": "Alle Neuigkeiten",
+            "allUpcomingEvents": "Alle bevorstehenden Veranstaltungen",
+            "news": "Neuigkeiten",
+            "upcomingEvents": "Bevorstehende Veranstaltungen",
+            "yourFollowUps": "Anstehende Aufgaben"
         },
         "details": {
             "about": "Über",
@@ -391,10 +400,10 @@
             "verse": "Verse",
             "viewTeach": "Lehren",
             "watchSermon": "Predigt ansehen",
-            "downloadAudio": "",
-            "listenSermon": "",
-            "responseClosed": "",
-            "responseWindowPassed": ""
+            "downloadAudio": "Audio herunterladen",
+            "listenSermon": "Predigt anhören",
+            "responseClosed": "Die Rückmeldung ist geschlossen.",
+            "responseWindowPassed": "Der Zeitraum für Rückmeldungen ist abgelaufen."
         },
         "empty": {
             "dashboardAdminBody": "Es sind anscheinend noch keine Tabs konfiguriert. Öffnen Sie die Verwaltung, um den Startbildschirm Ihrer Mitglieder einzurichten.",
@@ -416,10 +425,10 @@
             "pendingCount": "{} ausstehend",
             "repeatLastGift": "Letzte Spende wiederholen",
             "years": "Jahre",
-            "statementDisclaimer": "",
-            "statementNote": "",
-            "statementNoteLabel": "",
-            "statementUnavailable": ""
+            "statementDisclaimer": "Diese Aufstellung dient nur zu Informationszwecken und ist keine Steuerbescheinigung.",
+            "statementNote": "Diese Aufstellung enthält Ihre Spenden für das ausgewählte Jahr.",
+            "statementNoteLabel": "Hinweis",
+            "statementUnavailable": "Die Spendenaufstellung ist derzeit nicht verfügbar."
         },
         "group": {
             "absent": "Abwesend",
@@ -558,9 +567,9 @@
                 "timeOfDay": "Tageszeit",
                 "when": "Wann sollten Erinnerungen verschickt werden?",
                 "who": "Wer sollte daran erinnert werden?",
-                "sendFailed": "",
-                "sendNow": "",
-                "sentNow": ""
+                "sendFailed": "Erinnerung konnte nicht gesendet werden.",
+                "sendNow": "Jetzt senden",
+                "sentNow": "Erinnerung wurde gesendet."
             },
             "repeats": "Wiederholt sich",
             "requestNote": "Sie können dem Gruppenleiter optional eine kurze Nachricht hinzufügen.",
@@ -609,21 +618,21 @@
             "yearly": "Jährlich",
             "you": "Sie",
             "yourGroups": "Ihre Gruppen",
-            "allForms": "",
-            "anonymous": "",
-            "answerCount": "",
-            "answerCountOne": "",
-            "checkOutEvent": "",
-            "eventRegistration": "",
-            "fillOut": "",
-            "formClosed": "",
-            "forms": "",
-            "noAnswersYet": "",
-            "noForms": "",
-            "print": "",
-            "printAll": "",
-            "seats": "",
-            "share": ""
+            "allForms": "Alle Formulare",
+            "anonymous": "Anonym",
+            "answerCount": "{} Antworten",
+            "answerCountOne": "{} Antwort",
+            "checkOutEvent": "Veranstaltung ansehen",
+            "eventRegistration": "Veranstaltungsanmeldung",
+            "fillOut": "Ausfüllen",
+            "formClosed": "Dieses Formular ist geschlossen.",
+            "forms": "Formulare",
+            "noAnswersYet": "Noch keine Antworten.",
+            "noForms": "Noch keine Formulare.",
+            "print": "Drucken",
+            "printAll": "Alle drucken",
+            "seats": "Sitzplätze",
+            "share": "Teilen"
         },
         "inbox": {
             "backToInbox": "Zurück zum Posteingang",
@@ -637,8 +646,8 @@
             "title": "Posteingang",
             "today": "Heute",
             "unreadMessages": "{} ungelesene Nachrichten",
-            "signedOutBody": "",
-            "signedOutTitle": ""
+            "signedOutBody": "Melden Sie sich an, um Ihre Benachrichtigungen und Nachrichten zu sehen.",
+            "signedOutTitle": "Melden Sie sich an, um Ihren Posteingang zu öffnen."
         },
         "install": {
             "allSetBody": "Die {} App ist auf diesem Gerät installiert.",
@@ -670,7 +679,7 @@
             "iosStep3Title": "Zum Startbildschirm hinzufügen",
             "iosSubtitle": "Safari ist erforderlich – nur drei Fingertipps, und schon bist du drin.",
             "iosTitle": "Auf dem iPhone installieren",
-            "lede": "Predigten, Gruppen, Dienste und Spenden öffnen sich wie eine App, mit Benachrichtigungen. Kein Download aus einem App Store nötig.",
+            "lede": "Predigten, Gruppen, Dienste und Spenden sind wie in einer App verfügbar – einschließlich Benachrichtigungen. Ein Download aus einem App-Store ist nicht erforderlich.",
             "ourApp": "unsere App",
             "qrAlt": "QR-Code mit einem Link zu dieser Installationsseite",
             "scanCaption": "um diese Seite zu öffnen und die Installation durchzuführen",
@@ -741,15 +750,15 @@
             "titleVerify": "Bestätigungscode eingeben",
             "titleWelcome": "Willkommen, {}",
             "verifyCode": "Code bestätigen",
-            "errMfaCode": "",
-            "ledeMfa": "",
-            "mfaCode": "",
-            "titleMfa": ""
+            "errMfaCode": "Bitte geben Sie den Bestätigungscode ein.",
+            "ledeMfa": "Geben Sie den Code aus Ihrer Authentifizierungs-App ein.",
+            "mfaCode": "Bestätigungscode",
+            "titleMfa": "Zwei-Faktor-Authentifizierung"
         },
         "me": {
             "allGroups": "Alle Gruppen",
             "allUpcoming": "Alle anstehenden",
-            "backToMe": "Zurück zu Ich",
+            "backToMe": "Zurück zu meinem Bereich",
             "event": "Ereignis",
             "givenThisYear": "Gespendet in {0} · {1} Spenden",
             "myRequests": "Meine Anfragen",
@@ -765,25 +774,25 @@
             "settings": "Einstellungen",
             "signInBody": "Melden Sie sich an, um Ihre Dienstzeiten, Anmeldungen und Gruppenveranstaltungen einzusehen.",
             "signInTitle": "Melden Sie sich an, um Ihre Woche einzusehen",
-            "title": "Ich",
+            "title": "Mein Bereich",
             "upcoming": "Anstehend",
-            "allCards": "",
-            "allForms": "",
-            "allTasks": "",
-            "attended": "",
-            "form": "",
-            "myAttendance": "",
-            "myAttendanceLede": "",
-            "myCards": "",
-            "myForms": "",
-            "myFormsLede": "",
-            "myTasks": "",
-            "noAnswers": "",
-            "noAssignments": "",
-            "noAttendance": "",
-            "noForms": "",
-            "tasksSignedOutBody": "",
-            "tasksSignedOutTitle": ""
+            "allCards": "Alle Karten",
+            "allForms": "Alle Formulare",
+            "allTasks": "Alle Aufgaben",
+            "attended": "Teilgenommen",
+            "form": "Formular",
+            "myAttendance": "Meine Anwesenheit",
+            "myAttendanceLede": "Ihre bisherigen Anwesenheiten.",
+            "myCards": "Meine Karten",
+            "myForms": "Meine Formulare",
+            "myFormsLede": "Formulare, die Sie ausgefüllt haben.",
+            "myTasks": "Meine Aufgaben",
+            "noAnswers": "Noch keine Antworten.",
+            "noAssignments": "Keine Zuweisungen.",
+            "noAttendance": "Noch keine Anwesenheiten erfasst.",
+            "noForms": "Noch keine Formulare.",
+            "tasksSignedOutBody": "Melden Sie sich an, um Ihre Aufgaben und deren Status anzuzeigen.",
+            "tasksSignedOutTitle": "Melden Sie sich an, um Ihre Aufgaben zu sehen."
         },
         "messages": {
             "composeEmpty": "Suchen Sie nach einer Person, um eine Unterhaltung zu beginnen.",
@@ -795,8 +804,8 @@
             "recent": "Zuletzt",
             "searchConversations": "Unterhaltungen durchsuchen",
             "unreadCount": "{} ungelesen",
-            "signedOutBody": "",
-            "signedOutTitle": ""
+            "signedOutBody": "Melden Sie sich an, um Ihre Nachrichten zu sehen.",
+            "signedOutTitle": "Melden Sie sich an, um Ihre Nachrichten zu öffnen."
         },
         "mobileApp": "Mobil",
         "more": {
@@ -840,8 +849,7 @@
                 "group_activity": "Gruppenaktivität",
                 "group_messages": "Gruppenchat",
                 "serving_schedule": "Dienst & Zeitplan",
-                "tasks": "Aufgaben & Nachverfolgung",
-                "": ""
+                "tasks": "Aufgaben"
             },
             "channelEmail": "E-Mail",
             "channelInApp": "In-App",
@@ -908,7 +916,7 @@
             "addressVisibility": "Sichtbarkeit der Adresse",
             "approvalLede": "Änderungen an Ihrem Profil werden den Mitarbeitern der Gemeinde zur Freigabe vorgelegt.",
             "birthDate": "Geburtstag",
-            "canvasNotAvailable": "Leinwand nicht verfügbar.",
+            "canvasNotAvailable": "Der Profil-Editor ist nicht verfügbar.",
             "changeEmail": "E-Mail-Adresse ändern",
             "changePassword": "Passwort ändern",
             "changePhoto": "Foto ändern",
@@ -962,8 +970,8 @@
             "visibilityPreferences": "Einstellungen zur Sichtbarkeit",
             "workPhone": "Diensttelefon",
             "zip": "Postleitzahl",
-            "signedOutBody": "",
-            "signedOutTitle": ""
+            "signedOutBody": "Melden Sie sich an, um Ihr Profil zu bearbeiten.",
+            "signedOutTitle": "Anmeldung erforderlich"
         },
         "register": {
             "decrease": "Menge verringern",
@@ -991,10 +999,10 @@
             "cancelConfirm": "Diese Anfrage abbrechen? Dies kann nicht rückgängig gemacht werden.",
             "cancelRequest": "Anfrage abbrechen",
             "description": "Beschreibung",
-            "emptyBody": "Ihre Event- und Raumanfragen werden hier angezeigt.",
+            "emptyBody": "Ihre Veranstaltungs- und Raumanfragen werden hier angezeigt.",
             "end": "Ende",
             "enterTitle": "Bitte geben Sie einen Titel ein.",
-            "eventTitle": "Event-Titel",
+            "eventTitle": "Veranstaltungstitel",
             "failedToSubmit": "Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
             "formLede": "Die Mitarbeiter genehmigen jeden Raum und jeden Gegenstand.",
             "keep": "Behalten",
@@ -1013,7 +1021,7 @@
             "statusRejected": "Abgelehnt",
             "submit": "Anfrage einreichen",
             "submitting": "Einreichen…",
-            "title": "Ein Event anfragen"
+            "title": "Veranstaltung anfragen"
         },
         "screenTitles": {
             "bible": "Bibel",
@@ -1044,9 +1052,9 @@
             "volunteer": "Ehrenamtlich",
             "volunteerOpportunities": "Ehrenamtliche Möglichkeiten",
             "votd": "Vers des Tages",
-            "myAttendance": "",
-            "myForms": "",
-            "myTasks": ""
+            "myAttendance": "Meine Anwesenheit",
+            "myForms": "Meine Formulare",
+            "myTasks": "Meine Aufgaben"
         },
         "screens": {
             "alreadyCheckedIn": "Bereits eingecheckt",
@@ -1172,8 +1180,8 @@
             "sermonsLoadErrorBody": "Beim Laden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
             "serviceLabel": "Gottesdienst: {}",
             "shareVotd": "Vers des Tages teilen",
-            "showCheckinCode": "Check-In Code anzeigen",
-            "showCodeAtStation": "Zeigen Sie diesen Code an der Check-In Station vor, um Ihre Namensschilder auszudrucken.",
+            "showCheckinCode": "Check-in-Code anzeigen",
+            "showCodeAtStation": "Zeigen Sie diesen Code an der Check-in-Station vor, um Ihre Namensschilder auszudrucken.",
             "signIn": "Anmeldung",
             "signInToCheckIn": "Bitte melden Sie sich an, um einzuchecken",
             "signInToCheckInCta": "Anmelden",
@@ -1217,13 +1225,13 @@
             "watchLive": "Live ansehen",
             "website": "Webseite",
             "youreCheckedIn": "Du bist eingecheckt!",
-            "checkinClosed": "",
-            "checkinClosedOpens": "",
-            "checkinOpensAt": "",
-            "checkinRatio": "",
-            "checkinRatioRoom": "",
-            "onlineGivingNotSetUp": "",
-            "pushDisabledOnServer": ""
+            "checkinClosed": "Der Check-in ist geschlossen.",
+            "checkinClosedOpens": "Der Check-in öffnet {}.",
+            "checkinOpensAt": "Der Check-in öffnet um {}.",
+            "checkinRatio": "{} von {} eingecheckt",
+            "checkinRatioRoom": "{} von {} Personen eingecheckt",
+            "onlineGivingNotSetUp": "Online-Spenden sind noch nicht eingerichtet.",
+            "pushDisabledOnServer": "Push-Benachrichtigungen sind serverseitig deaktiviert."
         },
         "sermons": {
             "allInSeries": "Alle in der Reihe",
@@ -1241,7 +1249,7 @@
             "playFromStart": "Von Anfang an abspielen",
             "searchSermons": "Predigten durchsuchen",
             "watchLatest": "Neueste ansehen",
-            "audio": ""
+            "audio": "Audio"
         },
         "serving": {
             "addBlockoutTitle": "Sperrdaten hinzufügen",
@@ -1286,7 +1294,7 @@
             "whosHere": "Wer ist da",
             "year": "Jahr",
             "yourAssignment": "Ihr Einsatz",
-            "teamCount": ""
+            "teamCount": "{} Teams"
         },
         "stream": {
             "backToStream": "Zurück zum Stream",
@@ -1307,36 +1315,36 @@
             "shareImage": "Bild teilen",
             "thisWeek": "Diese Woche",
             "unableToShare": "Kann nicht geteilt werden",
-            "download": "",
-            "pastVerses": ""
+            "download": "Herunterladen",
+            "pastVerses": "Vergangene Verse"
         },
         "yesterday": "gestern",
         "card": {
-            "about": "",
-            "actionFailed": "",
-            "cards": "",
-            "complete": "",
-            "created": "",
-            "due": "",
-            "dueOn": "",
-            "from": "",
-            "notes": "",
-            "overdue": "",
-            "snooze": "",
-            "snoozeDay": "",
-            "snoozeDays": "",
-            "snoozed": "",
-            "snoozedUntilLabel": "",
-            "step": "",
-            "tasks": ""
+            "about": "Über",
+            "actionFailed": "Aktion fehlgeschlagen. Bitte versuchen Sie es erneut.",
+            "cards": "Karten",
+            "complete": "Abschließen",
+            "created": "Erstellt",
+            "due": "Fällig",
+            "dueOn": "Fällig am {}",
+            "from": "Von",
+            "notes": "Notizen",
+            "overdue": "Überfällig",
+            "snooze": "Erinnerung verschieben",
+            "snoozeDay": "Um einen Tag verschieben",
+            "snoozeDays": "Um {} Tage verschieben",
+            "snoozed": "Zurückgestellt",
+            "snoozedUntilLabel": "Zurückgestellt bis",
+            "step": "Schritt",
+            "tasks": "Aufgaben"
         },
         "folder": {
-            "empty": ""
+            "empty": "Dieser Ordner ist leer."
         },
         "news": {
-            "empty": "",
-            "notFound": "",
-            "viewOnWebsite": ""
+            "empty": "Noch keine Neuigkeiten vorhanden.",
+            "notFound": "Neuigkeit nicht gefunden.",
+            "viewOnWebsite": "Auf der Website ansehen"
         }
     },
     "pageSlug": {
@@ -1346,7 +1354,7 @@
         "donate": "Spenden",
         "formClosedOn": "Dieses Formular wurde am {} geschlossen",
         "formNotAvailableUntil": "Dieses Formular ist erst ab {} verfügbar",
-        "formNotFound": "This form could not be loaded.",
+        "formNotFound": "Dieses Formular konnte nicht geladen werden.",
         "formSubmitted": "Ihr Formular wurde erfolgreich übermittelt.",
         "liveStream": "Live-Stream",
         "loginToManageDonations": "Bitte melden Sie sich an, um Spenden zu verwalten",
@@ -1358,9 +1366,9 @@
         "sermons": "Predigten",
         "toViewForm": "um dieses Formular anzuzeigen.",
         "verseOfTheDay": "Vers des Tages",
-        "membersOnly": "This page is for church members",
-        "noAccess": "You don",
-        "thisWeek": "This week"
+        "membersOnly": "Diese Seite ist nur für Gemeindemitglieder bestimmt.",
+        "noAccess": "Sie haben keinen Zugriff auf diese Seite.",
+        "thisWeek": "Diese Woche"
     },
     "person": {
         "email": "E-Mail",
@@ -1388,8 +1396,7 @@
             "apply": "Anwenden",
             "invalid": "Dieser Code ist ungültig.",
             "label": "Rabattcode",
-            "remove": "Entfernen",
-            "": ""
+            "remove": "Entfernen"
         },
         "errors": {
             "emailRequired": "E-Mail ist für die Gästeregistrierung erforderlich.",
@@ -1427,9 +1434,9 @@
             "subtotalNote": "Zwischensumme vor Rabatten",
             "title": "Bezahlung",
             "total": "Gesamt",
-            "captchaRequired": "",
-            "payLaterNote": "",
-            "registerPayLater": ""
+            "captchaRequired": "Bitte bestätigen Sie, dass Sie kein Roboter sind.",
+            "payLaterNote": "Sie können sich jetzt anmelden und später bezahlen.",
+            "registerPayLater": "Anmelden und später bezahlen"
         },
         "phone": "Telefon",
         "questions": "Fragen",
@@ -1455,8 +1462,8 @@
         "yourHousehold": "Dein Haushalt",
         "yourInformation": "Ihre Informationen",
         "yourType": "Ihre Anmeldeart",
-        "pendingBody": "",
-        "pendingTitle": ""
+        "pendingBody": "Ihre Anmeldung wird bearbeitet. Sie erhalten eine Bestätigung, sobald sie abgeschlossen ist.",
+        "pendingTitle": "Anmeldung wird bearbeitet"
     },
     "serving": {
         "allSlotsFilled": "Alle {} Plätze besetzt",
@@ -1491,7 +1498,7 @@
         "spotsOpen": "{} Plätze frei",
         "toSignUp": "um sich für eine Position anzumelden.",
         "viewAndSignUp": "Anzeigen & anmelden",
-        "signedUpNames": ""
+        "signedUpNames": "Angemeldet: {}"
     },
     "video": {
         "adminDashboard": "Administrator-Dashboard",
@@ -1531,14 +1538,14 @@
         "profile": "Profil"
     },
     "blogPage": {
-        "allPosts": "",
-        "blog": "",
-        "byAuthor": "",
-        "category": "",
-        "moreIn": "",
-        "newerPosts": "",
-        "noPosts": "",
-        "olderPosts": "",
-        "tag": ""
+        "allPosts": "Alle Beiträge",
+        "blog": "Blog",
+        "byAuthor": "Von {}",
+        "category": "Kategorie: {}",
+        "moreIn": "Mehr aus {}",
+        "newerPosts": "Neuere Beiträge",
+        "noPosts": "Noch keine Beiträge vorhanden.",
+        "olderPosts": "Ältere Beiträge",
+        "tag": "Schlagwort: {}"
     }
 }
