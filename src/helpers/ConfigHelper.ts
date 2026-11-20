@@ -10,10 +10,40 @@ import { notFound } from "next/navigation";
 export interface ColorsInterface { primary: string, contrast: string, header: string }
 export interface LogoInterface { url: string, image: string }
 export interface ButtonInterface { text: string, url: string }
-export interface ServiceInterface { videoUrl: string, serviceTime: string, duration: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string }
+export interface ServiceInterface {
+  videoUrl: string;
+  serviceTime: string;
+  duration: string;
+  earlyStart: string;
+  chatBefore: string;
+  chatAfter: string;
+  provider: string;
+  providerKey: string;
+  localCountdownTime?: Date;
+  localStartTime?: Date;
+  localEndTime?: Date;
+  localChatStart?: Date;
+  localChatEnd?: Date;
+  label: string;
+}
 export interface AppThemeModeColors { background: string, surface: string, primary: string, primaryContrast: string, secondary: string, textColor: string }
 export interface AppThemeConfig { light: AppThemeModeColors, dark: AppThemeModeColors }
-export interface ConfigurationInterface { keyName?: string, siteId?: string, navLinks?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface, allowDonations:boolean, hasWebsite:boolean, globalStyles:GlobalStyleInterface, homePage?: PageInterface, appTheme?: AppThemeConfig, hidePublicSite?: boolean, ga4MeasurementId?: string, blogFooterHtml?: string, announcementBanner?: string }
+export interface ConfigurationInterface {
+  keyName?: string;
+  siteId?: string;
+  navLinks?: LinkInterface[];
+  church: ChurchInterface;
+  appearance: AppearanceInterface;
+  allowDonations:boolean;
+  hasWebsite:boolean;
+  globalStyles:GlobalStyleInterface;
+  homePage?: PageInterface;
+  appTheme?: AppThemeConfig;
+  hidePublicSite?: boolean;
+  ga4MeasurementId?: string;
+  blogFooterHtml?: string;
+  announcementBanner?: string;
+}
 
 // Prod caches config for 5 min; dev/test fetch fresh so content/style edits show immediately.
 const CONFIG_REVALIDATE_SECONDS = process.env.NODE_ENV === "production" ? 300 : 0;

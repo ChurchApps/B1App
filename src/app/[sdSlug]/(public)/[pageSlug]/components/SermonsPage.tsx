@@ -12,8 +12,6 @@ type Props = {
 
 export function SermonsPage(props:Props) {
 
-  const day = 1; // getDayOfYear();
-
   return (
     <Container>
       <h1 style={{ textAlign: "center" }}>{props.title}</h1>

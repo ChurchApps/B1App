@@ -27,7 +27,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   const [config, setConfig] = React.useState<StreamConfigInterface | null>(null);
   const [chatState, setChatState] = React.useState<ChatStateInterface | null>(null);
   const [currentService, setCurrentService] = React.useState<StreamingServiceExtendedInterface | null>(null);
-  const [overlayContent, setOverlayContent] = React.useState(false);
+  const [overlayContent] = React.useState(false);
   const [isClient, setIsClient] = React.useState(false);
   const [chatReady, setChatReady] = React.useState(false);
   const joinedServiceIdRef = React.useRef<string | null>(null);

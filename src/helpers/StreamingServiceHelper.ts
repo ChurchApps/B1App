@@ -53,7 +53,7 @@ export class StreamingServiceHelper {
       const parts = displayTime.split(":");
       const seconds = parseInt(parts[0]) * 60 + (parseInt(parts[1]) || 0);
       return isNaN(seconds) ? 0 : seconds;
-    } catch (ex) { return 0; }
+    } catch { return 0; }
   }
 
   static determineCurrentService(services: StreamingServiceExtendedInterface[] | undefined) {

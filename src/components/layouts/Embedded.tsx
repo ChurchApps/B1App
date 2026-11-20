@@ -1,7 +1,6 @@
 "use client";
 
 import Head from "next/head";
-import { createTheme } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import type { AppearanceInterface } from "@churchapps/apphelper";
 import type { ChurchInterface, LinkInterface } from "@churchapps/helpers";
@@ -27,14 +26,6 @@ export function Embedded(props: Props) {
       </>);
     }
   };
-
-  const mdTheme = createTheme({
-    palette: { secondary: { main: "#444444" } },
-    components: {
-      MuiTextField: { defaultProps: { margin: "normal" } },
-      MuiFormControl: { defaultProps: { margin: "normal" } }
-    }
-  });
 
   return (
     <>

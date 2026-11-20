@@ -38,7 +38,6 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
   const [volunteerNames, setVolunteerNames] = useState<Record<string, string[]>>({});
 
   const isLoggedIn = !!context?.userChurch?.jwt;
-  const personId = context?.person?.id;
   const { plan, positions, times } = planData;
 
   // Load user's assignments for this plan
