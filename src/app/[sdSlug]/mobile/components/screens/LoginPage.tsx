@@ -15,7 +15,7 @@ import {
   Typography
 } from "@mui/material";
 import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
-import type { LoginResponseInterface } from "@churchapps/helpers";
+import type { LoginResponseInterface, RegisterUserInterface, ResetPasswordResponseInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -205,8 +205,9 @@ export const MobileLoginScreen = ({ config }: Props) => {
       }
       if ("password" in payload) await handleLoginFailure();
       return false;
-    } catch (e: any) {
-      if ("mfaToken" in payload) showError(e?.message === "Too many requests" ? e.message : Locale.label("mobile.login.errMfaCode"));
+    } catch (e) {
+      const err = e as Error | undefined;
+      if ("mfaToken" in payload) showError(err?.message === "Too many requests" ? err.message : Locale.label("mobile.login.errMfaCode"));
       if ("password" in payload) await handleLoginFailure();
       return false;
     } finally {
@@ -227,9 +228,9 @@ export const MobileLoginScreen = ({ config }: Props) => {
     if (!regLastName.trim()) { showError(Locale.label("mobile.login.errLastName")); return; }
     setLoading(true);
     try {
-      const body: any = { email, firstName: regFirstName, lastName: regLastName, appName: "B1", appUrl: typeof window !== "undefined" ? window.location.origin : undefined, fillMs: Date.now() - registerShownAtRef.current };
+      const body: Omit<RegisterUserInterface, "appUrl"> & { appUrl?: string; fillMs: number } = { email, firstName: regFirstName, lastName: regLastName, appName: "B1", appUrl: typeof window !== "undefined" ? window.location.origin : undefined, fillMs: Date.now() - registerShownAtRef.current };
       if (matchedChurchId) body.churchId = matchedChurchId;
-      const resp: any = await ApiHelper.postAnonymous("/users/register", body, "MembershipApi");
+      const resp: { errors?: string[] } = await ApiHelper.postAnonymous("/users/register", body, "MembershipApi");
       if (resp?.errors?.length) {
         const msg = String(resp.errors[0]);
         if (msg.toLowerCase().includes("user already exists")) showError(Locale.label("mobile.login.errAccountExists"));
@@ -237,8 +238,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
         return;
       }
       goToVerify();
-    } catch (e: any) {
-      const msg = e?.toString?.() || Locale.label("mobile.login.errRegistrationFailed");
+    } catch (e) {
+      const msg = (e as Error | undefined)?.toString?.() || Locale.label("mobile.login.errRegistrationFailed");
       if (msg.toLowerCase().includes("user already exists")) showError(Locale.label("mobile.login.errAccountExists"));
       else showError(msg);
     } finally {
@@ -251,11 +252,11 @@ export const MobileLoginScreen = ({ config }: Props) => {
     if (!email || !EMAIL_REGEX.test(email)) { showError(Locale.label("mobile.login.errValidEmail")); return; }
     setLoading(true);
     try {
-      const resp: any = await ApiHelper.postAnonymous("/users/forgot", { userEmail: email }, "MembershipApi");
+      const resp: ResetPasswordResponseInterface = await ApiHelper.postAnonymous("/users/forgot", { userEmail: email }, "MembershipApi");
       if (resp?.emailed) goToVerify();
       else showError(Locale.label("mobile.login.errNoAccount"));
-    } catch (e: any) {
-      showError(e?.toString?.() || Locale.label("mobile.login.errGeneric"));
+    } catch (e) {
+      showError((e as Error | undefined)?.toString?.() || Locale.label("mobile.login.errGeneric"));
     } finally {
       setLoading(false);
     }
@@ -320,7 +321,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
     if (code.length !== CODE_LENGTH) { showError(Locale.label("mobile.login.errEnterCode")); return; }
     setLoading(true);
     try {
-      const resp: any = await ApiHelper.postAnonymous("/users/verifyCode", { email, code }, "MembershipApi");
+      const resp: { authGuid?: string; errors?: string[] } = await ApiHelper.postAnonymous("/users/verifyCode", { email, code }, "MembershipApi");
       if (resp?.authGuid) {
         setAuthGuid(resp.authGuid);
         try {
@@ -334,8 +335,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
         setCodeDigits(Array(CODE_LENGTH).fill(""));
         codeRefs.current[0]?.focus();
       }
-    } catch (e: any) {
-      showError(e?.toString?.() || Locale.label("mobile.login.errInvalidCode"));
+    } catch (e) {
+      showError((e as Error | undefined)?.toString?.() || Locale.label("mobile.login.errInvalidCode"));
       setCodeDigits(Array(CODE_LENGTH).fill(""));
       codeRefs.current[0]?.focus();
     } finally {
@@ -351,8 +352,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
       await ApiHelper.postAnonymous("/users/forgot", { userEmail: email }, "MembershipApi");
       showInfo(Locale.label("mobile.login.infoCodeResent"));
       setResendCooldown(RESEND_COOLDOWN_SECONDS);
-    } catch (e: any) {
-      showError(e?.toString?.() || Locale.label("mobile.login.errResendFailed"));
+    } catch (e) {
+      showError((e as Error | undefined)?.toString?.() || Locale.label("mobile.login.errResendFailed"));
     } finally {
       setLoading(false);
     }
@@ -364,11 +365,11 @@ export const MobileLoginScreen = ({ config }: Props) => {
     if (newPassword !== confirmPassword) { showError(Locale.label("mobile.login.errPasswordsMismatch")); return; }
     setLoading(true);
     try {
-      const resp: any = await ApiHelper.postAnonymous("/users/setPasswordGuid", { authGuid, newPassword }, "MembershipApi");
+      const resp: { success?: boolean } = await ApiHelper.postAnonymous("/users/setPasswordGuid", { authGuid, newPassword }, "MembershipApi");
       if (!resp?.success) { showError(Locale.label("mobile.login.errSetPasswordRetry")); setMode("forgot"); return; }
       await loginApiCall({ email, password: newPassword });
-    } catch (e: any) {
-      showError(e?.toString?.() || Locale.label("mobile.login.errSetPassword"));
+    } catch (e) {
+      showError((e as Error | undefined)?.toString?.() || Locale.label("mobile.login.errSetPassword"));
     } finally {
       setLoading(false);
     }

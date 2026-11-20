@@ -100,7 +100,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
     const handler = (event: MessageEvent) => {
 
       if (event.origin !== window.location.origin) return;
-      const data: any = event.data;
+      const data = event.data as { type?: string; url?: unknown } | null;
       if (!data || typeof data !== "object") return;
       if (data.type !== "navigate" || typeof data.url !== "string") return;
       const native = resolveInternalPath(data.url);

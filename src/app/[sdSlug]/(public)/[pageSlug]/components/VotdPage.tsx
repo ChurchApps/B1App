@@ -180,7 +180,7 @@ export function VotdPage() {
         </>
       )}
 
-      <Dialog open={!!selected} onClose={() => setSelected(null)} fullWidth maxWidth="md" aria-labelledby="votd-day-title" slotProps={{ paper: { "data-testid": "votd-day-dialog" } as any }}>
+      <Dialog open={!!selected} onClose={() => setSelected(null)} fullWidth maxWidth="md" aria-labelledby="votd-day-title" slotProps={{ paper: { "data-testid": "votd-day-dialog" } as React.HTMLAttributes<HTMLDivElement> }}>
         {selected && (
           <>
             <DialogContent>

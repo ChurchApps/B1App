@@ -99,7 +99,7 @@ export const RequestEventPage = ({ config }: Props) => {
         roomIds: booking.roomIds,
         resources: booking.resourceIds.map((resourceId) => ({ resourceId, quantity: 1 }))
       };
-      const result: any = await ApiHelper.post("/events/request", body, "ContentApi");
+      const result: { bookings?: Outcome[] } = await ApiHelper.post("/events/request", body, "ContentApi");
       setOutcome(Array.isArray(result?.bookings) ? result.bookings : []);
     } catch {
       setError(Locale.label("mobile.requests.failedToSubmit"));

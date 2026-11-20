@@ -59,7 +59,7 @@ export class EnvironmentHelper {
     const publicUrl = (isBrowser ? window.location.origin : process.env.PUBLIC_URL || "http://localhost").replace(/\/$/, "");
     const common = EnvironmentHelper.Common;
     const apiBase = isBrowser ? publicUrl + "/api" : process.env.B1_API_INTERNAL_URL || "http://api:8084";
-    for (const mod of ["Membership", "Attendance", "Content", "Giving", "Messaging", "Doing", "Reporting"]) (common as any)[mod + "Api"] = apiBase + "/" + mod.toLowerCase();
+    for (const mod of ["Membership", "Attendance", "Content", "Giving", "Messaging", "Doing", "Reporting"] as const) common[`${mod}Api` as const] = apiBase + "/" + mod.toLowerCase();
     common.MessagingApiSocket = publicUrl.replace(/^http/, "ws") + "/api/";
     common.ContentRoot = publicUrl + "/api/content";
     common.B1Root = publicUrl;

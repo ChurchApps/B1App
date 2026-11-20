@@ -13,6 +13,7 @@ import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
 import { formatRelative } from "../util";
 import { LoadErrorAlert } from "../LoadErrorAlert";
+import type { PrivateMessageListRow } from "../NotificationBellMenu";
 import { PageHead, PersonAvatar, Plate, QuietEmpty, Row, SearchField, SignInPrompt, StatusBadge } from "../kit";
 
 interface Props {
@@ -21,7 +22,7 @@ interface Props {
 
 interface Conversation {
   id: string;
-  pmId: string;
+  pmId?: string;
   personId: string;
   conversationId?: string;
   personName: string;
@@ -55,7 +56,7 @@ export const MessagesPage = ({ config: _config }: Props) => {
   const { data: conversations = null, isError: conversationsError, refetch: refetchConversations } = useQuery<Conversation[]>({
     queryKey: ["conversations", myPersonId],
     queryFn: async () => {
-      const pmData: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
+      const pmData: PrivateMessageListRow[] = await ApiHelper.get("/privateMessages", "MessagingApi");
       if (!Array.isArray(pmData) || pmData.length === 0) return [];
 
       const rows = pmData.map((pm) => {
@@ -94,7 +95,7 @@ export const MessagesPage = ({ config: _config }: Props) => {
           try {
             photo = PersonHelper.getPhotoUrl(person) || "";
           } catch {
-            photo = (person as any).photo || "";
+            photo = person.photo || "";
           }
         }
         result.push({

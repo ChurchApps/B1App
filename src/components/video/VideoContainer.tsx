@@ -24,7 +24,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
   const [isClient, setIsClient] = React.useState(false);
   const isMounted = useMountedState();
   const [config, setConfig] = React.useState<ConfigurationInterface | null>(null);
-  const [transparent, setTransparent] = useState(props.overlayContent);
+  const [transparent] = useState(props.overlayContent);
   const params = useParams<PageParams>();
 
   const loadData = () => {

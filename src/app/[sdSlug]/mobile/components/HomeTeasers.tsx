@@ -13,6 +13,7 @@ import { ConfirmDeclineSheet } from "./ConfirmDeclineSheet";
 import { EventProcessor } from "../helpers/eventProcessor";
 import { attendanceSubtitle, attendanceTitle, useMyRegistrations, type MyAttendanceRecord, type MyFormSubmission } from "../helpers/myRecords";
 import { MyTaskSheet, TaskRow } from "./screens/CardSheet";
+import type { EventRow } from "./group/GroupCalendarTab";
 import { BigNumber, PersonAvatar, PlateSection, Row, RowList, StatusBadge, TextLink, type BadgeTone } from "./kit";
 
 interface UpcomingAssignment {
@@ -75,14 +76,15 @@ export const useMyGroups = (enabled: boolean) => {
 };
 
 // Expands recurring timeline events across this month and the next two, keeping future occurrences in date order.
-export const expandUpcomingEvents = (timeline: any[], now: Date = new Date()): UpcomingEvent[] => {
-  const normalized = EventProcessor.updateTime(timeline as any);
+export const expandUpcomingEvents = (timeline: EventRow[], now: Date = new Date()): UpcomingEvent[] => {
+  const normalized = EventProcessor.updateTime(timeline);
   const months = [new Date(now.getFullYear(), now.getMonth(), 1), new Date(now.getFullYear(), now.getMonth() + 1, 1), new Date(now.getFullYear(), now.getMonth() + 2, 1)];
   const seen = new Set<string>();
   const items: UpcomingEvent[] = [];
   months.forEach((month) => {
-    EventProcessor.expandEventsForMonth(normalized, month).forEach((e: any) => {
-      const date = e.start instanceof Date ? e.start : new Date(e.start);
+    EventProcessor.expandEventsForMonth(normalized, month).forEach((e) => {
+      const start = e.start as Date | string | undefined;
+      const date = start instanceof Date ? start : new Date(start as string);
       if (isNaN(date.getTime()) || date < now) return;
       const key = `evt-${e.id}-${date.getTime()}`;
       if (seen.has(key)) return;
@@ -95,7 +97,7 @@ export const expandUpcomingEvents = (timeline: any[], now: Date = new Date()): U
 
 export const useUpcomingEvents = (enabled: boolean) => {
   // Same key as MePage, so both screens share one cache entry.
-  const { data } = useQuery<any[]>({
+  const { data } = useQuery<EventRow[]>({
     queryKey: ["/events/timeline"],
     queryFn: async () => {
       const data = await ApiHelper.get("/events/timeline", "ContentApi");
@@ -112,7 +114,7 @@ export const useUpcomingEvents = (enabled: boolean) => {
     const now = new Date();
     const items: HomeUpcomingEvent[] = [];
     const registered = new Set<string>();
-    (registrations || []).forEach((r: any) => {
+    (registrations || []).forEach((r) => {
       const date = r.event?.start ? new Date(r.event.start) : null;
       if (!date || isNaN(date.getTime()) || date < now || r.status === "cancelled") return;
       registered.add(`${r.eventId}-${date.getTime()}`);
@@ -128,7 +130,7 @@ export const useUpcomingEvents = (enabled: boolean) => {
 
 // The church's registration-enabled events, read anonymously so signed-out visitors can find one to register for.
 export const usePublicRegisterableEvents = (churchId: string | undefined, enabled: boolean) => {
-  const { data } = useQuery<any[]>({
+  const { data } = useQuery<EventRow[]>({
     queryKey: ["events-public-registerable", churchId],
     queryFn: async () => {
       const data = await ApiHelper.getAnonymous(`/events/public/registerable/${churchId}`, "ContentApi");
@@ -150,7 +152,7 @@ export const usePublicRegisterableEvents = (churchId: string | undefined, enable
         date = next.date;
       } else {
         // Not expandUpcomingEvents: its three-month window would hide an event further out.
-        date = new Date(event.start);
+        date = new Date(event.start as string | Date);
         const endTime = new Date(event.end || event.start || "").getTime();
         if (isNaN(date.getTime()) || endTime < now.getTime()) return;
       }
@@ -204,8 +206,8 @@ export const ServingTeaser = ({ upcoming, queryKey }: ReturnType<typeof useUpcom
         queryClient.invalidateQueries({ queryKey }),
         queryClient.invalidateQueries({ queryKey: ["/assignments/my"] })
       ]);
-    } catch (err: any) {
-      setError(err?.message || Locale.label("mobile.details.unableToRespond").replace("{}", action));
+    } catch (err) {
+      setError((err as Error | undefined)?.message || Locale.label("mobile.details.unableToRespond").replace("{}", action));
     } finally {
       setBusyId("");
     }

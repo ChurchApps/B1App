@@ -19,7 +19,7 @@ export const useChurchSermons = (churchId?: string) => useQuery<SermonInterface[
   queryFn: async () => {
     const result = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
     const list: SermonInterface[] = Array.isArray(result)
-      ? result.filter((s: any) => s && s.id && s.title)
+      ? result.filter((s: SermonInterface) => s && s.id && s.title)
       : [];
     list.sort((a, b) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime());
     return list;

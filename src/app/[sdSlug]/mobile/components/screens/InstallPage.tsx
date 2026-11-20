@@ -22,7 +22,7 @@ const tc = mobileTheme.colors;
 const detectPlatform = (): Platform => {
   if (typeof navigator === "undefined") return "desktop";
   const ua = navigator.userAgent || "";
-  if (/iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream) return "ios";
+  if (/iPad|iPhone|iPod/.test(ua) && !(window as Window & { MSStream?: unknown }).MSStream) return "ios";
   if (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) return "ios";
   if (/android/i.test(ua)) return "android";
   return "desktop";
@@ -32,7 +32,7 @@ const detectStandalone = (platform: Platform): boolean => {
   if (typeof window === "undefined") return false;
   if (platform === "ios") {
     // Navigator.standalone is the only trustworthy signal; display-mode:standalone has false positives in in-app browsers.
-    return (window.navigator as any).standalone === true;
+    return (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
   }
   return !!(window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
 };

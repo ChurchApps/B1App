@@ -26,7 +26,7 @@ export default [
     },
     rules: {
       "prefer-const": "error",
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-unused-vars": ["warn", { args: "all", argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
       "unused-imports/no-unused-imports": "error",
       "no-trailing-spaces": "error",

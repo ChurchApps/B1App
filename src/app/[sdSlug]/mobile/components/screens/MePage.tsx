@@ -121,12 +121,12 @@ export const MePage = ({ config }: Props) => {
     staleTime: 60 * 1000
   });
 
-  const { data: bookingCatalog = { rooms: [], resources: [] } } = useQuery<{ rooms: any[]; resources: any[] }>({
+  const { data: bookingCatalog = { rooms: [], resources: [] } } = useQuery<{ rooms: unknown[]; resources: unknown[] }>({
     queryKey: ["me-booking-catalog"],
     queryFn: async () => {
       const [rooms, resources] = await Promise.all([
-        ApiHelper.get("/rooms", "ContentApi").catch((): any[] => []),
-        ApiHelper.get("/resources", "ContentApi").catch((): any[] => [])
+        ApiHelper.get("/rooms", "ContentApi").catch((): unknown[] => []),
+        ApiHelper.get("/resources", "ContentApi").catch((): unknown[] => [])
       ]);
       return { rooms: Array.isArray(rooms) ? rooms : [], resources: Array.isArray(resources) ? resources : [] };
     },
@@ -200,11 +200,11 @@ export const MePage = ({ config }: Props) => {
     });
 
     registrations.forEach((r) => {
-      const start = (r as any).event?.start;
+      const start = r.event?.start;
       if (!start) return;
       const date = new Date(start);
       if (isNaN(date.getTime()) || date < now || r.status === "cancelled") return;
-      items.push({ kind: "registration", date, title: (r as any).event?.title || Locale.label("mobile.me.registration"), href: "/mobile/registrations", key: `reg-${r.id}`, photoUrl: (r as any).event?.photoUrl || undefined });
+      items.push({ kind: "registration", date, title: r.event?.title || Locale.label("mobile.me.registration"), href: "/mobile/registrations", key: `reg-${r.id}`, photoUrl: r.event?.photoUrl || undefined });
     });
 
     // Expand recurring group events across the next few months, keep future occurrences.
@@ -219,9 +219,9 @@ export const MePage = ({ config }: Props) => {
   const givingThisYear = useMemo(() => {
     const year = new Date().getFullYear();
     const gifts = donations.filter((d) => d.donationDate && DateHelper.toDate(d.donationDate).getFullYear() === year);
-    const currencies = new Set(gifts.map((d) => ((d as any).currency || "usd").toLowerCase()));
+    const currencies = new Set(gifts.map((d) => (d.currency || "usd").toLowerCase()));
     // Mixed currencies can't be summed without the exchange table, so only the count is shown then.
-    const total = currencies.size === 1 ? gifts.reduce((sum, d) => sum + Number((d as any).fund?.amount ?? d.amount ?? 0), 0) : null;
+    const total = currencies.size === 1 ? gifts.reduce((sum, d) => sum + Number(d.fund?.amount ?? d.amount ?? 0), 0) : null;
     return { year, count: gifts.length, total, currency: [...currencies][0] || "usd" };
   }, [donations]);
 

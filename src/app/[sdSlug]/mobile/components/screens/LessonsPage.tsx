@@ -21,6 +21,15 @@ const INTERNAL_ROUTE_MAP: Array<{ match: RegExp; to: (m: RegExpMatchArray) => st
   { match: /\/donate(?:\/|$|\?)/, to: () => "/mobile/donate" }
 ];
 
+// postMessage payloads the embedded Lessons site sends (a bare string is also accepted as the type).
+interface LessonsMessage {
+  type?: string;
+  event?: string;
+  message?: string;
+  autoPrint?: number | string;
+  url?: unknown;
+}
+
 const resolveInternalRoute = (url: string): string | null => {
   try {
 
@@ -80,7 +89,7 @@ export const LessonsPage = () => {
         UserHelper.user = resp.user;
         UserHelper.userChurches = resp.userChurches || [];
         const current = (resp.userChurches || []).find(
-          (uc: any) => uc.church?.id === churchId
+          (uc) => uc.church?.id === churchId
         );
         if (current) {
           UserHelper.currentUserChurch = current;
@@ -107,8 +116,10 @@ export const LessonsPage = () => {
 
       }
 
-      const data: any = event.data;
+      const data = event.data as LessonsMessage | string | null;
       if (!data) return;
+      // A plain string message has none of these fields, so reading them yields undefined.
+      const fields = data as LessonsMessage;
 
       const type =
         typeof data === "string"
@@ -124,7 +135,7 @@ export const LessonsPage = () => {
         window.location.href = "/mobile/logout";
         return;
       }
-      if (type === "print" || type === "autoPrint" || data?.autoPrint === 1 || data?.autoPrint === "1") {
+      if (type === "print" || type === "autoPrint" || fields?.autoPrint === 1 || fields?.autoPrint === "1") {
         try {
           window.print();
         } catch (err) {
@@ -133,8 +144,8 @@ export const LessonsPage = () => {
         return;
       }
 
-      if (type === "navigate" && typeof data?.url === "string") {
-        const route = resolveInternalRoute(data.url);
+      if (type === "navigate" && typeof fields?.url === "string") {
+        const route = resolveInternalRoute(fields.url);
         if (route) router.push(route);
       }
     };

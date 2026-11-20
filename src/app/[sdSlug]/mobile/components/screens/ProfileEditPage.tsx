@@ -27,7 +27,7 @@ import type { SelectChangeEvent } from "@mui/material";
 import PhotoCameraOutlinedIcon from "@mui/icons-material/PhotoCameraOutlined";
 import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { PersonInterface, VisibilityPreferenceInterface } from "@churchapps/helpers";
+import type { GroupInterface, PersonInterface, TaskInterface, VisibilityPreferenceInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { parseTitleOptions } from "@/helpers/TitleOptions";
 import UserContext from "@/context/UserContext";
@@ -107,14 +107,14 @@ interface PersonWithPrivacy extends PersonInterface {
   optedOut?: boolean;
 }
 
-const readField = (obj: any, key: string): string => {
+const readField = (obj: unknown, key: string): string => {
   if (!obj) return "";
   const parts = key.split(".");
-  let v: any = obj;
-  for (const p of parts) v = v?.[p];
+  let v: unknown = obj;
+  for (const p of parts) v = (v as Record<string, unknown> | null | undefined)?.[p];
   if (key === "birthDate" && v) {
     try {
-      return new Date(v).toISOString().split("T")[0];
+      return new Date(v as string | Date).toISOString().split("T")[0];
     } catch {
       return "";
     }
@@ -122,19 +122,19 @@ const readField = (obj: any, key: string): string => {
   return v == null ? "" : String(v);
 };
 
-const writeField = (obj: any, key: string, value: string): any => {
+function writeField<T>(obj: T, key: string, value: string): T {
   const parts = key.split(".");
-  const clone = (src: any, depth: number): any => {
+  const clone = (src: Record<string, unknown> | undefined, depth: number): Record<string, unknown> => {
     const copy = { ...(src || {}) };
     if (depth === parts.length - 1) {
       copy[parts[depth]] = value;
     } else {
-      copy[parts[depth]] = clone(src?.[parts[depth]], depth + 1);
+      copy[parts[depth]] = clone(src?.[parts[depth]] as Record<string, unknown> | undefined, depth + 1);
     }
     return copy;
   };
-  return clone(obj, 0);
-};
+  return clone(obj as Record<string, unknown>, 0) as T;
+}
 
 const resizePhotoToDataUrl = async (file: File): Promise<string> => new Promise((resolve, reject) => {
   const reader = new FileReader();
@@ -248,7 +248,7 @@ export const ProfileEditPage = ({ config }: Props) => {
 
   const churchId = UserHelper.currentUserChurch?.church?.id || config?.church?.id;
 
-  const { data: publicSettings, isFetched: settingsFetched } = useQuery<any>({
+  const { data: publicSettings, isFetched: settingsFetched } = useQuery<Record<string, string>>({
     queryKey: ["publicSettings", churchId],
     queryFn: () => ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi"),
     enabled: !!churchId
@@ -322,8 +322,8 @@ export const ProfileEditPage = ({ config }: Props) => {
         next.add("photo");
         return next;
       });
-    } catch (err: any) {
-      setPhotoError(err?.message || Locale.label("mobile.screens.couldNotProcessImage"));
+    } catch (err) {
+      setPhotoError((err as Error | undefined)?.message || Locale.label("mobile.screens.couldNotProcessImage"));
     }
   };
 
@@ -339,8 +339,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       setPhotoError(null);
       const photo = await resizePhotoToDataUrl(file);
       setNewMember((m) => ({ ...m, photo }));
-    } catch (err: any) {
-      setPhotoError(err?.message || Locale.label("mobile.screens.couldNotProcessImage"));
+    } catch (err) {
+      setPhotoError((err as Error | undefined)?.message || Locale.label("mobile.screens.couldNotProcessImage"));
     }
   };
 
@@ -373,7 +373,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     let saveWithApproval = requiresApproval;
     try {
       if (!churchId) throw new Error(Locale.label("mobile.screens.unableToLoadChurch"));
-      const settings = await ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi");
+      const settings: Record<string, string> = await ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi");
       const approvalGroupId: string = settings?.directoryApprovalGroupId || "";
       saveWithApproval = !!approvalGroupId;
 
@@ -381,7 +381,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       const displayName = [person.name?.first, person.name?.last].filter(Boolean).join(" ");
 
       if (saveWithApproval) {
-        const task: any = {
+        const task: TaskInterface = {
           dateCreated: new Date(),
           associatedWithType: "person",
           associatedWithId: id,
@@ -395,7 +395,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         };
 
         try {
-          const group = await ApiHelper.get(`/groups/${approvalGroupId}`, "MembershipApi");
+          const group: GroupInterface = await ApiHelper.get(`/groups/${approvalGroupId}`, "MembershipApi");
           task.assignedToType = "group";
           task.assignedToId = approvalGroupId;
           task.assignedToLabel = group?.name;
@@ -437,11 +437,11 @@ export const ProfileEditPage = ({ config }: Props) => {
         try { router.back(); } catch { }
       }, 900);
       return true;
-    } catch (err: any) {
+    } catch (err) {
       console.error("Profile save error", err);
       setSnack({
         open: true,
-        msg: err?.message || (saveWithApproval ? Locale.label("mobile.screens.unableToSubmitChanges") : Locale.label("mobile.screens.unableToSaveChanges")),
+        msg: (err as Error | undefined)?.message || (saveWithApproval ? Locale.label("mobile.screens.unableToSubmitChanges") : Locale.label("mobile.screens.unableToSaveChanges")),
         severity: "error"
       });
       return false;
@@ -504,8 +504,8 @@ export const ProfileEditPage = ({ config }: Props) => {
         UserHelper.user.lastName = acctLastName.trim();
       }
       setSnack({ open: true, msg: Locale.label("mobile.screens.displayNameUpdated"), severity: "success" });
-    } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.couldNotUpdateDisplayName"), severity: "error" });
+    } catch (err) {
+      setSnack({ open: true, msg: (err as Error | undefined)?.message || Locale.label("mobile.screens.couldNotUpdateDisplayName"), severity: "error" });
     } finally {
       setSavingAcctName(false);
     }
@@ -518,7 +518,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     if (!emailRegex.test(trimmed)) { setEmailError(Locale.label("mobile.profileEdit.invalidEmail")); return; }
     setSavingEmail(true);
     try {
-      const resp: any = await ApiHelper.post("/users/updateEmail", { email: trimmed }, "MembershipApi");
+      const resp: { jwt?: string } = await ApiHelper.post("/users/updateEmail", { email: trimmed }, "MembershipApi");
       if (UserHelper.user) UserHelper.user.email = trimmed;
 
       if (resp?.jwt && UserHelper.currentUserChurch) {
@@ -526,8 +526,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       }
       setNewEmail("");
       setSnack({ open: true, msg: Locale.label("mobile.screens.emailUpdated"), severity: "success" });
-    } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.couldNotUpdateEmail"), severity: "error" });
+    } catch (err) {
+      setSnack({ open: true, msg: (err as Error | undefined)?.message || Locale.label("mobile.screens.couldNotUpdateEmail"), severity: "error" });
     } finally {
       setSavingEmail(false);
     }
@@ -554,8 +554,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       setNewPassword("");
       setConfirmPassword("");
       setSnack({ open: true, msg: Locale.label("mobile.screens.passwordUpdated"), severity: "success" });
-    } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.couldNotUpdatePassword"), severity: "error" });
+    } catch (err) {
+      setSnack({ open: true, msg: (err as Error | undefined)?.message || Locale.label("mobile.screens.couldNotUpdatePassword"), severity: "error" });
     } finally {
       setSavingPassword(false);
     }
@@ -570,7 +570,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   const handleSaveVisibility = async (): Promise<boolean> => {
     setSavingPrivacy(true);
     try {
-      const tasks: Promise<any>[] = [];
+      const tasks: Promise<unknown>[] = [];
       if (prefsChanged) {
         const payload: VisibilityPreferenceInterface = {
           ...(visibilityPrefs || {}),
@@ -601,8 +601,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       }
       setSnack({ open: true, msg: Locale.label("mobile.screens.visibilityPreferencesSaved"), severity: "success" });
       return true;
-    } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.couldNotSaveVisibility"), severity: "error" });
+    } catch (err) {
+      setSnack({ open: true, msg: (err as Error | undefined)?.message || Locale.label("mobile.screens.couldNotSaveVisibility"), severity: "error" });
       return false;
     } finally {
       setSavingPrivacy(false);
@@ -704,7 +704,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         options={titleOptions}
         value={readField(person, "name.prefix")}
         onInputChange={(_, val) => { if (val !== readField(person, "name.prefix")) setField("name.prefix", val); }}
-        renderInput={(params) => <TextField {...params} fullWidth label={Locale.label("checkin.guestRegister.personTitle")} inputProps={{ ...params.inputProps, maxLength: 10, "data-testid": "profile-title" } as any} />}
+        renderInput={(params) => <TextField {...params} fullWidth label={Locale.label("checkin.guestRegister.personTitle")} inputProps={{ ...params.inputProps, maxLength: 10, "data-testid": "profile-title" } as React.InputHTMLAttributes<HTMLInputElement>} />}
       />
       {renderField("name.first", Locale.label("person.firstName"), { autoComplete: "given-name" })}
       {renderField("name.middle", Locale.label("mobile.profileEdit.middleName"), { autoComplete: "additional-name" })}
@@ -747,7 +747,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         options={titleOptions}
         value={newMember.prefix}
         onInputChange={(_, val) => setNewMember((m) => ({ ...m, prefix: val }))}
-        renderInput={(params) => <TextField {...params} fullWidth label={Locale.label("checkin.guestRegister.personTitle")} inputProps={{ ...params.inputProps, maxLength: 10, "data-testid": "family-member-title" } as any} />}
+        renderInput={(params) => <TextField {...params} fullWidth label={Locale.label("checkin.guestRegister.personTitle")} inputProps={{ ...params.inputProps, maxLength: 10, "data-testid": "family-member-title" } as React.InputHTMLAttributes<HTMLInputElement>} />}
       />
       <TextField label={Locale.label("person.email")} type="email" value={newMember.email} onChange={(e) => setNewMember({ ...newMember, email: e.target.value })} inputProps={{ inputMode: "email", "data-testid": "family-member-email" }} fullWidth />
       <TextField label={Locale.label("mobile.details.mobilePhone")} type="tel" value={newMember.mobilePhone} onChange={(e) => setNewMember({ ...newMember, mobilePhone: e.target.value })} inputProps={{ inputMode: "tel", "data-testid": "family-member-phone" }} fullWidth />

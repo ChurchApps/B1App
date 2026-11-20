@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Box, Button, Icon, Menu, MenuItem, Snackbar, Typography } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { ApiHelper, CommonEnvironmentHelper, Locale } from "@churchapps/apphelper";
-import { EventHelper } from "@churchapps/helpers";
+import { EventHelper, type EventInterface, type GroupInterface } from "@churchapps/helpers";
 import type { ElementInterface } from "@/helpers";
 import { buildOccurrences, eventPageId, firstLine, timeRange, type Occurrence } from "@/helpers/EventOccurrences";
 import { AutoScrollStrip } from "./AutoScrollStrip";
@@ -41,7 +41,7 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
       const windowEnd = new Date(now);
       windowEnd.setFullYear(windowEnd.getFullYear() + 1);
       // ponytail: inline EventHelper.hasTag until @churchapps/helpers bumps past 2.7.1
-      const tagged = (Array.isArray(events) ? events : []).filter((e: any) => !tag || (e.tags || "").split(",").some((t: string) => t.trim().toLowerCase() === tag));
+      const tagged = (Array.isArray(events) ? events : []).filter((e: EventInterface) => !tag || (e.tags || "").split(",").some((t: string) => t.trim().toLowerCase() === tag));
       const occurrences = buildOccurrences(tagged, now, windowEnd, 1);
       occurrences.sort((a, b) => a.start.getTime() - b.start.getTime());
       const shown = occurrences.slice(0, MAX_TILES);
@@ -53,7 +53,7 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
   // The public group endpoint hides archived and confidential groups, so their events get no badge.
   const loadGroupNames = (occurrences: Occurrence[]) => {
     const ids = Array.from(new Set(occurrences.map((o) => o.event.groupId).filter((id): id is string => !!id)));
-    Promise.all(ids.map((id) => ApiHelper.getAnonymous("/groups/public/" + churchId + "/" + id, "MembershipApi").then((g: any) => [id, g?.name] as const).catch(() => [id, undefined] as const))).then((pairs) => {
+    Promise.all(ids.map((id) => ApiHelper.getAnonymous("/groups/public/" + churchId + "/" + id, "MembershipApi").then((g: GroupInterface) => [id, g?.name] as const).catch(() => [id, undefined] as const))).then((pairs) => {
       const names: Record<string, string> = {};
       pairs.forEach(([id, name]) => { if (name) names[id] = name; });
       setGroupNames(names);
@@ -72,7 +72,7 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
   };
 
   const tiles = (items || []).map((o) => {
-    const photo = (o.event as any).photoUrl as string | undefined;
+    const photo = o.event.photoUrl;
     const groupName = showGroupBadge && o.event.groupId ? groupNames[o.event.groupId] : undefined;
     return (
       <Box key={eventPageId(o.event) + o.start.toISOString()} component={Link} href={"/events/" + eventPageId(o.event)} data-testid="upcoming-event-tile" data-start={o.start.toISOString()}

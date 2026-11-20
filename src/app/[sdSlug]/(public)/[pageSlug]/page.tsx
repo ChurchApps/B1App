@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
   const description = props.pageData?.metaDescription || title || churchName;
   const metadata = MetaHelper.getMetaData(title ? title + " - " + churchName : churchName, description, undefined, props.config.appearance);
   // A members-only page shows visitors the same sign-in gate on every such URL, so keep it out of search results.
-  if ((props.pageData as any)?.restricted) metadata.robots = { index: false, follow: true };
+  if (props.pageData?.restricted) metadata.robots = { index: false, follow: true };
   return metadata;
 }
 
@@ -67,7 +67,7 @@ export default async function Home({ params }: { params: PageParams }) {
 
   // A redirect the church saved wins over the built-in virtual pages, but not over a CMS page.
   // A page the visitor can't see comes back as { restricted } with no url; it is still a CMS page.
-  const restricted = !!(pageData as any)?.restricted;
+  const restricted = !!pageData?.restricted;
   if (!pageData?.url && !restricted) {
     const to = await resolveRedirect(config.church.id || "", sdSlug, "/" + pageSlug);
     if (to) permanentRedirect(to);

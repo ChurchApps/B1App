@@ -30,7 +30,7 @@ export function RestrictedPage({ config, pageUrl, siteId = "" }: Props) {
     if (status !== "ready") { setState("loading"); return; }
     let cancelled = false;
     ApiHelper.get("/pages/" + config.church.id + "/tree?url=" + pageUrl + (siteId ? "&siteId=" + siteId : ""), "ContentApi")
-      .then((data: any) => {
+      .then((data: PageInterface | null) => {
         if (cancelled) return;
         if (!data || data.restricted) { setState("denied"); return; }
         setPageData(data);

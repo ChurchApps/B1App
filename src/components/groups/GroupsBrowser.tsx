@@ -31,10 +31,10 @@ export const GroupsBrowser = (props: Props) => {
 
   useEffect(() => {
     if (!props.churchId) return;
-    ApiHelper.getAnonymous(`/groups/public/${props.churchId}/list`, "MembershipApi").then((data: any) => {
+    ApiHelper.getAnonymous(`/groups/public/${props.churchId}/list`, "MembershipApi").then((data: GroupInterface[]) => {
       setGroups(Array.isArray(data) ? data : []);
     }).catch(() => setGroups([]));
-    ApiHelper.getAnonymous(`/campuses/public/${props.churchId}`, "MembershipApi").then((data: any) => {
+    ApiHelper.getAnonymous(`/campuses/public/${props.churchId}`, "MembershipApi").then((data: { id?: string; name?: string }[]) => {
       setCampuses(Array.isArray(data) ? data : []);
     }).catch(() => setCampuses([]));
   }, [props.churchId]);

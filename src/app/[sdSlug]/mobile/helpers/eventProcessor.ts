@@ -6,7 +6,7 @@ const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0, 2
 const toFloatingUtc = (d: Date) => new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()));
 
 export class EventProcessor {
-  static updateTime(data: any): EventInterface[] {
+  static updateTime(data: unknown): EventInterface[] {
     if (!data || !Array.isArray(data)) return [];
     return data.map((d: EventInterface) => {
       const ev = { ...d };

@@ -50,6 +50,8 @@ export interface PageInterface {
   title?: string;
   layout?: string;
   metaDescription?: string;
+  // Set by the page tree endpoint when the page is members-only and the caller can't see it.
+  restricted?: boolean;
 
   sections?: SectionInterface[];
 }
@@ -75,7 +77,23 @@ export interface WrapperPageProps {
 
 export interface StreamingButtonInterface { text: string, url: string }
 export interface StreamingTabInterface { text: string, url: string, icon: string, type: string, data: string, updated?: boolean }
-export interface StreamingServiceExtendedInterface { videoUrl: string, serviceTime: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string, id?: string, sermon?: SermonInterface }
+export interface StreamingServiceExtendedInterface {
+  videoUrl: string;
+  serviceTime: string;
+  earlyStart: string;
+  chatBefore: string;
+  chatAfter: string;
+  provider: string;
+  providerKey: string;
+  localCountdownTime?: Date;
+  localStartTime?: Date;
+  localEndTime?: Date;
+  localChatStart?: Date;
+  localChatEnd?: Date;
+  label: string;
+  id?: string;
+  sermon?: SermonInterface;
+}
 export interface StreamConfigInterface { keyName?: string, churchId?: string, buttons?: StreamingButtonInterface[], tabs?: StreamingTabInterface[], services?: StreamingServiceExtendedInterface[] }
 
 export interface ChatStateInterface { mainConversation: ConversationInterface | null, hostConversation: ConversationInterface | null, user: ChatUserInterface }

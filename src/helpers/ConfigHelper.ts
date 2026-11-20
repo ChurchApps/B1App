@@ -10,10 +10,40 @@ import { notFound } from "next/navigation";
 export interface ColorsInterface { primary: string, contrast: string, header: string }
 export interface LogoInterface { url: string, image: string }
 export interface ButtonInterface { text: string, url: string }
-export interface ServiceInterface { videoUrl: string, serviceTime: string, duration: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string }
+export interface ServiceInterface {
+  videoUrl: string;
+  serviceTime: string;
+  duration: string;
+  earlyStart: string;
+  chatBefore: string;
+  chatAfter: string;
+  provider: string;
+  providerKey: string;
+  localCountdownTime?: Date;
+  localStartTime?: Date;
+  localEndTime?: Date;
+  localChatStart?: Date;
+  localChatEnd?: Date;
+  label: string;
+}
 export interface AppThemeModeColors { background: string, surface: string, primary: string, primaryContrast: string, secondary: string, textColor: string }
 export interface AppThemeConfig { light: AppThemeModeColors, dark: AppThemeModeColors }
-export interface ConfigurationInterface { keyName?: string, siteId?: string, navLinks?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface, allowDonations:boolean, hasWebsite:boolean, globalStyles:GlobalStyleInterface, homePage?: PageInterface, appTheme?: AppThemeConfig, hidePublicSite?: boolean, ga4MeasurementId?: string, blogFooterHtml?: string, announcementBanner?: string }
+export interface ConfigurationInterface {
+  keyName?: string;
+  siteId?: string;
+  navLinks?: LinkInterface[];
+  church: ChurchInterface;
+  appearance: AppearanceInterface;
+  allowDonations:boolean;
+  hasWebsite:boolean;
+  globalStyles:GlobalStyleInterface;
+  homePage?: PageInterface;
+  appTheme?: AppThemeConfig;
+  hidePublicSite?: boolean;
+  ga4MeasurementId?: string;
+  blogFooterHtml?: string;
+  announcementBanner?: string;
+}
 
 // Prod caches config for 5 min; dev/test fetch fresh so content/style edits show immediately.
 const CONFIG_REVALIDATE_SECONDS = process.env.NODE_ENV === "production" ? 300 : 0;
@@ -54,7 +84,7 @@ export class ConfigHelper {
     const church: ChurchInterface = await fetchCached("/churches/lookup/?subDomain=" + keyName, "MembershipApi", keyName);
     // An unknown subdomain comes back as {} (200). Every later call would ask for /…/undefined (Sentry B1-APP-EP).
     if (!church?.id) notFound();
-    const siteId = (church as any).siteId || "";
+    const siteId = (church as ChurchInterface & { siteId?: string }).siteId || "";
     const [appearance, tabs, homePage, gatewayConfigured, globalStyles, contentSettings] = await Promise.all([
       fetchCached<AppearanceInterface>("/settings/public/" + church.id, "MembershipApi", keyName),
       fetchCachedOrNull<LinkInterface[]>("/links/church/" + church.id + "?category=" + navCategory + (siteId ? "&siteId=" + siteId : ""), "ContentApi", keyName),
@@ -65,7 +95,7 @@ export class ConfigHelper {
     ]);
     let appTheme: AppThemeConfig | undefined;
     try {
-      const rawTheme = (appearance as any)?.appTheme;
+      const rawTheme = (appearance as (AppearanceInterface & { appTheme?: string | AppThemeConfig }) | null)?.appTheme;
       if (rawTheme) {
         const themeData = typeof rawTheme === "string" ? JSON.parse(rawTheme) : rawTheme;
         if (themeData && themeData.light) appTheme = themeData;

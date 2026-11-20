@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
   return MetaHelper.getMetaData(title + " - " + props.config.church.name, title + " - " + props.config.church.name, undefined, props.config.appearance);
 }
 
-const loadData = async (sdSlug:string, pageSlug:string) => {
+const loadData = async (sdSlug:string, _pageSlug:string) => {
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
   return { config };
 };
@@ -38,11 +38,6 @@ export default async function Home({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug, id } = await params;
   const { config } = await loadSharedData(sdSlug, pageSlug);
-
-  let label = "Plan Details";
-  switch (pageSlug) {
-    case "forms": label = "Form"; break;
-  }
 
   const getPageContent = () => {
     switch (pageSlug) {

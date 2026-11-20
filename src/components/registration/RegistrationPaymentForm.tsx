@@ -4,8 +4,8 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Alert, Box, Button, CircularProgress, Divider, Icon, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { getPaymentProvider, GuestCaptcha } from "@churchapps/apphelper/donations";
-import type { MemberEntryHandle, PaymentGateway } from "@churchapps/apphelper/donations";
-import { formatMoney, type RegistrationPayment } from "./useEventRegistration";
+import type { ChargeContext, MemberEntryHandle, PaymentGateway, PaymentProvider } from "@churchapps/apphelper/donations";
+import { formatMoney, type RegistrationPayment, type RegistrationResult } from "./useEventRegistration";
 
 interface SavedMethod {
   id: string;
@@ -32,17 +32,17 @@ interface Props {
   couponError: string;
   applyCoupon: () => void;
   removeCoupon: () => void;
-  onPay: (payment: RegistrationPayment) => Promise<any>;
-  onFinalized: (result: any) => void;
+  onPay: (payment: RegistrationPayment) => Promise<RegistrationResult | null>;
+  onFinalized: (result: RegistrationResult | null) => void;
   onBack: () => void;
   hideCoupon?: boolean;
   // Churches with no online giving: register now with a balance due, paid to the church later.
-  onPayLater?: () => Promise<any>;
+  onPayLater?: () => Promise<RegistrationResult | null>;
 }
 
 // Runs inside the provider's wrapper so its SDK context is available for finalize (e.g. 3DS).
 const PaymentEntry: React.FC<{
-  provider: any;
+  provider: PaymentProvider;
   gateway: PaymentGateway;
   churchId: string;
   personId?: string;
@@ -51,8 +51,8 @@ const PaymentEntry: React.FC<{
   amount: number;
   currency?: string;
   savedMethods: SavedMethod[];
-  onPay: (payment: RegistrationPayment) => Promise<any>;
-  onFinalized: (result: any) => void;
+  onPay: (payment: RegistrationPayment) => Promise<RegistrationResult | null>;
+  onFinalized: (result: RegistrationResult | null) => void;
 }> = ({ provider, gateway, churchId, personId, personEmail, personName, amount, currency, savedMethods, onPay, onFinalized }) => {
   const entryRef = useRef<MemberEntryHandle>(null);
   const hasSaved = savedMethods.length > 0;
@@ -88,6 +88,7 @@ const PaymentEntry: React.FC<{
     captchaRef.current?.reset();
   };
 
+  // Registrations carry no church or recurring info; the member entry only reads the fields below.
   const getContext = (): {
     provider: string;
     gatewayId?: string;
@@ -142,8 +143,8 @@ const PaymentEntry: React.FC<{
         }
       }
       onFinalized(result);
-    } catch (e: any) {
-      setError(e?.message || Locale.label("registration.errors.registrationFailed"));
+    } catch (e) {
+      setError((e as Error | undefined)?.message || Locale.label("registration.errors.registrationFailed"));
       resetCaptcha();
     } finally {
       setProcessing(false);
@@ -172,7 +173,7 @@ const PaymentEntry: React.FC<{
 
       {useNew && MemberEntry && (
         <Box sx={{ p: 1.5, border: "1px solid", borderColor: "divider", borderRadius: 1, mb: 2 }}>
-          <MemberEntry ref={entryRef} gateway={gateway} getContext={getContext} />
+          <MemberEntry ref={entryRef} gateway={gateway} getContext={getContext as () => ChargeContext} />
         </Box>
       )}
 
@@ -212,22 +213,22 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
     let active = true;
     (async () => {
       try {
-        const resp: any = await ApiHelper.getAnonymous("/donate/gateways/" + churchId, "GivingApi");
+        const resp: PaymentGateway[] | { gateways?: PaymentGateway[] } = await ApiHelper.getAnonymous("/donate/gateways/" + churchId, "GivingApi");
         const list: PaymentGateway[] = Array.isArray(resp) ? resp : resp?.gateways || [];
-        const gw = list.find((g: any) => g.enabled !== false) || list[0] || null;
+        const gw = list.find((g) => g.enabled !== false) || list[0] || null;
         if (!active) return;
         setGateway(gw);
         if (gw && personId) {
-          const prov = getPaymentProvider((gw as any).provider);
+          const prov = getPaymentProvider(gw.provider);
           if (prov.capabilities.savedCard) {
             try {
-              const methods: any = await ApiHelper.get("/paymentmethods/personid/" + personId, "GivingApi");
+              const methods: SavedMethod[] = await ApiHelper.get("/paymentmethods/personid/" + personId, "GivingApi");
               if (active) setSavedMethods(Array.isArray(methods) ? methods : []);
             } catch { /* no saved methods */ }
           }
         }
-      } catch (e: any) {
-        if (active) setLoadError(e?.message || Locale.label("registration.payment.noGateway"));
+      } catch (e) {
+        if (active) setLoadError((e as Error | undefined)?.message || Locale.label("registration.payment.noGateway"));
       } finally {
         if (active) setLoading(false);
       }
@@ -235,7 +236,7 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
     return () => { active = false; };
   }, [churchId, personId]);
 
-  const provider = useMemo(() => (gateway ? getPaymentProvider((gateway as any).provider) : null), [gateway]);
+  const provider = useMemo(() => (gateway ? getPaymentProvider(gateway.provider) : null), [gateway]);
 
   const summary = (
     <Box sx={{ mb: 2 }}>

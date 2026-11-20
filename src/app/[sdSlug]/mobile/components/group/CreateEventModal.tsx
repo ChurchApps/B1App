@@ -10,7 +10,7 @@ import { RRuleEditor } from "@churchapps/apphelper/website";
 import { EditRecurringModal } from "../../../../../components/eventCalendar/EditRecurringModal";
 import { MarkdownEditor } from "@churchapps/apphelper/markdown";
 import { EventReminderEdit } from "./EventReminderEdit";
-import { BookingPicker, diffBookings, emptyBookingSelection, type BookingSelection } from "./BookingPicker";
+import { BookingPicker, diffBookings, emptyBookingSelection, type BookingSelection, type EventBookingInterface } from "./BookingPicker";
 
 interface Props {
   open: boolean;
@@ -134,7 +134,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       setRegistrationOpenDate(d.registrationOpenDate);
       setRegistrationCloseDate(d.registrationCloseDate);
       setTags(d.tags);
-      setAllowRsvps(!((eventProp as any)?.rsvpDisabled ?? false));
+      setAllowRsvps(!(eventProp?.rsvpDisabled ?? false));
     }
   }
 
@@ -142,11 +142,11 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
     if (!open) return;
     setNotice(null);
     if (eventProp?.id) {
-      ApiHelper.get("/eventBookings/event/" + eventProp.id, "ContentApi").then((bk: any[]) => {
+      ApiHelper.get("/eventBookings/event/" + eventProp.id, "ContentApi").then((bk: EventBookingInterface[]) => {
         setBooking({
           ...emptyBookingSelection(),
-          roomIds: (bk || []).filter((b) => b.roomId).map((b) => b.roomId),
-          resourceIds: (bk || []).filter((b) => b.resourceId).map((b) => b.resourceId)
+          roomIds: (bk || []).filter((b) => b.roomId).map((b) => b.roomId as string),
+          resourceIds: (bk || []).filter((b) => b.resourceId).map((b) => b.resourceId as string)
         });
       }).catch(() => setBooking(emptyBookingSelection()));
     } else {
@@ -155,18 +155,18 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
   }, [open, eventProp]);
 
   // Diff selected rooms/resources against existing bookings: POST new, DELETE removed.
-  const syncBookings = async (eventId: string): Promise<any[]> => {
+  const syncBookings = async (eventId: string): Promise<EventBookingInterface[]> => {
     if (!eventId) return [];
-    const existing: any[] = eventProp?.id || createdIdRef.current ? await ApiHelper.get("/eventBookings/event/" + eventId, "ContentApi").catch((): any[] => []) : [];
+    const existing: EventBookingInterface[] = eventProp?.id || createdIdRef.current ? await ApiHelper.get("/eventBookings/event/" + eventId, "ContentApi").catch((): EventBookingInterface[] => []) : [];
     const { toAdd, toRemove } = diffBookings(eventId, booking, existing);
-    let saved: any[] = [];
+    let saved: EventBookingInterface[] = [];
     if (toAdd.length) saved = await ApiHelper.post("/eventBookings", toAdd, "ContentApi");
     for (const b of toRemove) await ApiHelper.delete("/eventBookings/" + b.id, "ContentApi");
     return saved;
   };
 
   // Tells the member the outcome and only closes if nothing is left pending.
-  const finishBookings = (saved: any[]) => {
+  const finishBookings = (saved: EventBookingInterface[]) => {
     onSaved?.();
     if ((saved || []).some((b) => b.status === "pending")) setNotice(Locale.label("mobile.group.bookingPending"));
     else onClose();
@@ -191,7 +191,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       tags: registrationEnabled ? (tags.trim() || undefined) : undefined
     };
     // Explicit boolean (both directions) to sidestep the Kysely-drops-undefined trap.
-    (payload as any).rsvpDisabled = !allowRsvps;
+    payload.rsvpDisabled = !allowRsvps;
     return payload;
   };
 
@@ -211,8 +211,8 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       createdIdRef.current = saved?.[0]?.id;
       const bookings = await syncBookings(saved?.[0]?.id);
       finishBookings(bookings);
-    } catch (e: any) {
-      setError(e?.message || Locale.label("mobile.group.failedToSaveEvent"));
+    } catch (e) {
+      setError((e as Error | undefined)?.message || Locale.label("mobile.group.failedToSaveEvent"));
     } finally {
       setSaving(false);
     }
@@ -225,8 +225,8 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       await ApiHelper.post("/events", [buildPayload()], "ContentApi");
       const bookings = await syncBookings(eventProp!.id!);
       finishBookings(bookings);
-    } catch (e: any) {
-      setError(e?.message || Locale.label("mobile.group.failedToSaveEvent"));
+    } catch (e) {
+      setError((e as Error | undefined)?.message || Locale.label("mobile.group.failedToSaveEvent"));
     } finally {
       setSaving(false);
     }
@@ -274,8 +274,8 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       await ApiHelper.delete("/events/" + eventProp.id, "ContentApi");
       onSaved?.();
       onClose();
-    } catch (e: any) {
-      setError(e?.message || Locale.label("mobile.group.failedToDeleteEvent"));
+    } catch (e) {
+      setError((e as Error | undefined)?.message || Locale.label("mobile.group.failedToDeleteEvent"));
     } finally {
       setSaving(false);
     }
@@ -290,15 +290,15 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
         case "this": {
           const exception: EventExceptionInterface = { eventId: eventProp.id, exceptionDate: eventProp.start };
           await ApiHelper.post("/eventExceptions", [exception], "ContentApi");
-          const oneEv: EventInterface = { ...ev, id: undefined as any, recurrenceRule: "" };
+          const oneEv: EventInterface = { ...ev, id: undefined, recurrenceRule: "" };
           await ApiHelper.post("/events", [oneEv], "ContentApi");
           break;
         }
         case "future": {
-          const newEvent: EventInterface = { ...ev, id: undefined as any, recurrenceRule: recurring ? rRule : "" };
+          const newEvent: EventInterface = { ...ev, id: undefined, recurrenceRule: recurring ? rRule : "" };
           const originalEv: EventInterface = await ApiHelper.get("/events/" + eventProp.id, "ContentApi");
           const rrule = EventHelper.getFullRRule(originalEv);
-          rrule.options.until = endBefore(eventProp.start as any);
+          rrule.options.until = endBefore(eventProp.start as Date);
           EventHelper.cleanRule(rrule.options);
           originalEv.recurrenceRule = EventHelper.getPartialRRuleString(rrule.options);
           await ApiHelper.post("/events", [originalEv, newEvent], "ContentApi");
@@ -306,10 +306,10 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
         }
         case "all": {
           const originalEv: EventInterface = await ApiHelper.get("/events/" + eventProp.id, "ContentApi");
-          const formStart = new Date(ev.start as any).getTime();
-          const shift = formStart - new Date(eventProp.start as any).getTime();
-          const seriesStart = new Date(new Date(originalEv.start as any).getTime() + shift);
-          const seriesEnd = new Date(seriesStart.getTime() + new Date(ev.end as any).getTime() - formStart);
+          const formStart = new Date(ev.start as Date).getTime();
+          const shift = formStart - new Date(eventProp.start as Date).getTime();
+          const seriesStart = new Date(new Date(originalEv.start as Date).getTime() + shift);
+          const seriesEnd = new Date(seriesStart.getTime() + new Date(ev.end as Date).getTime() - formStart);
           const allEv: EventInterface = {
             ...ev,
             start: seriesStart.toISOString() as unknown as Date,
@@ -329,8 +329,8 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       setRecurrenceModalType("");
       onSaved?.();
       onClose();
-    } catch (e: any) {
-      setError(e?.message || Locale.label("mobile.group.failedToSaveEvent"));
+    } catch (e) {
+      setError((e as Error | undefined)?.message || Locale.label("mobile.group.failedToSaveEvent"));
     } finally {
       setSaving(false);
     }
@@ -348,7 +348,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
         }
         case "future": {
           const originalEv: EventInterface = await ApiHelper.get("/events/" + eventProp.id, "ContentApi");
-          const until = endBefore(eventProp.start as any);
+          const until = endBefore(eventProp.start as Date);
           const rrule = EventHelper.getFullRRule(originalEv);
           if (until < rrule.options.dtstart) {
             await ApiHelper.delete("/events/" + eventProp.id, "ContentApi");
@@ -372,8 +372,8 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       setRecurrenceModalType("");
       onSaved?.();
       onClose();
-    } catch (e: any) {
-      setError(e?.message || Locale.label("mobile.group.failedToDeleteEvent"));
+    } catch (e) {
+      setError((e as Error | undefined)?.message || Locale.label("mobile.group.failedToDeleteEvent"));
     } finally {
       setSaving(false);
     }

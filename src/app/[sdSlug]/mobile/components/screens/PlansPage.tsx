@@ -169,8 +169,8 @@ export const PlansPage = ({ config: _config }: Props) => {
     try {
       await ApiHelper.post(`/assignments/${action}/${row.assignmentId}`, [], "DoingApi");
       await queryClient.invalidateQueries({ queryKey: assignmentsKey });
-    } catch (err: any) {
-      setRespondError(err?.message || Locale.label("mobile.details.unableToRespond").replace("{}", action));
+    } catch (err) {
+      setRespondError((err as Error | undefined)?.message || Locale.label("mobile.details.unableToRespond").replace("{}", action));
     } finally {
       setRespondingId("");
     }

@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import type { PrivateMessageListRow } from "../NotificationBellMenu";
 import { Highlight, PageHead, PersonAvatar, Plate, PlateSection, QuietEmpty, Row, RowList, SearchField, SignInPrompt } from "../kit";
 
 interface Props {
@@ -25,7 +26,7 @@ export const MessageComposePage = ({ config: _config }: Props) => {
   const { data: previous = null } = useQuery<PersonInterface[]>({
     queryKey: ["compose-previous", context?.user?.id],
     queryFn: async () => {
-      const pms: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
+      const pms: PrivateMessageListRow[] = await ApiHelper.get("/privateMessages", "MessagingApi");
       if (!Array.isArray(pms) || pms.length === 0) return [];
       const myPersonId = UserHelper.person?.id;
       const ids = Array.from(
