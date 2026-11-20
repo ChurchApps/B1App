@@ -24,6 +24,20 @@ export interface BookingSelection {
   windowEnd: string;
 }
 
+// A row from /eventBookings: one room or resource reserved for an event.
+export interface EventBookingInterface {
+  id?: string;
+  eventId?: string;
+  roomId?: string;
+  resourceId?: string;
+  quantity?: number;
+  setupMinutes?: number;
+  teardownMinutes?: number;
+  startTime?: Date;
+  endTime?: Date;
+  status?: string;
+}
+
 export const emptyBookingSelection = (): BookingSelection => ({
   roomIds: [],
   resourceIds: [],
@@ -74,11 +88,11 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
       ApiHelper.get("/resources", "ContentApi").catch((): unknown[] => [])
     ]).then(([r, res]) => {
       if (!active) return;
-      const roomList = Array.isArray(r) ? r : [];
-      const resList = Array.isArray(res) ? res : [];
+      const roomList: { id?: string; name?: string; capacity?: number; description?: string; active?: boolean }[] = Array.isArray(r) ? r : [];
+      const resList: { id?: string; name?: string; description?: string; active?: boolean }[] = Array.isArray(res) ? res : [];
       setRooms(roomList);
       setResources(resList);
-      onLoaded?.(roomList.some((x: any) => x.active !== false) || resList.some((x: any) => x.active !== false));
+      onLoaded?.(roomList.some((x) => x.active !== false) || resList.some((x) => x.active !== false));
       onData?.(roomList, resList);
     });
     return () => { active = false; };
@@ -125,7 +139,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           label={Locale.label("mobile.group.rooms")}
           value={roomIds}
           onChange={(e) => patch({ roomIds: e.target.value as unknown as string[] })}
-          SelectProps={{ multiple: true, renderValue: (selected: any) => rooms.filter((r) => selected.includes(r.id)).map((r) => r.name).join(", ") }}
+          SelectProps={{ multiple: true, renderValue: (selected: unknown) => rooms.filter((r) => (selected as string[]).includes(r.id as string)).map((r) => r.name).join(", ") }}
           data-testid="booking-rooms"
         >
           {pickableRooms.map((r) => (
@@ -146,7 +160,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           label={Locale.label("mobile.group.resources")}
           value={resourceIds}
           onChange={(e) => patch({ resourceIds: e.target.value as unknown as string[] })}
-          SelectProps={{ multiple: true, renderValue: (selected: any) => resources.filter((r) => selected.includes(r.id)).map((r) => r.name).join(", ") }}
+          SelectProps={{ multiple: true, renderValue: (selected: unknown) => resources.filter((r) => (selected as string[]).includes(r.id as string)).map((r) => r.name).join(", ") }}
           data-testid="booking-resources"
         >
           {pickableResources.map((r) => (
@@ -220,8 +234,8 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
 export const diffBookings = (
   eventId: string,
   selection: BookingSelection,
-  existing: any[]
-): { toAdd: any[]; toRemove: any[] } => {
+  existing: EventBookingInterface[]
+): { toAdd: EventBookingInterface[]; toRemove: EventBookingInterface[] } => {
   const existingRoomIds = existing.filter((b) => b.roomId).map((b) => b.roomId);
   const existingResourceIds = existing.filter((b) => b.resourceId).map((b) => b.resourceId);
   const win = selection.customWindow && selection.windowStart && selection.windowEnd

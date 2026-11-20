@@ -26,7 +26,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { navigateBack } from "../util";
-import { formatMoney, useEventRegistration, type RegType } from "@/components/registration/useEventRegistration";
+import { formatMoney, useEventRegistration, type RegType, type RegistrationEvent } from "@/components/registration/useEventRegistration";
 import { RegistrationPaymentForm } from "@/components/registration/RegistrationPaymentForm";
 import { PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink } from "../kit";
 
@@ -77,14 +77,14 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     || [person?.name?.first, person?.name?.last].filter(Boolean).join(" ") || "";
   const isLoggedIn = !!personId;
 
-  const { data: eventData, isLoading: loading, isError: loadError } = useQuery<{ event: EventInterface | null; activeCount: number }>({
+  const { data: eventData, isLoading: loading, isError: loadError } = useQuery<{ event: RegistrationEvent | null; activeCount: number }>({
     queryKey: ["event-register", churchId, eventId],
     queryFn: async () => {
       const [eventResp, countResp] = await Promise.all([
         ApiHelper.getAnonymous(`/events/public/${churchId}/${eventId}`, "ContentApi"),
         ApiHelper.getAnonymous(`/registrations/event/${eventId}/count?churchId=${churchId}`, "ContentApi")
       ]);
-      return { event: (eventResp as EventInterface) || null, activeCount: (countResp as any)?.count || 0 };
+      return { event: (eventResp as RegistrationEvent) || null, activeCount: (countResp as { count?: number } | null)?.count || 0 };
     },
     enabled: !!churchId && !!eventId,
     retry: false
@@ -195,7 +195,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
                 {Locale.label("mobile.registrations.balanceOf").replace("{}", formatMoney(balance)).replace("{}", formatMoney(reg.registration.totalAmount))}
               </Typography>
             )}
-            {reg.registration.totalAmount > 0 && !pending && (
+            {(reg.registration.totalAmount || 0) > 0 && !pending && (
               <Typography sx={{ mt: "8px", fontSize: 14, color: tc.textSecondary }}>
                 {Locale.label("registration.payment.total")}: {formatMoney(reg.registration.amountPaid || 0)} / {formatMoney(reg.registration.totalAmount)}
               </Typography>
@@ -204,7 +204,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           {reg.registration.members && reg.registration.members.length > 0 && (
             <PlateSection title={Locale.label("registration.registeredMembers")}>
               <RowList>
-                {reg.registration.members.map((m: any, i: number) => <Row key={i} title={`${m.firstName} ${m.lastName}`.trim()} />)}
+                {reg.registration.members.map((m, i: number) => <Row key={i} title={`${m.firstName} ${m.lastName}`.trim()} />)}
               </RowList>
             </PlateSection>
           )}
@@ -242,7 +242,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
               personEmail={isLoggedIn ? person?.contactInfo?.email || profile?.contactInfo?.email : reg.guestEmail}
               personName={`${reg.primaryFirstName} ${reg.primaryLastName}`.trim()}
               amount={reg.total}
-              currency={(event as any).currency}
+              currency={event.currency}
               summaryLines={reg.summaryLines}
               subtotal={reg.subtotal}
               discountAmount={reg.discountAmount}

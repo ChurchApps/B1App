@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
-import type { LinkInterface } from "@churchapps/helpers";
+import type { FileInterface, LinkInterface } from "@churchapps/helpers";
 import { ArrangementInterface, ArrangementKeyInterface, SongDetailInterface } from "@/helpers";
 import { SongDetails } from "./SongDetails";
 import { isAudioUrl } from "./ContentRenderer";
@@ -29,7 +29,7 @@ export const SongDialog: React.FC<Props> = (props) => {
   const [songDetail, setSongDetail] = React.useState<SongDetailInterface | null>(null);
   const [products, setProducts] = React.useState<PraiseChartsProduct[]>([]);
   const [links, setLinks] = React.useState<LinkInterface[]>([]);
-  const [audioFiles, setAudioFiles] = React.useState<any[]>([]);
+  const [audioFiles, setAudioFiles] = React.useState<FileInterface[]>([]);
   const [keyOffset, setKeyOffset] = React.useState(0);
 
   const loadData = async () => {
@@ -38,7 +38,7 @@ export const SongDialog: React.FC<Props> = (props) => {
       setArrangementKey(ak);
       const arr = await ApiHelper.get("/arrangements/" + ak.arrangementId, "ContentApi");
       setArrangement(arr);
-      ApiHelper.get("/files/arrangement/" + arr.id, "ContentApi").then((files: any[]) => setAudioFiles(files || [])).catch(() => setAudioFiles([]));
+      ApiHelper.get("/files/arrangement/" + arr.id, "ContentApi").then((files: FileInterface[]) => setAudioFiles(files || [])).catch(() => setAudioFiles([]));
       if (arr.songDetailId) setSongDetail(await ApiHelper.get("/songDetails/" + arr.songDetailId, "ContentApi"));
     } catch (e) {
       console.error("Failed to load song:", e);

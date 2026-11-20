@@ -6,7 +6,7 @@ export class MetaHelper {
     if (!title) title = "B1.church - Free Church Websites and Mobile Apps";
     // Church pages without their own description describe themselves by title, never with B1.church product copy.
     if (!description) description = title;
-    const ogImage = (appearance as any)?.ogImage || "https://content.churchapps.org/40/settings/ogImage.png?dt=1717512299395";
+    const ogImage = appearance?.ogImage || "https://content.churchapps.org/40/settings/ogImage.png?dt=1717512299395";
     if (!ogDescription) ogDescription = description;
 
     const metadata: Metadata = {

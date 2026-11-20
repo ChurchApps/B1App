@@ -100,7 +100,7 @@ function instructionToPlanItem(item: InstructionItem, providerId?: string, provi
     itemType,
     relatedId: item.relatedId,
     label: item.label || "",
-    description: (item as any).content,
+    description: item.content,
     seconds: item.seconds ?? 0,
     providerId,
     providerPath,
@@ -140,10 +140,10 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     queryFn: async () => {
       const [planRes, itemsRes, positionsRes, assignmentsRes, timesRes] = await Promise.all([
         ApiHelper.get(`/plans/${id}`, "DoingApi").catch((): null => null),
-        ApiHelper.get(`/planItems/plan/${id}`, "DoingApi").catch((): any[] => []),
-        ApiHelper.get(`/positions/plan/${id}`, "DoingApi").catch((): any[] => []),
-        ApiHelper.get(`/assignments/plan/${id}`, "DoingApi").catch((): any[] => []),
-        ApiHelper.get(`/times/plan/${id}`, "DoingApi").catch((): any[] => [])
+        ApiHelper.get(`/planItems/plan/${id}`, "DoingApi").catch((): PlanItemInterface[] => []),
+        ApiHelper.get(`/positions/plan/${id}`, "DoingApi").catch((): PositionInterface[] => []),
+        ApiHelper.get(`/assignments/plan/${id}`, "DoingApi").catch((): AssignmentInterface[] => []),
+        ApiHelper.get(`/times/plan/${id}`, "DoingApi").catch((): TimeInterface[] => [])
       ]);
       if (!planRes || !planRes.id) {
         return { plan: null, planItems: [], positions: [], assignments: [], times: [], people: [] };
@@ -448,7 +448,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             ) : myAssignments.map((assignment) => {
               const position = ArrayHelper.getOne(positions, "id", assignment.positionId) as PositionInterface | null;
               const posTimes = (times || []).filter(
-                (t: any) => position?.categoryName && typeof t?.teams === "string" && t.teams.indexOf(position.categoryName) > -1
+                (t) => position?.categoryName && typeof t?.teams === "string" && t.teams.indexOf(position.categoryName) > -1
               );
               return (
                 <AssignmentBlock
@@ -557,10 +557,10 @@ const AssignmentBlock = ({
 
   if (!position || !assignment) return null;
 
-  const sortedTimes = [...times].sort((a: any, b: any) => (a?.startTime > b?.startTime ? 1 : -1));
+  const sortedTimes = [...times].sort((a, b) => ((a?.startTime as Date) > (b?.startTime as Date) ? 1 : -1));
 
   let latestBoundary: Date | null = null;
-  sortedTimes.forEach((t: any) => {
+  sortedTimes.forEach((t) => {
     const raw = t?.endTime || t?.startTime;
     if (!raw) return;
     const boundary = new Date(raw);
@@ -583,9 +583,9 @@ const AssignmentBlock = ({
     try {
       await ApiHelper.post(`/assignments/${action}/${assignment.id}`, [], "DoingApi");
       onUpdate();
-    } catch (err: any) {
+    } catch (err) {
       console.error(`Error ${action}ing assignment:`, err);
-      setErrorMessage(err?.message || Locale.label("mobile.details.unableToRespond").replace("{}", action));
+      setErrorMessage((err as Error | undefined)?.message || Locale.label("mobile.details.unableToRespond").replace("{}", action));
     } finally {
       setBusy(false);
     }

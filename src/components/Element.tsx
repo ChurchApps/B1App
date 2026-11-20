@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Locale } from "@churchapps/apphelper";
+import { Locale, type AppearanceInterface } from "@churchapps/apphelper";
 import { CalendarElement, Element as AppHelperElement, ElementBlock, registerElementRenderer, setImageOptimizer } from "@churchapps/apphelper/website";
 import type { ChurchInterface, EventInterface } from "@churchapps/helpers";
 import { ElementInterface, SectionInterface } from "@/helpers";
@@ -16,14 +16,14 @@ import { b1ImageOptimizer } from "@/helpers/imageOptimizer";
 interface Props {
   element: ElementInterface;
   church?: ChurchInterface;
-  churchSettings: any;
+  churchSettings: AppearanceInterface;
   textColor: string;
   onEdit?: (section: SectionInterface | null, element: ElementInterface) => void;
   onMove?: () => void;
   parentId?: string;
 }
 
-const StreamElement: React.FC<{ element: ElementInterface; churchSettings: any; church: ChurchInterface; editMode: boolean }> = (props) => {
+const StreamElement: React.FC<{ element: ElementInterface; churchSettings: AppearanceInterface; church: ChurchInterface; editMode: boolean }> = (props) => {
   const mode = props.element.answers?.mode;
   const includeInteraction = mode !== "video";
 
@@ -46,9 +46,10 @@ registerElementRenderer("form", (p) => p.church
 registerElementRenderer("calendar", (p) => {
   const churchId = p.church?.id || p.element.churchId || "";
   if (p.element.answers?.display === "upcoming") return <UpcomingEventsElement key={p.element.id} element={p.element as ElementInterface} churchId={churchId} />;
-  // ponytail: eventUrl is spread untyped until @churchapps/apphelper publishes the prop
-  const eventUrl: any = { eventUrl: (e: EventInterface) => "/events/" + eventPageId(e) };
-  return <CalendarElement key={p.element.id} element={p.element} churchId={churchId} firstDayOfWeek={(p.church as any)?.firstDayOfWeek ?? 0} {...eventUrl} />;
+  const eventUrl = (e: EventInterface) => "/events/" + eventPageId(e);
+  // firstDayOfWeek is not yet declared on ChurchInterface.
+  const firstDayOfWeek = (p.church as (ChurchInterface & { firstDayOfWeek?: number }) | undefined)?.firstDayOfWeek ?? 0;
+  return <CalendarElement key={p.element.id} element={p.element} churchId={churchId} firstDayOfWeek={firstDayOfWeek} eventUrl={eventUrl} />;
 });
 // Group List: a grid, or one row that scrolls by itself when the layout is "autoscroll".
 registerElementRenderer("groupList", (p) => <GroupListElement key={p.element.id} element={p.element as ElementInterface} churchId={p.church?.id || p.element.churchId || ""} />);

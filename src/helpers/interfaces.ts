@@ -50,6 +50,8 @@ export interface PageInterface {
   title?: string;
   layout?: string;
   metaDescription?: string;
+  // Set by the page tree endpoint when the page is members-only and the caller can't see it.
+  restricted?: boolean;
 
   sections?: SectionInterface[];
 }

@@ -117,8 +117,8 @@ const CardSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void
       if (saved?.id === card.id) setCard({ ...card, ...saved });
       await invalidateMyTasks(queryClient);
       if (close) onClose();
-    } catch (err: any) {
-      setError(err?.message || Locale.label("mobile.card.actionFailed"));
+    } catch (err) {
+      setError((err as Error | undefined)?.message || Locale.label("mobile.card.actionFailed"));
     } finally {
       setBusy(false);
     }

@@ -43,7 +43,7 @@ export default async function Home({ params }: { params: Promise<PageParams> }) 
   const { sdSlug } = await params;
   const props = await loadSharedData(sdSlug);
 
-  if ((props.pageData as any)?.restricted) {
+  if (props.pageData?.restricted) {
     return (<>
       <Theme config={props.config} />
       <DefaultPageWrapper config={props.config}>

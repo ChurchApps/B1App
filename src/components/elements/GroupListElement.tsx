@@ -18,7 +18,7 @@ export const GroupListElement = ({ element, churchId }: Props) => {
 
   useEffect(() => {
     ApiHelper.getAnonymous("/groups/public/" + churchId + "/label?label=" + encodeURIComponent(label), "MembershipApi")
-      .then((data: any) => setGroups(Array.isArray(data) ? data : []))
+      .then((data: GroupInterface[]) => setGroups(Array.isArray(data) ? data : []))
       .catch(() => setGroups([]));
   }, [churchId, label]);
 

@@ -13,18 +13,21 @@ interface Props {
   forGroupLeader?: boolean;
 }
 
-type AnyRecord = Record<string, any>;
+interface LinkForm {
+  text: string;
+  url: string;
+}
 
 export function GroupLinkAdd({ forGroupLeader = false, ...props }: Props) {
-  const { register, handleSubmit, reset, setError, formState } = useForm<AnyRecord>({ defaultValues: { text: "", url: "" } });
+  const { register, handleSubmit, reset, setError, formState } = useForm<LinkForm>({ defaultValues: { text: "", url: "" } });
 
-  const e = formState.errors as any;
+  const e = formState.errors;
   const summaryErrors: string[] = [];
   if (e.text?.message) summaryErrors.push(e.text.message);
   if (e.url?.message) summaryErrors.push(e.url.message);
   if (e.root?.message) summaryErrors.push(e.root.message);
 
-  const onValid = (values: AnyRecord) => {
+  const onValid = (values: LinkForm) => {
     if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) {
       setError("root", { message: Locale.label("groups.validate.unauthorized") });
       return;

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Box, Button, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
-import type { PersonInterface } from "@churchapps/helpers";
+import type { ContactInfoInterface, PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { KeyValues, PageHead, PersonAvatar, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, TextLink } from "../kit";
@@ -54,7 +54,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
   const currentPersonId = UserHelper.person?.id;
   const isOwnProfile = !!currentPersonId && currentPersonId === person?.id;
 
-  const contact = (person as any)?.contactInfo || {};
+  const contact: ContactInfoInterface = person?.contactInfo || {};
   const phone: string = contact.mobilePhone || "";
   const homePhone: string = contact.homePhone || "";
   const email: string = contact.email || "";
@@ -86,7 +86,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
             {name}
           </Typography>
           <Typography sx={{ mt: "2px", color: tc.textSecondary, fontSize: 15, lineHeight: "22px" }}>
-            {(person as any)?.membershipStatus || Locale.label("mobile.details.churchMember")}
+            {person?.membershipStatus || Locale.label("mobile.details.churchMember")}
           </Typography>
         </Box>
       </Box>

@@ -85,7 +85,7 @@ export const GroupLessonTakeHome = ({ isMember, plans }: Props) => {
 
   const lesson = featured.lesson;
   const title = lesson.title || lesson.name || "";
-  const dateLabel = featured.plan.serviceDate ? DateHelper.prettyDate(DateHelper.toDate(featured.plan.serviceDate as any)) : "";
+  const dateLabel = featured.plan.serviceDate ? DateHelper.prettyDate(DateHelper.toDate(featured.plan.serviceDate)) : "";
 
   const line = (label: string, value: string) => (
     <Typography sx={{ fontSize: 15, lineHeight: "22px", color: tc.text, mt: "4px" }}>

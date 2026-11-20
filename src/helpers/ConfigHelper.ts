@@ -84,7 +84,7 @@ export class ConfigHelper {
     const church: ChurchInterface = await fetchCached("/churches/lookup/?subDomain=" + keyName, "MembershipApi", keyName);
     // An unknown subdomain comes back as {} (200). Every later call would ask for /…/undefined (Sentry B1-APP-EP).
     if (!church?.id) notFound();
-    const siteId = (church as any).siteId || "";
+    const siteId = (church as ChurchInterface & { siteId?: string }).siteId || "";
     const [appearance, tabs, homePage, gatewayConfigured, globalStyles, contentSettings] = await Promise.all([
       fetchCached<AppearanceInterface>("/settings/public/" + church.id, "MembershipApi", keyName),
       fetchCachedOrNull<LinkInterface[]>("/links/church/" + church.id + "?category=" + navCategory + (siteId ? "&siteId=" + siteId : ""), "ContentApi", keyName),
@@ -95,7 +95,7 @@ export class ConfigHelper {
     ]);
     let appTheme: AppThemeConfig | undefined;
     try {
-      const rawTheme = (appearance as any)?.appTheme;
+      const rawTheme = (appearance as (AppearanceInterface & { appTheme?: string | AppThemeConfig }) | null)?.appTheme;
       if (rawTheme) {
         const themeData = typeof rawTheme === "string" ? JSON.parse(rawTheme) : rawTheme;
         if (themeData && themeData.light) appTheme = themeData;

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { FileHelper } from "@churchapps/helpers";
+import { FileHelper, type FileInterface } from "@churchapps/helpers";
 import { Box, Button, IconButton, LinearProgress, Skeleton, TextField, Typography } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
@@ -160,8 +160,8 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       await ApiHelper.post("/links", [payload], "ContentApi");
       closeAddLink();
       load();
-    } catch (e: any) {
-      setLinkError(e?.message || Locale.label("mobile.group.failedAddLink"));
+    } catch (e) {
+      setLinkError((e as Error | undefined)?.message || Locale.label("mobile.group.failedAddLink"));
     } finally {
       setLinkSaving(false);
     }
@@ -178,7 +178,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       } catch {
         presigned = null;
       }
-      const record: any = { fileName: file.name, fileType: file.type, size: file.size, contentType: "group", contentId: groupId };
+      const record: FileInterface = { fileName: file.name, fileType: file.type, size: file.size, contentType: "group", contentId: groupId };
       if (presigned && presigned.key) {
         const uploaded = await FileHelper.uploadPresignedFile(presigned, file, setUploadProgress);
         if (uploaded.externalId) record.externalId = uploaded.externalId;
@@ -190,8 +190,8 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       setUploadProgress(-1);
       if (fileInputRef.current) fileInputRef.current.value = "";
       load();
-    } catch (e: any) {
-      setUploadError(e?.message || Locale.label("mobile.group.uploadFailed"));
+    } catch (e) {
+      setUploadError((e as Error | undefined)?.message || Locale.label("mobile.group.uploadFailed"));
       setUploadProgress(-1);
       if (fileInputRef.current) fileInputRef.current.value = "";
     }

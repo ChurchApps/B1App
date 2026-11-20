@@ -24,8 +24,8 @@ interface Props {
 export const Section: React.FC<Props> = props => {
   const [isDragging, setIsDragging] = useState(false);
 
-  const getAnswers = (): Record<string, any> => {
-    if (props.section.answers) return props.section.answers as Record<string, any>;
+  const getAnswers = (): Record<string, unknown> => {
+    if (props.section.answers) return props.section.answers;
     if (props.section.answersJSON) { try { return JSON.parse(props.section.answersJSON); } catch { return {}; } }
     return {};
   };

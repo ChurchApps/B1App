@@ -19,6 +19,9 @@ interface Props {
   config?: ConfigurationInterface;
 }
 
+// The pending-requests endpoint joins in the group name.
+type PendingJoinRequest = GroupJoinRequestInterface & { groupName?: string };
+
 const ENGAGEMENT_STORAGE_KEY = "b1app-group-view-counts";
 const TOP_GROUPS = 5;
 const tc = mobileTheme.colors;
@@ -43,11 +46,11 @@ export const GroupsPage = ({ config: _config }: Props) => {
     gcTime: 15 * 60 * 1000
   });
 
-  const { data: pendingRequests = [], refetch: refetchPending } = useQuery<GroupJoinRequestInterface[]>({
+  const { data: pendingRequests = [], refetch: refetchPending } = useQuery<PendingJoinRequest[]>({
     queryKey: ["my-pending-requests", context?.user?.id],
     queryFn: async () => {
       const data = await ApiHelper.get("/groupjoinrequests/my", "MembershipApi");
-      return Array.isArray(data) ? data.filter((r: GroupJoinRequestInterface) => r.status === "pending") : [];
+      return Array.isArray(data) ? data.filter((r: PendingJoinRequest) => r.status === "pending") : [];
     },
     enabled: loggedIn,
     staleTime: 5 * 60 * 1000,
@@ -206,7 +209,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
             {cancelRequestError && <Typography sx={{ color: tc.error, fontSize: 14, mb: "8px" }}>{cancelRequestError}</Typography>}
             <RowList>
               {pendingRequests.map((req) => {
-                const name = (req as any).groupName || req.group?.name || Locale.label("mobile.screens.groupFallback");
+                const name = req.groupName || req.group?.name || Locale.label("mobile.screens.groupFallback");
                 return (
                   <Row
                     key={req.id}

@@ -49,10 +49,7 @@ const saveSelection = (sel: Selection) => {
   }
 };
 
-type YouVersionModule = {
-  YouVersionProvider: React.ComponentType<any>;
-  BibleReader: any;
-};
+type YouVersionModule = Pick<typeof import("@youversion/platform-react-ui"), "YouVersionProvider" | "BibleReader">;
 
 class BibleErrorBoundary extends React.Component<
   { fallback: React.ReactNode; children: React.ReactNode },

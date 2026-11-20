@@ -6,7 +6,7 @@ import {
   Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Chip
 } from "@mui/material";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
-import type { PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
+import type { AssignmentInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,7 +15,7 @@ interface PositionWithCount extends PositionInterface {
   filledCount: number;
 }
 
-interface SignupPlanData {
+export interface SignupPlanData {
   plan: PlanInterface & { signupDeadline?: string | null; showVolunteerNames?: boolean };
   positions: PositionWithCount[];
   times: TimeInterface[];
@@ -32,8 +32,8 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
   const [planData, setPlanData] = useState<SignupPlanData>(initialData);
   const [loading, setLoading] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
-  const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
-  const [myAssignments, setMyAssignments] = useState<any[]>([]);
+  const [confirmRemoveId, setConfirmRemoveId] = useState<string | null | undefined>(null);
+  const [myAssignments, setMyAssignments] = useState<AssignmentInterface[]>([]);
   const [assignmentsLoaded, setAssignmentsLoaded] = useState(false);
   const [volunteerNames, setVolunteerNames] = useState<Record<string, string[]>>({});
 
@@ -43,7 +43,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
   // Load user's assignments for this plan
   React.useEffect(() => {
     if (isLoggedIn && !assignmentsLoaded) {
-      ApiHelper.get("/assignments/my", "DoingApi").then((data: any[]) => {
+      ApiHelper.get("/assignments/my", "DoingApi").then((data: AssignmentInterface[]) => {
         const planPositionIds = positions.map(p => p.id);
         const relevant = data.filter(a => planPositionIds.includes(a.positionId));
         setMyAssignments(relevant);
@@ -68,14 +68,14 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
   React.useEffect(() => { loadVolunteerNames(); }, [loadVolunteerNames]);
 
   const refreshData = async () => {
-    const allPlans = await ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi");
-    const updated = (allPlans || []).find((sp: any) => sp.plan.id === plan.id);
+    const allPlans: SignupPlanData[] = await ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi");
+    const updated = (allPlans || []).find((sp) => sp.plan.id === plan.id);
     if (updated) setPlanData(updated);
 
     if (isLoggedIn) {
-      const data = await ApiHelper.get("/assignments/my", "DoingApi");
+      const data: AssignmentInterface[] = await ApiHelper.get("/assignments/my", "DoingApi");
       const planPositionIds = positions.map(p => p.id);
-      setMyAssignments(data.filter((a: any) => planPositionIds.includes(a.positionId)));
+      setMyAssignments(data.filter((a) => planPositionIds.includes(a.positionId)));
       await loadVolunteerNames();
     }
   };
@@ -88,8 +88,9 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
       await ApiHelper.post("/assignments/signup", { positionId }, "DoingApi");
       setMessage({ type: "success", text: Locale.label("serving.signup.success") });
       await refreshData();
-    } catch (err: any) {
-      const errMsg = err?.message || err?.toString() || Locale.label("serving.signup.failed");
+    } catch (err) {
+      const e = err as Error | undefined;
+      const errMsg = e?.message || e?.toString() || Locale.label("serving.signup.failed");
       if (errMsg.includes("full")) setMessage({ type: "error", text: Locale.label("serving.signup.positionFull") });
       else if (errMsg.includes("deadline")) setMessage({ type: "error", text: Locale.label("serving.signup.deadlinePassed") });
       else if (errMsg.includes("Already")) setMessage({ type: "error", text: Locale.label("serving.signup.alreadySignedUp") });
@@ -106,8 +107,9 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
       await ApiHelper.delete("/assignments/signup/" + assignmentId, "DoingApi");
       setMessage({ type: "success", text: Locale.label("serving.remove.success") });
       await refreshData();
-    } catch (err: any) {
-      const errMsg = err?.message || err?.toString() || Locale.label("serving.remove.failed");
+    } catch (err) {
+      const e = err as Error | undefined;
+      const errMsg = e?.message || e?.toString() || Locale.label("serving.remove.failed");
       if (errMsg.includes("deadline")) setMessage({ type: "error", text: Locale.label("serving.remove.deadlinePassed") });
       else setMessage({ type: "error", text: errMsg });
     }
