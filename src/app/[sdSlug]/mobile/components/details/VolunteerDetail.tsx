@@ -111,8 +111,9 @@ export const VolunteerDetail = ({ id, config }: Props) => {
       await ApiHelper.post("/assignments/signup", { positionId: pos.id }, "DoingApi");
       setMessage({ type: "success", text: Locale.label("mobile.details.signedUpSuccess") });
       await load();
-    } catch (err: any) {
-      const msg = (err?.message || err?.toString() || "").toLowerCase();
+    } catch (err) {
+      const e = err as Error | undefined;
+      const msg = (e?.message || e?.toString() || "").toLowerCase();
       let text = Locale.label("mobile.details.signupFailed");
       if (msg.includes("full")) text = Locale.label("mobile.details.positionFull");
       else if (msg.includes("deadline")) text = Locale.label("mobile.details.deadlinePassed");
@@ -138,8 +139,9 @@ export const VolunteerDetail = ({ id, config }: Props) => {
       await ApiHelper.delete(`/assignments/signup/${assignment.id}`, "DoingApi");
       setMessage({ type: "success", text: Locale.label("mobile.details.signupRemoved") });
       await load();
-    } catch (err: any) {
-      const msg = (err?.message || err?.toString() || "").toLowerCase();
+    } catch (err) {
+      const e = err as Error | undefined;
+      const msg = (e?.message || e?.toString() || "").toLowerCase();
       const text = msg.includes("deadline") ? Locale.label("mobile.details.deadlineHasPassed") : Locale.label("mobile.details.couldNotRemoveSignup");
       setMessage({ type: "error", text });
     } finally {
@@ -160,7 +162,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   const serviceDateStr = plan?.serviceDate
     ? DateHelper.prettyDate(DateHelper.toDate(plan.serviceDate))
     : "";
-  const timesStr = times.length > 0 ? times.map((t) => (t as any).displayName || "").filter(Boolean).join(", ") : "";
+  const timesStr = times.length > 0 ? times.map((t) => t.displayName || "").filter(Boolean).join(", ") : "";
 
   const notices: { text: string; tone: "error" | "muted" | "success" }[] = [];
   if (isDeadlinePassed) notices.push({ text: Locale.label("mobile.details.signupDeadlinePassed"), tone: "muted" });
@@ -168,7 +170,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   if (message) notices.push({ text: message.text, tone: message.type });
 
   const renderPosition = (p: PositionInterface & { filledCount: number }) => {
-    const needed = (p as any).count || 0;
+    const needed = p.count || 0;
     const filled = p.filledCount || 0;
     const remaining = Math.max(0, needed - filled);
     const isFull = remaining === 0 && needed > 0;

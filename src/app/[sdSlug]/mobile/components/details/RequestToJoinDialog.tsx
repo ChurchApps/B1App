@@ -26,8 +26,8 @@ export const RequestToJoinDialog: React.FC<Props> = ({ open, groupId, groupName,
       await ApiHelper.post("/groupjoinrequests", { groupId, message: message.trim() || undefined }, "MembershipApi");
       setMessage("");
       onSubmitted();
-    } catch (e: any) {
-      setError(e?.message || Locale.label("mobile.group.failedToSubmitRequest"));
+    } catch (e) {
+      setError((e as Error | undefined)?.message || Locale.label("mobile.group.failedToSubmitRequest"));
     } finally {
       setSubmitting(false);
     }

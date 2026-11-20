@@ -6,7 +6,23 @@ import { StreamingServiceHelper } from "./StreamingServiceHelper";
 
 interface ButtonInterface { text: string, url: string }
 interface TabInterface { text: string, url: string, icon: string, type: string, data: string, updated?: boolean }
-interface ServiceInterface { videoUrl: string, serviceTime: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string, id?: string, sermon?: SermonInterface }
+interface ServiceInterface {
+  videoUrl: string;
+  serviceTime: string;
+  earlyStart: string;
+  chatBefore: string;
+  chatAfter: string;
+  provider: string;
+  providerKey: string;
+  localCountdownTime?: Date;
+  localStartTime?: Date;
+  localEndTime?: Date;
+  localChatStart?: Date;
+  localChatEnd?: Date;
+  label: string;
+  id?: string;
+  sermon?: SermonInterface;
+}
 interface ConfigurationInterface { keyName?: string, churchId?: string, appearance: AppearanceInterface, buttons?: ButtonInterface[], tabs?: TabInterface[], services?: ServiceInterface[] }
 
 export class ChatConfigHelper {

@@ -32,8 +32,8 @@ export const shareVerseText = async (verse: DailyVerse | null, day: number, shap
   const text = verseShareText(verse);
   const url = verseImageUrl(day, shape);
   try {
-    if (typeof navigator !== "undefined" && (navigator as any).share) {
-      await (navigator as any).share({ title: "Verse of the Day", text, url });
+    if (typeof navigator !== "undefined" && navigator.share) {
+      await navigator.share({ title: "Verse of the Day", text, url });
       return "shared";
     }
   } catch (e) {
@@ -54,7 +54,7 @@ export const shareVerseText = async (verse: DailyVerse | null, day: number, shap
 export const shareVerseImage = async (verse: DailyVerse | null, day: number, shape: string): Promise<ShareResult> => {
   try {
     const file = await fetchVerseImage(day, shape, "verse-of-the-day.jpg");
-    const nav = navigator as any;
+    const nav = navigator;
     if (nav.canShare?.({ files: [file] }) && nav.share) {
       await nav.share({ files: [file], text: verseShareText(verse) });
       return "shared";

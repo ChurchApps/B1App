@@ -67,7 +67,7 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
       .catch(() => { /* keep the default form */ });
     // The church's own title list (Manage Church > Custom Fields in B1Admin).
     ApiHelper.getAnonymous("/settings/public/" + encodeURIComponent(churchId), "MembershipApi")
-      .then((settings: any) => setTitles(parseTitleOptions(settings?.titleOptions)))
+      .then((settings: Record<string, string>) => setTitles(parseTitleOptions(settings?.titleOptions)))
       .catch(() => { /* keep the default titles */ });
   }, [churchId]);
 

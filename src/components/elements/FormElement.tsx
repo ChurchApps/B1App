@@ -8,7 +8,7 @@ import type { ChurchInterface } from "@churchapps/helpers";
 
 interface ElementInterface {
   id?: string;
-  answers?: any;
+  answers?: Record<string, string | number | boolean>;
 }
 
 interface Props {
@@ -34,7 +34,7 @@ export const FormElement = (props: Props) => {
   const [addFormId, setAddFormId] = useState<string>("");
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
-  const formId = props.element.answers?.formId;
+  const formId = props.element.answers?.formId as string;
   const [form, setForm] = useState<FormInterface | undefined>(undefined);
 
   useEffect(() => {

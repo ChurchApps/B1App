@@ -27,7 +27,8 @@ export const buildOccurrences = (events: EventInterface[], now: Date, windowEnd:
   return result;
 };
 
-export const eventPageId = (event: EventInterface) => (event as any).realEventId || event.id || "";
+// Curated-calendar rows carry the source event's id as realEventId.
+export const eventPageId = (event: EventInterface & { realEventId?: string }) => event.realEventId || event.id || "";
 
 const sameMeridiem = (a: string, b: string) => a.slice(-2) === b.slice(-2);
 

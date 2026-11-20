@@ -44,7 +44,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
 
   useEffect(() => {
     ApiHelper.getAnonymous("/registrations/event/" + eventId + "/count?churchId=" + churchId, "ContentApi")
-      .then((data: any) => setActiveCount(data?.count || 0));
+      .then((data: { count?: number }) => setActiveCount(data?.count || 0));
   }, [eventId, churchId]);
 
   const isFull = event.capacity ? activeCount >= event.capacity : false;
@@ -128,13 +128,13 @@ export function EventRegister({ churchId, eventId, event }: Props) {
             <Typography variant="body2"><b>{Locale.label("registration.event")}:</b> {event.title}</Typography>
             <Typography variant="body2"><b>{Locale.label("common.date")}:</b> {getDisplayTime()}</Typography>
             <Typography variant="body2" component="div"><b>{Locale.label("registration.status")}:</b> <Chip label={reg.registration.status} size="small" color={waitlisted ? "warning" : "success"} /></Typography>
-            {reg.registration.totalAmount > 0 && (
+            {(reg.registration.totalAmount || 0) > 0 && (
               <Typography variant="body2"><b>{Locale.label("registration.payment.total")}:</b> {formatMoney(reg.registration.amountPaid || 0)} / {formatMoney(reg.registration.totalAmount)}</Typography>
             )}
             {reg.registration.members && reg.registration.members.length > 0 && (
               <>
                 <Typography variant="body2" sx={{ fontWeight: 600, mt: 1 }}>{Locale.label("registration.registeredMembers")}:</Typography>
-                {reg.registration.members.map((m: any, i: number) => (
+                {reg.registration.members.map((m, i: number) => (
                   <Typography key={i} variant="body2">- {m.firstName} {m.lastName}</Typography>
                 ))}
               </>

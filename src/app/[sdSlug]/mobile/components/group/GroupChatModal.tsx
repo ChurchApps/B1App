@@ -10,7 +10,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import SendIcon from "@mui/icons-material/Send";
 import { ApiHelper, Locale, PersonHelper, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
 import { SubscriptionToggle, SUBSCRIPTION_MESSAGE_TYPE } from "@churchapps/apphelper";
-import type { PersonInterface } from "@churchapps/helpers";
+import type { MessageInterface, PersonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
 import { Eyebrow, PersonAvatar, QuietEmpty, Sheet, TextLink } from "../kit";
 import { enterSends, formatMessageTime } from "../util";
@@ -214,7 +214,7 @@ export const GroupChatModal = ({
     SocketHelper.addHandler("message", handlerId + "-msg", () => { loadConversations(); });
     SocketHelper.addHandler("deleteMessage", handlerId + "-del", () => { loadConversations(); });
     // Own reactions are applied optimistically from the POST response; ignore the self-echo.
-    SocketHelper.addHandler("reaction", "GroupChatModal-Reaction", (data: any) => {
+    SocketHelper.addHandler("reaction", "GroupChatModal-Reaction", (data: { messageId?: string; personId?: string; emoji: string; added?: boolean } | null) => {
       if (!data?.messageId || data.personId === UserHelper.person?.id) return;
       applyReaction(data.messageId, data.emoji, !!data.added, false);
     });
@@ -356,7 +356,7 @@ export const GroupChatModal = ({
     setReactAnchor(null);
     if (!m.id) return;
     try {
-      const res: any = await ApiHelper.post(`/messages/${m.id}/reactions`, { emoji }, "MessagingApi");
+      const res: { added?: boolean } = await ApiHelper.post(`/messages/${m.id}/reactions`, { emoji }, "MessagingApi");
       applyReaction(m.id, emoji, !!res?.added, true);
     } catch {
       /* ignore */
@@ -514,7 +514,7 @@ export const GroupChatModal = ({
               {groupName || Locale.label("mobile.group.groupChat")}
             </Typography>
           </Box>
-          <SubscriptionToggle conversationId={conversationId} messages={allMessages as any} personId={myPersonId} />
+          <SubscriptionToggle conversationId={conversationId} messages={allMessages as MessageInterface[]} personId={myPersonId} />
         </Box>
       </Box>
       {strip && <Box sx={{ bgcolor: tc.surface, borderBottom: `1px solid ${tc.border}` }}>{strip}</Box>}

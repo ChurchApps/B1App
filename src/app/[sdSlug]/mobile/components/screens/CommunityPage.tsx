@@ -29,11 +29,11 @@ export const CommunityPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const context = useContext(UserContext);
   const loggedIn = !!context?.user?.firstName;
-  const membershipStatus = (context?.userChurch?.person as any)?.membershipStatus?.toLowerCase();
+  const membershipStatus = context?.userChurch?.person?.membershipStatus?.toLowerCase();
   const [searchText, setSearchText] = React.useState("");
 
   const churchId = UserHelper.currentUserChurch?.church?.id || config?.church?.id;
-  const { data: publicSettings, isFetched: settingsFetched } = useQuery<any>({
+  const { data: publicSettings, isFetched: settingsFetched } = useQuery<Record<string, string>>({
     queryKey: ["publicSettings", churchId],
     queryFn: () => ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi"),
     enabled: loggedIn && !!churchId
@@ -41,7 +41,7 @@ export const CommunityPage = ({ config }: Props) => {
 
   // Staff with People View see everyone in B1Admin, so the Api lets them past the directory setting too.
   const canViewPeople = loggedIn && UserHelper.checkAccess(Permissions.membershipApi.people.view);
-  const canViewDirectory = canViewPeople || (loggedIn && (STATUS_RANK[membershipStatus] ?? -1) >= (REQUIRED_RANK[publicSettings?.directoryVisibility] ?? REQUIRED_RANK.Members));
+  const canViewDirectory = canViewPeople || (loggedIn && (STATUS_RANK[membershipStatus as string] ?? -1) >= (REQUIRED_RANK[publicSettings?.directoryVisibility as string] ?? REQUIRED_RANK.Members));
   const settingsSettled = !loggedIn || !churchId || settingsFetched;
 
   const { data: serverPeople = null, isFetching, isError: peopleError, refetch: refetchPeople } = useQuery<PersonInterface[]>({

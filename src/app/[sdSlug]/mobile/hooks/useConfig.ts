@@ -10,11 +10,14 @@ export function filterVisibleLinks(
 ): LinkInterface[] {
   if (!Array.isArray(links)) return [];
   if (!userChurch?.jwt) {
-    return links.filter((l: any) => !l.visibility || l.visibility === "everyone");
+    return links.filter((l: VisibleLink) => !l.visibility || l.visibility === "everyone");
   }
   const tags = (userChurch.groups ?? []).flatMap((g) => g?.tags?.split(",") || []);
-  return links.filter((l: any) => l.visibility !== "team" || tags.includes("team"));
+  return links.filter((l: VisibleLink) => l.visibility !== "team" || tags.includes("team"));
 }
+
+// Tabs carry a visibility the helpers LinkInterface does not declare yet.
+type VisibleLink = LinkInterface & { visibility?: string };
 
 // Tabs inside a folder show only on the folder's screen. A folder with nothing visible inside is left out.
 export function topLevelLinks(visible: LinkInterface[]): LinkInterface[] {

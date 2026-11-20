@@ -62,7 +62,7 @@ export const WebPushHelperBase = {
   isStandalone(): boolean {
     if (typeof window === "undefined") return false;
     const mq = window.matchMedia?.("(display-mode: standalone)").matches;
-    const iosStandalone = (window.navigator as any).standalone === true;
+    const iosStandalone = (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
     return !!(mq || iosStandalone);
   },
 

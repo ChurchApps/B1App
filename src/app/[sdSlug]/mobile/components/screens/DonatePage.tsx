@@ -66,7 +66,7 @@ const campaignSx: SxProps<Theme> = {
   "& [data-testid^='campaign-card-'] + [data-testid^='campaign-card-']": { borderTop: `1px solid ${tc.border}`, mt: "18px", pt: "18px" }
 };
 
-const amountOf = (d: DonationInterface) => ((d as any).fund?.amount ?? (d as any).amount ?? 0) as number;
+const amountOf = (d: DonationInterface): number => d.fund?.amount ?? d.amount ?? 0;
 
 const Amount = ({ value, pending }: { value: string; pending?: boolean }) => (
   <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px", flex: "none" }}>
@@ -163,14 +163,14 @@ function DonatePageInner({ config }: Props) {
     queryKey: ["donate-subscriptions", customerId],
     queryFn: async () => {
       if (!customerId) return [];
-      const subResult: any = await ApiHelper.get(
+      const subResult: { data?: SubscriptionRow[] } = await ApiHelper.get(
         "/customers/" + customerId + "/subscriptions",
         "GivingApi"
       );
-      const rows: any[] = subResult?.data || [];
+      const rows: SubscriptionRow[] = subResult?.data || [];
       return Promise.all(
         rows.map(async (s): Promise<SubscriptionRow> => {
-          const funds: any = await ApiHelper.get(
+          const funds: SubscriptionRow["funds"] = await ApiHelper.get(
             "/subscriptionfunds?subscriptionId=" + s.id,
             "GivingApi"
           );
@@ -198,9 +198,9 @@ function DonatePageInner({ config }: Props) {
   }, [message]);
 
   const toChurchCurrency = (d: DonationInterface) =>
-    CurrencyHelper.convertAmount(amountOf(d), (d as any).currency || pageCurrency, pageCurrency, exchangeRates);
+    CurrencyHelper.convertAmount(amountOf(d), d.currency || pageCurrency, pageCurrency, exchangeRates);
   const isConvertedGift = (d: DonationInterface) => {
-    const giftCurrency = ((d as any).currency || pageCurrency).toUpperCase();
+    const giftCurrency = (d.currency || pageCurrency).toUpperCase();
     return giftCurrency !== pageCurrency.toUpperCase() && !!exchangeRates[giftCurrency];
   };
   const giftYear = (d: DonationInterface) => DateHelper.toDate(d.donationDate).getFullYear();
@@ -214,7 +214,7 @@ function DonatePageInner({ config }: Props) {
   const summarize = (list: DonationInterface[]) => ({
     total: list.reduce((sum, d) => sum + toChurchCurrency(d), 0),
     count: list.length,
-    pending: list.filter((d) => (d as any).status === "pending").length,
+    pending: list.filter((d) => d.status === "pending").length,
     isConverted: list.some(isConvertedGift)
   });
 
@@ -239,10 +239,10 @@ function DonatePageInner({ config }: Props) {
 
   const getSubPaymentMethod = (sub: SubscriptionRow) => {
     const pm = (paymentMethods || []).find(
-      (p) => (p as any).id === (sub.default_payment_method || sub.default_source)
+      (p) => p.id === (sub.default_payment_method || sub.default_source)
     );
     if (!pm) return Locale.label("mobile.screens.paymentMethodNotFound");
-    return `${(pm as any).name} ****${(pm as any).last4 || ""}`;
+    return `${pm.name} ****${pm.last4 || ""}`;
   };
 
   const handlePrintStatement = (year?: string) => {
@@ -276,15 +276,15 @@ function DonatePageInner({ config }: Props) {
   }
 
   const donationRow = (d: DonationInterface, i: number) => {
-    const method = (d as any).method;
-    const methodDetails = (d as any).methodDetails;
+    const method = d.method;
+    const methodDetails = d.methodDetails;
     const subtitle = DateHelper.prettyDate(DateHelper.toDate(d.donationDate)) + (method ? ` · ${method}${methodDetails ? ` - ${methodDetails}` : ""}` : "");
     return (
       <Row
-        key={(d as any).id || i}
-        title={(d as any).fund?.name || "—"}
+        key={d.id || i}
+        title={d.fund?.name || "—"}
         subtitle={subtitle}
-        trailing={<Amount value={CurrencyHelper.formatCurrencyWithLocale(amountOf(d), (d as any).currency || pageCurrency)} pending={(d as any).status === "pending"} />}
+        trailing={<Amount value={CurrencyHelper.formatCurrencyWithLocale(amountOf(d), d.currency || pageCurrency)} pending={d.status === "pending"} />}
       />
     );
   };

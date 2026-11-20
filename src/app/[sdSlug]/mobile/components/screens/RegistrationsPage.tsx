@@ -9,7 +9,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { BackVerb, PageHead, Plate, PlateSection, QuietEmpty, Row, Sheet, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
-import { apiPut, formatMoney, type RegType, type RegSelection } from "@/components/registration/useEventRegistration";
+import { apiPut, formatMoney, type RegType, type RegSelection, type RegistrationEvent, type RegistrationResult } from "@/components/registration/useEventRegistration";
 import { RegistrationPaymentForm } from "@/components/registration/RegistrationPaymentForm";
 
 interface Props {
@@ -17,8 +17,14 @@ interface Props {
 }
 
 const tc = mobileTheme.colors;
-const num = (v: any): number => (v == null || isNaN(Number(v)) ? 0 : Number(v));
-const balanceOf = (reg: RegistrationInterface) => Math.round((num((reg as any).totalAmount) - num((reg as any).amountPaid)) * 100) / 100;
+const num = (v: number | string | null | undefined): number => (v == null || isNaN(Number(v)) ? 0 : Number(v));
+const balanceOf = (reg: RegistrationInterface) => Math.round((num(reg.totalAmount) - num(reg.amountPaid)) * 100) / 100;
+
+// The edit sheet reads only the member names/types and selection quantities of the full registration.
+interface EditableRegistration {
+  members?: { firstName: string; lastName: string; registrationTypeId?: string }[];
+  selectionChoices?: { selectionId: string; quantity?: number }[];
+}
 
 const statusBadge = (status?: string): [BadgeTone, string] => {
   switch (status) {
@@ -67,13 +73,13 @@ const RegistrationsPageInner = ({ config: _config }: Props) => {
 
   const renderItem = (reg: RegistrationInterface) => {
     const isCancelled = reg.status === "cancelled";
-    const eventStart = (reg as any).event?.start;
-    const eventTitle = (reg as any).event?.title || Locale.label("mobile.group.event");
-    const total = num((reg as any).totalAmount);
-    const paid = num((reg as any).amountPaid);
+    const eventStart = reg.event?.start;
+    const eventTitle = reg.event?.title || Locale.label("mobile.group.event");
+    const total = num(reg.totalAmount);
+    const paid = num(reg.amountPaid);
     const balance = balanceOf(reg);
     const hasBalance = !isCancelled && reg.status !== "waitlisted" && balance > 0;
-    const names = (reg.members || []).map((m: any) => [m.firstName, m.lastName].filter(Boolean).join(" ")).filter(Boolean).join(", ");
+    const names = (reg.members || []).map((m) => [m.firstName, m.lastName].filter(Boolean).join(" ")).filter(Boolean).join(", ");
     const subtitle = [eventStart ? DateHelper.prettyDateTime(new Date(eventStart)) : "", names].filter(Boolean).join(" · ");
     const [tone, label]: [BadgeTone, string] = hasBalance ? ["warn", Locale.label("registration.mine.balanceLabel")] : statusBadge(reg.status);
 
@@ -109,7 +115,7 @@ const RegistrationsPageInner = ({ config: _config }: Props) => {
 
   const now = Date.now();
   const isPast = (reg: RegistrationInterface) => {
-    const start = (reg as any).event?.start;
+    const start = reg.event?.start;
     return !!start && new Date(start).getTime() < now;
   };
   const byCancelledLast = (a: RegistrationInterface, b: RegistrationInterface) => (a.status === "cancelled" ? 1 : 0) - (b.status === "cancelled" ? 1 : 0);
@@ -138,7 +144,7 @@ const RegistrationsPageInner = ({ config: _config }: Props) => {
             personEmail={context?.person?.contactInfo?.email}
             personName={context?.person?.name?.display}
             amount={balanceOf(payReg)}
-            currency={((payReg as any).event?.currency) as any}
+            currency={(payReg.event as RegistrationEvent | undefined)?.currency}
             summaryLines={[{ label: Locale.label("registration.mine.balanceLabel"), amount: balanceOf(payReg) }]}
             subtotal={balanceOf(payReg)}
             discountAmount={0}
@@ -226,7 +232,7 @@ interface EditProps {
 }
 
 const EditRegistrationDialog = ({ registration, churchId, onClose, onSaved }: EditProps) => {
-  const eventId = (registration as any).eventId;
+  const eventId = registration.eventId;
   const [members, setMembers] = useState<{ firstName: string; lastName: string; registrationTypeId?: string }[]>([]);
   const [types, setTypes] = useState<RegType[]>([]);
   const [selections, setSelections] = useState<RegSelection[]>([]);
@@ -236,14 +242,14 @@ const EditRegistrationDialog = ({ registration, churchId, onClose, onSaved }: Ed
 
   useEffect(() => {
     (async () => {
-      const [full, t, s]: any[] = await Promise.all([
+      const [full, t, s]: [EditableRegistration, RegType[], RegSelection[]] = await Promise.all([
         ApiHelper.get("/registrations/" + registration.id, "ContentApi"),
         ApiHelper.getAnonymous("/registrations/types/event/" + eventId + "?churchId=" + churchId, "ContentApi"),
         ApiHelper.getAnonymous("/registrations/selections/event/" + eventId + "?churchId=" + churchId, "ContentApi")
       ]);
       setTypes(Array.isArray(t) ? t : []);
       setSelections(Array.isArray(s) ? s : []);
-      setMembers((full?.members || []).map((m: any) => ({ firstName: m.firstName, lastName: m.lastName, registrationTypeId: m.registrationTypeId || "" })));
+      setMembers((full?.members || []).map((m) => ({ firstName: m.firstName, lastName: m.lastName, registrationTypeId: m.registrationTypeId || "" })));
       const q: Record<string, number> = {};
       for (const c of (full?.selectionChoices || [])) q[c.selectionId] = (q[c.selectionId] || 0) + num(c.quantity);
       setQty(q);
@@ -252,9 +258,9 @@ const EditRegistrationDialog = ({ registration, churchId, onClose, onSaved }: Ed
 
   const hasTypes = types.length > 0;
 
-  const updateMember = (i: number, field: string, value: string) => {
+  const updateMember = (i: number, field: "firstName" | "lastName" | "registrationTypeId", value: string) => {
     const next = [...members];
-    (next[i] as any)[field] = value;
+    next[i][field] = value;
     setMembers(next);
   };
 
@@ -262,11 +268,11 @@ const EditRegistrationDialog = ({ registration, churchId, onClose, onSaved }: Ed
     setError("");
     setSaving(true);
     try {
-      const body: any = {
+      const body = {
         members: members.map((m) => ({ firstName: m.firstName.trim(), lastName: m.lastName.trim(), registrationTypeId: m.registrationTypeId || undefined })),
         selections: Object.entries(qty).filter(([, q]) => q > 0).map(([selectionId, quantity]) => ({ selectionId, quantity }))
       };
-      const result: any = await apiPut("/registrations/" + registration.id, body, "ContentApi");
+      const result = await apiPut("/registrations/" + registration.id, body, "ContentApi") as RegistrationResult | null;
       if (result?.error) {
         setError(result.status === "type-full" ? Locale.label("registration.errors.typeFull") : result.status === "selection-full" ? Locale.label("registration.errors.selectionFull") : result.error);
         return;

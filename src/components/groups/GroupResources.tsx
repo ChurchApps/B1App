@@ -30,7 +30,7 @@ export const GroupResources: React.FC<Props> = (props) => {
   // churches with linked external storage have no 100MB cap
   const unlimited = !!storageStatus?.provider && storageStatus.provider !== "churchapps" && !storageStatus.quotaBytes;
 
-  const handleFileSaved = (file: FileInterface) => {
+  const handleFileSaved = (_file: FileInterface) => {
     setPendingFileSave(false);
     loadData();
   };

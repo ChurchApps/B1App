@@ -13,7 +13,7 @@ import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined
 import { Emojis } from "@/components/video/chat";
 import { ApiHelper, Locale, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { type MessageInterface, type PersonInterface } from "@churchapps/helpers";
+import { type ConversationInterface, type MessageInterface, type PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
@@ -263,11 +263,11 @@ export const MessageConversation = ({ id, config: _config }: Props) => {
         visibility: "hidden"
       }
     ];
-    const convData: any[] = await ApiHelper.post("/conversations", convParams, "MessagingApi");
+    const convData: ConversationInterface[] = await ApiHelper.post("/conversations", convParams, "MessagingApi");
     const newConvId: string | undefined = convData?.[0]?.id;
     if (!newConvId) throw new Error(Locale.label("mobile.details.couldNotCreateConversation"));
 
-    const pmData: any[] = await ApiHelper.post(
+    const pmData: PrivateMessageRow[] = await ApiHelper.post(
       "/privateMessages",
       [{ fromPersonId: myPersonId, toPersonId: id, conversationId: newConvId }],
       "MessagingApi"

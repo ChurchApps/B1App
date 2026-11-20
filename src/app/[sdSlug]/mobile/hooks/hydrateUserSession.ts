@@ -1,15 +1,10 @@
 "use client";
 
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
-import type { LoginResponseInterface } from "@churchapps/helpers";
+import type { LoginResponseInterface, LoginUserChurchInterface, PersonInterface, UserContextInterface } from "@churchapps/helpers";
 import { PersonHelper } from "@/helpers";
 
-export interface SessionContext {
-  setUser: (user: any) => void;
-  setUserChurches: (churches: any) => void;
-  setUserChurch: (church: any) => void;
-  setPerson: (person: any) => void;
-}
+export type SessionContext = Pick<UserContextInterface, "setUser" | "setUserChurches" | "setUserChurch" | "setPerson">;
 
 export interface HydrateOptions {
   sdSlug?: string;
@@ -21,15 +16,15 @@ export async function hydrateUserSession(
   resp: LoginResponseInterface,
   context: SessionContext | undefined,
   options: HydrateOptions = {}
-): Promise<any | null> {
+): Promise<PersonInterface | null> {
   const { sdSlug, churchId, writeCookies = false } = options;
 
   ApiHelper.setDefaultPermissions(resp.user.jwt!);
-  (resp.userChurches || []).forEach((uc: any) => { if (!uc.apis) uc.apis = []; });
+  (resp.userChurches || []).forEach((uc) => { if (!uc.apis) uc.apis = []; });
   UserHelper.user = resp.user;
   UserHelper.userChurches = resp.userChurches || [];
 
-  let matched: any = null;
+  let matched: LoginUserChurchInterface | null | undefined = null;
   if (churchId) {
     matched = UserHelper.userChurches?.find((uc) => uc.church?.id === churchId);
   }
@@ -41,14 +36,14 @@ export async function hydrateUserSession(
 
   if (!matched && (churchId || sdSlug)) {
     try {
-      const selectedChurch = await ApiHelper.post(
+      const selectedChurch: LoginUserChurchInterface = await ApiHelper.post(
         "/churches/select",
         churchId ? { churchId } : { subDomain: sdSlug },
         "MembershipApi"
       );
       if (selectedChurch) {
         if (!selectedChurch.apis) selectedChurch.apis = [];
-        const existingIndex = UserHelper.userChurches.findIndex((uc: any) => uc.church?.id === selectedChurch.church?.id);
+        const existingIndex = UserHelper.userChurches.findIndex((uc) => uc.church?.id === selectedChurch.church?.id);
         if (existingIndex >= 0) UserHelper.userChurches[existingIndex] = selectedChurch;
         else UserHelper.userChurches.push(selectedChurch);
         matched = selectedChurch;
@@ -63,7 +58,7 @@ export async function hydrateUserSession(
     UserHelper.setupApiHelper(target);
   }
 
-  let person: any = null;
+  let person: PersonInterface | null = null;
   const personId = UserHelper.currentUserChurch?.person?.id;
   const currentChurchId = UserHelper.currentUserChurch?.church?.id;
   if (personId) {

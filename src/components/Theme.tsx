@@ -14,6 +14,30 @@ const SHADOW_DEFAULTS = {
   lg: "0 4px 8px rgba(0,0,0,0.15)"
 };
 
+// Shape of globalStyles.palette / globalStyles.fonts once parsed; every key is optional.
+interface ThemePalette {
+  light?: string;
+  lightAccent?: string;
+  accent?: string;
+  darkAccent?: string;
+  dark?: string;
+  primary?: string;
+  secondary?: string;
+  success?: string;
+  warning?: string;
+  error?: string;
+  primaryLight?: string;
+  primaryDark?: string;
+  radius?: Partial<typeof RADIUS_DEFAULTS>;
+  shadow?: Partial<typeof SHADOW_DEFAULTS>;
+  typeScale?: number | string;
+}
+
+interface ThemeFonts {
+  heading?: string;
+  body?: string;
+}
+
 const pushKV = (lines: string[], key: string, value: string | undefined) => {
   if (value !== undefined && value !== null && value !== "") lines.push(`${key}: ${value};`);
 };
@@ -28,9 +52,9 @@ export const Theme: React.FC<Props> = (props) => {
   const googleFonts: string[] = [];
   const lines: string[] = [];
 
-  let paletteExtras: Record<string, any> = {};
+  let paletteExtras: ThemePalette = {};
   if (props.config.globalStyles?.palette) {
-    let palette: Record<string, any> = {};
+    let palette: ThemePalette = {};
     try { palette = JSON.parse(props.config.globalStyles.palette) || {}; } catch { /* malformed JSON */ }
     pushKV(lines, "--light", palette.light);
     pushKV(lines, "--lightAccent", palette.lightAccent);
@@ -47,7 +71,7 @@ export const Theme: React.FC<Props> = (props) => {
   }
 
   if (props.config.globalStyles?.fonts) {
-    let fonts: Record<string, any> = {};
+    let fonts: ThemeFonts = {};
     try { fonts = JSON.parse(props.config.globalStyles.fonts) || {}; } catch { /* malformed JSON */ }
     if (fonts.heading) pushKV(lines, "--headingFont", `'${fonts.heading}'`);
     if (fonts.body) pushKV(lines, "--bodyFont", `'${fonts.body}'`);
@@ -144,7 +168,7 @@ export const Theme: React.FC<Props> = (props) => {
       old.replaceWith(script);
     });
     // RefTagger only scans the page it loaded on; tag the new page's verses.
-    if (alreadyRan) (window as any).refTagger?.tag?.();
+    if (alreadyRan) (window as Window & { refTagger?: { tag?: () => void } }).refTagger?.tag?.();
   }, [props?.config?.globalStyles?.customJS]);
 
   return (<>

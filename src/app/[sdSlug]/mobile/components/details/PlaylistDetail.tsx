@@ -33,7 +33,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
 
       const list = await ApiHelper.getAnonymous(`/playlists/public/${churchId}`, "ContentApi");
       if (!Array.isArray(list)) return null;
-      const match = list.find((p: any) => p && p.id === id) as PlaylistInterface | undefined;
+      const match = list.find((p: PlaylistInterface) => p && p.id === id) as PlaylistInterface | undefined;
       return match ?? null;
     },
     enabled: !!churchId && !!id,
@@ -51,8 +51,8 @@ export const PlaylistDetail = ({ id, config }: Props) => {
       const data = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
       if (!Array.isArray(data)) return [];
       return data
-        .filter((s: any) => s && s.id && s.title && s.playlistId === id)
-        .sort((a: any, b: any) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime()) as SermonInterface[];
+        .filter((s: SermonInterface) => s && s.id && s.title && s.playlistId === id)
+        .sort((a: SermonInterface, b: SermonInterface) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime()) as SermonInterface[];
     },
     enabled: !!churchId && !!id,
     staleTime: 5 * 60 * 1000,

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
+import type { EventInterface, PersonInterface, RegistrationInterface } from "@churchapps/helpers";
 
 // Local casts — the Wave-1 helpers interfaces are not published yet.
 export interface RegType {
@@ -58,6 +59,33 @@ export interface HouseholdMember {
   birthDate?: Date | string;
 }
 
+// Events carry the gateway currency when the church has one configured.
+export type RegistrationEvent = EventInterface & { currency?: string };
+
+// What /registrations/register returns: the registration, or a refusal; a 3DS charge adds a provider payload.
+export interface RegistrationResult extends RegistrationInterface {
+  error?: string;
+  payment?: unknown;
+}
+
+interface CouponValidationResult {
+  valid?: boolean;
+  discountType: "percent" | "amount";
+  value?: number | string;
+  reason?: string;
+}
+
+interface RegistrationPayload {
+  churchId: string;
+  eventId: string;
+  personId?: string;
+  guestInfo?: { firstName: string; lastName: string; email: string; phone?: string };
+  members?: WizardMember[];
+  selections?: { selectionId: string; quantity: number }[];
+  couponCode?: string;
+  formSubmissionId?: string;
+}
+
 export type RegStep = "info" | "members" | "selections" | "questions" | "payment" | "confirm";
 
 export interface WizardPerson {
@@ -71,12 +99,12 @@ export interface WizardPerson {
 interface Params {
   churchId: string;
   eventId: string;
-  event: any;
+  event: RegistrationEvent | null;
   isLoggedIn: boolean;
   person?: WizardPerson;
 }
 
-export const formatMoney = (n: number, currency?: string): string => {
+export const formatMoney = (n: number | undefined, currency?: string): string => {
   const amount = Number(n) || 0;
   if (currency) {
     try {
@@ -87,16 +115,16 @@ export const formatMoney = (n: number, currency?: string): string => {
 };
 
 // ApiHelper exposes no PUT; compose one from its config + fetch wrapper.
-export const apiPut = (path: string, data: any, apiName: string): Promise<any> => {
-  const config = (ApiHelper as any).getConfig(apiName);
-  return (ApiHelper as any).fetchWithErrorHandling(config.url + path, {
+export const apiPut = (path: string, data: unknown, apiName: string): Promise<unknown> => {
+  const config = ApiHelper.getConfig(apiName);
+  return ApiHelper.fetchWithErrorHandling(config.url + path, {
     method: "PUT",
     headers: { Authorization: "Bearer " + config.jwt, "Content-Type": "application/json" },
     body: JSON.stringify(data)
   });
 };
 
-const num = (v: any): number => (v == null || isNaN(Number(v)) ? 0 : Number(v));
+const num = (v: number | string | null | undefined): number => (v == null || isNaN(Number(v)) ? 0 : Number(v));
 
 const ageYears = (birthDate?: Date | string): number | null => {
   if (!birthDate) return null;
@@ -126,7 +154,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   const [couponError, setCouponError] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [registration, setRegistration] = useState<any>(null);
+  const [registration, setRegistration] = useState<RegistrationResult | null>(null);
   const [unRestrictedFormId, setUnRestrictedFormId] = useState("");
   const [formSubmissionId, setFormSubmissionId] = useState<string | undefined>(undefined);
   const [atCapacity, setAtCapacity] = useState(false);
@@ -135,10 +163,10 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   useEffect(() => {
     if (!churchId || !eventId) return;
     ApiHelper.getAnonymous("/registrations/types/event/" + eventId + "?churchId=" + churchId, "ContentApi")
-      .then((data: any) => setTypes(Array.isArray(data) ? data : []))
+      .then((data: RegType[]) => setTypes(Array.isArray(data) ? data : []))
       .catch(() => setTypes([]));
     ApiHelper.getAnonymous("/registrations/selections/event/" + eventId + "?churchId=" + churchId, "ContentApi")
-      .then((data: any) => setSelections(Array.isArray(data) ? data : []))
+      .then((data: RegSelection[]) => setSelections(Array.isArray(data) ? data : []))
       .catch(() => setSelections([]));
   }, [churchId, eventId]);
 
@@ -150,11 +178,11 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
       return;
     }
     ApiHelper.get("/people/household/" + householdId, "MembershipApi")
-      .then((data: any) => {
+      .then((data: PersonInterface[]) => {
         const rows = Array.isArray(data) ? data : [];
         setHouseholdMembers(rows
-          .filter((p: any) => p.id && p.id !== selfId)
-          .map((p: any) => ({ id: p.id, firstName: p.name?.first || "", lastName: p.name?.last || "", birthDate: p.birthDate })));
+          .filter((p) => p.id && p.id !== selfId)
+          .map((p): HouseholdMember => ({ id: p.id as string, firstName: p.name?.first || "", lastName: p.name?.last || "", birthDate: p.birthDate })));
       })
       .catch(() => setHouseholdMembers([]));
   }, [householdId, selfId]);
@@ -305,7 +333,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
     if (!code) return;
     try {
       const memberCount = buildMembersPayload().length || 1;
-      const result: any = await ApiHelper.postAnonymous("/registrations/coupons/validate", { churchId, eventId, code, memberCount }, "ContentApi");
+      const result: CouponValidationResult = await ApiHelper.postAnonymous("/registrations/coupons/validate", { churchId, eventId, code, memberCount }, "ContentApi");
       if (result?.valid) {
         setAppliedCoupon({ code, discountType: result.discountType, value: Number(result.value) });
       } else {
@@ -328,7 +356,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   const resolveFormStep = async (): Promise<"questions" | "next"> => {
     if (!event?.formId) return "next";
     try {
-      const formData: any = await ApiHelper.get("/forms/standalone/" + event.formId + "?churchId=" + churchId, "MembershipApi");
+      const formData: { restricted?: boolean } = await ApiHelper.get("/forms/standalone/" + event.formId + "?churchId=" + churchId, "MembershipApi");
       if (formData?.restricted) return "next";
       setUnRestrictedFormId(event.formId);
       return "questions";
@@ -378,18 +406,18 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
     else void submit(undefined, fs?.id);
   };
 
-  const mapError = (result: any): string => {
+  const mapError = (result: RegistrationResult | { status?: string; error?: string } | null): string => {
     if (result?.status === "type-full") return Locale.label("registration.errors.typeFull");
     if (result?.status === "selection-full") return Locale.label("registration.errors.selectionFull");
     return result?.error || Locale.label("registration.errors.registrationFailed");
   };
 
-  const submit = async (payment?: RegistrationPayment, fsIdOverride?: string): Promise<any> => {
+  const submit = async (payment?: RegistrationPayment, fsIdOverride?: string): Promise<RegistrationResult | null> => {
     setError("");
     if (!validateMembers()) return null;
     setIsSubmitting(true);
     try {
-      const payload: any = { churchId, eventId };
+      const payload: RegistrationPayload & RegistrationPayment = { churchId, eventId };
       if (isLoggedIn) payload.personId = person?.id;
       else payload.guestInfo = { firstName: guestFirstName.trim(), lastName: guestLastName.trim(), email: guestEmail.trim(), phone: guestPhone.trim() || undefined };
 
@@ -402,7 +430,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
       if (fsId) payload.formSubmissionId = fsId;
       if (payment) Object.assign(payload, payment);
 
-      const result: any = isLoggedIn
+      const result: RegistrationResult = isLoggedIn
         ? await ApiHelper.post("/registrations/register", payload, "ContentApi")
         : await ApiHelper.postAnonymous("/registrations/register", payload, "ContentApi");
       if (result?.error) {
@@ -417,10 +445,10 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
       setRegistration(result);
       setStep("confirm");
       return result;
-    } catch (e: any) {
+    } catch (e) {
       // ApiHelper throws on a refusal with the response body as the message; show the server's reason.
-      let body: any = null;
-      try { body = JSON.parse(e?.message); } catch { /* not a JSON body */ }
+      let body: RegistrationResult | null = null;
+      try { body = JSON.parse((e as Error | undefined)?.message as string); } catch { /* not a JSON body */ }
       setError(mapError(body));
       return null;
     } finally {
@@ -428,7 +456,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
     }
   };
 
-  const finishConfirm = (result: any) => {
+  const finishConfirm = (result: RegistrationResult | null) => {
     setRegistration(result);
     setStep("confirm");
   };

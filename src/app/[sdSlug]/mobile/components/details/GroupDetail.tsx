@@ -9,7 +9,7 @@ import LinkIcon from "@mui/icons-material/Link";
 import { ApiHelper, DateHelper, Locale, PersonHelper, SUBSCRIPTION_MESSAGE_TYPE, UserHelper } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Permissions, type GroupInterface, type GroupJoinRequestInterface, type PersonInterface, type PlanInterface } from "@churchapps/helpers";
+import { Permissions, type ContactInfoInterface, type EventInterface, type GroupInterface, type GroupJoinRequestInterface, type PersonInterface, type PlanInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { getFirstDayOfWeek } from "@/helpers/firstDayOfWeek";
 import { mobileTheme } from "../mobileTheme";
@@ -39,7 +39,7 @@ interface GroupMember {
     id: string;
     name?: { display?: string; first?: string; last?: string };
     photo?: string;
-    contactInfo?: any;
+    contactInfo?: ContactInfoInterface;
     householdId?: string;
   };
 }
@@ -74,7 +74,7 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
 const truncate = (s: string, max = 120) => (s.length > max ? s.slice(0, max - 1) + "…" : s);
 const photoOf = (p?: GroupMember["person"]) => {
   if (!p?.photo) return undefined;
-  try { return PersonHelper.getPhotoUrl(p as any); } catch { return undefined; }
+  try { return PersonHelper.getPhotoUrl(p as PersonInterface); } catch { return undefined; }
 };
 const timeAgo = (t?: string) => {
   if (!t) return "";
@@ -139,8 +139,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     router.replace(qs ? `${pathname}?${qs}` : pathname || "/mobile/groups");
   }, []);
 
-  const isValidGroup = (data: any): data is GroupWithExtras =>
-    !!data && typeof data === "object" && !!data.id;
+  const isValidGroup = (data: unknown): data is GroupWithExtras =>
+    !!data && typeof data === "object" && !!(data as GroupWithExtras).id;
 
   const { data: groupData, isLoading: groupLoading } = useQuery<GroupWithExtras | null>({
     queryKey: ["group-detail", id],
@@ -292,7 +292,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     if (!currentPersonId || !groupId) return;
     setJoining(true);
     try {
-      const result: any = await ApiHelper.post(
+      const result: { redirect?: string } = await ApiHelper.post(
         "/groupmembers/self",
         { groupId },
         "MembershipApi"
@@ -340,7 +340,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const planTeaser = React.useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const dated = groupPlans.filter((p) => p.serviceDate).map((p) => ({ p, d: DateHelper.toDate(p.serviceDate as any) }));
+    const dated = groupPlans.filter((p) => p.serviceDate).map((p) => ({ p, d: DateHelper.toDate(p.serviceDate) }));
     const upcoming = dated.filter((x) => x.d >= today).sort((a, b) => a.d.getTime() - b.d.getTime());
     const past = dated.filter((x) => x.d < today).sort((a, b) => b.d.getTime() - a.d.getTime());
     return upcoming[0] || past[0] || null;
@@ -686,7 +686,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
         <CreateEventModal
           open={!!editEvent}
           groupId={groupId}
-          event={editEvent as any}
+          event={editEvent as EventInterface | null}
           onClose={() => setEditEvent(null)}
           onSaved={() => {
             setEditEvent(null);

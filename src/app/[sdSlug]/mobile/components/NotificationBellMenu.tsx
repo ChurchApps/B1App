@@ -21,7 +21,7 @@ interface Props {
 
 export interface Conversation {
   id: string;
-  pmId: string;
+  pmId?: string;
   personId: string;
   conversationId?: string;
   personName: string;
@@ -29,6 +29,20 @@ export interface Conversation {
   preview: string;
   lastTime?: string;
   unread: boolean;
+}
+
+// A /privateMessages row as JSON: the pair's thread with its newest message (dates arrive as strings).
+export interface PrivateMessageListRow {
+  id?: string;
+  pmId?: string;
+  privateMessageId?: string;
+  privateMessage?: { id?: string };
+  fromPersonId?: string;
+  toPersonId?: string;
+  notifyPersonId?: string;
+  conversationId?: string;
+  lastMessageTime?: string;
+  conversation?: { id?: string; dateCreated?: string; messages?: { content?: string }[] };
 }
 
 export interface NotificationItem {
@@ -46,7 +60,7 @@ export interface NotificationItem {
 
 // Same shape as MessagesPage: all three share the ["conversations", personId] cache entry.
 export const fetchConversations = async (myPersonId?: string): Promise<Conversation[]> => {
-  const pmData: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
+  const pmData: PrivateMessageListRow[] = await ApiHelper.get("/privateMessages", "MessagingApi");
   if (!Array.isArray(pmData) || pmData.length === 0) return [];
 
   const rows = pmData.map((pm) => {
@@ -81,7 +95,7 @@ export const fetchConversations = async (myPersonId?: string): Promise<Conversat
       try {
         photo = PersonHelper.getPhotoUrl(person) || "";
       } catch {
-        photo = (person as any).photo || "";
+        photo = person.photo || "";
       }
     }
     result.push({

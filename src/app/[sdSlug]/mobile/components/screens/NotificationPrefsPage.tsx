@@ -158,8 +158,8 @@ export const NotificationPrefsPage = () => {
   }, [prefs, applyPrefs]);
 
   const timeZones = useMemo(() => {
-    const supported: string[] = typeof (Intl as any).supportedValuesOf === "function"
-      ? (Intl as any).supportedValuesOf("timeZone")
+    const supported: string[] = typeof Intl.supportedValuesOf === "function"
+      ? Intl.supportedValuesOf("timeZone")
       : [];
     const all = supported.length ? [...supported] : [deviceZone].filter(Boolean);
     if (timeZone && !all.includes(timeZone)) all.unshift(timeZone);
@@ -224,8 +224,8 @@ export const NotificationPrefsPage = () => {
       await refetch();
       setOverrides(new Map());
       setSnack({ open: true, msg: Locale.label("mobile.notificationPrefs.saved"), severity: "success" });
-    } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || Locale.label("mobile.notificationPrefs.saveFailed"), severity: "error" });
+    } catch (err) {
+      setSnack({ open: true, msg: (err as Error | undefined)?.message || Locale.label("mobile.notificationPrefs.saveFailed"), severity: "error" });
     } finally {
       setSaving(false);
     }

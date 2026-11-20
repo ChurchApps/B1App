@@ -36,7 +36,7 @@ export const SermonDetail = ({ id, config }: Props) => {
       if (churchId) {
         const list = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
         if (Array.isArray(list)) {
-          found = list.find((s: any) => s && s.id === id) || null;
+          found = list.find((s: SermonInterface) => s && s.id === id) || null;
         }
       }
       if (!found) {
@@ -65,7 +65,7 @@ export const SermonDetail = ({ id, config }: Props) => {
       try {
         const list = await ApiHelper.getAnonymous(`/playlists/public/${churchId}`, "ContentApi");
         if (Array.isArray(list)) {
-          const match = list.find((p: any) => p && p.id === playlistId) as PlaylistInterface | undefined;
+          const match = list.find((p: PlaylistInterface) => p && p.id === playlistId) as PlaylistInterface | undefined;
           return match?.title || null;
         }
       } catch {
@@ -95,8 +95,8 @@ export const SermonDetail = ({ id, config }: Props) => {
     const text = `${Locale.label("mobile.details.checkOutSermon").replace("{}", title)} ${shareUrl}`.trim();
 
     try {
-      if (typeof navigator !== "undefined" && typeof (navigator as any).share === "function") {
-        await (navigator as any).share({ title, text, url: shareUrl });
+      if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+        await navigator.share({ title, text, url: shareUrl });
         return;
       }
     } catch {

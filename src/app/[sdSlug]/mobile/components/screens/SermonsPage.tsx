@@ -99,7 +99,7 @@ export const SermonsPage = ({ config }: Props) => {
     queryFn: async () => {
       const result = await ApiHelper.getAnonymous(`/playlists/public/${churchId}`, "ContentApi");
       const list: PlaylistInterface[] = Array.isArray(result)
-        ? result.filter((p: any) => p && p.id && p.title)
+        ? result.filter((p: PlaylistInterface) => p && p.id && p.title)
         : [];
       list.sort((a, b) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime());
       return list;

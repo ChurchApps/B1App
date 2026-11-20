@@ -75,15 +75,15 @@ export const GroupPlansTab: React.FC<Props> = ({ groupId }) => {
     const past: PlanWithType[] = [];
     filtered.forEach((p) => {
       if (!p.serviceDate) return;
-      const d = DateHelper.toDate(p.serviceDate as any);
+      const d = DateHelper.toDate(p.serviceDate);
       if (d >= startOfToday) upcoming.push(p);
       else past.push(p);
     });
     if (view === "upcoming") {
-      upcoming.sort((a, b) => new Date(a.serviceDate as any).getTime() - new Date(b.serviceDate as any).getTime());
+      upcoming.sort((a, b) => new Date(a.serviceDate as Date).getTime() - new Date(b.serviceDate as Date).getTime());
       return upcoming;
     }
-    past.sort((a, b) => new Date(b.serviceDate as any).getTime() - new Date(a.serviceDate as any).getTime());
+    past.sort((a, b) => new Date(b.serviceDate as Date).getTime() - new Date(a.serviceDate as Date).getTime());
     return past;
   }, [plans, planTypeIds, selectedPlanTypeId, view, startOfToday]);
 
@@ -131,7 +131,7 @@ export const GroupPlansTab: React.FC<Props> = ({ groupId }) => {
               key={plan.id}
               href={`/mobile/plans/${plan.id}`}
               title={plan.name}
-              subtitle={plan.serviceDate ? DateHelper.prettyDate(DateHelper.toDate(plan.serviceDate as any)) : undefined}
+              subtitle={plan.serviceDate ? DateHelper.prettyDate(DateHelper.toDate(plan.serviceDate)) : undefined}
               chevron
             />
           ))}

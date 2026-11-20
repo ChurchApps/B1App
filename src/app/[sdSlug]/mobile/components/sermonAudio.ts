@@ -8,7 +8,7 @@ export const safeHttpUrl = (url?: string | null) => (url && /^https?:\/\//i.test
 
 export const buildEmbedUrl = (sermon: SermonInterface | null): string | null => {
   if (!sermon) return null;
-  const { videoType, videoData, videoUrl } = sermon as any;
+  const { videoType, videoData, videoUrl } = sermon;
 
   if (videoType && videoData) {
     switch (videoType) {
@@ -25,7 +25,7 @@ export const buildEmbedUrl = (sermon: SermonInterface | null): string | null => 
 
 export const buildExternalUrl = (sermon: SermonInterface | null): string | null => {
   if (!sermon) return null;
-  const { videoType, videoData, videoUrl } = sermon as any;
+  const { videoType, videoData, videoUrl } = sermon;
 
   if (videoType && videoData) {
     switch (videoType) {

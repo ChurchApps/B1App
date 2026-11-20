@@ -12,8 +12,6 @@ type Props = {
 
 export function StreamPage(props: Props) {
 
-  const day = 1; // getDayOfYear();
-
   return (
     <Container>
       <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.liveStream", "Live Stream")}</h1>

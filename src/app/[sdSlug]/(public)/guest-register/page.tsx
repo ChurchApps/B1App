@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
 
 const loadData = async (sdSlug: string) => {
   const config = await ConfigHelper.load(sdSlug);
-  const publicSettings: any = await ApiHelper.getAnonymous("/settings/public/" + config.church.id, "MembershipApi");
+  const publicSettings: Record<string, string> = await ApiHelper.getAnonymous("/settings/public/" + config.church.id, "MembershipApi");
   const enabled = publicSettings?.enableQRGuestRegistration === "true";
   const imageUrl: string = publicSettings?.guestRegistrationImage || "";
   return { config, enabled, imageUrl };

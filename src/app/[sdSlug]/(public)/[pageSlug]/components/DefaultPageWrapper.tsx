@@ -2,6 +2,7 @@ import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/layouts/Footer";
 import { ConfigurationInterface, fetchCached } from "@/helpers/ConfigHelper";
+import type { SectionInterface } from "@/helpers/interfaces";
 import { CssBaseline } from "@mui/material";
 
 type Props = {
@@ -16,9 +17,9 @@ type Props = {
 export async function DefaultPageWrapper(props: Props) {
   const config = props.config as ConfigurationInterface;
 
-  let footerSections: any[] = [];
+  let footerSections: SectionInterface[] = [];
   try {
-    footerSections = await fetchCached<any[]>("/blocks/public/footer/" + config.church.id + (config.siteId ? "?siteId=" + config.siteId : ""), "ContentApi", config.keyName || config.church.subDomain || "");
+    footerSections = await fetchCached<SectionInterface[]>("/blocks/public/footer/" + config.church.id + (config.siteId ? "?siteId=" + config.siteId : ""), "ContentApi", config.keyName || config.church.subDomain || "");
   } catch { /* render the page without footer blocks */ }
 
   return (<>
