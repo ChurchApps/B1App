@@ -146,7 +146,8 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
         setBooking({
           ...emptyBookingSelection(),
           roomIds: (bk || []).filter((b) => b.roomId).map((b) => b.roomId as string),
-          resourceIds: (bk || []).filter((b) => b.resourceId).map((b) => b.resourceId as string)
+          resourceIds: (bk || []).filter((b) => b.resourceId).map((b) => b.resourceId as string),
+          resourceQuantities: Object.fromEntries((bk || []).filter((b) => b.resourceId).map((b) => [b.resourceId as string, b.quantity ?? 1]))
         });
       }).catch(() => setBooking(emptyBookingSelection()));
     } else {

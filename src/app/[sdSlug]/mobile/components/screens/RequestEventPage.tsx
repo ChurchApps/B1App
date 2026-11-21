@@ -97,7 +97,7 @@ export const RequestEventPage = ({ config }: Props) => {
         end: localToIso(allDay ? `${end.slice(0, 10)}T23:59` : end),
         recurrenceRule: recurring ? rRule : undefined,
         roomIds: booking.roomIds,
-        resources: booking.resourceIds.map((resourceId) => ({ resourceId, quantity: 1 }))
+        resources: booking.resourceIds.map((resourceId) => ({ resourceId, quantity: booking.resourceQuantities[resourceId] ?? 1 }))
       };
       const result: { bookings?: Outcome[] } = await ApiHelper.post("/events/request", body, "ContentApi");
       setOutcome(Array.isArray(result?.bookings) ? result.bookings : []);

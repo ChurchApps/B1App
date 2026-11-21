@@ -158,6 +158,49 @@ test.describe("Mobile event request (CA-1)", () => {
     }
   });
 
+  // #1652: a requester asks for part of a pooled resource (40 of 70 chairs) instead of the whole stock.
+  test("requester enters how many of a pooled resource they need", async ({ page }) => {
+    const jwt = await demoJwt();
+    const ctx = await request.newContext();
+    const auth = { headers: { Authorization: "Bearer " + jwt } };
+    const stamp = Date.now();
+    const chairsName = `Zacchaeus Folding Chairs ${stamp}`;
+    const easelName = `Zacchaeus Easel ${stamp}`;
+    const saved = await (await ctx.post(`${API_BASE}/content/resources`, {
+      ...auth,
+      data: [{ name: chairsName, quantity: 70 }, { name: easelName, quantity: 1 }]
+    })).json();
+    const [chairs, easel] = saved;
+    try {
+      await page.goto("/mobile/requestEvent");
+      await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+      await page.getByTestId("request-title").locator("input").fill(`Test Request ${stamp}`);
+      await page.getByTestId("booking-resources").click();
+      await page.getByRole("option", { name: new RegExp(chairsName) }).click();
+      await page.getByRole("option", { name: new RegExp(easelName) }).click();
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("listbox")).toHaveCount(0);
+
+      const qty = page.getByTestId("booking-resource-quantity-" + chairs.id);
+      await expect(qty).toHaveValue("1");
+      await expect(page.getByTestId("booking-resource-quantity-" + easel.id)).toHaveCount(0);
+      await qty.fill("40");
+      await expect(qty).toHaveValue("40");
+
+      const submitted = page.waitForRequest((req) => req.url().includes("/events/request") && req.method() === "POST");
+      await page.getByTestId("request-submit").click();
+      const body = (await submitted).postDataJSON();
+      expect(body.resources).toEqual(expect.arrayContaining([
+        { resourceId: chairs.id, quantity: 40 },
+        { resourceId: easel.id, quantity: 1 }
+      ]));
+      await expect(page.getByTestId("request-outcome")).toBeVisible({ timeout: 15000 });
+    } finally {
+      for (const r of saved) await ctx.delete(`${API_BASE}/content/resources/${r.id}`, auth).catch(() => {});
+      await ctx.dispose();
+    }
+  });
+
   test("no-approval room is approved immediately", async ({ page }) => {
     await fillRoomRequest(page, /Sanctuary/i);
     await expect(page.getByTestId("request-outcome")).toContainText(/Approved/i);
