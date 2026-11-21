@@ -496,6 +496,7 @@
       "answerCount": "{} answers",
       "answerCountOne": "1 answer",
       "attendanceSaved": "Attendance saved.",
+      "available": "{} available",
       "backTo": "Back to {}",
       "backToChat": "Back to chat",
       "beFirstToShare": "Be the first to share something with the group.",
