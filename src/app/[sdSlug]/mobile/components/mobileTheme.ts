@@ -109,6 +109,7 @@ export const SCREEN_TITLES: Record<string, string> = new Proxy({} as Record<stri
       plan: Locale.label("mobile.screenTitles.plans"),
       plans: Locale.label("mobile.screenTitles.plans"),
       planDetails: Locale.label("mobile.screenTitles.planDetails"),
+      songs: Locale.label("mobile.screenTitles.songs"),
       sermons: Locale.label("mobile.screenTitles.sermons"),
       sermonDetails: Locale.label("mobile.screenTitles.sermonDetails"),
       news: Locale.label("mobile.dashboard.news"),
@@ -163,6 +164,7 @@ export const linkTypeToRoute = (
     case "groups": return "/mobile/groups";
     case "directory": return "/mobile/community";
     case "plans": return "/mobile/plans";
+    case "songs": return "/mobile/songs";
     case "checkin": return "/mobile/checkin";
     case "lessons": return "/mobile/lessons";
     case "donation": return "/mobile/donate";
@@ -202,6 +204,7 @@ export const linkTypeToIcon = (linkType?: string, itemIcon?: string): string => 
     case "groups": return "groups";
     case "directory": return "people";
     case "plans": return "event_note";
+    case "songs": return "music_note";
     case "checkin": return "how_to_reg";
     case "lessons": return "menu_book";
     case "donation": return "volunteer_activism";

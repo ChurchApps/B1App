@@ -1108,6 +1108,7 @@
       "sermonDetails": "Sermon",
       "sermons": "Sermons",
       "signIn": "Sign In",
+      "songs": "Songs",
       "stream": "Stream",
       "volunteer": "Volunteer",
       "volunteerOpportunities": "Volunteer Opportunities",
@@ -1352,6 +1353,14 @@
       "whosHere": "Who's here",
       "year": "Year",
       "yourAssignment": "Your assignment"
+    },
+    "songs": {
+      "empty": "No songs yet. Songs added in B1 Admin under Serving › Songs appear here.",
+      "keyOf": "Key of {}",
+      "noMatches": "No songs match your search.",
+      "search": "Search songs",
+      "signedOutBody": "The song library is open to people signed in to the church.",
+      "signedOutTitle": "Sign in to see the song library"
     },
     "stream": {
       "backToStream": "Back to Stream",

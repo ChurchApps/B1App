@@ -22,6 +22,7 @@ const MessagesPage = dynamic(() => import("./screens/MessagesPage").then(m => ({
 const DonatePage = dynamic(() => import("./screens/DonatePage").then(m => ({ default: m.DonatePage })), { loading });
 const CheckinPage = dynamic(() => import("./screens/CheckinPage").then(m => ({ default: m.CheckinPage })), { loading });
 const PlansPage = dynamic(() => import("./screens/PlansPage").then(m => ({ default: m.PlansPage })), { loading });
+const SongsPage = dynamic(() => import("./screens/SongsPage").then(m => ({ default: m.SongsPage })), { loading });
 const RegistrationsPage = dynamic(() => import("./screens/RegistrationsPage").then(m => ({ default: m.RegistrationsPage })), { loading });
 const MePage = dynamic(() => import("./screens/MePage").then(m => ({ default: m.MePage })), { loading });
 const RequestEventPage = dynamic(() => import("./screens/RequestEventPage").then(m => ({ default: m.RequestEventPage })), { loading });
@@ -75,6 +76,7 @@ export function ScreenRouter({ pageSlug, config }: Props) {
     case "service": return <CheckinPage config={config} />;
     case "plans":
     case "plan": return <PlansPage config={config} />;
+    case "songs": return <SongsPage config={config} />;
     case "votd": return <VotdPage />;
     case "bible": return <BiblePage />;
     case "notifications": return <NotificationsPage config={config} />;
