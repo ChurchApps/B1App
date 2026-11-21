@@ -130,6 +130,34 @@ test.describe("Mobile event request (CA-1)", () => {
     }
   });
 
+  // #1653: the resource picker shows how many of an item the church has, the way rooms show seats.
+  test("resource picker shows the quantity on hand", async ({ page }) => {
+    const jwt = await demoJwt();
+    const ctx = await request.newContext();
+    const auth = { headers: { Authorization: "Bearer " + jwt } };
+    const stamp = Date.now();
+    const chairsName = `Zacchaeus Folding Chairs ${stamp}`;
+    const easelName = `Zacchaeus Easel ${stamp}`;
+    const saved = await (await ctx.post(`${API_BASE}/content/resources`, {
+      ...auth,
+      data: [{ name: chairsName, description: "Gray metal chairs", quantity: 70 }, { name: easelName, description: "Wooden easel", quantity: 1 }]
+    })).json();
+    try {
+      await page.goto("/mobile/requestEvent");
+      await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+      await page.getByTestId("booking-resources").click();
+      const chairs = page.getByRole("option", { name: new RegExp(chairsName) });
+      await expect(chairs).toContainText("70 available");
+      await expect(chairs).toContainText("Gray metal chairs");
+      const easel = page.getByRole("option", { name: new RegExp(easelName) });
+      await expect(easel).toContainText("Wooden easel");
+      await expect(easel).not.toContainText("available");
+    } finally {
+      for (const r of saved) await ctx.delete(`${API_BASE}/content/resources/${r.id}`, auth).catch(() => {});
+      await ctx.dispose();
+    }
+  });
+
   test("no-approval room is approved immediately", async ({ page }) => {
     await fillRoomRequest(page, /Sanctuary/i);
     await expect(page.getByTestId("request-outcome")).toContainText(/Approved/i);
