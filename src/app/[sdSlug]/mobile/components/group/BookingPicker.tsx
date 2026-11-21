@@ -17,6 +17,8 @@ import { mobileTheme } from "../mobileTheme";
 export interface BookingSelection {
   roomIds: string[];
   resourceIds: string[];
+  // How many of each ticked resource are requested; a missing key means 1.
+  resourceQuantities: Record<string, number>;
   setupMinutes: string;
   teardownMinutes: string;
   customWindow: boolean;
@@ -41,6 +43,7 @@ export interface EventBookingInterface {
 export const emptyBookingSelection = (): BookingSelection => ({
   roomIds: [],
   resourceIds: [],
+  resourceQuantities: {},
   setupMinutes: "",
   teardownMinutes: "",
   customWindow: false,
@@ -71,6 +74,8 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
   const tc = mobileTheme.colors;
   const [rooms, setRooms] = React.useState<{ id?: string; name?: string; capacity?: number; description?: string; active?: boolean }[]>([]);
   const [resources, setResources] = React.useState<{ id?: string; name?: string; quantity?: number; description?: string; active?: boolean }[]>([]);
+  // A quantity box the requester has cleared shows empty until they type a number or leave it.
+  const [clearedQuantity, setClearedQuantity] = React.useState<string | null>(null);
   const [conflicts, setConflicts] = React.useState<{ message?: string }[]>([]);
 
   const { roomIds, resourceIds, setupMinutes, teardownMinutes, customWindow, windowStart, windowEnd } = value;
@@ -78,6 +83,10 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
   // Inactive rooms and resources leave the pickers, but stay listed while this event still books them.
   const pickableRooms = rooms.filter((r) => r.active !== false || roomIds.includes(r.id!));
   const pickableResources = resources.filter((r) => r.active !== false || resourceIds.includes(r.id!));
+
+  const resourceQuantities = value.resourceQuantities || {};
+  // Ticked resources with more than one unit get a quantity box below the picker.
+  const pooledResources = resources.filter((r) => resourceIds.includes(r.id!) && (r.quantity || 0) > 1);
 
   const patch = (p: Partial<BookingSelection>) => onChange({ ...value, ...p });
 
@@ -116,13 +125,26 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
         startTime: customWindow && windowStart ? new Date(windowStart) : undefined,
         endTime: customWindow && windowEnd ? new Date(windowEnd) : undefined,
         roomIds,
-        resources: resourceIds.map((id) => ({ resourceId: id, quantity: 1 }))
+        resources: resourceIds.map((id) => ({ resourceId: id, quantity: resourceQuantities[id] ?? 1 }))
       }, "ContentApi").then((c) => setConflicts(Array.isArray(c) ? c : [])).catch(() => setConflicts([]));
     }, 400);
     return () => clearTimeout(t);
   }, [
-    start, end, recurring, rRule, roomIds, resourceIds, eventId, setupMinutes, teardownMinutes, customWindow, windowStart, windowEnd
+    start, end, recurring, rRule, roomIds, resourceIds, resourceQuantities, eventId, setupMinutes, teardownMinutes, customWindow, windowStart, windowEnd
   ]);
+
+  const changeResources = (ids: string[]) => {
+    const quantities = Object.fromEntries(Object.entries(resourceQuantities).filter(([id]) => ids.includes(id)));
+    patch({ resourceIds: ids, resourceQuantities: quantities });
+  };
+
+  const changeQuantity = (id: string, raw: string, max: number) => {
+    setClearedQuantity(raw.trim() ? null : id);
+    if (!raw.trim()) return;
+    const n = parseInt(raw, 10);
+    const qty = Math.min(Math.max(Number.isNaN(n) ? 1 : n, 1), max);
+    patch({ resourceQuantities: { ...resourceQuantities, [id]: qty } });
+  };
 
   const toggleCustomWindow = (on: boolean) => {
     patch({ customWindow: on, windowStart: on ? (windowStart || start) : windowStart, windowEnd: on ? (windowEnd || end) : windowEnd });
@@ -159,7 +181,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           size="small"
           label={Locale.label("mobile.group.resources")}
           value={resourceIds}
-          onChange={(e) => patch({ resourceIds: e.target.value as unknown as string[] })}
+          onChange={(e) => changeResources(e.target.value as unknown as string[])}
           SelectProps={{ multiple: true, renderValue: (selected: unknown) => resources.filter((r) => (selected as string[]).includes(r.id as string)).map((r) => r.name).join(", ") }}
           data-testid="booking-resources"
         >
@@ -174,6 +196,22 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           ))}
         </TextField>
       )}
+      {pooledResources.map((r) => (
+        <Box key={r.id} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+          <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>{r.name}</Typography>
+          <TextField
+            size="small"
+            type="number"
+            label={Locale.label("mobile.group.quantity")}
+            value={clearedQuantity === r.id ? "" : resourceQuantities[r.id!] ?? 1}
+            onChange={(e) => changeQuantity(r.id!, e.target.value, r.quantity!)}
+            onBlur={() => setClearedQuantity(null)}
+            inputProps={{ min: 1, max: r.quantity, "data-testid": "booking-resource-quantity-" + r.id }}
+            helperText={Locale.label("mobile.group.available").replace("{}", String(r.quantity))}
+            sx={{ width: 140 }}
+          />
+        </Box>
+      ))}
       {hasBookings && (
         <>
           {!customWindow && (
@@ -240,15 +278,17 @@ export const diffBookings = (
   existing: EventBookingInterface[]
 ): { toAdd: EventBookingInterface[]; toRemove: EventBookingInterface[] } => {
   const existingRoomIds = existing.filter((b) => b.roomId).map((b) => b.roomId);
-  const existingResourceIds = existing.filter((b) => b.resourceId).map((b) => b.resourceId);
+  const quantityFor = (resourceId: string) => selection.resourceQuantities?.[resourceId] ?? 1;
+  // A resource whose requested quantity changed is rebooked, so the new amount goes through approval again.
+  const keptResourceIds = existing.filter((b) => b.resourceId && selection.resourceIds.includes(b.resourceId) && (b.quantity ?? 1) === quantityFor(b.resourceId)).map((b) => b.resourceId);
   const win = selection.customWindow && selection.windowStart && selection.windowEnd
     ? { startTime: new Date(selection.windowStart), endTime: new Date(selection.windowEnd) }
     : { setupMinutes: toInt(selection.setupMinutes) || undefined, teardownMinutes: toInt(selection.teardownMinutes) || undefined };
   const toAdd = [
     ...selection.roomIds.filter((id) => !existingRoomIds.includes(id)).map((roomId) => ({ eventId, roomId, ...win })),
-    ...selection.resourceIds.filter((id) => !existingResourceIds.includes(id)).map((resourceId) => ({ eventId, resourceId, quantity: 1, ...win }))
+    ...selection.resourceIds.filter((id) => !keptResourceIds.includes(id)).map((resourceId) => ({ eventId, resourceId, quantity: quantityFor(resourceId), ...win }))
   ];
-  const toRemove = existing.filter((b) => (b.roomId && !selection.roomIds.includes(b.roomId)) || (b.resourceId && !selection.resourceIds.includes(b.resourceId)));
+  const toRemove = existing.filter((b) => (b.roomId && !selection.roomIds.includes(b.roomId)) || (b.resourceId && !keptResourceIds.includes(b.resourceId)));
   return { toAdd, toRemove };
 };
 
