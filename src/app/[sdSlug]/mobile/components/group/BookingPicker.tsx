@@ -64,13 +64,13 @@ interface Props {
 
 const toInt = (v: string) => (v.trim() ? parseInt(v, 10) || 0 : 0);
 
-// Joins the non-empty parts of a picker item's second line (seats, description).
+// Joins the non-empty parts of a picker item's second line (seats or quantity, description).
 const secondaryLine = (parts: (string | undefined)[]) => parts.filter(Boolean).join(" · ") || undefined;
 
 export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, eventId, onLoaded, onData }: Props) => {
   const tc = mobileTheme.colors;
   const [rooms, setRooms] = React.useState<{ id?: string; name?: string; capacity?: number; description?: string; active?: boolean }[]>([]);
-  const [resources, setResources] = React.useState<{ id?: string; name?: string; description?: string; active?: boolean }[]>([]);
+  const [resources, setResources] = React.useState<{ id?: string; name?: string; quantity?: number; description?: string; active?: boolean }[]>([]);
   const [conflicts, setConflicts] = React.useState<{ message?: string }[]>([]);
 
   const { roomIds, resourceIds, setupMinutes, teardownMinutes, customWindow, windowStart, windowEnd } = value;
@@ -89,7 +89,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
     ]).then(([r, res]) => {
       if (!active) return;
       const roomList: { id?: string; name?: string; capacity?: number; description?: string; active?: boolean }[] = Array.isArray(r) ? r : [];
-      const resList: { id?: string; name?: string; description?: string; active?: boolean }[] = Array.isArray(res) ? res : [];
+      const resList: { id?: string; name?: string; quantity?: number; description?: string; active?: boolean }[] = Array.isArray(res) ? res : [];
       setRooms(roomList);
       setResources(resList);
       onLoaded?.(roomList.some((x) => x.active !== false) || resList.some((x) => x.active !== false));
@@ -166,7 +166,10 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           {pickableResources.map((r) => (
             <MenuItem key={r.id} value={r.id} sx={{ whiteSpace: "normal" }}>
               <Checkbox checked={resourceIds.includes(r.id!)} size="small" />
-              <ListItemText primary={r.name} secondary={r.description || undefined} />
+              <ListItemText
+                primary={r.name}
+                secondary={secondaryLine([r.quantity && r.quantity > 1 ? Locale.label("mobile.group.available").replace("{}", String(r.quantity)) : undefined, r.description])}
+              />
             </MenuItem>
           ))}
         </TextField>
