@@ -19,6 +19,7 @@ const KEEP_ALIVE_TABS = new Set([
   "donate",
   "checkin",
   "plans",
+  "songs",
   "votd",
   "bible",
   "registrations",
