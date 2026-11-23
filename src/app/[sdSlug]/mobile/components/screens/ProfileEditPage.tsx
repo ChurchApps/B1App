@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Alert,
   Autocomplete,
@@ -30,6 +30,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { GroupInterface, PersonInterface, TaskInterface, VisibilityPreferenceInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { parseTitleOptions } from "@/helpers/TitleOptions";
+import { canEditHouseholdMember } from "@/helpers/HouseholdEdit";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
 import { Eyebrow, KeyValues, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, Sheet, SignInPrompt, StatusBadge, TextLink } from "../kit";
@@ -183,6 +184,9 @@ export const ProfileEditPage = ({ config }: Props) => {
   const userContext = useContext(UserContext);
   const queryClient = useQueryClient();
   const personId = UserHelper.currentUserChurch?.person?.id;
+  // ?personId= edits another household member; those changes always go to staff for approval.
+  const requestedMemberId = useSearchParams()?.get("personId") || "";
+  const editingMember = !!requestedMemberId && requestedMemberId !== personId;
 
   const [sheet, setSheet] = useState<SheetKey | null>(null);
   const [person, setPerson] = useState<PersonWithPrivacy | null>(null);
@@ -241,6 +245,10 @@ export const ProfileEditPage = ({ config }: Props) => {
     enabled: !!householdId
   });
 
+  const member = editingMember ? household.find((h) => h.id === requestedMemberId) : undefined;
+  const memberEditable = editingMember && canEditHouseholdMember(serverPerson, member);
+  const subject = editingMember ? (memberEditable ? member : undefined) : serverPerson;
+
   const { data: visibilityPrefs } = useQuery<VisibilityPreferenceInterface>({
     queryKey: ["visibilityPreferences", "my"],
     queryFn: () => ApiHelper.get("/visibilityPreferences/my", "MembershipApi"),
@@ -268,17 +276,21 @@ export const ProfileEditPage = ({ config }: Props) => {
       setInitial({ ...emptyPerson });
       return;
     }
-    if (!serverPerson) return;
+    if (!subject) {
+      setPerson(null);
+      setInitial(null);
+      return;
+    }
     const merged: PersonWithPrivacy = {
       ...emptyPerson,
-      ...serverPerson,
-      name: { ...emptyPerson.name, ...(serverPerson.name || {}) },
-      contactInfo: { ...emptyPerson.contactInfo, ...(serverPerson.contactInfo || {}) }
+      ...subject,
+      name: { ...emptyPerson.name, ...(subject.name || {}) },
+      contactInfo: { ...emptyPerson.contactInfo, ...(subject.contactInfo || {}) }
     };
     setPerson(merged);
     setInitial(JSON.parse(JSON.stringify(merged)));
     setModifiedFields(new Set());
-  }, [personId, serverPerson]);
+  }, [personId, subject]);
 
   useEffect(() => {
     if (!visibilityPrefs) return;
@@ -291,7 +303,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     setInitialVis({ address: a, phone: p, email: e });
   }, [visibilityPrefs]);
 
-  const loading = personLoading && !person;
+  const loading = (personLoading || (editingMember && householdLoading)) && !person;
 
   const setField = useCallback((key: string, value: string) => {
     setPerson((prev) => (prev ? writeField(prev, key, value) : prev));
@@ -376,10 +388,14 @@ export const ProfileEditPage = ({ config }: Props) => {
       if (!churchId) throw new Error(Locale.label("mobile.screens.unableToLoadChurch"));
       const settings: Record<string, string> = await ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi");
       const approvalGroupId: string = settings?.directoryApprovalGroupId || "";
+      // A household member's changes never take the direct-save path; the Api refuses them without an approval group.
+      if (editingMember && !approvalGroupId) throw new Error(Locale.label("mobile.profileEdit.memberNeedsApproval"));
       saveWithApproval = !!approvalGroupId;
 
-      const id = person.id || UserHelper.currentUserChurch?.person?.id;
+      const id = editingMember ? requestedMemberId : person.id || UserHelper.currentUserChurch?.person?.id;
       const displayName = [person.name?.first, person.name?.last].filter(Boolean).join(" ");
+      const submitterId = editingMember ? personId : id;
+      const submitterName = editingMember ? [serverPerson?.name?.first, serverPerson?.name?.last].filter(Boolean).join(" ") : displayName;
 
       if (saveWithApproval) {
         const task: TaskInterface = {
@@ -388,8 +404,8 @@ export const ProfileEditPage = ({ config }: Props) => {
           associatedWithId: id,
           associatedWithLabel: displayName,
           createdByType: "person",
-          createdById: id,
-          createdByLabel: displayName,
+          createdById: submitterId,
+          createdByLabel: submitterName,
           title: `Profile changes for ${displayName || "member"}`,
           status: "Open",
           data: JSON.stringify(profileChanges)
@@ -415,7 +431,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       }
 
       // Photo uploads on submit, so refresh to show new image without sign-out.
-      if (id) {
+      if (editingMember) queryClient.invalidateQueries({ queryKey: ["household", householdId] });
+      else if (id) {
         try {
           const fresh = await ApiHelper.get("/people/" + id, "MembershipApi");
           if (fresh) userContext?.setPerson(fresh);
@@ -641,6 +658,20 @@ export const ProfileEditPage = ({ config }: Props) => {
     return (
       <Box sx={{ py: "48px", display: "flex", justifyContent: "center" }}>
         <CircularProgress sx={{ color: tc.primary }} />
+      </Box>
+    );
+  }
+
+  if (editingMember && !memberEditable && !personLoading && !householdLoading) {
+    return (
+      <Box sx={{ pb: "24px" }}>
+        <PageHead title={Locale.label("mobile.profileEdit.editMemberTitle")} />
+        <Plate>
+          <PlateSection>
+            <Box data-testid="household-member-not-editable"><QuietEmpty>{Locale.label("mobile.profileEdit.memberNotEditable")}</QuietEmpty></Box>
+            <TextLink href="/mobile/profileEdit" sx={{ mt: "12px", display: "inline-block" }}>{Locale.label("mobile.profileEdit.backToProfile")}</TextLink>
+          </PlateSection>
+        </Plate>
       </Box>
     );
   }
@@ -881,7 +912,9 @@ export const ProfileEditPage = ({ config }: Props) => {
 
   return (
     <Box sx={{ pb: "24px" }}>
-      <PageHead title={Locale.label("mobile.profileEdit.title")} lede={requiresApproval ? Locale.label("mobile.profileEdit.approvalLede") : undefined} />
+      {editingMember
+        ? <PageHead title={fullName || Locale.label("mobile.profileEdit.editMemberTitle")} lede={Locale.label("mobile.profileEdit.memberLede")} />
+        : <PageHead title={Locale.label("mobile.profileEdit.title")} lede={requiresApproval ? Locale.label("mobile.profileEdit.approvalLede") : undefined} />}
       <Plate>
         <PlateSection title={Locale.label("mobile.profileEdit.photoAndName")} action={editLink("name")}>
           <Box sx={{ display: "flex", alignItems: "center", gap: "14px" }}>
@@ -896,51 +929,58 @@ export const ProfileEditPage = ({ config }: Props) => {
           {hasContact ? <KeyValues items={contactItems} /> : <QuietEmpty>{Locale.label("mobile.profileEdit.noContactInfo")}</QuietEmpty>}
         </PlateSection>
 
-        <PlateSection title={Locale.label("mobile.screens.tabHousehold")} action={editLink("household", Locale.label("mobile.profileEdit.addFamilyMember"))}>
-          {householdLoading && householdId && <CircularProgress sx={{ color: tc.primary }} size={24} />}
-          {!householdLoading && !householdId && <QuietEmpty>{Locale.label("mobile.profileEdit.noHouseholdLinked")}</QuietEmpty>}
-          {!householdLoading && householdIsError && householdId && <QuietEmpty sx={{ color: tc.error }}>{Locale.label("mobile.profileEdit.couldNotLoadHousehold")}</QuietEmpty>}
-          {!householdLoading && !householdIsError && !!householdId && otherHousehold.length === 0 && <QuietEmpty>{Locale.label("mobile.profileEdit.noOtherHouseholdMembers")}</QuietEmpty>}
-          {!householdLoading && !householdIsError && otherHousehold.length > 0 && (
-            <RowList>
-              {otherHousehold.map((h) => (
-                <Row
-                  key={h.id}
-                  href={`/mobile/community/${h.id}`}
-                  chevron
-                  leading={(
-                    <Avatar src={h.photo ? PersonHelper.getPhotoUrl(h) : undefined} sx={{ width: 40, height: 40, bgcolor: tc.chip, color: tc.onChip, fontSize: 15, fontWeight: 600 }}>
-                      {(h.name?.first?.charAt(0) || "?").toUpperCase()}
-                    </Avatar>
-                  )}
-                  title={h.name?.display || Locale.label("mobile.components.unknown")}
-                  subtitle={h.householdRole || Locale.label("mobile.details.householdMember")}
-                />
-              ))}
-            </RowList>
-          )}
-        </PlateSection>
+        {!editingMember && <>
+          <PlateSection title={Locale.label("mobile.screens.tabHousehold")} action={editLink("household", Locale.label("mobile.profileEdit.addFamilyMember"))}>
+            {householdLoading && householdId && <CircularProgress sx={{ color: tc.primary }} size={24} />}
+            {!householdLoading && !householdId && <QuietEmpty>{Locale.label("mobile.profileEdit.noHouseholdLinked")}</QuietEmpty>}
+            {!householdLoading && householdIsError && householdId && <QuietEmpty sx={{ color: tc.error }}>{Locale.label("mobile.profileEdit.couldNotLoadHousehold")}</QuietEmpty>}
+            {!householdLoading && !householdIsError && !!householdId && otherHousehold.length === 0 && <QuietEmpty>{Locale.label("mobile.profileEdit.noOtherHouseholdMembers")}</QuietEmpty>}
+            {!householdLoading && !householdIsError && otherHousehold.length > 0 && (
+              <RowList>
+                {otherHousehold.map((h) => {
+                  const editable = requiresApproval && canEditHouseholdMember(serverPerson, h);
+                  const name = h.name?.display || Locale.label("mobile.components.unknown");
+                  return (
+                    <Row
+                      key={h.id}
+                      href={editable ? undefined : `/mobile/community/${h.id}`}
+                      chevron={!editable}
+                      trailing={editable ? <TextLink href={`/mobile/profileEdit?personId=${h.id}`} aria-label={`${Locale.label("mobile.details.edit")} ${name}`} data-testid={`household-member-edit-${h.id}`}>{Locale.label("mobile.details.edit")}</TextLink> : undefined}
+                      leading={(
+                        <Avatar src={h.photo ? PersonHelper.getPhotoUrl(h) : undefined} sx={{ width: 40, height: 40, bgcolor: tc.chip, color: tc.onChip, fontSize: 15, fontWeight: 600 }}>
+                          {(h.name?.first?.charAt(0) || "?").toUpperCase()}
+                        </Avatar>
+                      )}
+                      title={name}
+                      subtitle={h.householdRole || Locale.label("mobile.details.householdMember")}
+                    />
+                  );
+                })}
+              </RowList>
+            )}
+          </PlateSection>
 
-        <PlateSection title={Locale.label("mobile.screens.tabAccount")} action={editLink("account")}>
-          <KeyValues
-            items={[
-              { label: Locale.label("mobile.profileEdit.signIn"), value: accountUser?.email || "—" },
-              { label: Locale.label("mobile.screens.passwordLabel"), value: "••••••••" },
-              { label: Locale.label("mobile.profileEdit.displayName"), value: [accountUser?.firstName, accountUser?.lastName].filter(Boolean).join(" ") }
-            ]}
-          />
-        </PlateSection>
+          <PlateSection title={Locale.label("mobile.screens.tabAccount")} action={editLink("account")}>
+            <KeyValues
+              items={[
+                { label: Locale.label("mobile.profileEdit.signIn"), value: accountUser?.email || "—" },
+                { label: Locale.label("mobile.screens.passwordLabel"), value: "••••••••" },
+                { label: Locale.label("mobile.profileEdit.displayName"), value: [accountUser?.firstName, accountUser?.lastName].filter(Boolean).join(" ") }
+              ]}
+            />
+          </PlateSection>
 
-        <PlateSection title={Locale.label("mobile.screens.tabPrivacy")} action={editLink("privacy", Locale.label("mobile.screens.change"))}>
-          <KeyValues
-            items={[
-              { label: Locale.label("mobile.profileEdit.directory"), value: Locale.label(optedOutLocal ? "mobile.profileEdit.hiddenFromDirectory" : "mobile.profileEdit.shownInDirectory") },
-              { label: Locale.label("mobile.profileEdit.addressVisibility"), value: Locale.label(scopeLabelKeys[addressVis]) },
-              { label: Locale.label("mobile.profileEdit.phoneVisibility"), value: Locale.label(scopeLabelKeys[phoneVis]) },
-              { label: Locale.label("mobile.profileEdit.emailVisibility"), value: Locale.label(scopeLabelKeys[emailVis]) }
-            ]}
-          />
-        </PlateSection>
+          <PlateSection title={Locale.label("mobile.screens.tabPrivacy")} action={editLink("privacy", Locale.label("mobile.screens.change"))}>
+            <KeyValues
+              items={[
+                { label: Locale.label("mobile.profileEdit.directory"), value: Locale.label(optedOutLocal ? "mobile.profileEdit.hiddenFromDirectory" : "mobile.profileEdit.shownInDirectory") },
+                { label: Locale.label("mobile.profileEdit.addressVisibility"), value: Locale.label(scopeLabelKeys[addressVis]) },
+                { label: Locale.label("mobile.profileEdit.phoneVisibility"), value: Locale.label(scopeLabelKeys[phoneVis]) },
+                { label: Locale.label("mobile.profileEdit.emailVisibility"), value: Locale.label(scopeLabelKeys[emailVis]) }
+              ]}
+            />
+          </PlateSection>
+        </>}
       </Plate>
 
       <Sheet
@@ -950,7 +990,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         actions={(
           <>
             <Button variant="contained" onClick={saveProfileSheet} disabled={saving || !settingsSettled} sx={{ flex: { xs: 1, sm: "none" } }}>
-              {saving ? <CircularProgress size={20} sx={{ color: "inherit" }} /> : requiresApproval ? Locale.label("mobile.profileEdit.submitForApproval") : Locale.label("mobile.profileEdit.saveChanges")}
+              {saving ? <CircularProgress size={20} sx={{ color: "inherit" }} /> : requiresApproval || editingMember ? Locale.label("mobile.profileEdit.submitForApproval") : Locale.label("mobile.profileEdit.saveChanges")}
             </Button>
             <Button variant="outlined" onClick={closeProfileSheet} disabled={saving}>{Locale.label("common.cancel")}</Button>
           </>
