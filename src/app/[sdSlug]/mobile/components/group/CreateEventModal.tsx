@@ -12,12 +12,14 @@ import { MarkdownEditor } from "@churchapps/apphelper/markdown";
 import { EventReminderEdit } from "./EventReminderEdit";
 import { BookingPicker, diffBookings, emptyBookingSelection, type BookingSelection, type EventBookingInterface } from "./BookingPicker";
 
+type EventWithLocation = EventInterface & { location?: string | null };
+
 interface Props {
   open: boolean;
   groupId: string;
   initialDateIso?: string;
 
-  event?: EventInterface | null;
+  event?: EventWithLocation | null;
   onClose: () => void;
   onSaved?: () => void;
 }
@@ -56,6 +58,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       return {
         title: eventProp.title || "",
         description: eventProp.description || "",
+        location: eventProp.location || "",
         start: toLocal(eventProp.start || new Date()),
         end: toLocal(eventProp.end || new Date()),
         allDay: eventProp.allDay ?? false,
@@ -74,6 +77,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
     return {
       title: "",
       description: "",
+      location: "",
       start: toLocal(base),
       end: toLocal(endBase),
       allDay: false,
@@ -89,6 +93,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
 
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [location, setLocation] = React.useState("");
   const [start, setStart] = React.useState("");
   const [end, setEnd] = React.useState("");
   const [allDay, setAllDay] = React.useState(false);
@@ -119,6 +124,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       createdIdRef.current = undefined;
       setTitle(d.title);
       setDescription(d.description);
+      setLocation(d.location);
       setStart(d.start);
       setEnd(d.end);
       setAllDay(d.allDay);
@@ -175,11 +181,12 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
 
   const buildPayload = (): EventInterface => {
     const parsedCapacity = capacity.trim() ? parseInt(capacity, 10) : undefined;
-    const payload: EventInterface = {
+    const payload: EventWithLocation = {
       ...(eventProp || {}),
       groupId: eventProp?.groupId || groupId,
       title: title.trim(),
       description: description.trim() || undefined,
+      location: location.trim() || null,
       start: localToIsoString(allDay ? `${start.slice(0, 10)}T00:00` : start) as unknown as Date,
       end: localToIsoString(allDay ? `${end.slice(0, 10)}T23:59` : end) as unknown as Date,
       allDay,
@@ -421,6 +428,14 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
             value={description}
             onChange={(val) => setDescription(val)}
             style={{ maxHeight: 200, overflowY: "scroll" }}
+          />
+          <TextField
+            fullWidth
+            size="small"
+            label={Locale.label("mobile.group.location")}
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            inputProps={{ maxLength: 255, "data-testid": "event-location-input" }}
           />
           <FormControlLabel
             control={<Switch checked={allDay} onChange={(e) => setAllDay(e.target.checked)} />}

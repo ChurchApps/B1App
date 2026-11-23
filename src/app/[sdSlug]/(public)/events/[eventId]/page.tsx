@@ -12,7 +12,7 @@ import { firstLine } from "@/helpers/EventOccurrences";
 import { MetaHelper } from "@/helpers/MetaHelper";
 
 type PageParams = Promise<{ sdSlug: string; eventId: string }>;
-type PublicEvent = EventInterface & { roomNames?: string[]; photoUrl?: string };
+type PublicEvent = EventInterface & { roomNames?: string[]; photoUrl?: string; location?: string };
 
 export const dynamic = "force-dynamic";
 

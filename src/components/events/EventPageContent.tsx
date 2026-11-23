@@ -11,7 +11,7 @@ import { buildOccurrences, timeRange } from "@/helpers/EventOccurrences";
 export interface EventPageLabels { allEvents: string; when: string; where: string; register: string; addToCalendar: string; }
 
 // Labels come from the server page: the client Locale loads asynchronously and would flash raw keys.
-interface Props { event: EventInterface & { roomNames?: string[]; photoUrl?: string }; icsUrl: string; labels: EventPageLabels; }
+interface Props { event: EventInterface & { roomNames?: string[]; photoUrl?: string; location?: string }; icsUrl: string; labels: EventPageLabels; }
 
 const longDate = (d: Date) => d.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
 
@@ -58,7 +58,15 @@ export const EventPageContent = ({ event, icsUrl, labels }: Props) => {
         </Box>
         <Box component="aside" sx={{ border: "1px solid", borderColor: "divider", borderRadius: 3, p: 2.75, height: "fit-content", boxShadow: "0 1px 3px rgba(0,0,0,.06)" }}>
           <Typography sx={{ display: "flex", gap: 1.25, fontSize: 15, mb: 1.5 }} data-testid="event-when"><b>{labels.when}</b><span>{whenText}</span></Typography>
-          {rooms && <Typography sx={{ display: "flex", gap: 1.25, fontSize: 15, mb: 1.5 }} data-testid="event-where"><b>{labels.where}</b><span>{rooms}</span></Typography>}
+          {(event.location || rooms) && (
+            <Typography sx={{ display: "flex", gap: 1.25, fontSize: 15, mb: 1.5 }} data-testid="event-where">
+              <b>{labels.where}</b>
+              <Box component="span" sx={{ display: "flex", flexDirection: "column" }}>
+                {event.location && <span data-testid="event-location">{event.location}</span>}
+                {rooms && <span data-testid="event-rooms">{rooms}</span>}
+              </Box>
+            </Typography>
+          )}
           {event.registrationEnabled && <Button component={Link} href={"/register/" + event.id} variant="contained" fullWidth sx={{ mt: 1, mb: 1.25, py: 1.25 }} data-testid="event-register-button">{labels.register}</Button>}
           <Typography component="a" href={icsUrl} download={(event.title || "event") + ".ics"} data-testid="event-add-to-calendar" sx={{ display: "block", textAlign: "center", color: "var(--accent, #2A6F97)", fontSize: 15, mt: 1 }}>{labels.addToCalendar}</Typography>
         </Box>
