@@ -35,6 +35,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { memberGivingYearLimit } from "../../helpers/givingYears";
+import { currentStatementYear, parseStartMonth, statementYearLabel, statementYearOf } from "../../helpers/statementPeriod";
 import { churchCurrency } from "../../helpers/churchCurrency";
 import { BackVerb, BigNumber, FilterPills, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink, useSliceView } from "../kit";
 
@@ -87,8 +88,10 @@ function DonatePageInner({ config }: Props) {
   const donationsEnabled = isAuthenticated;
   const pathname = usePathname() || "/mobile/donate";
   const [view, setView] = useSliceView();
-  const currentYear = new Date().getFullYear();
   const settings = config?.appearance as Record<string, unknown> | undefined;
+  // Years here are statement years (B1Admin > Settings > Giving "Statement year starts in"), so each year matches its printed statement.
+  const startMonth = parseStartMonth(settings?.statementYearStartMonth);
+  const currentYear = currentStatementYear(startMonth);
   const yearLimit = memberGivingYearLimit(settings);
   const historyVisible = yearLimit > 0;
   const latestYear = Math.min(currentYear, yearLimit);
@@ -203,8 +206,8 @@ function DonatePageInner({ config }: Props) {
     const giftCurrency = (d.currency || pageCurrency).toUpperCase();
     return giftCurrency !== pageCurrency.toUpperCase() && !!exchangeRates[giftCurrency];
   };
-  const giftYear = (d: DonationInterface) => DateHelper.toDate(d.donationDate).getFullYear();
-  const donations = useMemo(() => allDonations.filter((d) => giftYear(d) <= yearLimit), [allDonations, yearLimit]);
+  const giftYear = (d: DonationInterface) => statementYearOf(DateHelper.toDate(d.donationDate), startMonth) ?? 0;
+  const donations = useMemo(() => allDonations.filter((d) => giftYear(d) <= yearLimit), [allDonations, yearLimit, startMonth]);
 
   const sortedDonations = useMemo(
     () => [...donations].sort((a, b) => DateHelper.toDate(b.donationDate).getTime() - DateHelper.toDate(a.donationDate).getTime()),
@@ -220,18 +223,18 @@ function DonatePageInner({ config }: Props) {
 
   const ytd = useMemo(
     () => summarize(donations.filter((d) => giftYear(d) === latestYear)),
-    [donations, pageCurrency, exchangeRates, latestYear]
+    [donations, pageCurrency, exchangeRates, latestYear, startMonth]
   );
 
   const years = useMemo(() => {
     const set = new Set<number>([latestYear]);
     donations.forEach((d) => set.add(giftYear(d)));
     return [...set].sort((a, b) => b - a);
-  }, [donations, latestYear]);
+  }, [donations, latestYear, startMonth]);
 
   const historyDonations = useMemo(
     () => (historyYear === "all" ? sortedDonations : sortedDonations.filter((d) => String(giftYear(d)) === historyYear)),
-    [sortedDonations, historyYear]
+    [sortedDonations, historyYear, startMonth]
   );
   const history = useMemo(() => summarize(historyDonations), [historyDonations, pageCurrency, exchangeRates]);
 
@@ -382,7 +385,7 @@ function DonatePageInner({ config }: Props) {
       }
       group.items.push(d);
     });
-    const yearOptions = [...years.map((y) => ({ value: String(y), label: String(y) })), { value: "all", label: Locale.label("mobile.giving.allYears") }];
+    const yearOptions = [...years.map((y) => ({ value: String(y), label: statementYearLabel(y, startMonth) })), { value: "all", label: Locale.label("mobile.giving.allYears") }];
     return (
       <Box>
         {backToGiving}
@@ -438,7 +441,7 @@ function DonatePageInner({ config }: Props) {
           <PlateSection><QuietEmpty>{Locale.label("mobile.screens.onlineGivingNotSetUp")}</QuietEmpty></PlateSection>
         )}
         {historyVisible && (
-          <PlateSection title={String(latestYear)} action={<TextLink href={sliceHref("history")}>{Locale.label("mobile.giving.allHistory")}</TextLink>}>
+          <PlateSection title={statementYearLabel(latestYear, startMonth)} action={<TextLink href={sliceHref("history")}>{Locale.label("mobile.giving.allHistory")}</TextLink>}>
             <Box data-testid="giving-ytd-total"><BigNumber>{CurrencyHelper.formatCurrencyWithLocale(ytd.total || 0, pageCurrency)}</BigNumber></Box>
             <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
               {latestYear === currentYear
