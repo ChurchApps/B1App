@@ -177,6 +177,86 @@ test.describe.serial("Mobile donate member giving settings", () => {
   });
 });
 
+// B1Admin > Settings > Giving: a church-written tax disclaimer, and a statement year that starts in July.
+test.describe.serial("Mobile donate statement disclaimer and statement year", () => {
+  const MAIN_API = process.env.API_BASE || "http://localhost:8084";
+  const APP = process.env.BASE_URL || "http://grace.localtest.me:3301";
+  const DEMO_PERSON_ID = "PER00000082";
+  const DISCLAIMER = "Gifts to {churchName} are tax deductible as allowed by law. <b>x</b>";
+  // The statement year that contains today, with a July start, and the one before it.
+  const now = new Date();
+  const current = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+  const previous = current - 1;
+  // March of the current July-June year's second half falls in the previous statement year, though it is the calendar year `current`.
+  const giftDate = `${current}-03-10`;
+  let batchId: string;
+
+  const apiAuth = async (ctx: APIRequestContext) => {
+    const login = await (await ctx.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = (login.userChurches || []).find((c: { church?: { id?: string } }) => c.church?.id === "CHU00000001");
+    return { headers: { Authorization: `Bearer ${uc.jwt}` } };
+  };
+
+  const saveSettings = async (values: Record<string, string>) => {
+    const ctx = await request.newContext();
+    const auth = await apiAuth(ctx);
+    const all: { keyName: string }[] = await (await ctx.get(`${MAIN_API}/membership/settings`, auth)).json();
+    const rows = Object.entries(values).map(([keyName, value]) => ({ ...(all.find((s) => s.keyName === keyName) || { churchId: "CHU00000001", keyName }), public: 1, value }));
+    const res = await ctx.post(`${MAIN_API}/membership/settings`, { ...auth, data: rows });
+    if (!res.ok()) throw new Error(`settings save failed: ${res.status()}`);
+    await ctx.post(`${APP}/api/revalidate/grace`);
+    await ctx.dispose();
+  };
+
+  test.beforeAll(async () => {
+    await saveSettings({ statementYearStartMonth: "7", statementDisclaimer: DISCLAIMER, memberGivingYears: "" });
+    const ctx = await request.newContext();
+    const auth = await apiAuth(ctx);
+    batchId = (await (await ctx.post(`${MAIN_API}/giving/donationbatches`, { ...auth, data: [{ name: "Zacchaeus Statement Year", batchDate: giftDate }] })).json())[0].id;
+    const donationId = (await (await ctx.post(`${MAIN_API}/giving/donations`, {
+      ...auth,
+      data: [{ batchId, personId: DEMO_PERSON_ID, donationDate: giftDate, amount: 123.45, currency: "usd", method: "Check", status: "complete" }]
+    })).json())[0].id;
+    await ctx.post(`${MAIN_API}/giving/funddonations`, { ...auth, data: [{ donationId, fundId: "FUN00000001", amount: 123.45 }] });
+    await ctx.dispose();
+  });
+
+  test.afterAll(async () => {
+    await saveSettings({ statementYearStartMonth: "", statementDisclaimer: "" });
+    if (!batchId) return;
+    const ctx = await request.newContext();
+    await ctx.delete(`${MAIN_API}/giving/donationbatches/${batchId}`, await apiAuth(ctx));
+    await ctx.dispose();
+  });
+
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => { window.print = () => {}; window.close = () => {}; window.history.back = () => {}; });
+  });
+
+  test("printed statement covers July to June and prints the church's disclaimer as plain text", async ({ page }) => {
+    await page.goto(`/mobile/donate/print?year=${previous}`);
+    await expect(page.getByRole("heading", { name: `${previous}–${current} Annual Giving Statement` })).toBeVisible({ timeout: 30000 });
+    await expect(page.getByTestId("statement-period")).toHaveText(`Period: Jul 1, ${previous} - Jun 30, ${current}`);
+    await expect(page.locator("table").last()).toContainText("$123.45");
+    const disclaimer = page.getByTestId("statement-disclaimer");
+    await expect(disclaimer).toHaveText(/^Gifts to .+ are tax deductible as allowed by law\. <b>x<\/b>$/);
+    await expect(disclaimer).not.toContainText("{churchName}");
+    await expect(disclaimer.locator("b")).toHaveCount(0);
+
+    await page.goto(`/mobile/donate/print?year=${current}`);
+    await expect(page.getByRole("heading", { name: `${current}–${current + 1} Annual Giving Statement` })).toBeVisible({ timeout: 30000 });
+    await expect(page.getByText("$123.45")).toHaveCount(0);
+  });
+
+  test("history years are statement years", async ({ page }) => {
+    await page.goto("/mobile/donate?view=history");
+    const years = page.getByRole("group", { name: "Years" });
+    await expect(years.getByRole("button", { name: `${current}–${current + 1}`, exact: true })).toBeVisible({ timeout: 30000 });
+    await years.getByRole("button", { name: `${previous}–${current}`, exact: true }).click();
+    await expect(page.locator("main")).toContainText("$123.45");
+  });
+});
+
 // Mixed-currency giving: each gift keeps its own currency in the history list, but the Year-to-Date and
 // history totals are converted into the church currency (USD on Grace) with the Api's own exchange rates.
 // The expected figures are rebuilt from the Api's gifts + read-only rate table, so they follow the live rate.
