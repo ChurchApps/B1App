@@ -83,7 +83,7 @@
       "specs": ["mobile-request-event.spec.ts", "events-location.spec.ts"]
     },
     "donate": {
-      "src": ["src/app/[sdSlug]/mobile/components/screens/DonatePage.tsx", "src/app/[sdSlug]/mobile/donate/**", "src/app/[sdSlug]/(public)/[pageSlug]/components/DonatePage.tsx", "src/components/donate/**", "src/app/[sdSlug]/mobile/helpers/churchCurrency.ts", "src/app/[sdSlug]/mobile/helpers/givingYears.ts"],
+      "src": ["src/app/[sdSlug]/mobile/components/screens/DonatePage.tsx", "src/app/[sdSlug]/mobile/donate/**", "src/app/[sdSlug]/(public)/[pageSlug]/components/DonatePage.tsx", "src/components/donate/**", "src/app/[sdSlug]/mobile/helpers/churchCurrency.ts", "src/app/[sdSlug]/mobile/helpers/givingYears.ts", "src/app/[sdSlug]/mobile/helpers/memberDonateUrl.ts"],
       "specs": ["mobile-donate*.spec.ts", "mobile-campaigns.spec.ts", "giving-paypal-buttons.spec.ts", "public-built-in.spec.ts"]
     },
     "serving": {
