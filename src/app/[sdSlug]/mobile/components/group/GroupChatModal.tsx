@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Box, Button, CircularProgress, Dialog, IconButton, Menu, MenuItem, Snackbar, TextField, Typography } from "@mui/material";
 import AddReactionOutlinedIcon from "@mui/icons-material/AddReactionOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -389,16 +390,28 @@ export const GroupChatModal = ({
         const name = nameOf(m.personId);
         const prev = messages[i - 1];
         const showName = !isMine && (!prev || prev.personId !== m.personId);
+        const profileHref = m.personId ? `/mobile/community/${m.personId}` : undefined;
+        const sentAt = formatMessageTime(m.timeSent);
         const photo = p ? (() => { try { return PersonHelper.getPhotoUrl(p); } catch { return ""; } })() : "";
         const showActions = (isMine || isLeader) && !!m.id;
         const reactions = (m.reactions || []).filter((r) => r.count > 0);
         return (
           <Box key={m.id || `m-${i}`} sx={{ display: "flex", gap: "8px", alignItems: "flex-start", flexDirection: isMine ? "row-reverse" : "row" }}>
-            {!isMine && <Box sx={{ width: 32, flex: "none", pt: showName ? "22px" : 0 }}>{showName && <PersonAvatar name={name} src={photo || undefined} size={32} />}</Box>}
+            {!isMine && (
+              <Box sx={{ width: 32, flex: "none", pt: showName ? "22px" : 0 }}>
+                {showName && (profileHref
+                  ? <Box component={Link} href={profileHref} aria-label={name || undefined} data-testid="group-chat-sender-avatar" sx={{ display: "block", borderRadius: "50%" }}><PersonAvatar name={name} src={photo || undefined} size={32} /></Box>
+                  : <PersonAvatar name={name} src={photo || undefined} size={32} />)}
+              </Box>
+            )}
             <Box sx={{ maxWidth: "78%", minWidth: 0, display: "flex", flexDirection: "column", alignItems: isMine ? "flex-end" : "flex-start" }}>
               {showName && (
                 <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary, mb: "4px" }}>
-                  {[name, formatMessageTime(m.timeSent)].filter(Boolean).join(" · ")}
+                  {name && profileHref
+                    ? <Box component={Link} href={profileHref} data-testid="group-chat-sender-name" sx={{ color: "inherit", textDecoration: "none", fontWeight: 500, "&:hover": { textDecoration: "underline" } }}>{name}</Box>
+                    : name}
+                  {name && sentAt ? " · " : ""}
+                  {sentAt}
                 </Typography>
               )}
               <Box sx={{
