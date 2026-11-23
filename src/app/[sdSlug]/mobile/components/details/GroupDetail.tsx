@@ -25,6 +25,7 @@ import { GroupLessonTakeHome } from "../group/GroupLessonTakeHome";
 import { GroupMuteSwitch } from "../group/GroupMuteSwitch";
 import { GroupFormsList, GroupFormsTab, useGroupFormAnswers, useLinkedForms } from "../group/GroupFormsTab";
 import { AnonymousGroupView } from "../group/AnonymousGroupView";
+import { ShareGroupAction } from "../group/ShareGroupAction";
 import { RequestToJoinDialog } from "./RequestToJoinDialog";
 import { GroupJoinRequests } from "../group/GroupJoinRequests";
 
@@ -428,6 +429,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           </Button>
         )}
         {renderJoinAction()}
+        <ShareGroupAction group={group} />
       </PageHead>
     </>
   );
