@@ -47,6 +47,8 @@ const getStartOfToday = () => {
   return d;
 };
 
+const ACCEPT_ALL = "__all__";
+
 const rowKey = (row: AssignmentRow) => row.assignmentId || `${row.planId}-${row.position}`;
 
 export const PlansPage = ({ config: _config }: Props) => {
@@ -150,6 +152,7 @@ export const PlansPage = ({ config: _config }: Props) => {
   }, [assignments, positions, plans, startOfToday]);
 
   const needsReply = upcomingRows.filter((r) => normalizeStatus(r.status) === "unconfirmed");
+  const acceptable = needsReply.filter((r) => !!r.assignmentId);
   const scheduled = upcomingRows.filter((r) => normalizeStatus(r.status) !== "unconfirmed");
   const confirmedCount = upcomingRows.filter((r) => ["confirmed", "accepted"].includes(normalizeStatus(r.status))).length;
 
@@ -172,6 +175,29 @@ export const PlansPage = ({ config: _config }: Props) => {
     } catch (err) {
       setRespondError((err as Error | undefined)?.message || Locale.label("mobile.details.unableToRespond").replace("{}", action));
     } finally {
+      setRespondingId("");
+    }
+  };
+
+  // Sequential, so a failure part way leaves an exact count; the rows that failed stay in Needs your reply.
+  const acceptAll = async () => {
+    const rows = acceptable;
+    if (rows.length < 2 || respondingId) return;
+    setRespondingId(ACCEPT_ALL);
+    setRespondError("");
+    let accepted = 0;
+    for (const row of rows) {
+      try {
+        await ApiHelper.post(`/assignments/accept/${row.assignmentId}`, [], "DoingApi");
+        accepted++;
+      } catch {
+        // Keep going; the count below reports what's left.
+      }
+    }
+    try {
+      await queryClient.invalidateQueries({ queryKey: assignmentsKey });
+    } finally {
+      if (accepted < rows.length) setRespondError(Locale.label("mobile.serving.acceptAllPartial").replace("{}", String(accepted)).replace("{}", String(rows.length)));
       setRespondingId("");
     }
   };
@@ -203,7 +229,7 @@ export const PlansPage = ({ config: _config }: Props) => {
   );
 
   const renderNeedsReply = (row: AssignmentRow) => {
-    const busy = respondingId === row.assignmentId;
+    const busy = respondingId === row.assignmentId || respondingId === ACCEPT_ALL;
     return (
       <Box key={rowKey(row)} sx={{ "& + &": { borderTop: `1px solid ${tc.border}`, pt: "16px", mt: "16px" } }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "flex-start" }}>
@@ -266,7 +292,14 @@ export const PlansPage = ({ config: _config }: Props) => {
       </PageHead>
       <Plate>
         {needsReply.length > 0 && (
-          <PlateSection title={Locale.label("mobile.serving.needsReply")}>
+          <PlateSection
+            title={Locale.label("mobile.serving.needsReply")}
+            action={acceptable.length > 1 ? (
+              <TextLink onClick={acceptAll} disabled={!!respondingId} data-testid="plans-accept-all">
+                {respondingId === ACCEPT_ALL ? Locale.label("mobile.serving.acceptAllAccepting") : Locale.label("mobile.serving.acceptAll")}
+              </TextLink>
+            ) : undefined}
+          >
             {needsReply.map(renderNeedsReply)}
             {respondError && <Typography role="alert" sx={{ mt: "10px", fontSize: 13.5, color: tc.error }}>{respondError}</Typography>}
             <ConfirmDeclineSheet open={!!declineRow} onClose={() => setDeclineRow(null)} onConfirm={() => { if (declineRow) respond(declineRow, "decline"); }} />

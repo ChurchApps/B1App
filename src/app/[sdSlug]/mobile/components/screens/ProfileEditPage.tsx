@@ -69,6 +69,7 @@ const fieldLabelKeys: Record<string, string> = {
   "name.last": "person.lastName",
   photo: "mobile.profileEdit.photo",
   birthDate: "mobile.profileEdit.birthDate",
+  anniversary: "mobile.profileEdit.anniversary",
   "contactInfo.email": "person.email",
   "contactInfo.address1": "mobile.profileEdit.address1",
   "contactInfo.address2": "mobile.profileEdit.address2",
@@ -112,7 +113,7 @@ const readField = (obj: unknown, key: string): string => {
   const parts = key.split(".");
   let v: unknown = obj;
   for (const p of parts) v = (v as Record<string, unknown> | null | undefined)?.[p];
-  if (key === "birthDate" && v) {
+  if ((key === "birthDate" || key === "anniversary") && v) {
     try {
       return new Date(v as string | Date).toISOString().split("T")[0];
     } catch {
@@ -659,7 +660,8 @@ export const ProfileEditPage = ({ config }: Props) => {
     { label: Locale.label("mobile.profileEdit.homePhone"), value: person.contactInfo?.homePhone },
     { label: Locale.label("mobile.profileEdit.workPhone"), value: person.contactInfo?.workPhone },
     { label: Locale.label("mobile.profileEdit.sectionAddress"), value: address },
-    { label: Locale.label("mobile.profileEdit.birthDate"), value: readField(person, "birthDate") }
+    { label: Locale.label("mobile.profileEdit.birthDate"), value: readField(person, "birthDate") },
+    { label: Locale.label("mobile.profileEdit.anniversary"), value: readField(person, "anniversary") }
   ];
   const hasContact = contactItems.some((i) => !!i.value);
   const editLink = (key: SheetKey, label = Locale.label("mobile.details.edit")) => (
@@ -719,6 +721,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       {renderField("contactInfo.homePhone", Locale.label("mobile.profileEdit.homePhone"), { type: "tel", inputMode: "tel" })}
       {renderField("contactInfo.workPhone", Locale.label("mobile.profileEdit.workPhone"), { type: "tel", inputMode: "tel" })}
       {renderField("birthDate", Locale.label("mobile.profileEdit.birthDate"), { type: "date" })}
+      {renderField("anniversary", Locale.label("mobile.profileEdit.anniversary"), { type: "date" })}
       <Eyebrow component="h3">{Locale.label("mobile.profileEdit.sectionAddress")}</Eyebrow>
       {renderField("contactInfo.address1", Locale.label("mobile.profileEdit.address1"), { autoComplete: "address-line1" })}
       {renderField("contactInfo.address2", Locale.label("mobile.profileEdit.address2"), { autoComplete: "address-line2" })}

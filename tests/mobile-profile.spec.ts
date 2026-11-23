@@ -266,3 +266,44 @@ test.describe.serial("Mobile profile church title list", () => {
     await expect(page.getByRole("option", { name: "Pastor", exact: true })).toHaveCount(0);
   });
 });
+
+// A member can add their anniversary beside their birth date; it saves the same way.
+test.describe.serial("Mobile profile anniversary", () => {
+  let api: ApiHandle;
+  let demoPersonId = "";
+
+  test.beforeAll(async () => {
+    api = await getApi("demo", "MembershipApi");
+  });
+
+  test.afterAll(async () => {
+    if (demoPersonId) {
+      const me = await (await apiCall(api, "get", membershipUrl("/people/" + demoPersonId))).json();
+      // The demo seed has no anniversary.
+      await apiCall(api, "post", membershipUrl("/people"), [{ ...me, anniversary: null }]);
+    }
+    await api.request.dispose();
+  });
+
+  test("Contact sheet saves an anniversary and the Contact section shows it", async ({ page }) => {
+    await page.goto("/mobile/profileEdit");
+    await page.getByTestId("profile-edit-contact").click({ timeout: 30000 });
+    const anniversary = page.getByLabel("Anniversary", { exact: true });
+    await expect(anniversary).toBeVisible({ timeout: 15000 });
+    await expect(page.getByLabel("Birth Date", { exact: true })).toBeVisible();
+    await anniversary.fill("2011-06-18");
+
+    const saved = page.waitForRequest((r) => r.method() === "POST" && /\/membership\/people$/.test(r.url()), { timeout: 30000 });
+    await page.getByRole("button", { name: "Save Changes" }).click();
+    const body = (await saved).postDataJSON()[0];
+    demoPersonId = body.id;
+    await expect(page.getByText("Your changes have been saved.")).toBeVisible({ timeout: 15000 });
+
+    const me = await (await apiCall(api, "get", membershipUrl("/people/" + demoPersonId))).json();
+    expect(String(me.anniversary).slice(0, 10)).toBe("2011-06-18");
+
+    await page.waitForTimeout(1500);
+    await page.goto("/mobile/profileEdit");
+    await expect(page.locator("main")).toContainText("Anniversary", { timeout: 30000 });
+  });
+});

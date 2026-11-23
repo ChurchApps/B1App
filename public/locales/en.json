@@ -954,6 +954,7 @@
       "address1": "Address Line 1",
       "address2": "Address Line 2",
       "addressVisibility": "Address Visibility",
+      "anniversary": "Anniversary",
       "approvalLede": "Changes to your profile go to church staff for approval.",
       "birthDate": "Birth Date",
       "canvasNotAvailable": "Canvas not available.",
@@ -1298,6 +1299,9 @@
     },
     "serving": {
       "addBlockoutTitle": "Add blockout dates",
+      "acceptAll": "Accept all",
+      "acceptAllAccepting": "Accepting…",
+      "acceptAllPartial": "Accepted {} of {}. The rest still need your reply; try again.",
       "addDates": "Add dates",
       "allFilter": "All",
       "allTeams": "All teams",
