@@ -7,6 +7,7 @@ import { UserHelper, Locale } from "@churchapps/apphelper";
 import { Button, Container, Grid, Icon, Link, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { CampaignProgress } from "@/components/donate/CampaignProgress";
+import { memberDonateUrl } from "../../../mobile/helpers/memberDonateUrl";
 
 type Props = { config?: ConfigurationInterface; };
 
@@ -17,7 +18,7 @@ export function DonatePage(props: Props) {
   const [mounted, setMounted] = React.useState(false);
   const router = useRouter();
   React.useEffect(() => {
-    if (UserHelper.currentUserChurch?.person?.id) router.replace("/mobile/donate");
+    if (UserHelper.currentUserChurch?.person?.id) router.replace(memberDonateUrl(window.location.search));
     setMounted(true);
   }, []);
 
