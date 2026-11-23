@@ -56,6 +56,7 @@ export const RequestEventPage = ({ config }: Props) => {
 
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [location, setLocation] = React.useState("");
   const [allDay, setAllDay] = React.useState(false);
   const [start, setStart] = React.useState(toLocalDefault(24));
   const [end, setEnd] = React.useState(toLocalDefault(25));
@@ -92,6 +93,7 @@ export const RequestEventPage = ({ config }: Props) => {
       const body = {
         title: title.trim(),
         description: description.trim() || undefined,
+        location: location.trim() || undefined,
         allDay,
         start: localToIso(allDay ? `${start.slice(0, 10)}T00:00` : start),
         end: localToIso(allDay ? `${end.slice(0, 10)}T23:59` : end),
@@ -175,6 +177,15 @@ export const RequestEventPage = ({ config }: Props) => {
             label={Locale.label("mobile.requests.description")}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            label={Locale.label("mobile.requests.location")}
+            helperText={Locale.label("mobile.requests.locationHelp")}
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            slotProps={{ htmlInput: { maxLength: 255 } }}
+            data-testid="request-location"
           />
           <Box sx={{ display: "grid", gridTemplateColumns: { xs: allDay ? "1fr 1fr" : "1fr", sm: "1fr 1fr" }, gap: "12px" }}>
             <TextField
