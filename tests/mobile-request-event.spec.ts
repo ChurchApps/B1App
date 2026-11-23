@@ -130,6 +130,48 @@ test.describe("Mobile event request (CA-1)", () => {
     }
   });
 
+  // #1650: a category groups rooms and resources under a heading; uncategorized items trail with no heading.
+  test("rooms and resources are grouped under their category headings", async ({ page }) => {
+    const jwt = await demoJwt();
+    const ctx = await request.newContext();
+    const auth = { headers: { Authorization: "Bearer " + jwt } };
+    const stamp = Date.now();
+    const category = `Zacchaeus Wing ${stamp}`;
+    const roomName = `Zacchaeus Stage ${stamp}`;
+    const gear = `Zacchaeus Gear ${stamp}`;
+    const resourceName = `Zacchaeus Mic ${stamp}`;
+    const roomId = (await (await ctx.post(`${API_BASE}/content/rooms`, { ...auth, data: [{ name: roomName, categoryName: category }] })).json())[0].id;
+    const resourceId = (await (await ctx.post(`${API_BASE}/content/resources`, { ...auth, data: [{ name: resourceName, categoryName: gear }] })).json())[0].id;
+    const listboxOrder = () => page.locator('[role="listbox"] > li').evaluateAll((els) => els.map((el) => ({
+      heading: el.classList.contains("MuiListSubheader-root"),
+      text: (el.textContent || "").trim()
+    })));
+    try {
+      await page.goto("/mobile/requestEvent");
+      await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+      await page.getByTestId("booking-rooms").click();
+      await expect(page.getByRole("listbox").locator(".MuiListSubheader-root").filter({ hasText: category })).toBeVisible();
+      const rooms = await listboxOrder();
+      const h = rooms.findIndex((r) => r.heading && r.text === category);
+      const stage = rooms.findIndex((r) => !r.heading && r.text.startsWith(roomName));
+      const sanctuary = rooms.findIndex((r) => !r.heading && r.text.startsWith("Sanctuary"));
+      expect(h).toBeGreaterThanOrEqual(0);
+      expect(stage).toBeGreaterThan(h);
+      expect(sanctuary).toBeGreaterThan(stage);
+      expect(rooms.slice(sanctuary).some((r) => r.heading)).toBe(false);
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("listbox")).toHaveCount(0);
+
+      await page.getByTestId("booking-resources").click();
+      await expect(page.getByRole("listbox").locator(".MuiListSubheader-root").filter({ hasText: gear })).toBeVisible();
+      await expect(page.getByRole("option", { name: new RegExp(resourceName) })).toBeVisible();
+    } finally {
+      await ctx.delete(`${API_BASE}/content/rooms/${roomId}`, auth).catch(() => {});
+      await ctx.delete(`${API_BASE}/content/resources/${resourceId}`, auth).catch(() => {});
+      await ctx.dispose();
+    }
+  });
+
   // #1653: the resource picker shows how many of an item the church has, the way rooms show seats.
   test("resource picker shows the quantity on hand", async ({ page }) => {
     const jwt = await demoJwt();
