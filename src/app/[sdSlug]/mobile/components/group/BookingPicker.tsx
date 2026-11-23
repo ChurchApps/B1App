@@ -6,6 +6,7 @@ import {
   Checkbox,
   FormControlLabel,
   ListItemText,
+  ListSubheader,
   MenuItem,
   Switch,
   TextField,
@@ -70,10 +71,28 @@ const toInt = (v: string) => (v.trim() ? parseInt(v, 10) || 0 : 0);
 // Joins the non-empty parts of a picker item's second line (seats or quantity, description).
 const secondaryLine = (parts: (string | undefined)[]) => parts.filter(Boolean).join(" · ") || undefined;
 
+type Categorized = { name?: string; categoryName?: string | null };
+
+// Rooms and resources grouped by category (#1650): a heading per category A-Z, items sorted by name,
+// uncategorized items last with no heading. With no categories at all the list renders unchanged.
+// MUI Select needs flat children, so headings and items go into one array.
+const categorizedOptions = <T extends Categorized>(items: T[], renderItem: (item: T) => React.ReactNode): React.ReactNode[] => {
+  const category = (i: T) => i.categoryName?.trim() || "";
+  if (!items.some((i) => category(i))) return items.map(renderItem);
+  const result: React.ReactNode[] = [];
+  const names = Array.from(new Set(items.map(category).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+  names.forEach((c) => {
+    result.push(<ListSubheader key={"cat-" + c}>{c}</ListSubheader>);
+    items.filter((i) => category(i) === c).sort((a, b) => (a.name || "").localeCompare(b.name || "")).forEach((i) => result.push(renderItem(i)));
+  });
+  items.filter((i) => !category(i)).forEach((i) => result.push(renderItem(i)));
+  return result;
+};
+
 export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, eventId, onLoaded, onData }: Props) => {
   const tc = mobileTheme.colors;
-  const [rooms, setRooms] = React.useState<{ id?: string; name?: string; capacity?: number; description?: string; active?: boolean }[]>([]);
-  const [resources, setResources] = React.useState<{ id?: string; name?: string; quantity?: number; description?: string; active?: boolean }[]>([]);
+  const [rooms, setRooms] = React.useState<{ id?: string; name?: string; capacity?: number; description?: string; active?: boolean; categoryName?: string | null }[]>([]);
+  const [resources, setResources] = React.useState<{ id?: string; name?: string; quantity?: number; description?: string; active?: boolean; categoryName?: string | null }[]>([]);
   // A quantity box the requester has cleared shows empty until they type a number or leave it.
   const [clearedQuantity, setClearedQuantity] = React.useState<string | null>(null);
   const [conflicts, setConflicts] = React.useState<{ message?: string }[]>([]);
@@ -97,8 +116,8 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
       ApiHelper.get("/resources", "ContentApi").catch((): unknown[] => [])
     ]).then(([r, res]) => {
       if (!active) return;
-      const roomList: { id?: string; name?: string; capacity?: number; description?: string; active?: boolean }[] = Array.isArray(r) ? r : [];
-      const resList: { id?: string; name?: string; quantity?: number; description?: string; active?: boolean }[] = Array.isArray(res) ? res : [];
+      const roomList: { id?: string; name?: string; capacity?: number; description?: string; active?: boolean; categoryName?: string | null }[] = Array.isArray(r) ? r : [];
+      const resList: { id?: string; name?: string; quantity?: number; description?: string; active?: boolean; categoryName?: string | null }[] = Array.isArray(res) ? res : [];
       setRooms(roomList);
       setResources(resList);
       onLoaded?.(roomList.some((x) => x.active !== false) || resList.some((x) => x.active !== false));
@@ -164,7 +183,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           SelectProps={{ multiple: true, renderValue: (selected: unknown) => rooms.filter((r) => (selected as string[]).includes(r.id as string)).map((r) => r.name).join(", ") }}
           data-testid="booking-rooms"
         >
-          {pickableRooms.map((r) => (
+          {categorizedOptions(pickableRooms, (r) => (
             <MenuItem key={r.id} value={r.id} sx={{ whiteSpace: "normal" }}>
               <Checkbox checked={roomIds.includes(r.id!)} size="small" />
               <ListItemText
@@ -185,7 +204,7 @@ export const BookingPicker = ({ value, onChange, start, end, recurring, rRule, e
           SelectProps={{ multiple: true, renderValue: (selected: unknown) => resources.filter((r) => (selected as string[]).includes(r.id as string)).map((r) => r.name).join(", ") }}
           data-testid="booking-resources"
         >
-          {pickableResources.map((r) => (
+          {categorizedOptions(pickableResources, (r) => (
             <MenuItem key={r.id} value={r.id} sx={{ whiteSpace: "normal" }}>
               <Checkbox checked={resourceIds.includes(r.id!)} size="small" />
               <ListItemText
