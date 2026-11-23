@@ -821,6 +821,7 @@
       "settings": "Settings",
       "signInBody": "Sign in to view your serving assignments, registrations, and group events.",
       "signInTitle": "Sign in to see your week",
+      "subscribeHint": "Anyone with this link can see your groups' events.",
       "tasksSignedOutBody": "Tasks and cards are assigned to your account.",
       "tasksSignedOutTitle": "Sign in to see your tasks",
       "title": "Me",

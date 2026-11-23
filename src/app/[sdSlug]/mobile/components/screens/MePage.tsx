@@ -1,22 +1,29 @@
 "use client";
 
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Avatar, Box, Button, Skeleton, Typography } from "@mui/material";
+import { Avatar, Box, Button, IconButton, Skeleton, Typography } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ViewListIcon from "@mui/icons-material/ViewList";
 import { ApiHelper, ArrayHelper, CurrencyHelper, DateHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { AssignmentInterface, DonationInterface, PersonInterface, PlanInterface, PositionInterface, TaskInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
+import { getFirstDayOfWeek } from "@/helpers/firstDayOfWeek";
 import { mobileTheme } from "../mobileTheme";
-import { expandUpcomingEvents, upcomingKindMeta, type UpcomingKind } from "../HomeTeasers";
+import { expandMonthEvents, expandUpcomingEvents, upcomingKindMeta, type UpcomingKind } from "../HomeTeasers";
+import { MonthGrid, isoDate, startOfMonth } from "../MonthGrid";
 import { memberGivingYearLimit } from "../../helpers/givingYears";
 import { attendanceSubtitle, attendanceTitle, useMyAttendance, useMyCards, useMyFormSubmissions, useMyGroups, useMyRegistrations, useMyTasks } from "../../helpers/myRecords";
 import { formatRelative, deriveNotificationUrl, getInitials } from "../util";
 import type { EventRow } from "../group/GroupCalendarTab";
 import { MyTaskSheet, TaskRow } from "./CardSheet";
-import { BackVerb, BigNumber, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, StatusBadge, TextLink, useSliceView } from "../kit";
+import { BackVerb, BigNumber, Eyebrow, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, StatusBadge, TextLink, useSliceView, ViewToggle } from "../kit";
 
 interface Props {
   config: ConfigurationInterface;
@@ -54,6 +61,9 @@ interface HouseholdMember extends PersonInterface {
 
 const TEASER_COUNT = 3;
 
+type UpcomingMode = "list" | "month";
+const UPCOMING_MODE_KEY = "b1-me-upcoming-view";
+
 export const MePage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const context = useContext(UserContext);
@@ -61,6 +71,21 @@ export const MePage = ({ config }: Props) => {
   const loggedIn = !!context?.user?.firstName;
   const personId = context?.person?.id || context?.userChurch?.person?.id;
   const givingEnabled = !!personId;
+  const [upcomingMode, setUpcomingMode] = useState<UpcomingMode>("list");
+  const [currentMonth, setCurrentMonth] = useState<Date>(() => startOfMonth(new Date()));
+  const [selected, setSelected] = useState<string>(() => isoDate(new Date()));
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(UPCOMING_MODE_KEY);
+      if (saved === "month" || saved === "list") setUpcomingMode(saved);
+    } catch { /* storage blocked — keep list view */ }
+  }, []);
+
+  const changeUpcomingMode = (mode: UpcomingMode) => {
+    setUpcomingMode(mode);
+    try { localStorage.setItem(UPCOMING_MODE_KEY, mode); } catch { /* storage blocked */ }
+  };
 
   const { data: assignments = [], isLoading: assignmentsLoading } = useQuery<AssignmentInterface[]>({
     queryKey: ["/assignments/my", "DoingApi", context?.user?.id],
@@ -178,8 +203,8 @@ export const MePage = ({ config }: Props) => {
     enabled: loggedIn && givingEnabled
   });
 
-  const upcoming = useMemo<UpcomingItem[]>(() => {
-    const now = new Date();
+  // Serving and registrations on any date; the list and the month grid each cut what they need.
+  const fixedItems = useMemo<UpcomingItem[]>(() => {
     const items: UpcomingItem[] = [];
 
     assignments.forEach((a) => {
@@ -188,7 +213,6 @@ export const MePage = ({ config }: Props) => {
       const plan = plans.find((p) => p.id === position.planId);
       if (!plan?.serviceDate) return;
       const serviceDate = DateHelper.toDate(plan.serviceDate);
-      if (serviceDate < new Date(now.getFullYear(), now.getMonth(), now.getDate())) return;
       const category = position.categoryName || "";
       const times = planTimes
         .filter((t) => t.planId === plan.id && t.startTime)
@@ -203,16 +227,37 @@ export const MePage = ({ config }: Props) => {
       const start = r.event?.start;
       if (!start) return;
       const date = new Date(start);
-      if (isNaN(date.getTime()) || date < now || r.status === "cancelled") return;
+      if (isNaN(date.getTime()) || r.status === "cancelled") return;
       items.push({ kind: "registration", date, title: r.event?.title || Locale.label("mobile.me.registration"), href: "/mobile/registrations", key: `reg-${r.id}`, photoUrl: r.event?.photoUrl || undefined });
     });
+    return items;
+  }, [assignments, positions, plans, planTimes, registrations]);
+
+  const upcoming = useMemo<UpcomingItem[]>(() => {
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const items = fixedItems.filter((i) => i.date >= (i.kind === "serving" ? startOfToday : now));
 
     // Expand recurring group events across the next few months, keep future occurrences.
     expandUpcomingEvents(timeline, now).forEach((e) => items.push({ kind: "event", ...e }));
 
     items.sort((a, b) => a.date.getTime() - b.date.getTime());
     return items.slice(0, 12);
-  }, [assignments, positions, plans, planTimes, registrations, timeline]);
+  }, [fixedItems, timeline]);
+
+  // Month grid: everything in the viewed month, past days included and without the list's 12-item cap.
+  const monthItemsByDate = useMemo<Record<string, UpcomingItem[]>>(() => {
+    const items: UpcomingItem[] = fixedItems.filter((i) => i.date.getFullYear() === currentMonth.getFullYear() && i.date.getMonth() === currentMonth.getMonth());
+    expandMonthEvents(timeline, currentMonth).forEach((e) => items.push({ kind: "event", ...e }));
+    items.sort((a, b) => a.date.getTime() - b.date.getTime());
+    const map: Record<string, UpcomingItem[]> = {};
+    items.forEach((i) => {
+      const key = isoDate(i.date);
+      if (!map[key]) map[key] = [];
+      map[key].push(i);
+    });
+    return map;
+  }, [fixedItems, timeline, currentMonth]);
 
   const recentNotifications = useMemo(() => (notifications || []).slice(0, 2), [notifications]);
 
@@ -263,12 +308,70 @@ export const MePage = ({ config }: Props) => {
     return <RowList>{items.map(renderItem)}</RowList>;
   };
 
+  const handleSubscribe = async () => {
+    const contentApi = EnvironmentHelper.Common?.ContentApi || "";
+    if (!contentApi) return;
+    const feed = await ApiHelper.get("/events/subscribe/mine", "ContentApi").catch((): null => null);
+    if (!feed?.token) return;
+    const httpsUrl = `${contentApi}/events/subscribe?churchId=${feed.churchId}&personId=${feed.personId}&token=${encodeURIComponent(feed.token)}`;
+    const webcalUrl = httpsUrl.replace(/^https?:\/\//, "webcal://");
+    try {
+      window.location.href = webcalUrl;
+    } catch {
+      window.open(httpsUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
   if (view === "upcoming") {
+    const shiftMonth = (delta: number) => setCurrentMonth((m) => new Date(m.getFullYear(), m.getMonth() + delta, 1));
+    const selectedItems = monthItemsByDate[selected] || [];
     return (
       <Box sx={{ pb: "24px" }}>
         <BackVerb label={Locale.label("mobile.me.backToMe")} onClick={() => setView("")} />
         <Plate>
-          <PlateSection title={Locale.label("mobile.me.upcoming")}>{upcomingList(upcoming)}</PlateSection>
+          <PlateSection
+            title={Locale.label("mobile.me.upcoming")}
+            action={(
+              <Box data-testid="me-upcoming-toggle">
+                <ViewToggle
+                  label={Locale.label("mobile.me.upcoming")}
+                  value={upcomingMode}
+                  onChange={changeUpcomingMode}
+                  options={[
+                    { value: "list", label: Locale.label("mobile.group.list"), icon: <ViewListIcon /> },
+                    { value: "month", label: Locale.label("mobile.group.calendar"), icon: <CalendarMonthIcon /> }
+                  ]}
+                />
+              </Box>
+            )}
+          >
+            {upcomingMode === "list" ? upcomingList(upcoming) : (
+              <>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Typography component="h2" data-testid="me-month-title" sx={{ fontSize: 17, lineHeight: "24px", fontWeight: 600, color: tc.text }}>
+                    {currentMonth.toLocaleDateString(DateHelper.locale, { month: "long", year: "numeric" })}
+                  </Typography>
+                  <Box sx={{ display: "flex", mr: "-8px" }}>
+                    <IconButton onClick={() => shiftMonth(-1)} aria-label={Locale.label("mobile.group.previousMonth")} sx={{ color: tc.text }}><ChevronLeftIcon /></IconButton>
+                    <IconButton onClick={() => shiftMonth(1)} aria-label={Locale.label("mobile.group.nextMonth")} sx={{ color: tc.text }}><ChevronRightIcon /></IconButton>
+                  </Box>
+                </Box>
+                <MonthGrid month={currentMonth} eventDays={monthItemsByDate} selected={selected} onSelect={setSelected} firstDayOfWeek={getFirstDayOfWeek(config?.church)} />
+                <Box data-testid="me-selected-day" sx={{ mt: "16px" }}>
+                  <Eyebrow component="h3">{new Date(selected + "T00:00:00").toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" })}</Eyebrow>
+                  {stillLoading
+                    ? [0, 1].map((i) => <Skeleton key={i} variant="text" height={44} />)
+                    : selectedItems.length === 0
+                      ? <QuietEmpty sx={{ mt: "8px" }}>{Locale.label("mobile.group.noEventsToday")}</QuietEmpty>
+                      : <RowList>{selectedItems.map(renderItem)}</RowList>}
+                </Box>
+              </>
+            )}
+          </PlateSection>
+          <PlateSection>
+            <TextLink data-testid="me-subscribe" onClick={handleSubscribe}>{Locale.label("mobile.group.subscribe")}</TextLink>
+            <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary, mt: "4px" }}>{Locale.label("mobile.me.subscribeHint")}</Typography>
+          </PlateSection>
         </Plate>
       </Box>
     );
