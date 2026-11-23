@@ -26,7 +26,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CODE_LENGTH = 6;
 const RESEND_COOLDOWN_SECONDS = 30;
 
-type Mode = "login" | "register" | "forgot" | "verify" | "setPassword" | "mfa";
+type Mode = "login" | "register" | "forgot" | "emailCode" | "verify" | "setPassword" | "mfa";
 
 interface CheckEmailResponseInterface {
   exists: boolean;
@@ -95,6 +95,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   const [codeDigits, setCodeDigits] = useState<string[]>(Array(CODE_LENGTH).fill(""));
   const [resendCooldown, setResendCooldown] = useState(0);
+  // The verify screen serves both a password-reset code and a sign-in code; they post to different endpoints.
+  const [codePurpose, setCodePurpose] = useState<"reset" | "login">("reset");
   const codeRefs = useRef<Array<HTMLInputElement | null>>([]);
 
   const [authGuid, setAuthGuid] = useState("");
@@ -187,10 +189,10 @@ export const MobileLoginScreen = ({ config }: Props) => {
     return true;
   };
 
-  const loginApiCall = async (payload: { email: string; password: string } | { jwt: string } | { authGuid: string } | { mfaToken: string; mfaCode: string }) => {
+  const loginApiCall = async (payload: { email: string; password: string } | { jwt: string } | { authGuid: string } | { mfaToken: string; mfaCode: string } | { email: string; code: string; appName: string }, path = "/users/login") => {
     setLoading(true);
     try {
-      const data: LoginResponseInterface = await ApiHelper.postAnonymous("/users/login", payload, "MembershipApi");
+      const data: LoginResponseInterface = await ApiHelper.postAnonymous(path, payload, "MembershipApi");
       if (data?.mfaRequired) {
         setMfaToken(data.mfaToken || "");
         setMfaCode("");
@@ -208,6 +210,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
     } catch (e) {
       const err = e as Error | undefined;
       if ("mfaToken" in payload) showError(err?.message === "Too many requests" ? err.message : Locale.label("mobile.login.errMfaCode"));
+      if ("code" in payload) showError(err?.message === "Too many requests" ? err.message : Locale.label("mobile.login.errInvalidCode"));
       if ("password" in payload) await handleLoginFailure();
       return false;
     } finally {
@@ -262,7 +265,23 @@ export const MobileLoginScreen = ({ config }: Props) => {
     }
   };
 
-  const goToVerify = () => {
+  const handleEmailCodeSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!email || !EMAIL_REGEX.test(email)) { showError(Locale.label("mobile.login.errValidEmail")); return; }
+    setLoading(true);
+    try {
+      const resp: { emailed?: boolean; errors?: string[] } = await ApiHelper.postAnonymous("/users/requestLoginCode", { email }, "MembershipApi");
+      if (resp?.emailed) goToVerify("login");
+      else showError(resp?.errors?.[0] || Locale.label("mobile.login.errGeneric"));
+    } catch (e) {
+      showError((e as Error | undefined)?.message || Locale.label("mobile.login.errGeneric"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const goToVerify = (purpose: "reset" | "login" = "reset") => {
+    setCodePurpose(purpose);
     setCodeDigits(Array(CODE_LENGTH).fill(""));
     setResendCooldown(RESEND_COOLDOWN_SECONDS);
     setMode("verify");
@@ -319,6 +338,13 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const submitCode = async (codeOverride?: string) => {
     const code = codeOverride ?? codeDigits.join("");
     if (code.length !== CODE_LENGTH) { showError(Locale.label("mobile.login.errEnterCode")); return; }
+    if (codePurpose === "login") {
+      if (!(await loginApiCall({ email, code, appName: "B1" }, "/users/loginWithCode"))) {
+        setCodeDigits(Array(CODE_LENGTH).fill(""));
+        codeRefs.current[0]?.focus();
+      }
+      return;
+    }
     setLoading(true);
     try {
       const resp: { authGuid?: string; errors?: string[] } = await ApiHelper.postAnonymous("/users/verifyCode", { email, code }, "MembershipApi");
@@ -349,7 +375,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
     setLoading(true);
     setCodeDigits(Array(CODE_LENGTH).fill(""));
     try {
-      await ApiHelper.postAnonymous("/users/forgot", { userEmail: email }, "MembershipApi");
+      if (codePurpose === "login") await ApiHelper.postAnonymous("/users/requestLoginCode", { email }, "MembershipApi");
+      else await ApiHelper.postAnonymous("/users/forgot", { userEmail: email }, "MembershipApi");
       showInfo(Locale.label("mobile.login.infoCodeResent"));
       setResendCooldown(RESEND_COOLDOWN_SECONDS);
     } catch (e) {
@@ -403,6 +430,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const heroTitle = () => {
     if (mode === "register") return churchName ? Locale.label("mobile.login.titleJoin").replace("{}", churchName) : Locale.label("mobile.login.titleCreateAccount");
     if (mode === "forgot") return Locale.label("mobile.login.titleResetPassword");
+    if (mode === "emailCode") return Locale.label("mobile.login.titleEmailCode");
     if (mode === "verify") return Locale.label("mobile.login.titleVerify");
     if (mode === "mfa") return Locale.label("mobile.login.titleMfa");
     if (mode === "setPassword") return setPasswordFirstName ? Locale.label("mobile.login.titleWelcome").replace("{}", setPasswordFirstName) : Locale.label("mobile.login.titleSetPassword");
@@ -412,6 +440,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const heroSubtitle = () => {
     if (mode === "register") return churchName ? Locale.label("mobile.login.ledeRegisterFor").replace("{}", churchName) : Locale.label("mobile.login.ledeRegister");
     if (mode === "forgot") return Locale.label("mobile.login.ledeForgot");
+    if (mode === "emailCode") return Locale.label("mobile.login.ledeEmailCode");
     if (mode === "verify") return Locale.label("mobile.login.ledeVerify").replace("{}", email);
     if (mode === "setPassword") return Locale.label("mobile.login.ledeSetPassword");
     if (mode === "mfa") return Locale.label("mobile.login.ledeMfa");
@@ -466,7 +495,10 @@ export const MobileLoginScreen = ({ config }: Props) => {
       <Button type="submit" variant="contained" fullWidth disabled={loading} size="large">
         {loading ? spinner : Locale.label("mobile.login.signIn")}
       </Button>
-      <TextLink onClick={() => setMode("forgot")} sx={{ alignSelf: "center" }}>{Locale.label("mobile.login.forgotPassword")}</TextLink>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "16px", flexWrap: "wrap" }}>
+        <TextLink onClick={() => setMode("emailCode")}>{Locale.label("mobile.login.emailCodeLink")}</TextLink>
+        <TextLink onClick={() => setMode("forgot")}>{Locale.label("mobile.login.forgotPassword")}</TextLink>
+      </Box>
       <Typography sx={{ ...centered, fontSize: 12.5 }}>
         {Locale.label("mobile.login.agreeBefore")}{" "}
         <TextLink href="https://churchapps.org/privacy" sx={{ fontSize: 12.5 }}>{Locale.label("mobile.components.privacyPolicy")}</TextLink>{Locale.label("mobile.login.agreeAfter")}
@@ -497,6 +529,16 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   const renderForgot = () => (
     <Box component="form" onSubmit={handleForgotSubmit} sx={formSx}>
+      {emailField()}
+      <Button type="submit" variant="contained" fullWidth disabled={loading} size="large">
+        {loading ? spinner : Locale.label("mobile.login.sendCode")}
+      </Button>
+      <TextLink onClick={() => setMode("login")} sx={{ alignSelf: "center" }}>{Locale.label("mobile.login.backToSignIn")}</TextLink>
+    </Box>
+  );
+
+  const renderEmailCode = () => (
+    <Box component="form" onSubmit={handleEmailCodeSubmit} sx={formSx}>
       {emailField()}
       <Button type="submit" variant="contained" fullWidth disabled={loading} size="large">
         {loading ? spinner : Locale.label("mobile.login.sendCode")}
@@ -616,6 +658,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
           {mode === "login" && renderLogin()}
           {mode === "register" && renderRegister()}
           {mode === "forgot" && renderForgot()}
+          {mode === "emailCode" && renderEmailCode()}
           {mode === "verify" && renderVerify()}
           {mode === "setPassword" && renderSetPassword()}
           {mode === "mfa" && renderMfa()}
