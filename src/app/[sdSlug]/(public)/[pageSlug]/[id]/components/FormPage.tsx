@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { PersonHelper, WrapperPageProps } from "@/helpers";
 import { Loading } from "@churchapps/apphelper";
 import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { DateHelper } from "@churchapps/apphelper";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import type { FormInterface } from "@churchapps/helpers";
@@ -112,7 +113,7 @@ export function FormPage(props: Props) {
           <img src={form.photoUrl} alt={form.name || ""} data-testid="form-header-photo" style={{ display: "block", width: "100%", aspectRatio: "16 / 9", objectFit: "cover", borderRadius: 8, marginBottom: 16 }} />
         )}
         {!isFormSubmitted && form?.description && (
-          <p data-testid="form-description" style={{ whiteSpace: "pre-wrap" }}>{form.description}</p>
+          <div data-testid="form-description"><MarkdownPreviewLight value={form.description} breaks /></div>
         )}
         {isFormSubmitted
           ? (
