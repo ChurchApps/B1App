@@ -56,7 +56,7 @@
     },
     "mobileGroups": {
       "src": ["src/app/[sdSlug]/mobile/components/screens/GroupsPage.tsx", "src/app/[sdSlug]/mobile/components/details/GroupDetail.tsx", "src/app/[sdSlug]/mobile/components/details/RequestToJoinDialog.tsx", "src/app/[sdSlug]/mobile/components/group/**", "src/components/eventCalendar/**"],
-      "specs": ["mobile-group*.spec.ts", "mobile-first-day.spec.ts", "mobile-rsvp.spec.ts", "mobile-confidential.spec.ts", "public-groups.spec.ts", "realtime-conversations.spec.ts", "realtime-reactions.spec.ts", "realtime-single-socket.spec.ts", "mobile-anonymous-events.spec.ts"]
+      "specs": ["mobile-group*.spec.ts", "mobile-first-day.spec.ts", "mobile-rsvp.spec.ts", "mobile-confidential.spec.ts", "public-groups.spec.ts", "realtime-conversations.spec.ts", "realtime-reactions.spec.ts", "realtime-single-socket.spec.ts", "mobile-anonymous-events.spec.ts", "events-location.spec.ts"]
     },
     "publicGroups": {
       "src": ["src/app/[sdSlug]/(public)/groups/**", "src/components/groups/**", "src/components/elements/GroupListElement.tsx", "src/components/elements/GroupsBrowserElement.tsx"],
@@ -80,7 +80,7 @@
     },
     "requestEvent": {
       "src": ["src/app/[sdSlug]/mobile/components/screens/RequestEventPage.tsx"],
-      "specs": ["mobile-request-event.spec.ts"]
+      "specs": ["mobile-request-event.spec.ts", "events-location.spec.ts"]
     },
     "donate": {
       "src": ["src/app/[sdSlug]/mobile/components/screens/DonatePage.tsx", "src/app/[sdSlug]/mobile/donate/**", "src/app/[sdSlug]/(public)/[pageSlug]/components/DonatePage.tsx", "src/components/donate/**", "src/app/[sdSlug]/mobile/helpers/churchCurrency.ts", "src/app/[sdSlug]/mobile/helpers/givingYears.ts"],
@@ -96,11 +96,11 @@
     },
     "events": {
       "src": ["src/app/[sdSlug]/(public)/events/**", "src/components/events/**", "src/components/elements/UpcomingEventsElement.tsx", "src/helpers/EventOccurrences.ts"],
-      "specs": ["public-events.spec.ts", "mobile-groups.spec.ts", "mobile-rsvp.spec.ts"]
+      "specs": ["public-events.spec.ts", "events-location.spec.ts", "mobile-groups.spec.ts", "mobile-rsvp.spec.ts"]
     },
     "checkin": {
       "src": ["src/app/[sdSlug]/mobile/components/screens/CheckinPage.tsx", "src/components/checkin/CheckinStyles.tsx", "src/helpers/CheckinHelper.ts"],
-      "specs": ["mobile-checkin.spec.ts"]
+      "specs": ["mobile-checkin.spec.ts", "mobile-checkin-hide-deceased.spec.ts"]
     },
     "sermons": {
       "src": ["src/app/[sdSlug]/(public)/sermons/**", "src/app/[sdSlug]/(public)/[pageSlug]/components/SermonsPage.tsx", "src/app/[sdSlug]/mobile/components/screens/SermonsPage.tsx", "src/app/[sdSlug]/mobile/components/details/SermonDetail.tsx", "src/app/[sdSlug]/mobile/components/sermonAudio.ts", "src/app/[sdSlug]/mobile/components/details/PlaylistDetail.tsx", "src/app/api/podcast/**", "src/helpers/sermonEmbed.ts", "src/helpers/podcastDownload.ts"],
