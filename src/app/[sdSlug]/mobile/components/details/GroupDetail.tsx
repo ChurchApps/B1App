@@ -22,6 +22,7 @@ import { GroupChatModal, type ChatSubTab } from "../group/GroupChatModal";
 import { CreateEventModal } from "../group/CreateEventModal";
 import { GroupPlansTab } from "../group/GroupPlansTab";
 import { GroupLessonTakeHome } from "../group/GroupLessonTakeHome";
+import { GroupMuteSwitch } from "../group/GroupMuteSwitch";
 import { GroupFormsList, GroupFormsTab, useGroupFormAnswers, useLinkedForms } from "../group/GroupFormsTab";
 import { AnonymousGroupView } from "../group/AnonymousGroupView";
 import { RequestToJoinDialog } from "./RequestToJoinDialog";
@@ -561,6 +562,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
       {hasAbout && aboutSection}
       {isMember && currentPersonId && (
         <PlateSection>
+          {groupId && <GroupMuteSwitch groupId={groupId} />}
           <TextLink danger disabled={joining} onClick={() => setLeaveDialogOpen(true)} data-testid="leave-group-button">{Locale.label("mobile.details.leaveGroup")}</TextLink>
         </PlateSection>
       )}
