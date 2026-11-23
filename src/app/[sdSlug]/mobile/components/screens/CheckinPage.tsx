@@ -134,7 +134,8 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
         householdId
           ? ApiHelper.get("/people/household/" + householdId, "MembershipApi").then(
             (members: PersonInterface[]) => {
-              CheckinHelper.householdMembers = members;
+              // Inactive members stay (they may be returning); deceased never show.
+              CheckinHelper.householdMembers = (members || []).filter((m) => m.membershipStatus !== "Deceased");
             }
           )
           : Promise.resolve().then(() => {
