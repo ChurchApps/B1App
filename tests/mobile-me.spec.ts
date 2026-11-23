@@ -2,6 +2,8 @@ import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 import { apiCall, doingUrl, getApi, membershipUrl } from "./helpers/api";
 
+const contentUrl = (path: string) => `${process.env.API_BASE || "http://localhost:8084"}/content${path}`;
+
 test.describe("Mobile Me page", () => {
   test("renders upcoming items and event rows navigate to the group", async ({ page }) => {
     await page.goto("/mobile/me");
@@ -162,5 +164,74 @@ test.describe("Mobile Me page serving times", () => {
     const servingRow = page.getByTestId("me-item-serving").filter({ hasText: "Sound Tech" });
     await expect(servingRow).toBeVisible({ timeout: 15000 });
     await expect(servingRow).toContainText(expected);
+  });
+});
+
+test.describe("Mobile Me page calendar", () => {
+  const isoDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+  test("Upcoming switches to a month calendar of everything the member can see", async ({ page }) => {
+    await page.goto("/mobile/me?view=upcoming");
+    await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+    await expect(page.getByTestId("me-item-event").first()).toBeVisible({ timeout: 15000 });
+
+    const toggle = page.getByTestId("me-upcoming-toggle");
+    await expect(toggle.getByRole("button", { name: "List" })).toHaveAttribute("aria-pressed", "true");
+    await toggle.getByRole("button", { name: "Calendar" }).click();
+
+    for (let i = 0; i < 7; i++) await expect(page.getByTestId(`weekday-${i}`)).toBeVisible();
+    const today = new Date();
+    await expect(page.getByTestId(`day-${isoDate(today)}`)).toHaveAttribute("aria-pressed", "true");
+
+    // Demo groups meet weekly, so this month has days with a dot; picking one lists its items.
+    const dayWithEvents = page.locator('[data-testid^="day-"]:has(i)').first();
+    await expect(dayWithEvents).toBeVisible({ timeout: 15000 });
+    await dayWithEvents.click();
+    await expect(page.getByTestId("me-selected-day").getByTestId("me-item-event").first()).toBeVisible();
+
+    const title = page.getByTestId("me-month-title");
+    const thisMonth = await title.textContent();
+    await page.getByRole("button", { name: "Next month" }).click();
+    await expect(title).not.toHaveText(thisMonth || "");
+    const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+    await expect(page.getByTestId(`day-${isoDate(nextMonth)}`)).toBeVisible();
+
+    // The choice sticks across visits, like the group Events tab.
+    await page.reload();
+    await expect(page.getByTestId("me-upcoming-toggle").getByRole("button", { name: "Calendar" })).toHaveAttribute("aria-pressed", "true", { timeout: 30000 });
+  });
+
+  test("Subscribe fetches the member's own secret calendar feed link", async ({ page }) => {
+    await page.goto("/mobile/me?view=upcoming");
+    await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
+    const subscribe = page.getByTestId("me-subscribe");
+    await expect(subscribe).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText("Anyone with this link can see your groups' events.")).toBeVisible();
+    const mine = page.waitForResponse((r) => r.url().includes("/events/subscribe/mine"));
+    await subscribe.click();
+    const feed = await (await mine).json();
+    expect(feed.token).toBeTruthy();
+  });
+
+  test("the personal feed serves the member's group events only with a valid token", async () => {
+    const api = await getApi("demo", "ContentApi");
+    try {
+      const mineRes = await apiCall(api, "get", contentUrl("/events/subscribe/mine"));
+      expect(mineRes.ok()).toBeTruthy();
+      const { churchId, personId, token } = await mineRes.json();
+      expect(churchId).toBe(api.churchId);
+      expect(personId).toBeTruthy();
+
+      const feedUrl = contentUrl(`/events/subscribe?churchId=${churchId}&personId=${personId}&token=${encodeURIComponent(token)}`);
+      const feed = await api.request.get(feedUrl);
+      expect(feed.status()).toBe(200);
+      expect(feed.headers()["content-type"]).toContain("text/calendar");
+      expect(await feed.text()).toContain("BEGIN:VEVENT");
+
+      const bad = await api.request.get(contentUrl(`/events/subscribe?churchId=${churchId}&personId=${personId}&token=bad`));
+      expect(bad.status()).toBe(401);
+    } finally {
+      await api.request.dispose();
+    }
   });
 });

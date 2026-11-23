@@ -76,24 +76,30 @@ export const useMyGroups = (enabled: boolean) => {
 };
 
 // Expands recurring timeline events across this month and the next two, keeping future occurrences in date order.
+const expandMonth = (normalized: ReturnType<typeof EventProcessor.updateTime>, month: Date, seen: Set<string>, from?: Date): UpcomingEvent[] => {
+  const items: UpcomingEvent[] = [];
+  EventProcessor.expandEventsForMonth(normalized, month).forEach((e) => {
+    const start = e.start as Date | string | undefined;
+    const date = start instanceof Date ? start : new Date(start as string);
+    if (isNaN(date.getTime()) || (from && date < from)) return;
+    const key = `evt-${e.id}-${date.getTime()}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    items.push({ key, eventId: e.id, date, title: e.title || Locale.label("mobile.me.event"), href: e.groupId ? `/mobile/groups/${e.groupId}?activeTab=events` : "/mobile/groups", photoUrl: e.photoUrl || undefined });
+  });
+  return items;
+};
+
 export const expandUpcomingEvents = (timeline: EventRow[], now: Date = new Date()): UpcomingEvent[] => {
   const normalized = EventProcessor.updateTime(timeline);
   const months = [new Date(now.getFullYear(), now.getMonth(), 1), new Date(now.getFullYear(), now.getMonth() + 1, 1), new Date(now.getFullYear(), now.getMonth() + 2, 1)];
   const seen = new Set<string>();
-  const items: UpcomingEvent[] = [];
-  months.forEach((month) => {
-    EventProcessor.expandEventsForMonth(normalized, month).forEach((e) => {
-      const start = e.start as Date | string | undefined;
-      const date = start instanceof Date ? start : new Date(start as string);
-      if (isNaN(date.getTime()) || date < now) return;
-      const key = `evt-${e.id}-${date.getTime()}`;
-      if (seen.has(key)) return;
-      seen.add(key);
-      items.push({ key, eventId: e.id, date, title: e.title || Locale.label("mobile.me.event"), href: e.groupId ? `/mobile/groups/${e.groupId}?activeTab=events` : "/mobile/groups", photoUrl: e.photoUrl || undefined });
-    });
-  });
+  const items = months.flatMap((month) => expandMonth(normalized, month, seen, now));
   return items.sort((a, b) => a.date.getTime() - b.date.getTime());
 };
+
+// Every occurrence in one month, past days included, for the Me page's month grid (#1644).
+export const expandMonthEvents = (timeline: EventRow[], month: Date): UpcomingEvent[] => expandMonth(EventProcessor.updateTime(timeline), month, new Set<string>());
 
 export const useUpcomingEvents = (enabled: boolean) => {
   // Same key as MePage, so both screens share one cache entry.

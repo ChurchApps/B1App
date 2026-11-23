@@ -14,8 +14,8 @@ import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelp
 import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
-import { rotateWeekdays, weekdayColumn } from "@/helpers/firstDayOfWeek";
 import { mobileTheme } from "../mobileTheme";
+import { MonthGrid, endOfMonth, isoDate, startOfMonth } from "../MonthGrid";
 import { EventProcessor } from "../../helpers/eventProcessor";
 import { useMyRegistrations } from "../../helpers/myRecords";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
@@ -64,9 +64,6 @@ const VIEW_MODE_KEY = "b1-group-events-view";
 const tc = mobileTheme.colors;
 
 const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
-const isoDate = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
-const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
 
 // Local-time key for RSVP matching regardless of server datetime format.
 const occKey = (d: Date) => {
@@ -380,15 +377,6 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
     return groups;
   }, [filteredEvents, currentMonth]);
 
-  const monthStart = startOfMonth(currentMonth);
-  const firstWeekday = weekdayColumn(monthStart.getDay(), firstDayOfWeek);
-  const daysInMonth = endOfMonth(currentMonth).getDate();
-  const days: (Date | null)[] = [];
-  for (let i = 0; i < firstWeekday; i++) days.push(null);
-  for (let d = 1; d <= daysInMonth; d++) days.push(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d));
-  const weekdayLabels = rotateWeekdays(["S", "M", "T", "W", "T", "F", "S"], firstDayOfWeek);
-  const todayKey = isoDate(new Date());
-
   const shiftMonth = (delta: number) => setCurrentMonth((m) => new Date(m.getFullYear(), m.getMonth() + delta, 1));
 
   const handleAddEvent = () => {
@@ -498,51 +486,7 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
             <IconButton onClick={() => shiftMonth(1)} aria-label={Locale.label("mobile.group.nextMonth")} sx={{ color: tc.text }}><ChevronRightIcon /></IconButton>
           </Box>
         </Box>
-        {viewMode === "month" && (
-          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "4px", mt: "6px", textAlign: "center" }}>
-            {weekdayLabels.map((w, i) => (
-              <Box key={`wd-${i}`} data-testid={`weekday-${i}`} sx={{ height: 24, fontSize: 11.5, fontWeight: 600, letterSpacing: "0.04em", color: tc.textSecondary, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                {w}
-              </Box>
-            ))}
-            {days.map((d, i) => {
-              if (!d) return <Box key={`e-${i}`} />;
-              const key = isoDate(d);
-              const isSelected = key === selected;
-              const hasEvents = !!eventsByDate[key]?.length;
-              return (
-                <Box
-                  key={key}
-                  component="button"
-                  type="button"
-                  aria-pressed={isSelected}
-                  data-testid={`day-${key}`}
-                  onClick={() => setSelected(key)}
-                  sx={{
-                    height: 42,
-                    border: 0,
-                    borderRadius: "8px",
-                    font: "inherit",
-                    fontSize: 14,
-                    fontWeight: isSelected ? 650 : 400,
-                    cursor: "pointer",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "3px",
-                    bgcolor: isSelected ? tc.selected : "transparent",
-                    color: isSelected ? tc.onSelected : tc.text,
-                    boxShadow: key === todayKey && !isSelected ? `inset 0 0 0 1px ${tc.control}` : "none"
-                  }}
-                >
-                  {d.getDate()}
-                  {hasEvents && <Box component="i" sx={{ width: 5, height: 5, borderRadius: "50%", bgcolor: tc.primary }} />}
-                </Box>
-              );
-            })}
-          </Box>
-        )}
+        {viewMode === "month" && <MonthGrid month={currentMonth} eventDays={eventsByDate} selected={selected} onSelect={setSelected} firstDayOfWeek={firstDayOfWeek} />}
       </PlateSection>
 
       <PlateSection>
