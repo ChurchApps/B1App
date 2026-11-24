@@ -307,6 +307,7 @@
       "decline": "Decline",
       "declineAcceptedMessage": "Your team leaders will be notified that you can no longer serve in this position.",
       "declineAcceptedTitle": "Decline this assignment?",
+      "declineReason": "Reason (optional)",
       "declined": "Declined",
       "delete": "Delete",
       "deleteFailed": "Could not delete the message.",

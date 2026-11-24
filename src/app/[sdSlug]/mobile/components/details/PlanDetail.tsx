@@ -576,12 +576,12 @@ const AssignmentBlock = ({
     ? { label: Locale.label("mobile.details.responseClosed"), tone: "neu" as const }
     : statusMeta(assignment.status);
 
-  const handleRespond = async (action: "accept" | "decline") => {
+  const handleRespond = async (action: "accept" | "decline", declineReason = "") => {
     if (!assignment.id || busy) return;
     setBusy(true);
     setErrorMessage(null);
     try {
-      await ApiHelper.post(`/assignments/${action}/${assignment.id}`, [], "DoingApi");
+      await ApiHelper.post(`/assignments/${action}/${assignment.id}`, action === "decline" ? { declineReason } : [], "DoingApi");
       onUpdate();
     } catch (err) {
       console.error(`Error ${action}ing assignment:`, err);
@@ -642,7 +642,7 @@ const AssignmentBlock = ({
         </Box>
       )}
 
-      <ConfirmDeclineSheet open={confirmDecline} onClose={() => setConfirmDecline(false)} onConfirm={() => handleRespond("decline")} />
+      <ConfirmDeclineSheet open={confirmDecline} onClose={() => setConfirmDecline(false)} onConfirm={(reason) => handleRespond("decline", reason)} />
 
       {errorMessage && <Typography role="alert" sx={{ fontSize: 13, color: tc.error, mt: "8px" }}>{errorMessage}</Typography>}
     </Box>
