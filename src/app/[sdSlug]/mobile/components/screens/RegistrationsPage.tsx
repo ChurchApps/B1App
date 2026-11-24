@@ -4,7 +4,8 @@ import React, { Suspense, useContext, useEffect, useState } from "react";
 import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, IconButton, MenuItem, Select, Skeleton, TextField, Typography } from "@mui/material";
 import { ApiHelper, DateHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { RegistrationInterface } from "@churchapps/helpers";
+import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
+import type { FormSubmissionInterface, RegistrationInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -45,6 +46,7 @@ const RegistrationsPageInner = ({ config: _config }: Props) => {
   const [cancelError, setCancelError] = useState("");
   const [payReg, setPayReg] = useState<RegistrationInterface | null>(null);
   const [editReg, setEditReg] = useState<RegistrationInterface | null>(null);
+  const [answerReg, setAnswerReg] = useState<RegistrationInterface | null>(null);
 
   const { data: registrations = null } = useQuery<RegistrationInterface[]>({
     queryKey: ["registrations", personId],
@@ -81,6 +83,8 @@ const RegistrationsPageInner = ({ config: _config }: Props) => {
     const hasBalance = !isCancelled && reg.status !== "waitlisted" && balance > 0;
     const names = (reg.members || []).map((m) => [m.firstName, m.lastName].filter(Boolean).join(" ")).filter(Boolean).join(", ");
     const subtitle = [eventStart ? DateHelper.prettyDateTime(new Date(eventStart)) : "", names].filter(Boolean).join(" · ");
+    // Staff-added people and older signups have no answers yet for the event's form.
+    const needsAnswers = !isCancelled && !!reg.event?.formId && !reg.formSubmissionId;
     const [tone, label]: [BadgeTone, string] = hasBalance ? ["warn", Locale.label("registration.mine.balanceLabel")] : statusBadge(reg.status);
 
     return (
@@ -99,9 +103,14 @@ const RegistrationsPageInner = ({ config: _config }: Props) => {
             {!hasBalance && total > 0 && (
               <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{`${Locale.label("registration.payment.total")}: ${formatMoney(paid)} / ${formatMoney(total)}`}</Typography>
             )}
+            {needsAnswers && (
+              <Box><Button size="small" variant={hasBalance ? "outlined" : "contained"} onClick={() => setAnswerReg(reg)} data-testid={`answer-questions-${reg.id}`}>{Locale.label("registration.mine.answerQuestions")}</Button></Box>
+            )}
             <Box sx={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
               <TextLink onClick={() => setEditReg(reg)}>{Locale.label("registration.mine.edit")}</TextLink>
-              <TextLink danger onClick={() => setCancelId(reg.id || null)}>{Locale.label("registration.mine.cancel")}</TextLink>
+              {(reg.event as RegistrationEvent | undefined)?.allowSelfCancel !== false && (
+                <TextLink danger onClick={() => setCancelId(reg.id || null)}>{Locale.label("registration.mine.cancel")}</TextLink>
+              )}
             </Box>
           </Box>
         )}
@@ -161,6 +170,16 @@ const RegistrationsPageInner = ({ config: _config }: Props) => {
           />
         )}
       </Sheet>
+
+      {answerReg && (
+        <AnswerQuestionsSheet
+          registration={answerReg}
+          churchId={churchId}
+          personId={personId}
+          onClose={() => setAnswerReg(null)}
+          onSaved={() => { setAnswerReg(null); refetch(); }}
+        />
+      )}
 
       {editReg && (
         <EditRegistrationDialog
@@ -332,6 +351,67 @@ const EditRegistrationDialog = ({ registration, churchId, onClose, onSaved }: Ed
               );
             })}
           </>
+        )}
+      </>
+    </Sheet>
+  );
+};
+
+interface AnswerProps {
+  registration: RegistrationInterface;
+  churchId: string;
+  personId?: string;
+  onClose: () => void;
+  onSaved: () => void;
+}
+
+const AnswerQuestionsSheet = ({ registration, churchId, personId, onClose, onSaved }: AnswerProps) => {
+  const formId = registration.event?.formId || "";
+  const [available, setAvailable] = useState<boolean | null>(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    // The signup wizard skips restricted forms, so only offer the ones it would have asked.
+    ApiHelper.get("/forms/standalone/" + formId + "?churchId=" + churchId, "MembershipApi")
+      .then((form: { restricted?: boolean } | null) => setAvailable(!!form && !form.restricted))
+      .catch(() => setAvailable(false));
+  }, [formId, churchId]);
+
+  const handleSaved = async (fs?: FormSubmissionInterface) => {
+    if (!fs?.id) return;
+    setError("");
+    try {
+      const result = await apiPut("/registrations/" + registration.id, { formSubmissionId: fs.id }, "ContentApi") as RegistrationResult | null;
+      if (result?.error) {
+        setError(result.error);
+        return;
+      }
+      onSaved();
+    } catch {
+      setError(Locale.label("mobile.screens.unableToSaveChanges"));
+    }
+  };
+
+  return (
+    <Sheet open onClose={onClose} title={registration.event?.title || Locale.label("registration.questions")}>
+      <>
+        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {available === null && <Skeleton variant="rectangular" height={120} />}
+        {available === false && <QuietEmpty>{Locale.label("registration.mine.questionsUnavailable")}</QuietEmpty>}
+        {available && (
+          <FormSubmissionEdit
+            churchId={churchId}
+            addFormId=""
+            unRestrictedFormId={formId}
+            contentType="event"
+            contentId={registration.eventId || ""}
+            formSubmissionId=""
+            personId={personId}
+            updatedFunction={(fs?: FormSubmissionInterface) => { void handleSaved(fs); }}
+            cancelFunction={onClose}
+            showHeader={false}
+            noBackground={true}
+          />
         )}
       </>
     </Sheet>

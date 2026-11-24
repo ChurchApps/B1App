@@ -9,7 +9,7 @@ import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
 import type { EventInterface, FormSubmissionInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
-import { formatMoney, useEventRegistration, type RegType } from "./useEventRegistration";
+import { formatMoney, useEventRegistration, type RegType, type RegistrationEvent } from "./useEventRegistration";
 
 // Stripe/donations pull browser-only modules; keep them out of the server render.
 const RegistrationPaymentForm = dynamic(() => import("./RegistrationPaymentForm").then((m) => m.RegistrationPaymentForm), { ssr: false });
@@ -79,6 +79,10 @@ export function EventRegister({ churchId, eventId, event }: Props) {
   };
 
   const typeDisabled = (t: RegType) => t.remainingCapacity != null && t.remainingCapacity <= 0;
+
+  const withRegisteredNote = (name: string, registered: boolean, testId: string) => (registered
+    ? <>{name} <Typography component="span" variant="caption" color="text.secondary" data-testid={`household-registered-${testId}`}>· {Locale.label("registration.alreadyRegistered")}</Typography></>
+    : name);
 
   if (!isOpen) {
     return (
@@ -169,7 +173,9 @@ export function EventRegister({ churchId, eventId, event }: Props) {
             onPay={(p) => reg.submit(p)}
             onFinalized={(result) => reg.finishConfirm(result)}
             onBack={() => reg.setStep(reg.hasSelections ? "selections" : "members")}
-            onPayLater={() => reg.submit()}
+            onPayLater={() => reg.submit({ payLater: true })}
+            allowPayLater={!!(event as RegistrationEvent).allowPayLater}
+            dueNow={reg.dueNow}
           />
         </CardContent>
       </Card>
@@ -229,17 +235,19 @@ export function EventRegister({ churchId, eventId, event }: Props) {
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{Locale.label("registration.yourHousehold")}</Typography>
               <FormControlLabel
                 control={<Checkbox checked disabled />}
-                label={`${reg.primaryFirstName} ${reg.primaryLastName} (${Locale.label("registration.you")})`}
+                label={withRegisteredNote(`${reg.primaryFirstName} ${reg.primaryLastName} (${Locale.label("registration.you")})`, reg.selfAlreadyRegistered, "self")}
               />
               {reg.householdMembers.map((hm) => {
+                const registered = reg.isAlreadyRegistered(hm.id);
                 const checked = reg.isHouseholdMemberSelected(hm.id);
                 const selected = reg.members.find((m) => m.personId === hm.id);
                 return (
                   <Box key={hm.id} sx={{ display: "flex", gap: 1, alignItems: "center", flexWrap: "wrap" }}>
                     <FormControlLabel
                       sx={{ flex: 1, minWidth: 180 }}
+                      disabled={registered}
                       control={<Checkbox checked={checked} onChange={() => reg.toggleHouseholdMember(hm)} data-testid={`household-member-${hm.id}`} />}
-                      label={`${hm.firstName} ${hm.lastName}`.trim()}
+                      label={withRegisteredNote(`${hm.firstName} ${hm.lastName}`.trim(), registered, hm.id)}
                     />
                     {checked && reg.hasTypes && (
                       <Select

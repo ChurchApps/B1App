@@ -38,6 +38,10 @@ interface Props {
   hideCoupon?: boolean;
   // Churches with no online giving: register now with a balance due, paid to the church later.
   onPayLater?: () => Promise<RegistrationResult | null>;
+  // The event also offers pay later beside online payment.
+  allowPayLater?: boolean;
+  // Charged now when attendee types take a deposit; the rest of amount stays as a balance.
+  dueNow?: number;
 }
 
 // Runs inside the provider's wrapper so its SDK context is available for finalize (e.g. 3DS).
@@ -202,6 +206,7 @@ const PaymentEntry: React.FC<{
 
 export const RegistrationPaymentForm: React.FC<Props> = (props) => {
   const { churchId, personId, amount, summaryLines, subtotal, discountAmount, appliedCoupon } = props;
+  const chargeAmount = props.dueNow ?? amount;
   const [gateway, setGateway] = useState<PaymentGateway | null>(null);
   const [savedMethods, setSavedMethods] = useState<SavedMethod[]>([]);
   const [loading, setLoading] = useState(true);
@@ -259,6 +264,18 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
           <Typography variant="body1" sx={{ fontWeight: 700 }}>{Locale.label("registration.payment.total")}</Typography>
           <Typography variant="body1" sx={{ fontWeight: 700 }} data-testid="reg-total">{formatMoney(amount, displayCurrency)}</Typography>
         </Box>
+        {chargeAmount < amount && (
+          <>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>{Locale.label("registration.payment.dueToday")}</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 600 }} data-testid="reg-due-today">{formatMoney(chargeAmount, displayCurrency)}</Typography>
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "space-between", color: "text.secondary" }}>
+              <Typography variant="body2">{Locale.label("registration.payment.balanceLater")}</Typography>
+              <Typography variant="body2" data-testid="reg-balance-later">{formatMoney(Math.round((amount - chargeAmount) * 100) / 100, displayCurrency)}</Typography>
+            </Box>
+          </>
+        )}
       </Stack>
     </Box>
   );
@@ -325,7 +342,7 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
               personId={personId}
               personEmail={props.personEmail}
               personName={props.personName}
-              amount={amount}
+              amount={chargeAmount}
               currency={props.currency}
               savedMethods={savedMethods}
               onPay={props.onPay}
@@ -340,13 +357,28 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
             personId={personId}
             personEmail={props.personEmail}
             personName={props.personName}
-            amount={amount}
+            amount={chargeAmount}
             currency={props.currency}
             savedMethods={savedMethods}
             onPay={props.onPay}
             onFinalized={props.onFinalized}
           />
         )
+      )}
+      {!loading && !loadError && gateway && props.allowPayLater && props.onPayLater && (
+        <Box sx={{ mt: 2 }}>
+          <Divider sx={{ mb: 2 }} />
+          <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>{Locale.label("registration.payment.payLaterCashCheck")}</Typography>
+          <Button
+            fullWidth
+            variant="outlined"
+            disabled={payingLater}
+            data-testid="reg-pay-later"
+            onClick={async () => { setPayingLater(true); try { await props.onPayLater?.(); } finally { setPayingLater(false); } }}
+          >
+            {payingLater ? Locale.label("registration.registering") : Locale.label("registration.payment.registerPayLater")}
+          </Button>
+        </Box>
       )}
       <Button sx={{ mt: 2 }} onClick={props.onBack}>{Locale.label("registration.back")}</Button>
       <Typography variant="caption" sx={{ display: "block", mt: 1, color: "text.secondary" }}>

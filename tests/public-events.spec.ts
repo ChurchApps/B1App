@@ -134,6 +134,22 @@ test.describe.serial("Public event pages and upcoming-event tiles", () => {
       await ctx.post(`${API_BASE}/content/elements`, { ...auth, data: [{ ...element, answersJSON: JSON.stringify(answers) }] });
     }
   });
+
+  test("Calendar element item count limits how many upcoming events show", async ({ page }) => {
+    const element = await (await ctx.get(`${API_BASE}/content/elements/${ELEMENT_ID}`, auth)).json();
+    const answers = { ...JSON.parse(element.answersJSON || "{}"), display: "upcoming", itemCount: "2" };
+    const elementRes = await ctx.post(`${API_BASE}/content/elements`, { ...auth, data: [{ ...element, answersJSON: JSON.stringify(answers) }] });
+    expect(elementRes.ok()).toBeTruthy();
+
+    try {
+      await page.goto("/events");
+      const tiles = page.getByTestId("upcoming-event-tile");
+      await expect.poll(() => tiles.count(), { timeout: 30000 }).toBe(2);
+    } finally {
+      delete (answers as { itemCount?: string }).itemCount;
+      await ctx.post(`${API_BASE}/content/elements`, { ...auth, data: [{ ...element, answersJSON: JSON.stringify(answers) }] });
+    }
+  });
 });
 
 // ChurchAppsSupport#1399: the Calendar element's Upcoming events can scroll on its own, like the Verse of the Day week.

@@ -9,6 +9,7 @@ export interface RegType {
   name: string;
   description?: string;
   price: number | null;
+  depositAmount?: number | null;
   capacity: number | null;
   remainingCapacity: number | null;
   minAgeYears?: number | null;
@@ -43,6 +44,7 @@ export interface RegistrationPayment {
   type?: string;
   currency?: string;
   captchaPass?: string;
+  payLater?: boolean;
 }
 
 export interface WizardMember {
@@ -60,7 +62,7 @@ export interface HouseholdMember {
 }
 
 // Events carry the gateway currency when the church has one configured.
-export type RegistrationEvent = EventInterface & { currency?: string };
+export type RegistrationEvent = EventInterface & { currency?: string; allowSelfCancel?: boolean; allowPayLater?: boolean };
 
 // What /registrations/register returns: the registration, or a refusal; a 3DS charge adds a provider payload.
 export interface RegistrationResult extends RegistrationInterface {
@@ -126,6 +128,12 @@ export const apiPut = (path: string, data: unknown, apiName: string): Promise<un
 
 const num = (v: number | string | null | undefined): number => (v == null || isNaN(Number(v)) ? 0 : Number(v));
 
+// Mirrors the Api: a type's deposit, when below its price, is what checkout charges per attendee.
+const chargeNowPrice = (t: RegType): number => {
+  const deposit = num(t.depositAmount);
+  return deposit > 0 && deposit < num(t.price) ? deposit : num(t.price);
+};
+
 const ageYears = (birthDate?: Date | string): number | null => {
   if (!birthDate) return null;
   const bd = new Date(birthDate);
@@ -159,6 +167,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   const [formSubmissionId, setFormSubmissionId] = useState<string | undefined>(undefined);
   const [atCapacity, setAtCapacity] = useState(false);
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([]);
+  const [registeredPersonIds, setRegisteredPersonIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (!churchId || !eventId) return;
@@ -187,6 +196,20 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
       .catch(() => setHouseholdMembers([]));
   }, [householdId, selfId]);
 
+  const signedInId = isLoggedIn ? selfId : undefined;
+  useEffect(() => {
+    if (!signedInId || !eventId) {
+      setRegisteredPersonIds([]);
+      return;
+    }
+    ApiHelper.get("/registrations/event/" + eventId + "/household", "ContentApi")
+      .then((data: { personIds?: string[] }) => setRegisteredPersonIds(Array.isArray(data?.personIds) ? data.personIds : []))
+      .catch(() => setRegisteredPersonIds([]));
+  }, [signedInId, eventId]);
+
+  const isAlreadyRegistered = (personId?: string) => !!personId && registeredPersonIds.includes(personId);
+  const selfAlreadyRegistered = isAlreadyRegistered(selfId);
+
   const hasTypes = types.length > 0;
   const hasSelections = selections.length > 0;
   const typeMap = useMemo(() => new Map(types.map((t) => [t.id, t])), [types]);
@@ -213,6 +236,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   const isHouseholdMemberSelected = (personId: string) => members.some((m) => m.personId === personId);
 
   const toggleHouseholdMember = (hm: HouseholdMember) => {
+    if (isAlreadyRegistered(hm.id)) return;
     setMembers((prev) => (prev.some((m) => m.personId === hm.id)
       ? prev.filter((m) => m.personId !== hm.id)
       : [...prev, { firstName: hm.firstName, lastName: hm.lastName, personId: hm.id, registrationTypeId: ageFitTypeId(hm.birthDate) }]));
@@ -271,6 +295,21 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
 
   const total = Math.max(0, Math.round((subtotal - discountAmount) * 100) / 100);
 
+  const dueNow = useMemo(() => {
+    let sum = 0;
+    if (hasTypes) {
+      for (const m of buildMembersPayload()) {
+        const t = m.registrationTypeId ? typeMap.get(m.registrationTypeId) : undefined;
+        if (t) sum += chargeNowPrice(t);
+      }
+    }
+    for (const s of selections) sum += num(s.price) * (selectionQty[s.id] || 0);
+    return Math.min(total, Math.round(sum * 100) / 100);
+
+  }, [
+    types, selections, members, primaryTypeId, selectionQty, primaryFirstName, primaryLastName, total
+  ]);
+
   const isWaitlistMode = useMemo(() => !!event?.waitlistEnabled, [event]);
 
   const needsPayment = total > 0;
@@ -305,6 +344,10 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
         setError(Locale.label("registration.errors.emailRequired"));
         return false;
       }
+    }
+    if (selfAlreadyRegistered) {
+      setError(Locale.label("registration.errors.alreadyRegistered"));
+      return false;
     }
     if (hasTypes && !primaryTypeId) {
       setError(Locale.label("registration.errors.typeRequired"));
@@ -409,6 +452,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   const mapError = (result: RegistrationResult | { status?: string; error?: string } | null): string => {
     if (result?.status === "type-full") return Locale.label("registration.errors.typeFull");
     if (result?.status === "selection-full") return Locale.label("registration.errors.selectionFull");
+    if (result?.status === "already-registered") return Locale.label("registration.errors.memberAlreadyRegistered");
     return result?.error || Locale.label("registration.errors.registrationFailed");
   };
 
@@ -487,6 +531,8 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
     updateMember,
     householdMembers,
     isHouseholdMemberSelected,
+    isAlreadyRegistered,
+    selfAlreadyRegistered,
     toggleHouseholdMember,
     selectionQty,
     setQuantity,
@@ -506,6 +552,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
     subtotal,
     discountAmount,
     total,
+    dueNow,
     needsPayment,
     summaryLines,
     isWaitlistMode,

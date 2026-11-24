@@ -12,7 +12,9 @@ import type {
 } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
+import { findServingConflicts } from "@/helpers/servingConflicts";
 import { mobileTheme } from "../mobileTheme";
+import { useUpcomingServing } from "../HomeTeasers";
 import { PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, Sheet, StatusBadge, TextLink } from "../kit";
 
 interface Props {
@@ -92,7 +94,34 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   const volunteerNames = bundle?.volunteerNames ?? {};
   const notFound = !loading && bundle !== undefined && !plan;
 
-  const load = () => queryClient.invalidateQueries({ queryKey: ["volunteer-detail", churchId, id, signedIn] });
+  // Same queries (and cache) as Home's upcoming list and the Plans page blockouts.
+  const { upcoming: upcomingServing, queryKey: upcomingKey } = useUpcomingServing(signedIn);
+  const { data: blockouts = [] } = useQuery<{ startDate: string; endDate?: string }[]>({
+    queryKey: ["/blockoutdates/my", "DoingApi"],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/blockoutdates/my", "DoingApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: signedIn,
+    staleTime: 10 * 60 * 1000
+  });
+
+  // Display only: signup stays allowed on a day the member already serves or has blocked out.
+  const conflicts = React.useMemo(() => {
+    if (!signedIn || !plan?.id || !plan.serviceDate) return null;
+    const result = findServingConflicts(
+      plan.id,
+      DateHelper.toDate(plan.serviceDate),
+      upcomingServing.map((a) => ({ planId: a.planId, serviceDate: DateHelper.toDate(a.serviceDate), positionName: a.positionName, status: a.status })),
+      blockouts.filter((b) => b?.startDate).map((b) => ({ startDate: DateHelper.toDate(b.startDate), endDate: b.endDate ? DateHelper.toDate(b.endDate) : undefined }))
+    );
+    return result.serving || result.blockedOut ? result : null;
+  }, [signedIn, plan, upcomingServing, blockouts]);
+
+  const load = () => Promise.all([
+    queryClient.invalidateQueries({ queryKey: ["volunteer-detail", churchId, id, signedIn] }),
+    queryClient.invalidateQueries({ queryKey: upcomingKey })
+  ]);
 
   // The Api counts the deadline back from the first service time (#1325).
   const isDeadlinePassed = React.useMemo(() => {
@@ -167,6 +196,15 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   const notices: { text: string; tone: "error" | "muted" | "success" }[] = [];
   if (isDeadlinePassed) notices.push({ text: Locale.label("mobile.details.signupDeadlinePassed"), tone: "muted" });
   if (!signedIn) notices.push({ text: Locale.label("mobile.details.signInToSignUp"), tone: "muted" });
+  if (conflicts?.serving) {
+    notices.push({
+      text: conflicts.positionNames.length > 0
+        ? Locale.label("mobile.details.servingThatDayAs").replace("{}", conflicts.positionNames.join(", "))
+        : Locale.label("mobile.details.servingThatDayNote"),
+      tone: "muted"
+    });
+  }
+  if (conflicts?.blockedOut) notices.push({ text: Locale.label("mobile.details.blockedOutNote"), tone: "muted" });
   if (message) notices.push({ text: message.text, tone: message.type });
 
   const renderPosition = (p: PositionInterface & { filledCount: number }) => {
@@ -202,6 +240,12 @@ export const VolunteerDetail = ({ id, config }: Props) => {
           {p.description && <Box component="span" sx={{ display: "block" }}>{p.description}</Box>}
           {names.length > 0 && (
             <Box component="span" sx={{ display: "block" }}>{Locale.label("mobile.details.signedUpNames").replace("{}", names.join(", "))}</Box>
+          )}
+          {conflicts && !mine && !isFull && (
+            <Box component="span" sx={{ display: "flex", flexWrap: "wrap", gap: "6px", mt: "6px" }}>
+              {conflicts.serving && <StatusBadge tone="warn" data-testid="signup-conflict-serving">{Locale.label("mobile.details.servingThatDay")}</StatusBadge>}
+              {conflicts.blockedOut && <StatusBadge tone="warn" data-testid="signup-conflict-blockout">{Locale.label("mobile.details.blockedOut")}</StatusBadge>}
+            </Box>
           )}
         </>}
         trailing={trailing}

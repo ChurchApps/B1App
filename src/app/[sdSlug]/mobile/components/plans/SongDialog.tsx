@@ -12,6 +12,8 @@ import { Eyebrow, FilterPills, Sheet, TextLink } from "../kit";
 
 const tc = mobileTheme.colors;
 
+const isPdf = (f: FileInterface) => f.fileType === "application/pdf" || /\.pdf$/i.test(f.fileName || "");
+
 interface PraiseChartsProduct {
   name: string;
   file_type: string;
@@ -29,7 +31,7 @@ export const SongDialog: React.FC<Props> = (props) => {
   const [songDetail, setSongDetail] = React.useState<SongDetailInterface | null>(null);
   const [products, setProducts] = React.useState<PraiseChartsProduct[]>([]);
   const [links, setLinks] = React.useState<LinkInterface[]>([]);
-  const [audioFiles, setAudioFiles] = React.useState<FileInterface[]>([]);
+  const [arrangementFiles, setArrangementFiles] = React.useState<FileInterface[]>([]);
   const [keyOffset, setKeyOffset] = React.useState(0);
 
   const loadData = async () => {
@@ -38,7 +40,7 @@ export const SongDialog: React.FC<Props> = (props) => {
       setArrangementKey(ak);
       const arr = await ApiHelper.get("/arrangements/" + ak.arrangementId, "ContentApi");
       setArrangement(arr);
-      ApiHelper.get("/files/arrangement/" + arr.id, "ContentApi").then((files: FileInterface[]) => setAudioFiles(files || [])).catch(() => setAudioFiles([]));
+      ApiHelper.get("/files/arrangement/" + arr.id, "ContentApi").then((files: FileInterface[]) => setArrangementFiles(files || [])).catch(() => setArrangementFiles([]));
       if (arr.songDetailId) setSongDetail(await ApiHelper.get("/songDetails/" + arr.songDetailId, "ContentApi"));
     } catch (e) {
       console.error("Failed to load song:", e);
@@ -69,6 +71,13 @@ export const SongDialog: React.FC<Props> = (props) => {
         <audio controls preload="metadata" style={{ width: "100%", display: "block", marginTop: 4 }} src={l.url} data-testid={`song-external-${i}-audio`} />
       )}
     </Box>
+  ));
+
+  const audioFiles = arrangementFiles.filter((f) => !isPdf(f));
+  const chartFiles = arrangementFiles.filter(isPdf);
+
+  const listChartFiles = () => chartFiles.map((f, i) => (
+    <TextLink key={f.id} href={f.contentPath} data-testid={`song-chart-${i}-link`} sx={{ whiteSpace: "normal" }}>{f.fileName}</TextLink>
   ));
 
   const listAudioFiles = () => audioFiles.map((f, i) => (
@@ -117,7 +126,8 @@ export const SongDialog: React.FC<Props> = (props) => {
     );
   };
 
-  const hasFiles = products?.length > 0 || links.length > 0 || audioFiles.length > 0;
+  const hasFiles = products?.length > 0 || links.length > 0 || arrangementFiles.length > 0;
+  const hasListedFiles = products?.length > 0 || links.length > 0 || chartFiles.length > 0;
 
   return (
     <Sheet
@@ -128,6 +138,12 @@ export const SongDialog: React.FC<Props> = (props) => {
       actions={<Button variant="outlined" onClick={props.onClose} data-testid="song-dialog-close-button">{Locale.label("mobile.plans.close")}</Button>}
     >
       {songDetail?.artist && <Typography sx={{ color: tc.textSecondary, fontSize: 14, mt: "-6px", mb: "12px" }}>{songDetail.artist}</Typography>}
+      {arrangement?.sequence?.trim() && (
+        <Box sx={{ mb: "14px" }} data-testid="song-sequence">
+          <Box sx={{ mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.sequence")}</Eyebrow></Box>
+          <Typography sx={{ fontSize: 15, whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{arrangement.sequence}</Typography>
+        </Box>
+      )}
       {arrangement?.lyrics && <>
         <Box sx={{ mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.keySignature")}</Eyebrow></Box>
         {getKeySelect()}
@@ -136,13 +152,16 @@ export const SongDialog: React.FC<Props> = (props) => {
       </>}
       {hasFiles && (
         <Box sx={{ mt: "18px" }}>
-          <Box sx={{ mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.files")}</Eyebrow></Box>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px", alignItems: "flex-start" }}>
-            {listProducts()}
-            {listLinks()}
-          </Box>
+          {hasListedFiles && <>
+            <Box sx={{ mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.files")}</Eyebrow></Box>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "8px", alignItems: "flex-start" }}>
+              {listProducts()}
+              {listLinks()}
+              {listChartFiles()}
+            </Box>
+          </>}
           {audioFiles.length > 0 && <>
-            <Box sx={{ mt: "14px", mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.audioTracks")}</Eyebrow></Box>
+            <Box sx={{ mt: hasListedFiles ? "14px" : 0, mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.audioTracks")}</Eyebrow></Box>
             <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>{listAudioFiles()}</Box>
           </>}
         </Box>

@@ -237,6 +237,11 @@ export default function PrintPage({ params }: { params: Params }) {
     return `Period: ${DateHelper.prettyDate(start)} - ${DateHelper.prettyDate(end)}`;
   };
 
+  // The standard layout has no legal block, so a filled-in Tax ID and organization address print with the
+  // church's details instead. Country formats already show both in their legal block.
+  const standardTaxId = !churchSettings.statementFormat ? churchSettings.statementRegistrationNumber?.trim() || "" : "";
+  const standardOrgAddress = !churchSettings.statementFormat ? churchSettings.statementOrgAddress?.trim() || "" : "";
+
   if (blocked) return <AuthGuard sdSlug={sdSlug}><p style={{ padding: "24px", fontFamily: "Roboto, sans-serif" }}>{Locale.label("mobile.giving.statementUnavailable")}</p></AuthGuard>;
 
   return (
@@ -269,9 +274,16 @@ export default function PrintPage({ params }: { params: Params }) {
             </div>
             <div style={{ flex: "1 1 280px", minWidth: 0 }}>
               <h1>{context?.userChurch?.church?.name}</h1>
-              <p>{context?.userChurch?.church?.address1}</p>
-              <p>{context?.userChurch?.church?.address2}</p>
-              <p>{context?.userChurch?.church?.city}, {context?.userChurch?.church?.country}, {context?.userChurch?.church?.zip}</p>
+              {standardOrgAddress ? (
+                <p data-testid="statement-org-address" style={{ whiteSpace: "pre-line" }}>{standardOrgAddress}</p>
+              ) : (
+                <>
+                  <p>{context?.userChurch?.church?.address1}</p>
+                  <p>{context?.userChurch?.church?.address2}</p>
+                  <p>{context?.userChurch?.church?.city}, {context?.userChurch?.church?.country}, {context?.userChurch?.church?.zip}</p>
+                </>
+              )}
+              {standardTaxId && <p data-testid="statement-tax-id">{Locale.label("mobile.giving.taxId")} {standardTaxId}</p>}
             </div>
           </div>
           <div style={{ margin: "0px", padding: "0px", borderTop: "2px solid var(--print-accent)", width: "100%" }}></div>
