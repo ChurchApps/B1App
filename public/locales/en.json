@@ -1435,6 +1435,7 @@
     "addMember": "Add Member",
     "additionalMembers": "Additional Members",
     "additionalMembersInfo": "Optionally register additional family members for this event.",
+    "alreadyRegistered": "Already registered",
     "back": "Back",
     "capacityReached": "This event has reached its capacity of {}.",
     "closed": "Registration for this event has closed.",
@@ -1455,7 +1456,9 @@
       "remove": "Remove"
     },
     "errors": {
+      "alreadyRegistered": "You're already registered for this event.",
       "emailRequired": "Email is required for guest registration.",
+      "memberAlreadyRegistered": "Someone you picked is already registered for this event.",
       "memberNamesRequired": "First and last name are required for each additional member.",
       "namesRequired": "First name and last name are required.",
       "registrationFailed": "Registration failed. The event may be full or registration may have closed.",
@@ -1467,6 +1470,7 @@
     "eventFull": "Event Full",
     "free": "Free",
     "mine": {
+      "answerQuestions": "Answer questions",
       "balanceDue": "Balance due: {}",
       "balanceLabel": "Balance due",
       "cancel": "Cancel Registration",
@@ -1474,7 +1478,8 @@
       "completePayment": "Complete payment",
       "edit": "Edit",
       "editTitle": "Edit Registration",
-      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events."
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "questionsUnavailable": "These questions can't be answered here. Contact the church if you need to update your answers."
     },
     "noAdditional": "No additional members added",
     "notOpen": "Registration Not Open",

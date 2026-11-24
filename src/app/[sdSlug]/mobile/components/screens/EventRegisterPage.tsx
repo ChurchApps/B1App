@@ -126,6 +126,10 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   };
   const typeDisabled = (t: RegType) => t.remainingCapacity != null && t.remainingCapacity <= 0;
 
+  const withRegisteredNote = (name: string, registered: boolean, testId: string) => (registered
+    ? <>{name} <Typography component="span" sx={{ fontSize: 13, color: tc.textSecondary }} data-testid={`household-registered-${testId}`}>· {Locale.label("registration.alreadyRegistered")}</Typography></>
+    : name);
+
   const errorLine = (msg: string) => (
     <Typography role="alert" sx={{ mt: "12px", color: tc.error, fontSize: 14 }}>{msg}</Typography>
   );
@@ -319,16 +323,18 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
 
             {reg.householdMembers.length > 0 && (
               <Box data-testid="household-members" sx={{ display: "flex", flexDirection: "column" }}>
-                <FormControlLabel sx={{ minHeight: 44 }} control={<Checkbox checked disabled />} label={`${reg.primaryFirstName} ${reg.primaryLastName} (${Locale.label("registration.you")})`} />
+                <FormControlLabel sx={{ minHeight: 44 }} control={<Checkbox checked disabled />} label={withRegisteredNote(`${reg.primaryFirstName} ${reg.primaryLastName} (${Locale.label("registration.you")})`, reg.selfAlreadyRegistered, "self")} />
                 {reg.householdMembers.map((hm) => {
+                  const registered = reg.isAlreadyRegistered(hm.id);
                   const checked = reg.isHouseholdMemberSelected(hm.id);
                   const selected = reg.members.find((m) => m.personId === hm.id);
                   return (
                     <Box key={hm.id}>
                       <FormControlLabel
                         sx={{ minHeight: 44 }}
+                        disabled={registered}
                         control={<Checkbox checked={checked} onChange={() => reg.toggleHouseholdMember(hm)} data-testid={`household-member-${hm.id}`} />}
-                        label={`${hm.firstName} ${hm.lastName}`.trim()}
+                        label={withRegisteredNote(`${hm.firstName} ${hm.lastName}`.trim(), registered, hm.id)}
                       />
                       {checked && reg.hasTypes && (
                         <Select fullWidth size="small" displayEmpty value={selected?.registrationTypeId || ""} onChange={(e) => reg.updateMember(reg.members.indexOf(selected!), "registrationTypeId", e.target.value)} data-testid={`household-type-${hm.id}`} sx={{ mb: 1 }}>
