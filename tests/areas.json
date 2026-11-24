@@ -87,8 +87,8 @@
       "specs": ["mobile-donate*.spec.ts", "mobile-campaigns.spec.ts", "giving-paypal-buttons.spec.ts", "public-built-in.spec.ts"]
     },
     "serving": {
-      "src": ["src/app/[sdSlug]/mobile/components/screens/PlansPage.tsx", "src/app/[sdSlug]/mobile/components/screens/VolunteerPage.tsx", "src/app/[sdSlug]/mobile/components/screens/SongsPage.tsx", "src/app/[sdSlug]/mobile/components/details/PlanDetail.tsx", "src/app/[sdSlug]/mobile/components/details/VolunteerDetail.tsx", "src/app/[sdSlug]/mobile/components/plans/**", "src/app/[sdSlug]/mobile/components/ConfirmDeclineSheet.tsx", "src/app/[sdSlug]/(public)/volunteer/**", "src/components/serving/**", "src/helpers/PraiseChartsHelper.ts"],
-      "specs": ["mobile-plans*.spec.ts", "mobile-songs.spec.ts", "volunteer-signup.spec.ts", "mobile-misc.spec.ts", "mobile-me.spec.ts"]
+      "src": ["src/app/[sdSlug]/mobile/components/screens/PlansPage.tsx", "src/app/[sdSlug]/mobile/components/screens/VolunteerPage.tsx", "src/app/[sdSlug]/mobile/components/screens/SongsPage.tsx", "src/app/[sdSlug]/mobile/components/details/PlanDetail.tsx", "src/app/[sdSlug]/mobile/components/details/VolunteerDetail.tsx", "src/app/[sdSlug]/mobile/components/plans/**", "src/app/[sdSlug]/mobile/components/ConfirmDeclineSheet.tsx", "src/app/[sdSlug]/(public)/volunteer/**", "src/components/serving/**", "src/helpers/PraiseChartsHelper.ts", "src/helpers/servingConflicts.ts", "src/helpers/schedulingPreferences.ts"],
+      "specs": ["mobile-plans*.spec.ts", "mobile-songs.spec.ts", "volunteer-signup.spec.ts", "mobile-volunteer-conflicts.spec.ts", "mobile-misc.spec.ts", "mobile-me.spec.ts"]
     },
     "registration": {
       "src": ["src/app/[sdSlug]/mobile/components/screens/EventRegisterPage.tsx", "src/app/[sdSlug]/mobile/components/screens/RegistrationsPage.tsx", "src/app/[sdSlug]/(public)/register/**", "src/app/[sdSlug]/(public)/guest-register/**", "src/components/registration/**", "src/components/checkin/GuestRegister.tsx"],
