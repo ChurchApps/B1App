@@ -8,6 +8,7 @@ import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface, fetchCached } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { getSermonEmbed } from "@/helpers/sermonEmbed";
+import { sermonThumbnail } from "@/helpers/sermonList";
 import { SermonJsonLd } from "@/components/seo/SermonJsonLd";
 import { DefaultPageWrapper } from "../../[pageSlug]/components/DefaultPageWrapper";
 import { Animate } from "@churchapps/apphelper/website";
@@ -27,13 +28,18 @@ const loadData = async (sdSlug: string, sermonId: string) => {
   const sermon = Array.isArray(sermons) ? sermons.find((s) => s.id === sermonId) || null : null;
 
   let playlistTitle: string | undefined;
+  let thumbnail = sermon ? sermonThumbnail(sermon) : undefined;
   if (sermon?.playlistId) {
     try {
       const playlists = await fetchCached<PlaylistInterface[]>("/playlists/public/" + config.church.id, "ContentApi", sdSlug);
-      playlistTitle = Array.isArray(playlists) ? playlists.find((p) => p.id === sermon.playlistId)?.title : undefined;
-    } catch { /* playlist name is optional */ }
+      if (Array.isArray(playlists)) {
+        playlistTitle = playlists.find((p) => p.id === sermon.playlistId)?.title;
+        thumbnail = sermonThumbnail(sermon, playlists);
+      }
+    } catch { /* playlist name and image are optional */ }
   }
-  return { config, sermon, playlistTitle };
+  // A sermon without its own image shows its playlist's.
+  return { config, sermon: sermon ? { ...sermon, thumbnail } : null, playlistTitle };
 };
 
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {

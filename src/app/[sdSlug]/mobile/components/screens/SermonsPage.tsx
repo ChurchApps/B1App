@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Box, Button, Skeleton, Typography } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
-import { ApiHelper, Locale } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -14,7 +14,8 @@ import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
 import { formatDate } from "../util";
 import { BackVerb, FilterPills, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, SearchField, StatusBadge, TextLink, Thumb, useSliceView } from "../kit";
-import { MediaFrame, SermonRow, sermonHref, sermonMeta, useChurchSermons } from "../SermonCard";
+import { MediaFrame, SermonRow, sermonHref, sermonMeta, useChurchPlaylists, useChurchSermons } from "../SermonCard";
+import { sermonThumbnail } from "@/helpers/sermonList";
 import { DateHelper } from "@churchapps/helpers";
 
 interface Props {
@@ -94,20 +95,7 @@ export const SermonsPage = ({ config }: Props) => {
 
   const { data: sermons = [], isLoading: sermonsLoading, isError: sermonsError } = useChurchSermons(churchId);
 
-  const { data: playlists = [], isLoading: playlistsLoading, isError: playlistsError } = useQuery<PlaylistInterface[]>({
-    queryKey: ["playlists", churchId],
-    queryFn: async () => {
-      const result = await ApiHelper.getAnonymous(`/playlists/public/${churchId}`, "ContentApi");
-      const list: PlaylistInterface[] = Array.isArray(result)
-        ? result.filter((p: PlaylistInterface) => p && p.id && p.title)
-        : [];
-      list.sort((a, b) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime());
-      return list;
-    },
-    enabled: !!churchId,
-    staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000
-  });
+  const { data: playlists = [], isLoading: playlistsLoading, isError: playlistsError } = useChurchPlaylists(churchId);
 
   const { data: streamConfig } = useQuery<StreamConfigPayload | null>({
     queryKey: ["sermons-stream", keyName],
@@ -225,7 +213,7 @@ export const SermonsPage = ({ config }: Props) => {
             <RowList sx={{ mt: "8px" }}>
               {sermonsLoading
                 ? <RowSkeletons count={5} />
-                : filteredSermons.map((s) => <SermonRow key={s.id} sermon={s} href={sermonHref(s)} />)}
+                : filteredSermons.map((s) => <SermonRow key={s.id} sermon={s} href={sermonHref(s)} playlists={playlists} />)}
             </RowList>
             {!sermonsLoading && filteredSermons.length === 0 && (
               <QuietEmpty sx={{ mt: "12px" }}>{Locale.label(sermons.length ? "mobile.sermons.noMatches" : "mobile.sermons.noSermons")}</QuietEmpty>
@@ -278,7 +266,7 @@ export const SermonsPage = ({ config }: Props) => {
               <MediaFrame
                 href={sermonHref(featuredSermon)}
                 ariaLabel={`${Locale.label("mobile.components.playSermon")}: ${featuredSermon.title || ""}`}
-                src={featuredSermon.thumbnail}
+                src={sermonThumbnail(featuredSermon, playlists)}
                 kicker={playlistTitles.get(featuredSermon.playlistId || "") || formatDate(featuredSermon.publishDate, "short")}
                 title={featuredSermon.title}
                 play
@@ -313,7 +301,7 @@ export const SermonsPage = ({ config }: Props) => {
           >
             {sermons.length === 0
               ? <QuietEmpty>{Locale.label("mobile.sermons.noSermons")}</QuietEmpty>
-              : recent.length > 0 && <RowList>{recent.map((s) => <SermonRow key={s.id} sermon={s} href={sermonHref(s)} />)}</RowList>}
+              : recent.length > 0 && <RowList>{recent.map((s) => <SermonRow key={s.id} sermon={s} href={sermonHref(s)} playlists={playlists} />)}</RowList>}
           </PlateSection>
         )}
 

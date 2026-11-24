@@ -54,6 +54,31 @@ test.describe("Public sermons page", () => {
     await expect(page.locator("body")).toContainText(SEED_SERMONS.YOUTUBE_RECENT.title, { timeout: 15000 });
   });
 
+  test("/sermons/latest redirects to the newest sermon, which shows its playlist image when it has none", async ({ page }) => {
+    const api = await getApi("demo", "ContentApi");
+    const unique = `Latest sermon ${Date.now()}`;
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const saved = await apiCall(api, "post", `${MAIN_API}/content/sermons`, [{ churchId: api.churchId, title: unique, videoType: "youtube", videoData: "dQw4w9WgXcQ", publishDate: yesterday, playlistId: SEED_PLAYLISTS.SUNDAY_SERMONS.id }]);
+    expect(saved.ok()).toBeTruthy();
+    const sermonId = (await saved.json())[0].id as string;
+    try {
+      // The sermon list is cached per church; clear it the way a B1Admin save does.
+      await page.request.post("/api/revalidate/" + DEMO_CHURCH.SUBDOMAIN);
+      await expect.poll(async () => {
+        const res = await page.request.get("/sermons/latest", { maxRedirects: 0 });
+        return res.status() + " " + (res.headers()["location"] || "");
+      }, { timeout: 30000 }).toMatch(new RegExp(`^30[78] .*/sermons/${sermonId}$`));
+
+      await page.goto("/sermons/latest");
+      await expect(page).toHaveURL(new RegExp(`/sermons/${sermonId}$`));
+      await expect(page.locator("h1").filter({ hasText: unique })).toBeVisible({ timeout: 15000 });
+      await expect(page.locator('meta[property="og:image"]').first()).toHaveAttribute("content", /sunday-sermons\.jpg/);
+    } finally {
+      await apiCall(api, "delete", `${MAIN_API}/content/sermons/${sermonId}`);
+      await page.request.post("/api/revalidate/" + DEMO_CHURCH.SUBDOMAIN);
+    }
+  });
+
   test("sermon page advertises the podcast RSS feed", async ({ page }) => {
     await page.goto("/sermons/" + SEED_SERMONS.YOUTUBE_RECENT.id);
     await expect(page.locator("h1").filter({ hasText: SEED_SERMONS.YOUTUBE_RECENT.title }).first()).toBeVisible({ timeout: 15000 });

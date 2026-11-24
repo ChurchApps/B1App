@@ -12,7 +12,7 @@ import { AutoScrollStrip } from "./AutoScrollStrip";
 
 interface Props { element: ElementInterface; churchId: string; }
 
-const MAX_TILES = 12;
+const DEFAULT_TILES = 12;
 
 const whenLine = (o: Occurrence) => {
   const weekday = o.start.toLocaleDateString(undefined, { weekday: "long" });
@@ -24,6 +24,7 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
   const calendarType = element.answers?.calendarType;
   const calendarId = element.answers?.calendarId as string | undefined;
   const tag = ((element.answers?.tag as string | undefined) || "").trim().toLowerCase();
+  const itemCount = Math.max(1, parseInt(String(element.answers?.itemCount ?? ""), 10) || DEFAULT_TILES);
   const [items, setItems] = useState<Occurrence[] | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [copied, setCopied] = useState(false);
@@ -44,11 +45,11 @@ export const UpcomingEventsElement = ({ element, churchId }: Props) => {
       const tagged = (Array.isArray(events) ? events : []).filter((e: EventInterface) => !tag || (e.tags || "").split(",").some((t: string) => t.trim().toLowerCase() === tag));
       const occurrences = buildOccurrences(tagged, now, windowEnd, 1);
       occurrences.sort((a, b) => a.start.getTime() - b.start.getTime());
-      const shown = occurrences.slice(0, MAX_TILES);
+      const shown = occurrences.slice(0, itemCount);
       setItems(shown);
       if (showGroupBadge) loadGroupNames(shown);
     }).catch(() => setItems([]));
-  }, [calendarType, calendarId, churchId, tag, showGroupBadge]);
+  }, [calendarType, calendarId, churchId, tag, showGroupBadge, itemCount]);
 
   // The public group endpoint hides archived and confidential groups, so their events get no badge.
   const loadGroupNames = (occurrences: Occurrence[]) => {

@@ -6,7 +6,8 @@ import { Box } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
-import type { SermonInterface } from "@churchapps/helpers";
+import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
+import { newestSermonsFirst, sermonThumbnail } from "@/helpers/sermonList";
 import { mobileTheme } from "./mobileTheme";
 import { Row, Thumb, hideBrokenImage } from "./kit";
 import { formatDate, formatDuration } from "./util";
@@ -18,15 +19,26 @@ export const useChurchSermons = (churchId?: string) => useQuery<SermonInterface[
   queryKey: ["sermons", churchId],
   queryFn: async () => {
     const result = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
-    const list: SermonInterface[] = Array.isArray(result)
-      ? result.filter((s: SermonInterface) => s && s.id && s.title)
+    return newestSermonsFirst(result);
+  },
+  enabled: !!churchId,
+  staleTime: 5 * 60 * 1000,
+  gcTime: 15 * 60 * 1000
+});
+
+export const useChurchPlaylists = (churchId?: string) => useQuery<PlaylistInterface[]>({
+  queryKey: ["playlists", churchId],
+  queryFn: async () => {
+    const result = await ApiHelper.getAnonymous(`/playlists/public/${churchId}`, "ContentApi");
+    const list: PlaylistInterface[] = Array.isArray(result)
+      ? result.filter((p: PlaylistInterface) => p && p.id && p.title)
       : [];
     list.sort((a, b) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime());
     return list;
   },
   enabled: !!churchId,
-  staleTime: 5 * 60 * 1000,
-  gcTime: 15 * 60 * 1000
+  staleTime: 10 * 60 * 1000,
+  gcTime: 30 * 60 * 1000
 });
 
 export const sermonHref = (sermon: SermonInterface, params?: Record<string, string | undefined>) => {
@@ -43,10 +55,10 @@ export const sermonMeta = (sermon: SermonInterface) =>
     sermonAudioUrl(sermon) && !sermonHasVideo(sermon) ? Locale.label("mobile.sermons.audio") : ""
   ].filter(Boolean).join(" · ");
 
-export const SermonRow = ({ sermon, href, leading, trailing }: { sermon: SermonInterface; href: string; leading?: React.ReactNode; trailing?: React.ReactNode }) => (
+export const SermonRow = ({ sermon, href, leading, trailing, playlists }: { sermon: SermonInterface; href: string; leading?: React.ReactNode; trailing?: React.ReactNode; playlists?: PlaylistInterface[] }) => (
   <Row
     href={href}
-    leading={leading ?? <Thumb src={sermon.thumbnail?.trim() || undefined} />}
+    leading={leading ?? <Thumb src={sermonThumbnail(sermon, playlists)} />}
     title={sermon.title || Locale.label("mobile.components.untitledSermon")}
     subtitle={sermonMeta(sermon) || undefined}
     trailing={trailing}

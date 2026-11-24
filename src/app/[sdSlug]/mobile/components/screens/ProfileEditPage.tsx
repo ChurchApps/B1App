@@ -340,6 +340,19 @@ export const ProfileEditPage = ({ config }: Props) => {
     }
   };
 
+  // Clearing photoUpdated is what takes the photo down; a staff-reviewed church gets a "photo" change with an empty value.
+  const handleRemovePhoto = () => {
+    setPhotoError(null);
+    setPerson((p) => (p ? { ...p, photo: "", photoUpdated: undefined } : p));
+    setModifiedFields((prev) => {
+      const next = new Set(prev);
+      // Nothing to remove if the saved profile never had a photo; only a newly picked one is being dropped.
+      if (initial?.photo) next.add("photo");
+      else next.delete("photo");
+      return next;
+    });
+  };
+
   const handleFamilyPhotoSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
@@ -724,9 +737,12 @@ export const ProfileEditPage = ({ config }: Props) => {
           {displayInitial}
         </Avatar>
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Button variant="outlined" onClick={handlePhotoClick} startIcon={<PhotoCameraOutlinedIcon />}>
-            {Locale.label("mobile.profileEdit.changePhoto")}
-          </Button>
+          <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "8px 16px" }}>
+            <Button variant="outlined" onClick={handlePhotoClick} startIcon={<PhotoCameraOutlinedIcon />}>
+              {Locale.label("mobile.profileEdit.changePhoto")}
+            </Button>
+            {person.photo && <TextLink danger onClick={handleRemovePhoto} data-testid="profile-remove-photo">{Locale.label("mobile.profileEdit.removePhoto")}</TextLink>}
+          </Box>
           <Typography sx={{ fontSize: 12.5, color: tc.textSecondary, mt: "6px" }}>{Locale.label("mobile.profileEdit.photoHint")}</Typography>
           {errorText(photoError)}
           <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleFileSelected} />

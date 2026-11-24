@@ -13,7 +13,8 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
 import { PageHead, Plate, PlateSection, QuietEmpty, RowList, TextLink } from "../kit";
-import { MediaFrame, SermonRow, sermonHref, sermonMeta, useChurchSermons } from "../SermonCard";
+import { MediaFrame, SermonRow, sermonHref, sermonMeta, useChurchPlaylists, useChurchSermons } from "../SermonCard";
+import { sermonThumbnail } from "@/helpers/sermonList";
 import { buildEmbedUrl, buildExternalUrl, sermonAudioUrl, sermonDownloadHref } from "../sermonAudio";
 
 interface Props {
@@ -80,6 +81,8 @@ export const SermonDetail = ({ id, config }: Props) => {
   });
 
   const { data: churchSermons = [] } = useChurchSermons(playlistId ? churchId : undefined);
+  // Series image stands in for sermons that have none of their own.
+  const { data: playlists = [] } = useChurchPlaylists(playlistId ? churchId : undefined);
   const inSeries = useMemo(() => churchSermons.filter((s) => s.playlistId === playlistId && s.id !== id).slice(0, 3), [churchSermons, playlistId, id]);
 
   const embedUrl = useMemo(() => buildEmbedUrl(sermon), [sermon]);
@@ -170,7 +173,7 @@ export const SermonDetail = ({ id, config }: Props) => {
             )
             : (
               <MediaFrame
-                src={sermon.thumbnail}
+                src={sermonThumbnail(sermon, playlists)}
                 kicker={playlistTitle || undefined}
                 title={sermonTitle}
                 play={canPlay}
@@ -233,7 +236,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               action={<TextLink href={seriesHref}>{Locale.label("mobile.sermons.allInSeries")}</TextLink>}
             >
               {inSeries.length > 0
-                ? <RowList>{inSeries.map((s) => <SermonRow key={s.id} sermon={s} href={sermonHref(s, { playlistId, playlistTitle: playlistTitle || undefined })} />)}</RowList>
+                ? <RowList>{inSeries.map((s) => <SermonRow key={s.id} sermon={s} href={sermonHref(s, { playlistId, playlistTitle: playlistTitle || undefined })} playlists={playlists} />)}</RowList>
                 : <QuietEmpty>{Locale.label("mobile.sermons.noOtherSermons")}</QuietEmpty>}
             </PlateSection>
           )}

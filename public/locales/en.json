@@ -1014,6 +1014,7 @@
       "photo": "Photo",
       "photoAndName": "Photo & name",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
+      "removePhoto": "Remove photo",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",

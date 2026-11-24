@@ -202,6 +202,23 @@ test.describe("Mobile content screens", () => {
     await expect(page.getByRole("region", { name: "In this series" }).getByRole("link", { name: "All in series" })).toHaveAttribute("href", /\/mobile\/playlist\/PLY00000001/);
   });
 
+  test("a sermon without its own image shows its series image", async ({ page }) => {
+    const api = await getApi("demo", "ContentApi");
+    const contentUrl = (path: string) => `${process.env.API_BASE || "http://localhost:8084"}/content${path}`;
+    const unique = `No image sermon ${Date.now()}`;
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const saved = await apiCall(api, "post", contentUrl("/sermons"), [{ churchId: api.churchId, title: unique, videoType: "youtube", videoData: "dQw4w9WgXcQ", publishDate: yesterday, playlistId: SEED_PLAYLISTS.SUNDAY_SERMONS.id }]);
+    expect(saved.ok()).toBeTruthy();
+    const sermonId = (await saved.json())[0].id as string;
+    try {
+      await page.goto(`/mobile/sermons/${sermonId}`);
+      await expect(page.getByRole("heading", { level: 1, name: unique })).toBeVisible({ timeout: 15000 });
+      await expect(page.getByRole("button", { name: "Play sermon" }).locator("img")).toHaveAttribute("src", /sunday-sermons\.jpg/);
+    } finally {
+      await apiCall(api, "delete", contentUrl(`/sermons/${sermonId}`));
+    }
+  });
+
   test("an audio-only sermon plays and downloads its podcast audio", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     const api = await getApi("demo", "ContentApi");
