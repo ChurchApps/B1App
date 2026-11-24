@@ -259,7 +259,9 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
               onPay={(p) => reg.submit(p)}
               onFinalized={(result) => reg.finishConfirm(result)}
               onBack={() => reg.setStep(reg.hasSelections ? "selections" : "members")}
-              onPayLater={() => reg.submit()}
+              onPayLater={() => reg.submit({ payLater: true })}
+              allowPayLater={!!event.allowPayLater}
+              dueNow={reg.dueNow}
             />
           </PlateSection>
           {eventSection}

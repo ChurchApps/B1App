@@ -108,7 +108,9 @@ const RegistrationsPageInner = ({ config: _config }: Props) => {
             )}
             <Box sx={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
               <TextLink onClick={() => setEditReg(reg)}>{Locale.label("registration.mine.edit")}</TextLink>
-              <TextLink danger onClick={() => setCancelId(reg.id || null)}>{Locale.label("registration.mine.cancel")}</TextLink>
+              {(reg.event as RegistrationEvent | undefined)?.allowSelfCancel !== false && (
+                <TextLink danger onClick={() => setCancelId(reg.id || null)}>{Locale.label("registration.mine.cancel")}</TextLink>
+              )}
             </Box>
           </Box>
         )}

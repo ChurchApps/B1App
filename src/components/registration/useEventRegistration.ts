@@ -9,6 +9,7 @@ export interface RegType {
   name: string;
   description?: string;
   price: number | null;
+  depositAmount?: number | null;
   capacity: number | null;
   remainingCapacity: number | null;
   minAgeYears?: number | null;
@@ -43,6 +44,7 @@ export interface RegistrationPayment {
   type?: string;
   currency?: string;
   captchaPass?: string;
+  payLater?: boolean;
 }
 
 export interface WizardMember {
@@ -60,7 +62,7 @@ export interface HouseholdMember {
 }
 
 // Events carry the gateway currency when the church has one configured.
-export type RegistrationEvent = EventInterface & { currency?: string };
+export type RegistrationEvent = EventInterface & { currency?: string; allowSelfCancel?: boolean; allowPayLater?: boolean };
 
 // What /registrations/register returns: the registration, or a refusal; a 3DS charge adds a provider payload.
 export interface RegistrationResult extends RegistrationInterface {
@@ -125,6 +127,12 @@ export const apiPut = (path: string, data: unknown, apiName: string): Promise<un
 };
 
 const num = (v: number | string | null | undefined): number => (v == null || isNaN(Number(v)) ? 0 : Number(v));
+
+// Mirrors the Api: a type's deposit, when below its price, is what checkout charges per attendee.
+const chargeNowPrice = (t: RegType): number => {
+  const deposit = num(t.depositAmount);
+  return deposit > 0 && deposit < num(t.price) ? deposit : num(t.price);
+};
 
 const ageYears = (birthDate?: Date | string): number | null => {
   if (!birthDate) return null;
@@ -286,6 +294,21 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   }, [appliedCoupon, subtotal]);
 
   const total = Math.max(0, Math.round((subtotal - discountAmount) * 100) / 100);
+
+  const dueNow = useMemo(() => {
+    let sum = 0;
+    if (hasTypes) {
+      for (const m of buildMembersPayload()) {
+        const t = m.registrationTypeId ? typeMap.get(m.registrationTypeId) : undefined;
+        if (t) sum += chargeNowPrice(t);
+      }
+    }
+    for (const s of selections) sum += num(s.price) * (selectionQty[s.id] || 0);
+    return Math.min(total, Math.round(sum * 100) / 100);
+
+  }, [
+    types, selections, members, primaryTypeId, selectionQty, primaryFirstName, primaryLastName, total
+  ]);
 
   const isWaitlistMode = useMemo(() => !!event?.waitlistEnabled, [event]);
 
@@ -529,6 +552,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
     subtotal,
     discountAmount,
     total,
+    dueNow,
     needsPayment,
     summaryLines,
     isWaitlistMode,
