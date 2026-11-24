@@ -187,9 +187,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@churchapps/apphelper@npm:^1.11.6":
-  version: 1.11.6
-  resolution: "@churchapps/apphelper@npm:1.11.6"
+"@churchapps/apphelper@npm:^1.13.0":
+  version: 1.13.0
+  resolution: "@churchapps/apphelper@npm:1.13.0"
   dependencies:
     "@emotion/cache": "npm:^11.14.0"
     "@emotion/react": "npm:^11.14.0"
@@ -251,7 +251,7 @@ __metadata:
       optional: true
     react-google-recaptcha:
       optional: true
-  checksum: 10c0/83bf9267797e87e1efa52f7f11a49a670976f6c20e1a5da2c0b1b50d1b7b492da82f311e33fe6f7b17ba99a79ee6338276b32286e05f070dd0f1553ba2831b7f
+  checksum: 10c0/6d9b01ab679cc5ec081e3a71652e3dd500a9d02efb70b1b90fe1a58d765de9d8d42ff0ff6d18731c14cd7949274ccb61a73b3df025e84cf421877e3d4144d983
   languageName: node
   linkType: hard
 
@@ -262,9 +262,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@churchapps/helpers@npm:^2.16.1":
-  version: 2.16.1
-  resolution: "@churchapps/helpers@npm:2.16.1"
+"@churchapps/helpers@npm:^2.17.0":
+  version: 2.17.0
+  resolution: "@churchapps/helpers@npm:2.17.0"
   dependencies:
     dayjs: "npm:^1.11.20"
   peerDependencies:
@@ -272,7 +272,7 @@ __metadata:
   peerDependenciesMeta:
     rrule:
       optional: true
-  checksum: 10c0/09fecb251965278239b0830229ca5611020e6b0b1961be282927ab0c1200110d0be695b6a69612ec735123702a09d63195f6b02745b1bfdc5ffa48bc926d0afd
+  checksum: 10c0/6b383454724494d5bf0dccb6d0bd0aeb03ea652575cbb07f7d58aaff25f679a824c2aa26a6387ceb0685c140dfdb5ce8eef30fc0af0c405d774392e2a7aa3a4d
   languageName: node
   linkType: hard
 
@@ -4115,9 +4115,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "b1-app@workspace:."
   dependencies:
-    "@churchapps/apphelper": "npm:^1.11.6"
+    "@churchapps/apphelper": "npm:^1.13.0"
     "@churchapps/content-providers": "npm:^0.17.0"
-    "@churchapps/helpers": "npm:^2.16.1"
+    "@churchapps/helpers": "npm:^2.17.0"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
     "@mui/icons-material": "npm:^7.3.11"

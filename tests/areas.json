@@ -52,7 +52,7 @@
     },
     "auth": {
       "src": ["src/app/[sdSlug]/(public)/login/**", "src/app/[sdSlug]/(public)/logout/**", "src/app/[sdSlug]/mobile/logout/**", "src/app/[sdSlug]/mobile/components/screens/LoginPage.tsx", "src/app/[sdSlug]/mobile/hooks/hydrateUserSession.ts", "src/components/Login.tsx", "src/components/LoginClient.tsx", "src/components/AuthGuard.tsx"],
-      "specs": ["auth-flow.spec.ts", "two-factor-login.spec.ts", "mobile-logout.spec.ts", "mobile-session-survives-refresh.spec.ts", "mobile-community-contact-visibility.spec.ts", "hide-public-site.spec.ts"]
+      "specs": ["auth-flow.spec.ts", "two-factor-login.spec.ts", "mobile-login-email-code.spec.ts", "mobile-logout.spec.ts", "mobile-session-survives-refresh.spec.ts", "mobile-community-contact-visibility.spec.ts", "hide-public-site.spec.ts"]
     },
     "mobileGroups": {
       "src": ["src/app/[sdSlug]/mobile/components/screens/GroupsPage.tsx", "src/app/[sdSlug]/mobile/components/details/GroupDetail.tsx", "src/app/[sdSlug]/mobile/components/details/RequestToJoinDialog.tsx", "src/app/[sdSlug]/mobile/components/group/**", "src/components/eventCalendar/**"],
@@ -83,7 +83,7 @@
       "specs": ["mobile-request-event.spec.ts", "events-location.spec.ts"]
     },
     "donate": {
-      "src": ["src/app/[sdSlug]/mobile/components/screens/DonatePage.tsx", "src/app/[sdSlug]/mobile/donate/**", "src/app/[sdSlug]/(public)/[pageSlug]/components/DonatePage.tsx", "src/components/donate/**", "src/app/[sdSlug]/mobile/helpers/churchCurrency.ts", "src/app/[sdSlug]/mobile/helpers/givingYears.ts"],
+      "src": ["src/app/[sdSlug]/mobile/components/screens/DonatePage.tsx", "src/app/[sdSlug]/mobile/donate/**", "src/app/[sdSlug]/(public)/[pageSlug]/components/DonatePage.tsx", "src/components/donate/**", "src/app/[sdSlug]/mobile/helpers/churchCurrency.ts", "src/app/[sdSlug]/mobile/helpers/givingYears.ts", "src/app/[sdSlug]/mobile/helpers/memberDonateUrl.ts", "src/app/[sdSlug]/mobile/helpers/statementPeriod.ts"],
       "specs": ["mobile-donate*.spec.ts", "mobile-campaigns.spec.ts", "giving-paypal-buttons.spec.ts", "public-built-in.spec.ts"]
     },
     "serving": {

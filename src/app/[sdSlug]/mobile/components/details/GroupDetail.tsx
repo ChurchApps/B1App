@@ -22,9 +22,12 @@ import { GroupChatModal, type ChatSubTab } from "../group/GroupChatModal";
 import { CreateEventModal } from "../group/CreateEventModal";
 import { GroupPlansTab } from "../group/GroupPlansTab";
 import { GroupLessonTakeHome } from "../group/GroupLessonTakeHome";
+import { GroupMuteSwitch } from "../group/GroupMuteSwitch";
 import { GroupFormsList, GroupFormsTab, useGroupFormAnswers, useLinkedForms } from "../group/GroupFormsTab";
 import { AnonymousGroupView } from "../group/AnonymousGroupView";
+import { ShareGroupAction } from "../group/ShareGroupAction";
 import { RequestToJoinDialog } from "./RequestToJoinDialog";
+import { GroupJoinRequests } from "../group/GroupJoinRequests";
 
 interface Props {
   id: string;
@@ -426,6 +429,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           </Button>
         )}
         {renderJoinAction()}
+        <ShareGroupAction group={group} />
       </PageHead>
     </>
   );
@@ -546,6 +550,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
         </PlateSection>
       )}
       <PlateSection title={Locale.label("mobile.details.membersTab")} action={!membersUnavailable && allLink("members", Locale.label("mobile.group.allMembers"))}>
+        {isLeader && groupId && <GroupJoinRequests groupId={groupId} onApproved={refreshMembers} />}
         {renderMembersTeaser()}
       </PlateSection>
       <PlateSection title={Locale.label("mobile.details.tabResources")} action={allLink("resources", Locale.label("mobile.group.allResources"))}>
@@ -561,6 +566,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
       {hasAbout && aboutSection}
       {isMember && currentPersonId && (
         <PlateSection>
+          {groupId && <GroupMuteSwitch groupId={groupId} />}
           <TextLink danger disabled={joining} onClick={() => setLeaveDialogOpen(true)} data-testid="leave-group-button">{Locale.label("mobile.details.leaveGroup")}</TextLink>
         </PlateSection>
       )}
@@ -573,6 +579,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     const list = (members || []).filter((m) => !q || memberName(m).toLowerCase().includes(q));
     return (
       <PlateSection>
+        {isLeader && groupId && <GroupJoinRequests groupId={groupId} onApproved={refreshMembers} />}
         <SearchField value={memberSearch} onChange={setMemberSearch} label={Locale.label("mobile.screens.searchMembers")} />
         {members === null && <Box sx={{ mt: "12px" }}>{[0, 1, 2].map((k) => <Skeleton key={k} variant="rounded" height={48} sx={{ mb: "8px" }} />)}</Box>}
         {members !== null && list.length === 0 && <QuietEmpty sx={{ mt: "12px" }}>{members.length === 0 ? Locale.label("mobile.details.noMembersYet") : Locale.label("mobile.screens.noMembersFound")}</QuietEmpty>}

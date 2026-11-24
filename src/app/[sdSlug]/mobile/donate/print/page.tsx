@@ -9,6 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { loadChurchAppearance } from "../../loadChurchAppearance";
 import { memberGivingYearLimit } from "../../helpers/givingYears";
+import { currentStatementYear, parseStartMonth, statementRangeDates, statementYearLabel, statementYearOf } from "../../helpers/statementPeriod";
 
 type Params = Promise<{ sdSlug: string; }>;
 
@@ -18,11 +19,18 @@ export default function PrintPage({ params }: { params: Params }) {
   const router = useRouter();
   const [sdSlug, setSdSlug] = useState<string>("");
   const [accentColor, setAccentColor] = useState<string>(DEFAULT_ACCENT);
-  let currYear = new Date().getFullYear();
   const searchparams = useSearchParams();
   const yearParam = parseInt(searchparams.get("year") || "", 10);
-  if (yearParam > 1900 && yearParam <= currYear) currYear = yearParam;
-  else if (searchparams.get("prev") === "1") currYear = currYear - 1;
+  const prevParam = searchparams.get("prev") === "1";
+  // Statement years follow the church's "Statement year starts in" month (January unless set), read with the settings.
+  const [startMonth, setStartMonth] = useState<number>(1);
+  const pickYear = (month: number) => {
+    const thisYear = currentStatementYear(month);
+    if (yearParam > 1900 && yearParam <= thisYear) return yearParam;
+    return prevParam ? thisYear - 1 : thisYear;
+  };
+  const currYear = pickYear(startMonth);
+  const yearLabel = statementYearLabel(currYear, startMonth);
   const context = useContext(UserContext);
 
   useEffect(() => {
@@ -61,9 +69,12 @@ export default function PrintPage({ params }: { params: Params }) {
     const churchId = context?.userChurch?.church?.id;
     const settings: Record<string, string> = (churchId && await ApiHelper.get("/settings/public/" + churchId, "MembershipApi").catch((): null => null)) || {};
     setChurchSettings(settings);
+    const month = parseStartMonth(settings.statementYearStartMonth);
+    const year = pickYear(month);
+    setStartMonth(month);
     if (settings.currency) setCurrency(settings.currency.toLowerCase());
     preloadLogo(settings.logoLight || "");
-    if (currYear > memberGivingYearLimit(settings)) {
+    if (year > memberGivingYearLimit(settings)) {
       setBlocked(true);
       return;
     }
@@ -77,10 +88,7 @@ export default function PrintPage({ params }: { params: Params }) {
       ApiHelper.get("/donations/my", "GivingApi").then((d: DonationInterface[]) => {
         const result: DonationInterface[] = [];
         d.forEach((don: DonationInterface) => {
-          const donDate = DateHelper.toDate(don.donationDate);
-          if (donDate.getFullYear() === currYear) {
-            result.push(don);
-          }
+          if (statementYearOf(DateHelper.toDate(don.donationDate), month) === year) result.push(don);
         });
         setDonations(result);
       })
@@ -221,6 +229,13 @@ export default function PrintPage({ params }: { params: Params }) {
   useEffect(() => { if (context?.user) loadData(); }, [context?.user]);
 
   const churchName = context?.userChurch?.church?.name || "";
+  // A church-written disclaimer replaces the standard sentence; React prints it as plain text.
+  const disclaimer = (churchSettings.statementDisclaimer?.trim() || Locale.label("mobile.giving.statementDisclaimer")).split("{churchName}").join(churchName);
+  const periodText = () => {
+    if (startMonth === 1) return `Period: Jan 1 - Dec 31, ${currYear}`;
+    const { start, end } = statementRangeDates(currYear, startMonth);
+    return `Period: ${DateHelper.prettyDate(start)} - ${DateHelper.prettyDate(end)}`;
+  };
 
   if (blocked) return <AuthGuard sdSlug={sdSlug}><p style={{ padding: "24px", fontFamily: "Roboto, sans-serif" }}>{Locale.label("mobile.giving.statementUnavailable")}</p></AuthGuard>;
 
@@ -237,8 +252,8 @@ export default function PrintPage({ params }: { params: Params }) {
         <div className="statement-page">
           <div style={{ margin: "0px 0px 32px 0px", padding: "0px", width: "100%", textAlign: "center" }}>
             {churchSettings.logoLight && <img src={churchSettings.logoLight} alt={churchName} data-testid="print-church-logo" style={{ display: "block", maxHeight: 60, maxWidth: 240, objectFit: "contain", margin: "0 auto 16px" }} />}
-            <h1>{currYear} Annual Giving Statement</h1>
-            <p>Period: Jan 1 - Dec 31, {currYear}</p>
+            <h1>{yearLabel} Annual Giving Statement</h1>
+            <p data-testid="statement-period">{periodText()}</p>
             <p>Issued: {getDate()}</p>
           </div>
           <div style={{ margin: "0px", padding: "0px", borderTop: "2px solid var(--print-accent)", width: "100%" }}></div>
@@ -312,8 +327,8 @@ export default function PrintPage({ params }: { params: Params }) {
           </div>
 
           <div style={{ marginTop: "40px", padding: "16px", backgroundColor: "#F8F9FA", borderRadius: "4px", fontSize: "12px", color: "#666", lineHeight: 1.6 }}>
-            <p data-testid="statement-note" style={{ margin: 0 }}><strong>{Locale.label("mobile.giving.statementNoteLabel")}</strong> {Locale.label("mobile.giving.statementNote").replace("{churchName}", churchName).replace("{year}", String(currYear))}</p>
-            <p data-testid="statement-disclaimer" style={{ fontSize: "10px", margin: "4px 0 0 0" }}>{Locale.label("mobile.giving.statementDisclaimer").split("{churchName}").join(churchName)}</p>
+            <p data-testid="statement-note" style={{ margin: 0 }}><strong>{Locale.label("mobile.giving.statementNoteLabel")}</strong> {Locale.label("mobile.giving.statementNote").replace("{churchName}", churchName).replace("{year}", yearLabel)}</p>
+            <p data-testid="statement-disclaimer" style={{ fontSize: "10px", margin: "4px 0 0 0", whiteSpace: "pre-line" }}>{disclaimer}</p>
             {churchSettings.givingNote && <p data-testid="statement-giving-note" style={{ whiteSpace: "pre-line", margin: "8px 0 0 0" }}>{churchSettings.givingNote}</p>}
           </div>
         </div>
