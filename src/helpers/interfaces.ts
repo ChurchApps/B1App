@@ -151,7 +151,8 @@ export interface ArrangementInterface {
   songId?: string,
   songDetailId?: string,
   name?: string,
-  lyrics?: string
+  lyrics?: string,
+  sequence?: string
 }
 
 export interface ArrangementKeyInterface {
