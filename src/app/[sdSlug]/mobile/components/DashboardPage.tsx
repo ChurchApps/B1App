@@ -28,6 +28,8 @@ import { LINK_VIEW_COUNTS_KEY, linkId, linkTarget, openExternal } from "../helpe
 import { useMyAttendance, useMyCards, useMyFormSubmissions, useMyTasks } from "../helpers/myRecords";
 import { AttendanceTeaser, EventsTeaser, FormsTeaser, GivingTeaser, GroupsTeaser, ServingTeaser, TasksTeaser, useGivingSummary, useLatestPosts, useMyGroups, usePublicRegisterableEvents, useUpcomingEvents, useUpcomingServing } from "./HomeTeasers";
 import { NewsCard, PostSheet } from "./NewsCard";
+import { useChurchPlaylists } from "./SermonCard";
+import { newestSermonsFirst, sermonThumbnail } from "@/helpers/sermonList";
 import type { PostInterface } from "@/helpers/interfaces";
 
 interface Props {
@@ -128,17 +130,14 @@ export const DashboardPage = ({ config }: Props) => {
     queryKey: ["sermons", churchId],
     queryFn: async () => {
       const result = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
-      const list: SermonInterface[] = Array.isArray(result)
-        ? result.filter((s: SermonInterface) => s && s.id && s.title)
-        : [];
-      list.sort((a, b) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime());
-      return list;
+      return newestSermonsFirst(result);
     },
     enabled: !!churchId && hasSermonsLink,
     staleTime: 5 * 60 * 1000,
     gcTime: 15 * 60 * 1000
   });
   const latest = hasSermonsLink ? sermons[0] : undefined;
+  const { data: playlists = [] } = useChurchPlaylists(latest?.playlistId && !latest.thumbnail?.trim() ? churchId : undefined);
 
   const signedIn = !!(context?.user);
   const has = (type: string) => signedIn && allLinks.some((l) => l.linkType === type);
@@ -284,7 +283,7 @@ export const DashboardPage = ({ config }: Props) => {
       <Row
         href={`/mobile/sermons/${latest.id}${latest.title ? `?title=${encodeURIComponent(latest.title)}` : ""}`}
         leading={(
-          <Thumb src={latest.thumbnail || undefined}>
+          <Thumb src={sermonThumbnail(latest, playlists)}>
             <PlayArrowIcon sx={{ position: "absolute", left: 6, bottom: 4, fontSize: 20, color: "#fff" }} />
           </Thumb>
         )}
