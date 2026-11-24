@@ -159,6 +159,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   const [formSubmissionId, setFormSubmissionId] = useState<string | undefined>(undefined);
   const [atCapacity, setAtCapacity] = useState(false);
   const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([]);
+  const [registeredPersonIds, setRegisteredPersonIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (!churchId || !eventId) return;
@@ -187,6 +188,20 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
       .catch(() => setHouseholdMembers([]));
   }, [householdId, selfId]);
 
+  const signedInId = isLoggedIn ? selfId : undefined;
+  useEffect(() => {
+    if (!signedInId || !eventId) {
+      setRegisteredPersonIds([]);
+      return;
+    }
+    ApiHelper.get("/registrations/event/" + eventId + "/household", "ContentApi")
+      .then((data: { personIds?: string[] }) => setRegisteredPersonIds(Array.isArray(data?.personIds) ? data.personIds : []))
+      .catch(() => setRegisteredPersonIds([]));
+  }, [signedInId, eventId]);
+
+  const isAlreadyRegistered = (personId?: string) => !!personId && registeredPersonIds.includes(personId);
+  const selfAlreadyRegistered = isAlreadyRegistered(selfId);
+
   const hasTypes = types.length > 0;
   const hasSelections = selections.length > 0;
   const typeMap = useMemo(() => new Map(types.map((t) => [t.id, t])), [types]);
@@ -213,6 +228,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   const isHouseholdMemberSelected = (personId: string) => members.some((m) => m.personId === personId);
 
   const toggleHouseholdMember = (hm: HouseholdMember) => {
+    if (isAlreadyRegistered(hm.id)) return;
     setMembers((prev) => (prev.some((m) => m.personId === hm.id)
       ? prev.filter((m) => m.personId !== hm.id)
       : [...prev, { firstName: hm.firstName, lastName: hm.lastName, personId: hm.id, registrationTypeId: ageFitTypeId(hm.birthDate) }]));
@@ -305,6 +321,10 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
         setError(Locale.label("registration.errors.emailRequired"));
         return false;
       }
+    }
+    if (selfAlreadyRegistered) {
+      setError(Locale.label("registration.errors.alreadyRegistered"));
+      return false;
     }
     if (hasTypes && !primaryTypeId) {
       setError(Locale.label("registration.errors.typeRequired"));
@@ -409,6 +429,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   const mapError = (result: RegistrationResult | { status?: string; error?: string } | null): string => {
     if (result?.status === "type-full") return Locale.label("registration.errors.typeFull");
     if (result?.status === "selection-full") return Locale.label("registration.errors.selectionFull");
+    if (result?.status === "already-registered") return Locale.label("registration.errors.memberAlreadyRegistered");
     return result?.error || Locale.label("registration.errors.registrationFailed");
   };
 
@@ -487,6 +508,8 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
     updateMember,
     householdMembers,
     isHouseholdMemberSelected,
+    isAlreadyRegistered,
+    selfAlreadyRegistered,
     toggleHouseholdMember,
     selectionQty,
     setQuantity,
