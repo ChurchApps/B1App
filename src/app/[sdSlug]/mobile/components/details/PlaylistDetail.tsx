@@ -102,8 +102,8 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     );
   }
 
-  // A series reads start to finish, so the rows run oldest first.
-  const ordered = sermons ? [...sermons].reverse() : null;
+  // Newest first, like every other sermon list; Play from Start still opens the oldest.
+  const ordered = sermons;
   const countLabel = sermons && sermons.length > 0
     ? `${sermons.length} ${sermons.length !== 1 ? Locale.label("mobile.details.sermonPlural") : Locale.label("mobile.details.sermonSingular")}`
     : "";
@@ -119,7 +119,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
       </Box>
       <PageHead title={seriesTitle} lede={lede || undefined}>
         {ordered && ordered.length > 0 && (
-          <Button variant="contained" component={Link} href={sermonUrl(ordered[0])} startIcon={<PlayArrowIcon />}>
+          <Button variant="contained" component={Link} href={sermonUrl(ordered[ordered.length - 1])} startIcon={<PlayArrowIcon />}>
             {Locale.label("mobile.sermons.playFromStart")}
           </Button>
         )}
