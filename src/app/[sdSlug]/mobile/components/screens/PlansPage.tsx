@@ -167,12 +167,12 @@ export const PlansPage = ({ config: _config }: Props) => {
   const thisYear = startOfToday.getFullYear();
   const pastThisYear = pastRows.filter((r) => r.serviceDate.getFullYear() === thisYear);
 
-  const respond = async (row: AssignmentRow, action: "accept" | "decline") => {
+  const respond = async (row: AssignmentRow, action: "accept" | "decline", declineReason = "") => {
     if (!row.assignmentId || respondingId) return;
     setRespondingId(row.assignmentId);
     setRespondError("");
     try {
-      await ApiHelper.post(`/assignments/${action}/${row.assignmentId}`, [], "DoingApi");
+      await ApiHelper.post(`/assignments/${action}/${row.assignmentId}`, action === "decline" ? { declineReason } : [], "DoingApi");
       await queryClient.invalidateQueries({ queryKey: assignmentsKey });
     } catch (err) {
       setRespondError((err as Error | undefined)?.message || Locale.label("mobile.details.unableToRespond").replace("{}", action));
@@ -304,7 +304,7 @@ export const PlansPage = ({ config: _config }: Props) => {
           >
             {needsReply.map(renderNeedsReply)}
             {respondError && <Typography role="alert" sx={{ mt: "10px", fontSize: 13.5, color: tc.error }}>{respondError}</Typography>}
-            <ConfirmDeclineSheet open={!!declineRow} onClose={() => setDeclineRow(null)} onConfirm={() => { if (declineRow) respond(declineRow, "decline"); }} />
+            <ConfirmDeclineSheet open={!!declineRow} onClose={() => setDeclineRow(null)} onConfirm={(reason) => { if (declineRow) respond(declineRow, "decline", reason); }} />
           </PlateSection>
         )}
         <PlateSection

@@ -203,11 +203,11 @@ export const ServingTeaser = ({ upcoming, queryKey }: ReturnType<typeof useUpcom
   const needsReply = upcoming.filter((a) => isStatus(a, "unconfirmed"));
   const rows = (needsReply.length ? needsReply : upcoming).slice(0, 2);
 
-  const respond = async (a: UpcomingAssignment, action: "accept" | "decline") => {
+  const respond = async (a: UpcomingAssignment, action: "accept" | "decline", declineReason = "") => {
     setBusyId(a.assignmentId);
     setError("");
     try {
-      await ApiHelper.post(`/assignments/${action}/${a.assignmentId}`, [], "DoingApi");
+      await ApiHelper.post(`/assignments/${action}/${a.assignmentId}`, action === "decline" ? { declineReason } : [], "DoingApi");
       await Promise.all([
         queryClient.invalidateQueries({ queryKey }),
         queryClient.invalidateQueries({ queryKey: ["/assignments/my"] })
@@ -245,7 +245,7 @@ export const ServingTeaser = ({ upcoming, queryKey }: ReturnType<typeof useUpcom
         })}
       </RowList>
       {error && <Typography sx={{ color: mobileTheme.colors.error, fontSize: 14, mt: "6px" }}>{error}</Typography>}
-      <ConfirmDeclineSheet open={!!declineTarget} onClose={() => setDeclineTarget(null)} onConfirm={() => { if (declineTarget) respond(declineTarget, "decline"); }} />
+      <ConfirmDeclineSheet open={!!declineTarget} onClose={() => setDeclineTarget(null)} onConfirm={(reason) => { if (declineTarget) respond(declineTarget, "decline", reason); }} />
     </PlateSection>
   );
 };
