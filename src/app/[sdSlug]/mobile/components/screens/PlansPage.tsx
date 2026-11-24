@@ -14,6 +14,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { BlockoutDatesSection } from "../plans/BlockoutDatesSection";
+import { SchedulingPreferencesSection } from "../plans/SchedulingPreferencesSection";
 import { ConfirmDeclineSheet } from "../ConfirmDeclineSheet";
 import { BackVerb, FilterPills, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
 
@@ -316,6 +317,7 @@ export const PlansPage = ({ config: _config }: Props) => {
           )}
         </PlateSection>
         {loggedIn && <BlockoutDatesSection enabled={loggedIn} />}
+        {loggedIn && <SchedulingPreferencesSection enabled={loggedIn} />}
         <PlateSection
           title={Locale.label("mobile.screens.tabPast")}
           action={<TextLink onClick={() => setView("past")}>{Locale.label("mobile.serving.pastAssignments")}</TextLink>}
