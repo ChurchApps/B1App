@@ -455,6 +455,7 @@
       "statementNote": "This statement summarizes all contributions received by {churchName} during {year}.",
       "statementNoteLabel": "Note:",
       "statementUnavailable": "This giving statement isn't available. Contact your church for a copy.",
+      "taxId": "Tax ID:",
       "years": "Years"
     },
     "group": {

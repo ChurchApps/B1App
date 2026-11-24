@@ -342,7 +342,8 @@ test.describe.serial("Mobile donate statement receipt formats", () => {
 
   // /membership/settings inserts a new row when no id is sent, so reuse existing ids
   // or every write leaves a duplicate key behind.
-  const setFormat = async (format: string) => {
+  const ORG_ADDRESS = "PO Box 100, Springfield, IL 62701";
+  const setFormat = async (format: string, orgAddress = ORG_ADDRESS, registrationNumber = REG_NUMBER) => {
     const ctx = await request.newContext();
     const res = await ctx.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } });
     const body = await res.json();
@@ -351,7 +352,8 @@ test.describe.serial("Mobile donate statement receipt formats", () => {
     const existing: any[] = await (await ctx.get(`${MAIN_API}/membership/settings`, auth)).json();
     const values: Record<string, string> = {
       statementFormat: format,
-      statementRegistrationNumber: REG_NUMBER,
+      statementRegistrationNumber: registrationNumber,
+      statementOrgAddress: orgAddress,
       statementSignatory: "Pastor Grace Miller",
       statementCityOfIssue: "Toronto"
     };
@@ -375,7 +377,7 @@ test.describe.serial("Mobile donate statement receipt formats", () => {
   });
 
   test.afterAll(async () => {
-    await setFormat("");
+    await setFormat("", "", "");
   });
 
   test("Canada format adds the CRA receipt block to the donor statement", async ({ page }) => {
@@ -388,13 +390,27 @@ test.describe.serial("Mobile donate statement receipt formats", () => {
     await expect(block).toContainText("Place of issue: Toronto");
     await expect(block).toContainText("Eligible amount of gift for income tax purposes");
     await expect(block).toContainText("Canada Revenue Agency: canada.ca/charities-giving");
+    await expect(block).toContainText(ORG_ADDRESS);
+    // Already in the legal block, so not printed a second time with the church's details.
+    await expect(page.getByTestId("statement-tax-id")).toHaveCount(0);
+    await expect(page.getByTestId("statement-org-address")).toHaveCount(0);
   });
 
-  test("standard format prints no receipt block", async ({ page }) => {
+  test("standard format prints no receipt block, but prints the Tax ID and organization address", async ({ page }) => {
     await setFormat("");
     await page.goto("/mobile/donate/print");
     await expect(page.getByText("Statement Summary:")).toBeVisible({ timeout: 20000 });
     await expect(page.locator('[data-testid="statement-legal-block"]')).toHaveCount(0);
+    await expect(page.getByTestId("statement-tax-id")).toHaveText("Tax ID: " + REG_NUMBER);
+    await expect(page.getByTestId("statement-org-address")).toHaveText(ORG_ADDRESS);
+  });
+
+  test("standard format with a blank Tax ID and address prints neither", async ({ page }) => {
+    await setFormat("", "", "");
+    await page.goto("/mobile/donate/print");
+    await expect(page.getByText("Statement Summary:")).toBeVisible({ timeout: 20000 });
+    await expect(page.getByTestId("statement-tax-id")).toHaveCount(0);
+    await expect(page.getByTestId("statement-org-address")).toHaveCount(0);
   });
 });
 
