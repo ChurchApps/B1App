@@ -194,6 +194,29 @@ test.describe("Mobile content screens", () => {
     await expect(page.locator("main")).toContainText(/The Power of Faith/i, { timeout: 15000 });
   });
 
+  test("a series lists its newest sermon first and Play from start opens the oldest", async ({ page }) => {
+    const api = await getApi("demo", "ContentApi");
+    const contentUrl = (path: string) => `${process.env.API_BASE || "http://localhost:8084"}/content${path}`;
+    const marker = `Series order ${Date.now()}`;
+    const daysAgo = (days: number) => new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+    const saved = await apiCall(api, "post", contentUrl("/sermons"), [
+      { churchId: api.churchId, title: `${marker} Older`, videoType: "youtube", videoData: "dQw4w9WgXcQ", publishDate: daysAgo(2), playlistId: SEED_PLAYLISTS.SUNDAY_SERMONS.id },
+      { churchId: api.churchId, title: `${marker} Newer`, videoType: "youtube", videoData: "dQw4w9WgXcQ", publishDate: daysAgo(1), playlistId: SEED_PLAYLISTS.SUNDAY_SERMONS.id }
+    ]);
+    expect(saved.ok()).toBeTruthy();
+    const sermonIds = ((await saved.json()) as { id: string }[]).map(({ id }) => id);
+    try {
+      await page.goto(`/mobile/playlist/${SEED_PLAYLISTS.SUNDAY_SERMONS.id}`);
+      const rows = page.getByRole("region", { name: "Sermons" }).getByRole("link");
+      await expect(rows.first()).toContainText(`${marker} Newer`, { timeout: 15000 });
+      await expect(rows.nth(1)).toContainText(`${marker} Older`);
+      const oldestHref = await rows.last().getAttribute("href");
+      await expect(page.getByRole("link", { name: "Play from start" })).toHaveAttribute("href", oldestHref!);
+    } finally {
+      for (const id of sermonIds) await apiCall(api, "delete", contentUrl(`/sermons/${id}`));
+    }
+  });
+
   test("sermon detail puts the player first with text-link verbs", async ({ page }) => {
     await page.goto("/mobile/sermons/SER00000001");
     await expect(page.getByRole("heading", { level: 1, name: /The Power of Faith/i })).toBeVisible({ timeout: 15000 });
