@@ -257,8 +257,11 @@ test.describe("Mobile content screens", () => {
       await expect(page.getByRole("heading", { level: 1, name: unique })).toBeVisible({ timeout: 15000 });
       await expect(page.getByRole("button", { name: /Watch Sermon/i })).toHaveCount(0);
       const download = page.getByRole("link", { name: "Download audio" });
-      await expect(download).toHaveAttribute("href", new RegExp(`^/api/podcast/download\\?url=.*sermons%2Frss%2FCHU00000001&guid=${sermonId}$`));
-      await expect(download).toHaveAttribute("download", "");
+      // The Api redirects to the file; relaying it through the website was cut off on long sermons (ChurchAppsSupport#1696).
+      await expect(download).toHaveAttribute("href", contentUrl(`/sermons/public/download/CHU00000001/${sermonId}`));
+      const redirect = await page.request.get((await download.getAttribute("href"))!, { maxRedirects: 0 });
+      expect(redirect.status()).toBe(302);
+      expect(redirect.headers()["location"]).toBe(audioUrl);
       await page.getByRole("button", { name: "Listen" }).click();
       await expect(page.getByTestId("sermon-audio")).toHaveAttribute("src", audioUrl);
       await expect(page.getByRole("button", { name: "Listen" })).toHaveCount(0);
