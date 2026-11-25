@@ -73,6 +73,32 @@ test.describe("Public sermons page", () => {
     }
   });
 
+  test("an audio sermon's page offers Share and Download audio", async ({ page }) => {
+    const api = await getApi("demo", "ContentApi");
+    const unique = `Shared audio sermon ${Date.now()}`;
+    const audioUrl = `https://example.com/${Date.now()}.mp3`;
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const saved = await apiCall(api, "post", `${MAIN_API}/content/sermons`, [{ churchId: api.churchId, title: unique, audioUrl, publishDate: yesterday, playlistId: SEED_PLAYLISTS.SUNDAY_SERMONS.id }]);
+    expect(saved.ok()).toBeTruthy();
+    const sermonId = (await saved.json())[0].id as string;
+    try {
+      // Record what the share sheet would receive instead of opening it.
+      await page.addInitScript(() => {
+        Object.defineProperty(navigator, "share", { configurable: true, value: async (data: unknown) => { (window as unknown as { __shared: unknown }).__shared = data; } });
+      });
+      await page.request.post("/api/revalidate/" + DEMO_CHURCH.SUBDOMAIN);
+      await page.goto(`/sermons/${sermonId}`);
+      await expect(page.locator("h1").filter({ hasText: unique })).toBeVisible({ timeout: 15000 });
+      await expect(page.getByTestId("sermon-download")).toHaveAttribute("href", new RegExp(`/sermons/public/download/${api.churchId}/${sermonId}$`));
+      await page.getByTestId("sermon-share").click();
+      await expect.poll(() => page.evaluate(() => (window as unknown as { __shared?: { url?: string } }).__shared?.url)).toMatch(new RegExp(`/sermons/${sermonId}$`));
+      expect(await page.evaluate(() => (window as unknown as { __shared?: { title?: string } }).__shared?.title)).toBe(unique);
+    } finally {
+      await apiCall(api, "delete", `${MAIN_API}/content/sermons/${sermonId}`);
+      await page.request.post("/api/revalidate/" + DEMO_CHURCH.SUBDOMAIN);
+    }
+  });
+
   test("/sermons/latest redirects to the newest sermon, which shows its playlist image when it has none", async ({ page }) => {
     const api = await getApi("demo", "ContentApi");
     const unique = `Latest sermon ${Date.now()}`;

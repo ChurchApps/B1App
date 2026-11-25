@@ -15,6 +15,7 @@ import { mobileTheme } from "../mobileTheme";
 import { PageHead, Plate, PlateSection, QuietEmpty, RowList, TextLink } from "../kit";
 import { MediaFrame, SermonRow, sermonHref, sermonMeta, useChurchPlaylists, useChurchSermons } from "../SermonCard";
 import { sermonThumbnail } from "@/helpers/sermonList";
+import { shareLink } from "@/helpers/shareLink";
 import { buildEmbedUrl, buildExternalUrl, sermonAudioUrl, sermonDownloadHref } from "../sermonAudio";
 
 interface Props {
@@ -97,25 +98,9 @@ export const SermonDetail = ({ id, config }: Props) => {
     const title = sermon.title || Locale.label("mobile.screenTitles.sermonDetails");
     const text = `${Locale.label("mobile.details.checkOutSermon").replace("{}", title)} ${shareUrl}`.trim();
 
-    try {
-      if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
-        await navigator.share({ title, text, url: shareUrl });
-        return;
-      }
-    } catch {
-
-    }
-
-    try {
-      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(text);
-        setSnackbar(Locale.label("mobile.details.linkCopied"));
-        return;
-      }
-    } catch {
-
-    }
-    setSnackbar(Locale.label("mobile.details.unableToShare"));
+    const result = await shareLink({ title, text, url: shareUrl });
+    if (result === "copied") setSnackbar(Locale.label("mobile.details.linkCopied"));
+    else if (result === "failed") setSnackbar(Locale.label("mobile.details.unableToShare"));
   }, [sermon, externalUrl]);
 
   const handleOpenExternal = useCallback(() => {
