@@ -1,4 +1,4 @@
-import { test, expect, request } from "@playwright/test";
+import { test, expect, request, type Page } from "@playwright/test";
 import { DEMO_CHURCH } from "./helpers/fixtures";
 
 const API_BASE = process.env.API_BASE || "http://localhost:8084";
@@ -7,7 +7,12 @@ const BASE_URL = process.env.BASE_URL || "http://grace.localtest.me:3301";
 // setHidePublicSite mutates a church-wide setting every public route reads.
 test.describe.configure({ mode: "serial" });
 
-async function setHidePublicSite(value: boolean) {
+interface LoginChurch { church?: { id?: string }; apis?: { keyName?: string; jwt?: string }[] }
+interface Setting { id?: string; keyName?: string; value?: string; public?: number }
+
+const setHidePublicSite = (value: boolean) => setContentSetting("hidePublicSite", `${value}`);
+
+async function setContentSetting(keyName: string, value: string) {
   const ctx = await request.newContext();
   const login = await ctx.post(API_BASE + "/membership/users/login", {
     data: { email: "demo@b1.church", password: "password" },
@@ -15,14 +20,13 @@ async function setHidePublicSite(value: boolean) {
   });
   if (!login.ok()) throw new Error(`login failed: ${login.status()}`);
   const body = await login.json();
-  const uc = (body.userChurches || []).find((c: any) => c.church?.id === DEMO_CHURCH.ID);
-  const jwt = uc?.apis?.find((a: any) => a.keyName === "ContentApi")?.jwt;
+  const uc = ((body.userChurches || []) as LoginChurch[]).find((c) => c.church?.id === DEMO_CHURCH.ID);
+  const jwt = uc?.apis?.find((a) => a.keyName === "ContentApi")?.jwt;
   if (!jwt) throw new Error("ContentApi JWT not present");
   const headers = { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" };
-  const settings = await (await ctx.get(API_BASE + "/content/settings", { headers })).json();
-  const setting = (settings || []).find((x: any) => x.keyName === "hidePublicSite")
-    || { keyName: "hidePublicSite", public: 1 };
-  setting.value = `${value}`;
+  const settings: Setting[] = (await (await ctx.get(API_BASE + "/content/settings", { headers })).json()) || [];
+  const setting = settings.find((x) => x.keyName === keyName) || { keyName, public: 1 };
+  setting.value = value;
   const res = await ctx.post(API_BASE + "/content/settings", { headers, data: [setting] });
   if (!res.ok()) throw new Error(`settings save failed: ${res.status()}`);
   // Same cache bust B1Admin fires on save.
@@ -69,13 +73,39 @@ test.describe("Disabled public website", () => {
     await expect(page).toHaveURL(/\/mobile/);
   });
 
-  // A church that keeps its own website embeds these pages in it.
-  test("keeps the embed pages reachable", async ({ page }) => {
+  // Middleware in the production build caches a church's settings for up to a minute, so the embed tests wait for a change to land.
+  const embedStatus = (page: Page) => page.request.get("/embed/donate", { maxRedirects: 0 }).then((r) => r.status());
+
+  test("sends the embed pages to the login screen while no website is listed", async ({ page }) => {
+    test.setTimeout(150000);
+    await setContentSetting("embedDomains", "");
+    await expect.poll(() => embedStatus(page), { timeout: 90000, intervals: [2000] }).toBe(307);
     await page.goto("/embed/donate");
-    await expect(page).toHaveURL(/\/embed\/donate$/);
-    await expect(page.getByTestId("embed-donate")).toBeVisible();
+    await expect(page).toHaveURL(/\/login/);
+    expect(new URL(page.url()).searchParams.get("returnUrl")).toBe("/embed/donate");
     await page.goto("/embed/forms/FRM00000004");
-    await expect(page).toHaveURL(/\/embed\/forms\/FRM00000004$/);
+    await expect(page).toHaveURL(/\/login/);
+  });
+
+  // A church that keeps its own website embeds these pages in it.
+  test("serves the embed pages once the church has listed a website", async ({ page }) => {
+    test.setTimeout(150000);
+    await setContentSetting("embedDomains", "embed-test-church.org");
+    try {
+      await expect.poll(() => embedStatus(page), { timeout: 90000, intervals: [2000] }).toBe(200);
+      await page.goto("/embed/donate");
+      await expect(page).toHaveURL(/\/embed\/donate$/);
+      await expect(page.getByTestId("embed-donate")).toBeVisible();
+      await page.goto("/embed/forms/FRM00000004");
+      await expect(page).toHaveURL(/\/embed\/forms\/FRM00000004$/);
+      // Only the embed routes open: the public pages and any other /embed/ path stay behind the login screen.
+      for (const path of ["/donate", "/embed", "/embed/login"]) {
+        await page.goto(path);
+        await expect(page, path).toHaveURL(/\/login/);
+      }
+    } finally {
+      await setContentSetting("embedDomains", "");
+    }
   });
 
   test("tells search engines not to index the site", async ({ request: req }) => {

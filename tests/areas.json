@@ -132,7 +132,7 @@
     },
     "hidePublicSite": {
       "src": ["src/helpers/publicSite.ts", "src/helpers/publicSiteServer.ts"],
-      "specs": ["hide-public-site.spec.ts", "seo.spec.ts", "public-embed.spec.ts"]
+      "specs": ["hide-public-site.spec.ts", "seo.spec.ts"]
     },
     "seo": {
       "src": ["src/components/seo/**", "src/app/[sdSlug]/robots.txt/**", "src/app/[sdSlug]/sitemap.xml/**", "src/helpers/canonicalLink.ts", "src/helpers/noindexHost.ts", "src/helpers/MetaHelper.ts"],
