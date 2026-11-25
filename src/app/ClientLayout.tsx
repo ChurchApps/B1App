@@ -38,7 +38,9 @@ function WebsiteSessionRestore() {
   return null;
 }
 
-function ClientLayout({ children }: { children: React.ReactNode }) {
+// embed: the /embed/* routes, framed by another website. They stay anonymous (no session restore, so a framed
+// page never acts as the signed-in member) and carry no analytics.
+function ClientLayout({ children, embed = false }: { children: React.ReactNode; embed?: boolean }) {
   const [errors, setErrors] = React.useState<string[]>([]);
   const [localeInit, setLocaleInit] = React.useState(false);
   const location = (typeof (window) === "undefined") ? null : window.location;
@@ -93,10 +95,10 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <CookieProviderWrapper>
-      <GoogleAnalytics />
+      {!embed && <GoogleAnalytics />}
       <ThemeProvider theme={mdTheme}>
         <UserProvider>
-          <WebsiteSessionRestore />
+          {!embed && <WebsiteSessionRestore />}
           <ErrorMessages errors={errors} />
           <React.Fragment key={localeInit ? "locale-ready" : "locale-loading"}>{children}</React.Fragment>
         </UserProvider>
