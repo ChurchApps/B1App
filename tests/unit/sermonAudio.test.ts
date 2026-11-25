@@ -21,10 +21,12 @@ describe("sermonHasVideo", () => {
 });
 
 describe("sermonDownloadHref", () => {
-  it("points the podcast download route at the church feed with the sermon id as guid", () => {
+  // ChurchAppsSupport#1696: relaying the file through /api/podcast/download hit the website's request time limit and
+  // cut long sermons off, so the link goes to the Api, which redirects the browser to the file itself.
+  it("links to the Api download redirect rather than relaying the file through the website", () => {
     assert.equal(
       sermonDownloadHref("https://api.churchapps.org/content", "CHU00000001", "SER00000001"),
-      "/api/podcast/download?url=https%3A%2F%2Fapi.churchapps.org%2Fcontent%2Fsermons%2Frss%2FCHU00000001&guid=SER00000001"
+      "https://api.churchapps.org/content/sermons/public/download/CHU00000001/SER00000001"
     );
   });
 });

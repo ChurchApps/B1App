@@ -44,6 +44,7 @@ export const sermonAudioUrl = (sermon: SermonInterface | null) => safeHttpUrl((s
 
 export const sermonHasVideo = (sermon: SermonInterface | null) => !!buildEmbedUrl(sermon);
 
-// Same-origin route that streams the episode from the church feed as an attachment named after its title.
+// The Api redirects to the stored file as an attachment named after the sermon, so no website request has to stay
+// open for the whole transfer (the old /api/podcast/download relay was cut off on long sermons).
 export const sermonDownloadHref = (contentApiBase: string, churchId: string, sermonId: string) =>
-  `/api/podcast/download?url=${encodeURIComponent(`${contentApiBase}/sermons/rss/${churchId}`)}&guid=${encodeURIComponent(sermonId)}`;
+  `${contentApiBase}/sermons/public/download/${encodeURIComponent(churchId)}/${encodeURIComponent(sermonId)}`;
