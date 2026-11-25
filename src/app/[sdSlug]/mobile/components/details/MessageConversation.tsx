@@ -339,7 +339,9 @@ export const MessageConversation = ({ id, config: _config }: Props) => {
         await createConversationAndSend(content);
       }
     } catch (e) {
-      if ((e as Error)?.message === "ageRestricted") setError(Locale.label("mobile.details.messageBlockedAge"));
+      const reason = (e as Error)?.message;
+      if (reason === "ageRestricted") setError(Locale.label("mobile.details.messageBlockedAge"));
+      else if (reason === "messagingDisabled") setError(Locale.label("mobile.details.messageBlockedDisabled"));
       else setError(Locale.label("mobile.details.messageFailed"));
 
       setPending((prev) => prev.filter((m) => m.id !== optimistic.id));
