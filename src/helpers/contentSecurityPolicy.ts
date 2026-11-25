@@ -17,6 +17,9 @@
 // DENY because church sites are legitimately framed by Lessons and B1.
 // frame-src stays broad (https:) because WebsiteUrlPage, stream interaction
 // tabs, and sermon videoUrl embed church-chosen URLs.
+//
+// The /embed/* routes add the church's own website domains to frame-ancestors
+// (the frameAncestors option; see src/helpers/embed.ts). No other route does.
 
 // Kingdom Funding Collect.js (white-label NMI host): script, styles.css, and /token/api XHR.
 const NMI_HOST = "https://lotusconsulting.transactiongateway.com";
@@ -62,7 +65,13 @@ export interface CspOptions {
   dev?: boolean;
   /** Origins of the app's own API stack; the http:/ws: ones (a local Api) join connect-src, https:/wss: are already covered. */
   apiOrigins?: string[];
+  /** Extra frame-ancestors for an embed route: the output of embedFrameAncestors(), nothing else. */
+  frameAncestors?: string[];
 }
+
+// Last gate before the header: an extra frame ancestor is an https host source, optionally with a "*." prefix.
+// Anything that could end the directive, add a source or widen it is dropped even if a caller passes it.
+const FRAME_ANCESTOR_SOURCE = /^https:\/\/(?:\*\.)?[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/;
 
 // The browser-facing API URLs (NEXT_PUBLIC_API_BASE, the Lessons API, the messaging socket) as origins, keeping
 // only the ones the production connect-src does not already admit: a production build pointed at a local
@@ -82,7 +91,7 @@ export const insecureApiOrigins = (urls: Array<string | undefined>): string[] =>
 };
 
 export const buildContentSecurityPolicy = (options: CspOptions = {}): string => {
-  const { nonce, dev = false, apiOrigins = [] } = options;
+  const { nonce, dev = false, apiOrigins = [], frameAncestors = [] } = options;
 
   const scriptSrc = ["'self'", ...(nonce ? [`'nonce-${nonce}'`, "'strict-dynamic'"] : []), ...SCRIPT_SRC_HOSTS, ...(dev ? DEV_SCRIPT_SRC : [])];
   const connectSrc = ["'self'", ...CONNECT_SRC_HOSTS, ...(dev ? DEV_CONNECT_SRC : []), ...apiOrigins.filter((o) => !CONNECT_SRC_HOSTS.some((h) => o.startsWith(h)))];
@@ -97,7 +106,7 @@ export const buildContentSecurityPolicy = (options: CspOptions = {}): string => 
     "script-src " + scriptSrc.join(" "),
     "connect-src " + connectSrc.join(" "),
     "frame-src 'self' https:",
-    "frame-ancestors " + FRAME_ANCESTORS.join(" "),
+    "frame-ancestors " + [...FRAME_ANCESTORS, ...frameAncestors.filter((source) => FRAME_ANCESTOR_SOURCE.test(source))].join(" "),
     "worker-src 'self' blob:",
     "media-src 'self' blob: https:",
     "form-action " + FORM_ACTION.join(" ")
