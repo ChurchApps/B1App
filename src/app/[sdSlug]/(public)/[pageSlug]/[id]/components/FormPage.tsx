@@ -14,6 +14,8 @@ import { Container } from "@mui/material";
 
 interface Props extends WrapperPageProps {
   formId: string;
+  /** Rendered by /embed/forms/[id] inside another website's frame, which only /embed/* pages may occupy. */
+  embed?: boolean;
 }
 
 type StandaloneFormInterface = FormInterface & { description?: string; displayMode?: "standard" | "conversational"; thankYouMessage?: string; photoUrl?: string };
@@ -81,7 +83,7 @@ export function FormPage(props: Props) {
       displayMode={form?.displayMode}
       showHeader={false}
       updatedFunction={handleUpdate}
-      cancelFunction={() => router.push("/")}
+      cancelFunction={props.embed ? undefined : () => router.push("/")}
     />
   );
 
@@ -94,7 +96,7 @@ export function FormPage(props: Props) {
     if (!PersonHelper?.person?.id) {
       return (
         <h3 className="text-center">
-          <Link href={"/login?returnUrl=/forms/" + props.formId} data-testid="form-login-link">{Locale.label("login.login")}</Link> {Locale.label("pageSlug.toViewForm")}
+          <Link href={"/login?returnUrl=/forms/" + props.formId} data-testid="form-login-link" target={props.embed ? "_blank" : undefined} rel={props.embed ? "noopener noreferrer" : undefined}>{Locale.label("login.login")}</Link> {Locale.label("pageSlug.toViewForm")}
         </h3>
       );
     }
