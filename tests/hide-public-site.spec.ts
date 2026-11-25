@@ -69,6 +69,15 @@ test.describe("Disabled public website", () => {
     await expect(page).toHaveURL(/\/mobile/);
   });
 
+  // A church that keeps its own website embeds these pages in it.
+  test("keeps the embed pages reachable", async ({ page }) => {
+    await page.goto("/embed/donate");
+    await expect(page).toHaveURL(/\/embed\/donate$/);
+    await expect(page.getByTestId("embed-donate")).toBeVisible();
+    await page.goto("/embed/forms/FRM00000004");
+    await expect(page).toHaveURL(/\/embed\/forms\/FRM00000004$/);
+  });
+
   test("tells search engines not to index the site", async ({ request: req }) => {
     const robots = await (await req.get("/robots.txt")).text();
     expect(robots).toContain("Disallow: /\n");

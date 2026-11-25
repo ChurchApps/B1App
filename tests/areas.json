@@ -120,15 +120,19 @@
     },
     "forms": {
       "src": ["src/app/[sdSlug]/(public)/[pageSlug]/[id]/**", "src/components/elements/FormElement.tsx"],
-      "specs": ["standalone-form-submit.spec.ts", "public-forms-*.spec.ts", "code-review-core.spec.ts", "mobile-group-forms.spec.ts"]
+      "specs": ["standalone-form-submit.spec.ts", "public-forms-*.spec.ts", "code-review-core.spec.ts", "mobile-group-forms.spec.ts", "public-embed.spec.ts"]
     },
     "publicPages": {
       "src": ["src/app/[sdSlug]/(public)/page.tsx", "src/app/[sdSlug]/(public)/[pageSlug]/page.tsx", "src/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper.tsx", "src/components/Header.tsx", "src/components/SiteWidgets.tsx", "src/components/CascadingMenus/**", "src/components/layouts/**", "src/components/RestrictedPage.tsx", "src/components/YoutubeBackground.tsx", "src/components/DropMalformedHash.tsx", "src/hooks/useHashScroll.ts", "src/helpers/RedirectHelper.ts", "src/styles/youtubeBackground.module.css"],
       "specs": ["public-home.spec.ts", "public-pages-no-error-shell.spec.ts", "public-fragment-link-scroll.spec.ts", "public-built-in.spec.ts", "public-restricted-page.spec.ts", "code-review-core.spec.ts", "hide-public-site.spec.ts", "site-announcement-bar.spec.ts"]
     },
+    "embed": {
+      "src": ["src/app/[sdSlug]/embed/**", "src/helpers/embed.ts", "src/styles/embed.css"],
+      "specs": ["public-embed.spec.ts", "hide-public-site.spec.ts"]
+    },
     "hidePublicSite": {
       "src": ["src/helpers/publicSite.ts", "src/helpers/publicSiteServer.ts"],
-      "specs": ["hide-public-site.spec.ts", "seo.spec.ts"]
+      "specs": ["hide-public-site.spec.ts", "seo.spec.ts", "public-embed.spec.ts"]
     },
     "seo": {
       "src": ["src/components/seo/**", "src/app/[sdSlug]/robots.txt/**", "src/app/[sdSlug]/sitemap.xml/**", "src/helpers/canonicalLink.ts", "src/helpers/noindexHost.ts", "src/helpers/MetaHelper.ts"],
