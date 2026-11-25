@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildContentSecurityPolicy, generateNonce, insecureApiOrigins } from "@/helpers/contentSecurityPolicy";
 import { canonicalLink, ownsSubdomain } from "@/helpers/canonicalLink";
+import { embedFrameAncestors, isEmbedPath, isEmbedServedOnHiddenSite } from "@/helpers/embed";
 import { isNoindexHost } from "@/helpers/noindexHost";
 import { isAllowedWhenPublicSiteHidden, isPublicSiteHidden } from "@/helpers/publicSite";
 
@@ -11,9 +12,12 @@ const CACHE_MAX = 5000;
 // Subdomains are [a-z0-9] only, so this never resolves to a church (vs. the host rewrite guessing one).
 const UNKNOWN_SITE = "_unknown.invalid";
 const cache = new Map<string, { site: string | null; exp: number }>();
-// hidePublicSite per subdomain. Kept short because the admin's revalidate call can't clear this per-instance map; dev/test read it fresh.
-const HIDDEN_TTL = process.env.NODE_ENV === "production" ? 60_000 : 0;
-const hiddenCache = new Map<string, { hidden: boolean; exp: number }>();
+// The church's public content settings this file acts on, per subdomain: hidePublicSite, and embedDomains as CSP sources.
+// Kept short because the admin's revalidate call can't clear this per-instance map; dev/test read it fresh.
+interface SiteSettings { hidden: boolean; frameAncestors: string[] }
+const NO_SETTINGS: SiteSettings = { hidden: false, frameAncestors: [] };
+const SETTINGS_TTL = process.env.NODE_ENV === "production" ? 60_000 : 0;
+const settingsCache = new Map<string, { settings: SiteSettings; exp: number }>();
 
 export const config = { matcher: ["/((?!_next/|api/|.*\\..*).*)", "/sitemap.xml", "/robots.txt", "/manifest.webmanifest"] };
 
@@ -33,27 +37,29 @@ const getSubDomain = (host: string, isInternal: boolean, site: string | null) =>
   return INTERNAL_HOSTS.includes(host) ? null : host.split(".")[0];
 };
 
-const cacheHidden = (subDomain: string, hidden: boolean) => {
-  if (HIDDEN_TTL <= 0) return hidden;
-  if (hiddenCache.size >= CACHE_MAX) hiddenCache.clear();
-  hiddenCache.set(subDomain, { hidden, exp: Date.now() + HIDDEN_TTL });
-  return hidden;
+const cacheSettings = (subDomain: string, settings: SiteSettings) => {
+  if (SETTINGS_TTL <= 0) return settings;
+  if (settingsCache.size >= CACHE_MAX) settingsCache.clear();
+  settingsCache.set(subDomain, { settings, exp: Date.now() + SETTINGS_TTL });
+  return settings;
 };
 
-// Only confirmed answers are cached; 5xx blips and errors serve the site rather than lock everyone out.
-const isHiddenSite = async (subDomain: string) => {
-  const cached = hiddenCache.get(subDomain);
-  if (cached && cached.exp >= Date.now()) return cached.hidden;
+// One lookup serves the hidden-site gate and the embed frame policy. Only confirmed answers are cached; 5xx blips
+// and errors serve the site rather than lock everyone out, and leave embed routes on the default frame policy.
+const loadSiteSettings = async (subDomain: string): Promise<SiteSettings> => {
+  const cached = settingsCache.get(subDomain);
+  if (cached && cached.exp >= Date.now()) return cached.settings;
   try {
     const churchRes = await fetch(apiBase() + "/churches/lookup/?subDomain=" + encodeURIComponent(subDomain), { signal: AbortSignal.timeout(3000) });
-    if (churchRes.status === 404) return cacheHidden(subDomain, false);
-    if (!churchRes.ok) return false;
+    if (churchRes.status === 404) return cacheSettings(subDomain, NO_SETTINGS);
+    if (!churchRes.ok) return NO_SETTINGS;
     const church = await churchRes.json().catch((): null => null);
-    if (!church?.id) return cacheHidden(subDomain, false);
+    if (!church?.id) return cacheSettings(subDomain, NO_SETTINGS);
     const settingsRes = await fetch(apiRoot() + "/content/settings/public/" + encodeURIComponent(church.id), { signal: AbortSignal.timeout(3000) });
-    if (!settingsRes.ok) return false;
-    return cacheHidden(subDomain, isPublicSiteHidden(await settingsRes.json().catch((): null => null)));
-  } catch { return false; }
+    if (!settingsRes.ok) return NO_SETTINGS;
+    const settings = await settingsRes.json().catch((): null => null);
+    return cacheSettings(subDomain, { hidden: isPublicSiteHidden(settings), frameAncestors: embedFrameAncestors(settings?.embedDomains) });
+  } catch { return NO_SETTINGS; }
 };
 
 // Signed-in members (unexpired jwt cookie set by LoginPage) see the site; this is a soft gate, so the payload is not verified.
@@ -101,16 +107,6 @@ export async function middleware(req: NextRequest) {
     headers.set("x-public-host", claimed);
   }
 
-  // Next reads the nonce off the request-side CSP header and stamps it onto the
-  // scripts it renders, which is what lets script-src drop 'unsafe-inline'.
-  const nonce = generateNonce();
-  const csp = buildContentSecurityPolicy({
-    nonce,
-    dev: process.env.NODE_ENV !== "production",
-    apiOrigins: insecureApiOrigins([process.env.NEXT_PUBLIC_API_BASE, process.env.NEXT_PUBLIC_LESSONS_API, process.env.NEXT_PUBLIC_MESSAGING_API_SOCKET])
-  });
-  headers.set("Content-Security-Policy", csp);
-
   let site: string | null = null;
   if (!isInternal) {
     site = await lookupSite(host);
@@ -120,17 +116,36 @@ export async function middleware(req: NextRequest) {
   if (SELF_HOSTED && !site) headers.set("x-site", (process.env.DEFAULT_CHURCH_SLUG || "church") + ".b1.church");
 
   const pathname = req.nextUrl.pathname;
-  if (!isAllowedWhenPublicSiteHidden(pathname) && !hasSession(req)) {
+  const embed = isEmbedPath(pathname);
+  const gated = !isAllowedWhenPublicSiteHidden(pathname) && !hasSession(req);
+  // Only an embed route may be framed by the church's own website; every other path keeps the default frame-ancestors.
+  let frameAncestors: string[] = [];
+  if (embed || gated) {
     const subDomain = getSubDomain(host, isInternal, site);
-    if (subDomain && await isHiddenSite(subDomain)) {
+    const settings = subDomain ? await loadSiteSettings(subDomain) : NO_SETTINGS;
+    // A hidden site serves an embed route only once the church has listed a website that may frame it; until then it is one more public page.
+    if (gated && settings.hidden && !isEmbedServedOnHiddenSite(pathname, settings.frameAncestors)) {
       const loginUrl = new URL("/login", req.url);
       loginUrl.searchParams.set("returnUrl", pathname + req.nextUrl.search);
       return NextResponse.redirect(loginUrl);
     }
+    if (embed) frameAncestors = settings.frameAncestors;
   }
+
+  // Next reads the nonce off the request-side CSP header and stamps it onto the
+  // scripts it renders, which is what lets script-src drop 'unsafe-inline'.
+  const nonce = generateNonce();
+  const csp = buildContentSecurityPolicy({
+    nonce,
+    dev: process.env.NODE_ENV !== "production",
+    apiOrigins: insecureApiOrigins([process.env.NEXT_PUBLIC_API_BASE, process.env.NEXT_PUBLIC_LESSONS_API, process.env.NEXT_PUBLIC_MESSAGING_API_SOCKET]),
+    frameAncestors
+  });
+  headers.set("Content-Security-Policy", csp);
+
   const res = NextResponse.next({ request: { headers } });
   res.headers.set("Content-Security-Policy", csp);
-  if (isNoindexHost(host)) res.headers.set("X-Robots-Tag", "noindex, nofollow");
+  if (isNoindexHost(host) || embed) res.headers.set("X-Robots-Tag", "noindex, nofollow");
   else {
     const proto = (req.headers.get("x-forwarded-proto") || req.nextUrl.protocol.replace(":", "")).split(",")[0].trim();
     const link = canonicalLink(publicHost || req.headers.get("x-forwarded-host") || req.headers.get("host"), proto, pathname);

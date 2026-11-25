@@ -1,0 +1,5 @@
+/* /embed/* pages render inside another website's frame: a plain white canvas instead of the site's grey page
+   background (member.css sets that one with !important). */
+html body {
+  background-color: #fff !important;
+}
