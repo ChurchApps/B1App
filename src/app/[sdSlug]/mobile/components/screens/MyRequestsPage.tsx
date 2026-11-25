@@ -2,6 +2,7 @@
 
 import React, { Suspense, useContext } from "react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Skeleton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
@@ -12,6 +13,7 @@ import { mobileTheme } from "../mobileTheme";
 import { LoadErrorAlert } from "../LoadErrorAlert";
 import type { NotificationItem } from "../NotificationBellMenu";
 import { BackVerb, PageHead, Plate, PlateSection, QuietEmpty, Row, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
+import { RequestMessagesSheet } from "./RequestMessagesSheet";
 
 interface Props {
   config: ConfigurationInterface;
@@ -27,6 +29,8 @@ interface RequestRow {
   approvalStatus?: string;
   bookings?: Booking[];
 }
+// One row of /conversations/eventRequests/counts: how many messages a request's thread holds.
+interface MessageCount { eventId: string; postCount: number }
 
 const tc = mobileTheme.colors;
 
@@ -54,6 +58,12 @@ const MyRequestsPageInner = (_props: Props) => {
   const [view] = useSliceView();
   const [cancelId, setCancelId] = React.useState<string | null>(null);
   const [cancelError, setCancelError] = React.useState("");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  // A reply notification lands here with ?request=<eventId>; that request's messages open once the list loads.
+  const deepLinkId = searchParams?.get("request") || "";
+  const [messagesId, setMessagesId] = React.useState<string | null>(null);
 
   const { data: requests = null, isError: requestsError, refetch: refetchRequests } = useQuery<RequestRow[]>({
     queryKey: ["event-requests-mine"],
@@ -97,6 +107,32 @@ const MyRequestsPageInner = (_props: Props) => {
     staleTime: 60 * 1000
   });
 
+  const requestIds = (requests || []).map((r) => r.id).filter(Boolean).slice(0, 200).join(",");
+  const { data: messageCounts = [], refetch: refetchMessageCounts } = useQuery<MessageCount[]>({
+    queryKey: ["event-request-message-counts", requestIds],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/conversations/eventRequests/counts?eventIds=" + requestIds, "MessagingApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!requestIds,
+    staleTime: 30 * 1000,
+    refetchOnWindowFocus: true
+  });
+
+  React.useEffect(() => {
+    if (deepLinkId && requests?.some((r) => r.id === deepLinkId)) setMessagesId(deepLinkId);
+  }, [deepLinkId, requests]);
+
+  const closeMessages = () => {
+    setMessagesId(null);
+    void refetchMessageCounts();
+    if (!deepLinkId) return;
+    const params = new URLSearchParams(searchParams?.toString() || "");
+    params.delete("request");
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname || "/mobile/myRequests");
+  };
+
   // Notifications come newest first, so the first match is the latest decision.
   const reasonFor = (contentType: string, contentId?: string) => {
     if (!contentId) return undefined;
@@ -131,7 +167,7 @@ const MyRequestsPageInner = (_props: Props) => {
       .filter((b) => b.status === "rejected")
       .map((b) => ({ id: b.id, name: bookingName(b), reason: reasonFor("eventBooking", b.id) }))
       .filter((b) => !!b.reason);
-    const hasDetails = bookings.length > 0 || req.approvalStatus === "pending" || !!description || !!reason;
+    const messageCount = messageCounts.find((c) => c.eventId === req.id)?.postCount || 0;
     return (
       <Box key={req.id} className="req-item" sx={{ py: "6px" }} data-testid={`request-card-${req.id}`}>
         <Row
@@ -139,29 +175,32 @@ const MyRequestsPageInner = (_props: Props) => {
           subtitle={req.start ? DateHelper.prettyDateTime(new Date(req.start)) : undefined}
           trailing={<span data-testid={`request-status-${req.id}`}><StatusBadge tone={statusTone(req.approvalStatus)} dot={req.approvalStatus === "approved"}>{statusLabel(req.approvalStatus)}</StatusBadge></span>}
         />
-        {hasDetails && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "6px", pb: "10px" }}>
-            {description && (
-              <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, whiteSpace: "pre-line" }} data-testid={`request-description-${req.id}`}>{description}</Typography>
-            )}
-            {reason && (
-              <Typography sx={{ fontSize: 13.5, color: tc.error }} data-testid={`request-reason-${req.id}`}>{`${statusLabel("rejected")}: ${reason}`}</Typography>
-            )}
-            {bookings.length > 0 && (
-              <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
-                {bookings.map((b) => `${bookingName(b)} ${statusLabel(b.status).toLowerCase()}`).join(" · ")}
-              </Typography>
-            )}
-            {bookingReasons.map((b) => (
-              <Typography key={b.id} sx={{ fontSize: 13.5, color: tc.error }} data-testid={`request-booking-reason-${b.id}`}>
-                {`${b.name} ${statusLabel("rejected").toLowerCase()}: ${b.reason}`}
-              </Typography>
-            ))}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "6px", pb: "10px" }}>
+          {description && (
+            <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, whiteSpace: "pre-line" }} data-testid={`request-description-${req.id}`}>{description}</Typography>
+          )}
+          {reason && (
+            <Typography sx={{ fontSize: 13.5, color: tc.error }} data-testid={`request-reason-${req.id}`}>{`${statusLabel("rejected")}: ${reason}`}</Typography>
+          )}
+          {bookings.length > 0 && (
+            <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
+              {bookings.map((b) => `${bookingName(b)} ${statusLabel(b.status).toLowerCase()}`).join(" · ")}
+            </Typography>
+          )}
+          {bookingReasons.map((b) => (
+            <Typography key={b.id} sx={{ fontSize: 13.5, color: tc.error }} data-testid={`request-booking-reason-${b.id}`}>
+              {`${b.name} ${statusLabel("rejected").toLowerCase()}: ${b.reason}`}
+            </Typography>
+          ))}
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: "8px 20px" }}>
+            <TextLink onClick={() => setMessagesId(req.id || null)} data-testid={`request-messages-${req.id}`}>
+              {messageCount > 0 ? Locale.label("mobile.requests.messagesCount").replace("{}", String(messageCount)) : Locale.label("mobile.requests.messageStaff")}
+            </TextLink>
             {req.approvalStatus === "pending" && (
-              <Box><TextLink danger onClick={() => setCancelId(req.id || null)} data-testid={`request-cancel-${req.id}`}>{Locale.label("mobile.requests.cancelRequest")}</TextLink></Box>
+              <TextLink danger onClick={() => setCancelId(req.id || null)} data-testid={`request-cancel-${req.id}`}>{Locale.label("mobile.requests.cancelRequest")}</TextLink>
             )}
           </Box>
-        )}
+        </Box>
       </Box>
     );
   };
@@ -191,6 +230,11 @@ const MyRequestsPageInner = (_props: Props) => {
     </Dialog>
   );
 
+  const messagesRequest = messagesId ? requests?.find((r) => r.id === messagesId) : undefined;
+  const messagesSheet = messagesRequest?.id
+    ? <RequestMessagesSheet key={messagesRequest.id} eventId={messagesRequest.id} title={messagesRequest.title || Locale.label("mobile.group.event")} onClose={closeMessages} />
+    : null;
+
   if (view === "past") {
     return (
       <Box>
@@ -200,6 +244,7 @@ const MyRequestsPageInner = (_props: Props) => {
           <PlateSection>{past.length === 0 ? <QuietEmpty>{Locale.label("mobile.requests.noPast")}</QuietEmpty> : list(past)}</PlateSection>
         </Plate>
         {cancelDialog}
+        {messagesSheet}
       </Box>
     );
   }
@@ -233,6 +278,7 @@ const MyRequestsPageInner = (_props: Props) => {
         )}
       </Plate>
       {cancelDialog}
+      {messagesSheet}
     </Box>
   );
 };
