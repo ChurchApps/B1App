@@ -140,3 +140,62 @@ test.describe("Mobile community", () => {
     await expect(page.getByRole("textbox", { name: /Search Members/i })).toBeVisible({ timeout: 30000 });
   });
 });
+
+// ChurchAppsSupport#1680: an admin can turn off private messages for one person (People > Personal Details
+// > "Disable private messages"). The Api then reports allowDirectMessages=false and refuses a new thread.
+async function setPrivateMessagesDisabled(personId: string, disabled: boolean) {
+  const api = process.env.API_BASE || "http://localhost:8084";
+  const ctx = await request.newContext();
+  const login = await ctx.post(api + "/membership/users/login", {
+    data: { email: "demo@b1.church", password: "password" },
+    headers: { "Content-Type": "application/json" }
+  });
+  if (!login.ok()) throw new Error(`login failed: ${login.status()}`);
+  const body = await login.json();
+  const uc = (body.userChurches || []).find((c: { church?: { id?: string } }) => c.church?.id === DEMO_CHURCH.ID);
+  const jwt = uc?.apis?.find((a: { keyName?: string; jwt?: string }) => a.keyName === "MembershipApi")?.jwt;
+  if (!jwt) throw new Error("MembershipApi JWT not present");
+  const headers = { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" };
+  const person = await (await ctx.get(`${api}/membership/people/${personId}`, { headers })).json();
+  person.disablePrivateMessages = disabled;
+  const res = await ctx.post(api + "/membership/people/", { headers, data: [person] });
+  if (!res.ok()) throw new Error(`person save failed: ${res.status()}`);
+  await ctx.dispose();
+}
+
+test.describe("Private messages turned off for one person", () => {
+  // Carol Clark: adult seed person with no private thread with the demo user, so a new thread is what gets blocked.
+  // Each state is checked from a fresh test context: the mobile shell persists its query cache across reloads.
+  const CAROL = "PER00000081";
+
+  test.afterEach(async () => {
+    await setPrivateMessagesDisabled(CAROL, false);
+  });
+
+  test("their profile hides the Message quick action", async ({ page }) => {
+    await setPrivateMessagesDisabled(CAROL, true);
+    await page.goto(`/mobile/community/${CAROL}`);
+    const main = page.locator("main");
+    await expect(main.getByRole("heading", { level: 1, name: /Carol/ })).toBeVisible({ timeout: 30000 });
+    await expect(main.getByRole("button", { name: /Send message/i })).toHaveCount(0);
+  });
+
+  test("turning the switch back on brings the Message quick action back", async ({ page }) => {
+    await setPrivateMessagesDisabled(CAROL, false);
+    await page.goto(`/mobile/community/${CAROL}`);
+    const main = page.locator("main");
+    await expect(main.getByRole("heading", { level: 1, name: /Carol/ })).toBeVisible({ timeout: 30000 });
+    await expect(main.getByRole("button", { name: /Send message/i })).toBeVisible({ timeout: 15000 });
+  });
+
+  test("a thread opened before the switch says why the message was not sent", async ({ page }) => {
+    await page.goto(`/mobile/messages/${CAROL}`);
+    const composer = page.getByPlaceholder(/Type a message/i);
+    await expect(composer).toBeVisible({ timeout: 30000 });
+
+    await setPrivateMessagesDisabled(CAROL, true);
+    await composer.fill(`hello ${Date.now()}`);
+    await page.getByRole("button", { name: /^Send$/i }).click();
+    await expect(page.getByText("Private messages are turned off for this person.")).toBeVisible({ timeout: 15000 });
+  });
+});
