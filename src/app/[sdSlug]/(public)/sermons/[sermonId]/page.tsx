@@ -9,9 +9,10 @@ import { ConfigurationInterface, fetchCached } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { getSermonEmbed } from "@/helpers/sermonEmbed";
 import { sermonThumbnail } from "@/helpers/sermonList";
-import { sermonAudioUrl } from "@/app/[sdSlug]/mobile/components/sermonAudio";
+import { sermonAudioUrl, sermonDownloadHref } from "@/app/[sdSlug]/mobile/components/sermonAudio";
 import { SermonJsonLd } from "@/components/seo/SermonJsonLd";
 import { DefaultPageWrapper } from "../../[pageSlug]/components/DefaultPageWrapper";
+import { SermonActions } from "./SermonActions";
 import { Animate } from "@churchapps/apphelper/website";
 import "@/styles/vendor/animations.css";
 import { DateHelper } from "@churchapps/helpers";
@@ -66,6 +67,9 @@ export default async function SermonPage({ params }: { params: PageParams }) {
 
   const { embedUrl } = getSermonEmbed(sermon);
   const audioUrl = embedUrl ? null : sermonAudioUrl(sermon);
+  // Download shows whenever the sermon has an audio file, even when a video takes the player's place.
+  const contentApi = ApiHelper.getConfig("ContentApi")?.url;
+  const downloadHref = sermonAudioUrl(sermon) && contentApi ? sermonDownloadHref(contentApi, config.church.id!, sermon.id!) : null;
   const publishDate = sermon.publishDate ? new Date(sermon.publishDate) : null;
   const dateLabel = publishDate && !isNaN(publishDate.getTime())
     ? publishDate.toLocaleDateString(DateHelper.normalizeLocale((config.appearance as { region?: string })?.region), { year: "numeric", month: "long", day: "numeric" })
@@ -81,6 +85,7 @@ export default async function SermonPage({ params }: { params: PageParams }) {
             ? <div className="videoWrapper"><iframe src={embedUrl} title={sermon.title} style={{ border: 0 }} allow="autoplay; fullscreen; picture-in-picture" /></div>
             : (sermon.thumbnail && <img src={sermon.thumbnail} alt={sermon.title} style={{ width: "100%", height: "auto" }} />)}
           {audioUrl && <audio controls preload="none" src={audioUrl} data-testid="sermon-audio" style={{ width: "100%", marginTop: 8 }} />}
+          <SermonActions title={sermon.title || config.church.name || ""} downloadHref={downloadHref} shareText={`Check out this sermon: "${sermon.title || config.church.name}"`} />
           {playlistTitle && <div style={{ marginTop: 16, textTransform: "uppercase", letterSpacing: 1, fontSize: 13, fontWeight: 600, color: "#666" }}>{playlistTitle}</div>}
           <h1 style={{ marginTop: 8 }}>{sermon.title}</h1>
           {dateLabel && <p style={{ color: "#666", marginTop: 0 }}>{dateLabel}</p>}
