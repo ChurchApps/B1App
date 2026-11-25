@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildContentSecurityPolicy, generateNonce, insecureApiOrigins } from "@/helpers/contentSecurityPolicy";
 import { canonicalLink, ownsSubdomain } from "@/helpers/canonicalLink";
-import { embedFrameAncestors, isEmbedPath } from "@/helpers/embed";
+import { embedFrameAncestors, isEmbedPath, isEmbedServedOnHiddenSite } from "@/helpers/embed";
 import { isNoindexHost } from "@/helpers/noindexHost";
 import { isAllowedWhenPublicSiteHidden, isPublicSiteHidden } from "@/helpers/publicSite";
 
@@ -123,7 +123,8 @@ export async function middleware(req: NextRequest) {
   if (embed || gated) {
     const subDomain = getSubDomain(host, isInternal, site);
     const settings = subDomain ? await loadSiteSettings(subDomain) : NO_SETTINGS;
-    if (gated && settings.hidden) {
+    // A hidden site serves an embed route only once the church has listed a website that may frame it; until then it is one more public page.
+    if (gated && settings.hidden && !isEmbedServedOnHiddenSite(pathname, settings.frameAncestors)) {
       const loginUrl = new URL("/login", req.url);
       loginUrl.searchParams.set("returnUrl", pathname + req.nextUrl.search);
       return NextResponse.redirect(loginUrl);

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { embedFrameAncestors, isEmbedPath, MAX_EMBED_DOMAINS, parseEmbedDomains } from "../../src/helpers/embed.ts";
+import { embedFrameAncestors, isEmbedPath, isEmbedServedOnHiddenSite, MAX_EMBED_DOMAINS, parseEmbedDomains } from "../../src/helpers/embed.ts";
 import { buildContentSecurityPolicy, FRAME_ANCESTORS } from "../../src/helpers/contentSecurityPolicy.ts";
 import { isAllowedWhenPublicSiteHidden } from "../../src/helpers/publicSite.ts";
 
@@ -220,16 +220,32 @@ describe("isEmbedPath", () => {
   });
 });
 
-describe("isAllowedWhenPublicSiteHidden", () => {
-  it("keeps the embed routes reachable on a hidden public site", () => {
-    for (const path of ["/embed/donate", "/embed/forms/FRM00000004", "/embed/calendar/CAL00000001"]) {
-      assert.equal(isAllowedWhenPublicSiteHidden(path), true, path);
+describe("embed routes on a hidden public site", () => {
+  const listed = embedFrameAncestors("gracechurch.org");
+
+  it("leaves the embed routes out of the hidden-site allowlist", () => {
+    for (const path of ["/embed/donate", "/embed/forms/FRM00000004", "/embed/calendar/CAL00000001", "/embed", "/embed/", "/embed/anything"]) {
+      assert.equal(isAllowedWhenPublicSiteHidden(path), false, path);
     }
   });
 
-  it("still gates the public pages", () => {
-    for (const path of ["/", "/donate", "/forms/FRM00000004", "/embed", "/embedded", "/sermons"]) {
-      assert.equal(isAllowedWhenPublicSiteHidden(path), false, path);
+  it("serves an embed route once the church has listed a website", () => {
+    for (const path of ["/embed/donate", "/embed/donate/", "/embed/forms/FRM00000004", "/embed/calendar/CAL00000001"]) {
+      assert.equal(isEmbedServedOnHiddenSite(path, listed), true, path);
+    }
+  });
+
+  it("keeps the embed routes behind the login gate while no website is listed", () => {
+    for (const raw of [undefined, "", "not a domain", "*", "localhost"]) {
+      assert.equal(isEmbedServedOnHiddenSite("/embed/donate", embedFrameAncestors(raw)), false, String(raw));
+    }
+  });
+
+  it("never opens another path, whatever the church listed", () => {
+    for (const path of [
+      "/", "/donate", "/forms/FRM00000004", "/embed", "/embed/", "/embed/login", "/embed/anything", "/embed/donate/extra", "/embedded/donate", "/grace/embed/donate"
+    ]) {
+      assert.equal(isEmbedServedOnHiddenSite(path, listed), false, path);
     }
   });
 });

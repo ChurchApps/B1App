@@ -61,3 +61,7 @@ export const embedFrameAncestors = (raw: unknown): string[] => parseEmbedDomains
 const EMBED_PATHS = [/^\/embed\/donate\/?$/, /^\/embed\/forms\/[^/]+\/?$/, /^\/embed\/calendar\/[^/]+\/?$/];
 
 export const isEmbedPath = (pathname: string) => EMBED_PATHS.some((re) => re.test(pathname));
+
+// "Disable Public Website" hides the embed routes too until the church lists a website: before that nothing may
+// frame them, so they are just public pages. frameAncestors is the church's embedFrameAncestors() output.
+export const isEmbedServedOnHiddenSite = (pathname: string, frameAncestors: string[]) => isEmbedPath(pathname) && frameAncestors.length > 0;
