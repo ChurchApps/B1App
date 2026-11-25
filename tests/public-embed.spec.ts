@@ -46,11 +46,12 @@ const frameAncestors = async (req: APIRequestContext, path: string) => {
 const ALLOWED = "https://embed-test-church.org https://*.embed-test-church.org";
 
 test.describe("Embed pages: frame policy", () => {
+  // The production build caches a church's settings in middleware for up to a minute, so the first check may wait that long.
+  test.describe.configure({ timeout: 150000 });
   test.beforeAll(async () => { await setEmbedDomains("https://www.Embed-Test-Church.org/give, not_a_domain; script-src *"); });
   test.afterAll(async () => { await setEmbedDomains(""); });
 
   test("/embed/donate may be framed by the church's listed website", async ({ request: req }) => {
-    // The production build caches the church's settings in middleware for up to a minute.
     await expect.poll(() => frameAncestors(req, "/embed/donate"), { timeout: 90000, intervals: [2000] }).toContain(ALLOWED);
     const directive = await frameAncestors(req, "/embed/donate");
     expect(directive).toContain("'self'");
