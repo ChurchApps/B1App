@@ -52,6 +52,8 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
   const [address, setAddress] = useState<GuestAddress>({ address1: "", address2: "", city: "", state: "", zip: "" });
   const [maritalStatus, setMaritalStatus] = useState("");
   const [comments, setComments] = useState("");
+  // The church's own guidance for the Comments box (B1Admin > Mobile > Check-In).
+  const [commentsPrompt, setCommentsPrompt] = useState("");
   const [modes, setModes] = useState<FieldModes>(DEFAULT_MODES);
   const [titles, setTitles] = useState<string[]>(DEFAULT_TITLES);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,10 +67,13 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
     ApiHelper.getAnonymous("/people/guest-register/options?churchId=" + encodeURIComponent(churchId), "MembershipApi")
       .then((data: Partial<FieldModes>) => { if (data && typeof data === "object") setModes({ ...DEFAULT_MODES, ...data }); })
       .catch(() => { /* keep the default form */ });
-    // The church's own title list (Manage Church > Custom Fields in B1Admin).
+    // The church's own title list (Manage Church > Custom Fields in B1Admin) and Comments prompt.
     ApiHelper.getAnonymous("/settings/public/" + encodeURIComponent(churchId), "MembershipApi")
-      .then((settings: Record<string, string>) => setTitles(parseTitleOptions(settings?.titleOptions)))
-      .catch(() => { /* keep the default titles */ });
+      .then((settings: Record<string, string>) => {
+        setTitles(parseTitleOptions(settings?.titleOptions));
+        setCommentsPrompt(settings?.guestRegistrationCommentsPrompt || "");
+      })
+      .catch(() => { /* keep the default titles and no prompt */ });
   }, [churchId]);
 
   const on = (key: FieldKey) => modes[key] !== "off";
@@ -389,7 +394,8 @@ export function GuestRegister({ churchId, imageUrl }: Props) {
             multiline
             minRows={3}
             fullWidth
-            slotProps={{ htmlInput: { maxLength: 1000 } }}
+            placeholder={commentsPrompt || undefined}
+            slotProps={{ htmlInput: { maxLength: 1000 }, ...(commentsPrompt ? { inputLabel: { shrink: true } } : {}) }}
           />
         </CheckinCard>
       )}

@@ -27,7 +27,7 @@ test.describe("QR guest registration", () => {
   test.beforeAll(async () => {
     api = await getApi("demo", "MembershipApi");
     const all = await loadSettings();
-    originals = all.filter((s) => ["enableQRGuestRegistration", "guestRegistrationFields", "guestRegistrationImage"].includes(s.keyName));
+    originals = all.filter((s) => ["enableQRGuestRegistration", "guestRegistrationFields", "guestRegistrationImage", "guestRegistrationCommentsPrompt"].includes(s.keyName));
     await removeCreated();
     await saveSettings({
       enableQRGuestRegistration: "true",
@@ -40,7 +40,8 @@ test.describe("QR guest registration", () => {
     await saveSettings({
       enableQRGuestRegistration: originals.find((s) => s.keyName === "enableQRGuestRegistration")?.value ?? "false",
       guestRegistrationFields: originals.find((s) => s.keyName === "guestRegistrationFields")?.value ?? "{}",
-      guestRegistrationImage: originals.find((s) => s.keyName === "guestRegistrationImage")?.value ?? ""
+      guestRegistrationImage: originals.find((s) => s.keyName === "guestRegistrationImage")?.value ?? "",
+      guestRegistrationCommentsPrompt: originals.find((s) => s.keyName === "guestRegistrationCommentsPrompt")?.value ?? ""
     });
     await api.request.dispose();
   });
@@ -126,6 +127,30 @@ test.describe("QR guest registration", () => {
     const messages = (await (await apiCall(messaging, "get", messagingUrl("/messages/conversation/" + head.conversationId))).json()) as any[];
     await messaging.request.dispose();
     expect(messages.map((m) => m.content)).toContain("Met you at the church picnic");
+  });
+
+  // ChurchAppsSupport#1698: the church's Comments prompt shows inside the box until the guest types.
+  test("shows the church's Comments prompt as the placeholder and hides it once the guest types", async ({ page }) => {
+    const promptText = "Enter your visit purpose and comment generally on the service";
+    await saveSettings({ guestRegistrationFields: JSON.stringify({ email: "optional", phone: "off", comments: "optional" }), guestRegistrationCommentsPrompt: "" });
+    await page.goto(BASE_URL + "/guest-register");
+    const comments = page.getByLabel(/^Comments/);
+    await expect(comments).toBeVisible({ timeout: 20000 });
+    await expect(comments).not.toHaveAttribute("placeholder", /./);
+    await comments.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: test.info().outputPath("before.png") });
+
+    await saveSettings({ guestRegistrationCommentsPrompt: promptText });
+    await page.reload();
+    await expect(comments).toHaveAttribute("placeholder", promptText, { timeout: 20000 });
+    // Visible before the guest taps the box, not hidden behind an unshrunk label.
+    expect(await comments.evaluate((el) => getComputedStyle(el, "::placeholder").opacity)).not.toBe("0");
+    await comments.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: test.info().outputPath("after.png") });
+    // The placeholder only paints while the box is empty.
+    expect(await comments.evaluate((el) => el.matches(":placeholder-shown"))).toBe(true);
+    await comments.fill("First visit, loved the music");
+    expect(await comments.evaluate((el) => el.matches(":placeholder-shown"))).toBe(false);
   });
 
   // ChurchAppsSupport#1448: everyone after the first person picks a household role, and each person can leave a phone.
