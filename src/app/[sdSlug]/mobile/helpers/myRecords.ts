@@ -76,12 +76,15 @@ export const useMyCards = (enabled: boolean) => useQuery<TaskInterface[]>({
   staleTime: 60 * 1000
 });
 
-// Open plain tasks assigned to the member; ones they only created are left to Me's Requests section.
+// Open plain tasks assigned to the member or to one of their groups (the Api only returns the member's own groups);
+// ones they only created are left to Me's Requests section.
+const isMine = (t: TaskInterface, personId: string | undefined) => (t.assignedToType === "person" && t.assignedToId === personId) || t.assignedToType === "group";
+
 export const useMyTasks = (personId: string | undefined, enabled: boolean) => useQuery<TaskInterface[]>({
   queryKey: ["/tasks", "DoingApi", personId],
   queryFn: async () => {
     const data = await ApiHelper.get("/tasks", "DoingApi");
-    return (Array.isArray(data) ? data : []).filter((t: TaskInterface) => t.assignedToType === "person" && t.assignedToId === personId).sort(newestFirst);
+    return (Array.isArray(data) ? data : []).filter((t: TaskInterface) => isMine(t, personId)).sort(newestFirst);
   },
   enabled: enabled && !!personId,
   staleTime: 60 * 1000
