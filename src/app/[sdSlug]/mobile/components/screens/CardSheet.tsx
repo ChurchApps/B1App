@@ -19,6 +19,7 @@ const isOverdue = (t: TaskInterface) => !!t.dueDate && new Date(t.dueDate).getTi
 const snoozeLabel = (days: number) => days === 1 ? Locale.label("mobile.card.snoozeDay") : Locale.label("mobile.card.snoozeDays").replace("{}", String(days));
 
 const isGroupTask = (t: TaskInterface) => t.assignedToType?.toLowerCase() === "group" && !!t.assignedToId;
+const groupMembersHref = (groupId?: string) => `/mobile/groups/${groupId}?view=members`;
 
 // One row for a card or a plain task, shared by Me, Home and the full list.
 export const TaskRow = ({ task, onOpen }: { task: TaskInterface; onOpen: (t: TaskInterface) => void }) => {
@@ -42,7 +43,8 @@ export const TaskRow = ({ task, onOpen }: { task: TaskInterface; onOpen: (t: Tas
 };
 
 // The person a card is about links to their directory profile only when the directory shows them to this member.
-const AboutPerson = ({ task }: { task: TaskInterface }) => {
+// A group it is about opens the group's members, as an assigned group does.
+const AboutParty = ({ task }: { task: TaskInterface }) => {
   const id = task.associatedWithType?.toLowerCase() === "person" ? task.associatedWithId : undefined;
   const { data: person } = useQuery<PersonInterface | null>({
     queryKey: ["community-person", id],
@@ -53,6 +55,7 @@ const AboutPerson = ({ task }: { task: TaskInterface }) => {
     enabled: !!id,
     retry: false
   });
+  if (task.associatedWithType?.toLowerCase() === "group" && task.associatedWithId) return <Box component={Link} href={groupMembersHref(task.associatedWithId)} data-testid="task-associated-group" sx={{ color: tc.primary, fontWeight: 500 }}>{task.associatedWithLabel}</Box>;
   const label = task.associatedWithLabel || person?.name?.display || "";
   if (id && person?.id) return <Box component={Link} href={`/mobile/community/${id}`} sx={{ color: tc.primary, fontWeight: 500 }}>{label}</Box>;
   return <>{label}</>;
@@ -60,7 +63,7 @@ const AboutPerson = ({ task }: { task: TaskInterface }) => {
 
 // A group assignment opens the group's members, where each member's own contact sharing applies.
 const AssignedTo = ({ task }: { task: TaskInterface }) => {
-  if (isGroupTask(task)) return <Box component={Link} href={`/mobile/groups/${task.assignedToId}?view=members`} data-testid="task-assigned-group" sx={{ color: tc.primary, fontWeight: 500 }}>{task.assignedToLabel}</Box>;
+  if (isGroupTask(task)) return <Box component={Link} href={groupMembersHref(task.assignedToId)} data-testid="task-assigned-group" sx={{ color: tc.primary, fontWeight: 500 }}>{task.assignedToLabel}</Box>;
   return <>{task.assignedToLabel}</>;
 };
 
@@ -138,7 +141,7 @@ const CardSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void
         { label: Locale.label("mobile.card.step"), value: step?.name },
         { label: Locale.label("mobile.card.due"), value: card.dueDate ? DateHelper.prettyDate(new Date(card.dueDate)) : undefined },
         { label: Locale.label("mobile.card.snoozedUntilLabel"), value: isSnoozed(card) ? <span data-testid="card-snoozed-until">{DateHelper.prettyDate(new Date(card.snoozedUntil as Date))}</span> : undefined },
-        { label: Locale.label("mobile.card.about"), value: card.associatedWithLabel || card.associatedWithId ? <AboutPerson task={card} /> : undefined },
+        { label: Locale.label("mobile.card.about"), value: card.associatedWithLabel || card.associatedWithId ? <AboutParty task={card} /> : undefined },
         ...contactItems,
         { label: Locale.label("mobile.card.created"), value: card.dateCreated ? DateHelper.prettyDateTime(new Date(card.dateCreated)) : undefined }
       ]} />
@@ -172,7 +175,7 @@ const TaskSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void
       <KeyValues items={[
         { label: Locale.label("mobile.card.from"), value: task.createdByLabel },
         { label: Locale.label("mobile.card.assignedTo"), value: task.assignedToLabel ? <AssignedTo task={task} /> : undefined },
-        { label: Locale.label("mobile.card.about"), value: task.associatedWithLabel || task.associatedWithId ? <AboutPerson task={task} /> : undefined },
+        { label: Locale.label("mobile.card.about"), value: task.associatedWithLabel || task.associatedWithId ? <AboutParty task={task} /> : undefined },
         ...contactItems,
         { label: Locale.label("mobile.card.created"), value: task.dateCreated ? DateHelper.prettyDateTime(new Date(task.dateCreated)) : undefined }
       ]} />

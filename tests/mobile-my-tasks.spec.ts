@@ -197,6 +197,35 @@ test.describe.serial("Mobile my cards and tasks", () => {
     }
   });
 
+  // ChurchAppsSupport#1710: a task about a group links the group to its members, as an assigned group does.
+  test("a task about a group links to the group's members", async ({ page }) => {
+    const created = await (await ctx.post(`${API}/doing/tasks`, {
+      headers,
+      data: [{ title: "Share the service rehearsal plan", status: "Open", assignedToType: "person", assignedToId: DEMO_PERSON, assignedToLabel: "Demo User", createdByType: "person", createdById: "PER00000027", createdByLabel: "Michael Davis", associatedWithType: "group", associatedWithId: "GRP00000001", associatedWithLabel: "Sunday Morning Service" }]
+    })).json();
+    const aboutTaskId = created[0].id;
+    try {
+      await page.goto("/mobile/myTasks");
+      await expect(mobileSignedInChrome(page)).toBeVisible({ timeout: 30000 });
+      const row = page.getByRole("region", { name: "Tasks", exact: true }).getByTestId("task-row-task").filter({ hasText: "Share the service rehearsal plan" });
+      await expect(row).toBeVisible({ timeout: 20000 });
+
+      await row.click();
+      const sheet = page.getByRole("dialog");
+      await expect(sheet.getByText("About", { exact: true })).toBeVisible({ timeout: 15000 });
+      const groupLink = sheet.getByTestId("task-associated-group");
+      await expect(groupLink).toHaveText("Sunday Morning Service");
+      await expect(groupLink).toHaveAttribute("href", "/mobile/groups/GRP00000001?view=members");
+
+      await groupLink.click();
+      await expect(page).toHaveURL(/\/mobile\/groups\/GRP00000001\?view=members/, { timeout: 30000 });
+      await expect(page.getByRole("link", { name: /John Smith/ }).last()).toBeVisible({ timeout: 20000 });
+    } finally {
+      const task = await (await ctx.get(`${API}/doing/tasks/${aboutTaskId}`, { headers })).json();
+      await ctx.post(`${API}/doing/tasks`, { headers, data: [{ ...task, status: "Closed", dateClosed: new Date().toISOString() }] });
+    }
+  });
+
   // ChurchAppsSupport#1635: tapping a "New Assignment" notification did nothing.
   test("a task assignment notification opens the task", async ({ page }) => {
     const marker = `New Assignment: Call Donald Clark about ushers ${Date.now()}`;
