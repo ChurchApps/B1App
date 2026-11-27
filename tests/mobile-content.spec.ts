@@ -259,6 +259,8 @@ test.describe("Mobile content screens", () => {
       const download = page.getByRole("link", { name: "Download audio" });
       // The Api redirects to the file; relaying it through the website was cut off on long sermons (ChurchAppsSupport#1696).
       await expect(download).toHaveAttribute("href", contentUrl(`/sermons/public/download/CHU00000001/${sermonId}`));
+      // Same-tab, so the browser saves the file instead of opening a tab (or, in the installed app, an outside browser window).
+      await expect(download).not.toHaveAttribute("target");
       const redirect = await page.request.get((await download.getAttribute("href"))!, { maxRedirects: 0 });
       expect(redirect.status()).toBe(302);
       expect(redirect.headers()["location"]).toBe(audioUrl);
