@@ -152,8 +152,9 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
       let peopleRes: PersonInterface[] = [];
       if (peopleIds.length > 0) {
         try {
-          const raw = await ApiHelper.get(`/people/basic?ids=${encodeURIComponent(peopleIds.join(","))}`, "MembershipApi");
-          if (Array.isArray(raw)) peopleRes = raw;
+          // The plan's own roster lookup: the directory-filtered people lookup hides Guests from members without View People.
+          const raw = await ApiHelper.get(`/plans/${id}/people`, "DoingApi");
+          if (Array.isArray(raw)) peopleRes = raw.map((p: { id: string; displayName: string; photo?: string }) => ({ id: p.id, name: { display: p.displayName }, contactInfo: {}, photo: p.photo }));
         } catch {
           peopleRes = [];
         }
