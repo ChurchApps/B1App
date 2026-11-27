@@ -88,8 +88,10 @@ export const TextLink = ({ href, onClick, children, danger, disabled, sx, ...res
   const style = [linkSx(danger), ...(Array.isArray(sx) ? sx : [sx])];
   if (href && !disabled) {
     const external = /^https?:/.test(href);
+    // Downloads stay in the same tab so the file saves without leaving the app.
+    const newTab = external && rest.download === undefined;
     return external
-      ? <Box component="a" href={href} target="_blank" rel="noopener noreferrer" onClick={onClick} sx={style} {...rest}>{children}</Box>
+      ? <Box component="a" href={href} target={newTab ? "_blank" : undefined} rel={newTab ? "noopener noreferrer" : undefined} onClick={onClick} sx={style} {...rest}>{children}</Box>
       : <Box component={Link} href={href} onClick={onClick} sx={style} {...rest}>{children}</Box>;
   }
   return <Box component="button" type="button" onClick={onClick} disabled={disabled} sx={style} {...(rest as React.ButtonHTMLAttributes<HTMLButtonElement>)}>{children}</Box>;
