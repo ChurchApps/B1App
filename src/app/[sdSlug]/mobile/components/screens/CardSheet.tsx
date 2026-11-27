@@ -18,12 +18,14 @@ const isSnoozed = (t: TaskInterface) => !!t.snoozedUntil && new Date(t.snoozedUn
 const isOverdue = (t: TaskInterface) => !!t.dueDate && new Date(t.dueDate).getTime() < Date.now();
 const snoozeLabel = (days: number) => days === 1 ? Locale.label("mobile.card.snoozeDay") : Locale.label("mobile.card.snoozeDays").replace("{}", String(days));
 
+const isGroupTask = (t: TaskInterface) => t.assignedToType?.toLowerCase() === "group" && !!t.assignedToId;
+
 // One row for a card or a plain task, shared by Me, Home and the full list.
 export const TaskRow = ({ task, onOpen }: { task: TaskInterface; onOpen: (t: TaskInterface) => void }) => {
   const card = !!task.workflowId;
   const subtitle = card
     ? (task.dueDate ? Locale.label("mobile.card.dueOn").replace("{}", DateHelper.prettyDate(new Date(task.dueDate))) : undefined)
-    : task.associatedWithLabel || undefined;
+    : (isGroupTask(task) ? task.assignedToLabel : task.associatedWithLabel) || undefined;
   let badge: React.ReactNode;
   if (card && isSnoozed(task)) badge = <StatusBadge tone="neu">{Locale.label("mobile.card.snoozed")}</StatusBadge>;
   else if (card && isOverdue(task)) badge = <StatusBadge tone="bad">{Locale.label("mobile.card.overdue")}</StatusBadge>;
@@ -54,6 +56,12 @@ const AboutPerson = ({ task }: { task: TaskInterface }) => {
   const label = task.associatedWithLabel || person?.name?.display || "";
   if (id && person?.id) return <Box component={Link} href={`/mobile/community/${id}`} sx={{ color: tc.primary, fontWeight: 500 }}>{label}</Box>;
   return <>{label}</>;
+};
+
+// A group assignment opens the group's members, where each member's own contact sharing applies.
+const AssignedTo = ({ task }: { task: TaskInterface }) => {
+  if (isGroupTask(task)) return <Box component={Link} href={`/mobile/groups/${task.assignedToId}?view=members`} data-testid="task-assigned-group" sx={{ color: tc.primary, fontWeight: 500 }}>{task.assignedToLabel}</Box>;
+  return <>{task.assignedToLabel}</>;
 };
 
 // Call and Email rows for the person a task is about. The Api only returns them to people who can view the task.
@@ -163,6 +171,7 @@ const TaskSheet = ({ task, onClose }: { task: TaskInterface; onClose: () => void
     <Sheet open onClose={onClose} title={task.title}>
       <KeyValues items={[
         { label: Locale.label("mobile.card.from"), value: task.createdByLabel },
+        { label: Locale.label("mobile.card.assignedTo"), value: task.assignedToLabel ? <AssignedTo task={task} /> : undefined },
         { label: Locale.label("mobile.card.about"), value: task.associatedWithLabel || task.associatedWithId ? <AboutPerson task={task} /> : undefined },
         ...contactItems,
         { label: Locale.label("mobile.card.created"), value: task.dateCreated ? DateHelper.prettyDateTime(new Date(task.dateCreated)) : undefined }

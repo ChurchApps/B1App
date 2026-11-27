@@ -199,6 +199,7 @@
     "card": {
       "about": "About",
       "actionFailed": "That didn't work. Try again.",
+      "assignedTo": "Assigned to",
       "cards": "Cards",
       "complete": "Complete",
       "created": "Created",
