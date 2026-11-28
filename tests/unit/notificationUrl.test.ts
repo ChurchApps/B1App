@@ -23,6 +23,12 @@ describe("deriveNotificationUrl", () => {
     assert.equal(deriveNotificationUrl({ contentType: "event", contentId: "e1", link: "/mobile/events/e1" }), "/mobile/events/e1");
   });
 
+  // ChurchAppsSupport#1676: a reply in a request's discussion opens that request's messages.
+  it("opens the request's messages for a reply to an event request", () => {
+    const link = "/mobile/myRequests?request=e1";
+    assert.equal(deriveNotificationUrl({ contentType: "eventRequest", contentId: "e1", message: "New message: Baptism (event request)", link }), link);
+  });
+
   it("opens group notes in the group's chat", () => {
     assert.equal(deriveNotificationUrl({ contentType: "groupNote", contentId: "g1" }), "/mobile/groups/g1?openChat=1&chatTab=notes");
   });

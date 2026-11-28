@@ -58,6 +58,43 @@ test.describe("Mobile event request (CA-1)", () => {
     await expect(page.getByTestId("request-outcome")).toHaveCount(0);
   });
 
+  // #1676: the requester and church staff can talk about a request without it being decided.
+  test("a request's messages open from My Requests and from a reply notification link", async ({ page }) => {
+    const jwt = await demoJwt();
+    const ctx = await request.newContext();
+    const auth = { headers: { Authorization: "Bearer " + jwt } };
+    const stamp = Date.now();
+    const text = `Could we use the side entrance? ${stamp}`;
+    const start = new Date();
+    start.setDate(start.getDate() + 9);
+    start.setHours(18, 0, 0, 0);
+    const end = new Date(start);
+    end.setHours(19);
+    // afterEach removes it: a pending request titled "Test Request".
+    const created = await (await ctx.post(`${API_BASE}/content/events/request`, { ...auth, data: { title: `Test Request ${stamp}`, start: start.toISOString(), end: end.toISOString(), allDay: false } })).json();
+    const eventId = created.event.id as string;
+    await ctx.dispose();
+
+    await page.goto("/mobile/myRequests");
+    const link = page.getByTestId(`request-messages-${eventId}`);
+    await expect(link).toHaveText("Message staff", { timeout: 30000 });
+    await link.click();
+    const thread = page.getByTestId("request-messages");
+    await thread.locator('textarea[name="noteText"]').first().fill(text);
+    const saved = page.waitForResponse((r) => r.url().includes("/messaging/messages") && r.request().method() === "POST" && r.ok());
+    await thread.locator("button").filter({ has: page.locator('text="send"') }).last().click();
+    await saved;
+    await expect(page.getByTestId("request-messages").getByText(text)).toBeVisible({ timeout: 15000 });
+    await page.getByRole("button", { name: "Close" }).click();
+    await expect(page.getByTestId("request-messages")).toHaveCount(0);
+    await expect(link).toHaveText("Messages (1)", { timeout: 15000 });
+
+    await page.goto(`/mobile/myRequests?request=${eventId}`);
+    await expect(page.getByTestId("request-messages").getByText(text)).toBeVisible({ timeout: 30000 });
+    await page.getByRole("button", { name: "Close" }).click();
+    await expect(page).toHaveURL(/\/mobile\/myRequests$/);
+  });
+
   test("room and resource pickers show each item's description", async ({ page }) => {
     await page.goto("/mobile/requestEvent");
     await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });

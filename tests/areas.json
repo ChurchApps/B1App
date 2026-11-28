@@ -75,7 +75,7 @@
       "specs": ["mobile-notification-prefs.spec.ts", "mobile-push-no-server-keys.spec.ts", "mobile-delete.spec.ts", "mobile-misc.spec.ts", "mobile-groups-join.spec.ts", "webpush-api.spec.ts"]
     },
     "me": {
-      "src": ["src/app/[sdSlug]/mobile/components/screens/MePage.tsx", "src/app/[sdSlug]/mobile/components/screens/ProfileEditPage.tsx", "src/app/[sdSlug]/mobile/components/screens/MyAttendancePage.tsx", "src/app/[sdSlug]/mobile/components/screens/MyFormsPage.tsx", "src/app/[sdSlug]/mobile/components/screens/MyRequestsPage.tsx", "src/app/[sdSlug]/mobile/components/screens/MyTasksPage.tsx", "src/app/[sdSlug]/mobile/components/screens/CardSheet.tsx", "src/app/[sdSlug]/mobile/helpers/myRecords.ts"],
+      "src": ["src/app/[sdSlug]/mobile/components/screens/MePage.tsx", "src/app/[sdSlug]/mobile/components/screens/ProfileEditPage.tsx", "src/app/[sdSlug]/mobile/components/screens/MyAttendancePage.tsx", "src/app/[sdSlug]/mobile/components/screens/MyFormsPage.tsx", "src/app/[sdSlug]/mobile/components/screens/MyRequestsPage.tsx", "src/app/[sdSlug]/mobile/components/screens/RequestMessagesSheet.tsx", "src/app/[sdSlug]/mobile/components/screens/MyTasksPage.tsx", "src/app/[sdSlug]/mobile/components/screens/CardSheet.tsx", "src/app/[sdSlug]/mobile/helpers/myRecords.ts"],
       "specs": ["mobile-me.spec.ts", "mobile-profile*.spec.ts", "mobile-signed-out-screens.spec.ts", "mobile-my-tasks.spec.ts", "mobile-request-event.spec.ts", "mobile-misc.spec.ts"]
     },
     "requestEvent": {
