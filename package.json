@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@churchapps/apphelper": "^1.15.3",
-    "@churchapps/content-providers": "^0.17.0",
+    "@churchapps/content-providers": "^0.18.0",
     "@churchapps/helpers": "^2.18.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
